@@ -17,6 +17,14 @@ struct LoginView: View {
                 contentLayer(geometry: geometry)
             }
         }
+        .sheet(isPresented: $isPresented) {
+            SignUpBottomSheetView(
+                onComplete: {
+                    print("SignUpBottomSheet Clicked()")
+                }
+            )
+            .presentationDetents([.fraction(0.7)])
+        }
     }
 
     private var backgroundLayer: some View {
