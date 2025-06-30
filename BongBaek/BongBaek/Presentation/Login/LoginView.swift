@@ -19,7 +19,6 @@ struct LoginView: View {
         }
     }
 
-    
     private var backgroundLayer: some View {
         Color.background
             .ignoresSafeArea()
