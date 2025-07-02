@@ -27,9 +27,7 @@ struct RecommendsView: View {
                     .frame(width: 57, height: 54)
             }
             
-            Button(action: {
-                // 추천 받기 버튼 동작
-            }) {
+            NavigationLink(destination: FullScheduleView()) {
                 Text("경조사비 추천 받기")
                     .font(.title_semibold_16)
                     .foregroundColor(.white)
