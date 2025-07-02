@@ -12,6 +12,7 @@ struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
+                ScheduleAlarmView(alarms: scheduleDummy)
                 RecommendsView()
                 ScheduleView(schedules: scheduleDummy)
                     .padding(.top, 32)
