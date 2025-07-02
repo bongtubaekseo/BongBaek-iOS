@@ -19,19 +19,25 @@ struct CustomTextField: View {
     @State private var validationMessage: String = ""
     @FocusState private var isFocused: Bool
     @State private var showPassword: Bool = false
+    let isReadOnly: Bool
+    let onTap: (() -> Void)?
     
     init(title: String,
          icon: String,
          placeholder: String,
          text: Binding<String>,
          validationRule: ValidationRule? = nil,
-         isSecure: Bool = false) {
+         isSecure: Bool = false,
+         isReadOnly: Bool = false,
+         onTap: (() -> Void)? = nil) {
         self.title = title
         self.icon = icon
         self.placeholder = placeholder
         self._text = text
         self.validationRule = validationRule
         self.isSecure = isSecure
+        self.isReadOnly = isReadOnly
+        self.onTap = onTap
     }
     
     var body: some View {
@@ -39,40 +45,82 @@ struct CustomTextField: View {
   
             HStack(spacing: 8) {
                 Image("icon_person_16")
+                    .renderingMode(.template)
                     .resizable()
                     .frame(width: 16,height: 16)
+                    .foregroundStyle(.white)
                 
                 Text(title)
                     .bodyMedium16()
-                    .foregroundColor(.black)
+                    .foregroundColor(.white)
             }
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 2) {
                 HStack {
                     if isSecure && !showPassword {
                         SecureField(placeholder, text: $text)
                             .font(.system(size: 16))
                             .textFieldStyle(PlainTextFieldStyle())
                             .focused($isFocused)
+                            .disabled(isReadOnly)
+                            .foregroundColor(.white)
+                            .tint(.white)
                     } else {
-                        TextField(placeholder, text: $text)
-                            .font(.system(size: 16))
-                            .textFieldStyle(PlainTextFieldStyle())
-                            .focused($isFocused)
+                        ZStack(alignment: .leading) {
+                            if text.isEmpty {
+                                Text(placeholder)
+                                    .font(.system(size: 16))
+                                    .foregroundColor(.gray.opacity(0.6))
+                            }
+                            
+                            TextField("", text: $text)
+                                .font(.system(size: 16))
+                                .textFieldStyle(PlainTextFieldStyle())
+                                .focused($isFocused)
+                                .disabled(isReadOnly)
+                                .foregroundColor(.white)
+                                .tint(.white)
+                        }
                     }
                     
-                    if isSecure {
-                        Button(action: {
-                            showPassword.toggle()
-                        }) {
-                            Image(systemName: showPassword ? "eye.slash" : "eye")
-                                .font(.system(size: 14))
+                    HStack(spacing: 8) {
+                        if !text.isEmpty && !isReadOnly && isFocused {
+                            Button(action: {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    text = ""
+                                }
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 16))
+                                    .foregroundColor(.gray.opacity(0.7))
+                            }
+                            .transition(.scale.combined(with: .opacity))
+                        }
+                        
+                        if isReadOnly {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 12))
                                 .foregroundColor(.gray)
+                        }
+                        
+                        if isSecure && !isReadOnly {
+                            Button(action: {
+                                showPassword.toggle()
+                            }) {
+                                Image(systemName: showPassword ? "eye.slash" : "eye")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
                 }
                 .padding(.vertical, 12)
-                
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    if isReadOnly {
+                        onTap?()
+                    }
+                }
                 Rectangle()
                     .frame(height: 1)
                     .foregroundColor(lineColor)
@@ -88,7 +136,9 @@ struct CustomTextField: View {
             }
         }
         .onChange(of: text) { _, newValue in
-            validateInput(newValue)
+            if !isReadOnly { 
+                validateInput(newValue)
+            }
         }
     }
     
