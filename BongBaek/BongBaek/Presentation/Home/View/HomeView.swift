@@ -12,10 +12,10 @@ struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
+                RecommendsView()
                 ScheduleView(schedules: scheduleDummy)
-                    .padding(.top, 48)
+                    .padding(.top, 32)
             }
-
             CustomTabView(selectedTab: $selectedTab)
                 .background(Color.gray750)
                 .clipShape(
@@ -28,7 +28,6 @@ struct HomeView: View {
         .background(Color.black.ignoresSafeArea())
     }
 }
-
 
 #Preview {
     HomeView()
