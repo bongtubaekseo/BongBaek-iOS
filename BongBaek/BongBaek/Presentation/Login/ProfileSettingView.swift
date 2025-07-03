@@ -72,7 +72,7 @@ struct ProfileSettingView: View {
                 print("선택된 날짜: \(selectedDateString)")
                 focusedField = nil
             }
-            .presentationDetents([.fraction(0.4)])
+            .presentationDetents([.height(359)])
         }
     }
     

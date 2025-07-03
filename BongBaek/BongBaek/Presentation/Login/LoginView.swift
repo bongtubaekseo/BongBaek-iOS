@@ -33,7 +33,9 @@ struct LoginView: View {
                     showProfileSetting = true
                 }
             )
-            .presentationDetents([.fraction(0.5)])
+//            .presentationDetents([.fraction(0.5)])
+            .presentationDetents([.height(424)])
+              .presentationDragIndicator(.visible)
         }
 
     }
