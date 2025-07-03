@@ -27,7 +27,7 @@ struct RecommendsView: View {
                     .frame(width: 57, height: 54)
             }
             
-            NavigationLink(destination: FullScheduleView()) {
+            NavigationLink(destination: RecommendView()) {
                 Text("경조사비 추천 받기")
                     .font(.title_semibold_16)
                     .foregroundColor(.white)
@@ -39,7 +39,7 @@ struct RecommendsView: View {
         }
         .padding()
         .background(.gray750)
-        .cornerRadius(10)
+        .cornerRadius(8)
         .padding(.horizontal)
     }
 }

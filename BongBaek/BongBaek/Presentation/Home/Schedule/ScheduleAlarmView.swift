@@ -21,9 +21,8 @@ struct ScheduleAlarmView: View {
             }
             .tabViewStyle(.page)
             .indexViewStyle(.page(backgroundDisplayMode: .always))
-            .frame(height: 220)
         }
-        .padding(.horizontal, 16)
+        .padding(.bottom, 12)
     }
 }
 

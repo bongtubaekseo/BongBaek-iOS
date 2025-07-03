@@ -13,8 +13,18 @@ struct HomeView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 ScrollView {
+                    HStack {
+                        Text("봉투백서")
+                            .font(.head_bold_24)
+                            .foregroundColor(.white)
+                            .padding(.leading, 20)
+                        Spacer()
+                    }
                     ScheduleAlarmView(alarms: scheduleDummy)
+                        .frame(height: 276)
+                        .padding(.leading, 20)
                     RecommendsView()
+                        .padding(.top, 10)
                     ScheduleView(schedules: scheduleDummy)
                         .padding(.top, 32)
                 }
@@ -31,7 +41,6 @@ struct HomeView: View {
         }
     }
 }
-
 
 #Preview {
     HomeView()
