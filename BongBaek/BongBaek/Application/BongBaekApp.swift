@@ -11,7 +11,8 @@ import SwiftUI
 struct BongBaekApp: App {
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            RecommendGuideTextView()
+                .background(.black)
         }
     }
 }
