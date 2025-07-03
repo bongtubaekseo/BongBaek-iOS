@@ -13,7 +13,6 @@ struct SignUpBottomSheetView: View {
     @State private var ageAgree = false
     @State private var serviceAgree = false
     @State private var privacyAgree = false
-    @State private var locationAgree = false
     @Environment(\.dismiss) private var dismiss
     @State var isChecked = false
     
@@ -33,10 +32,10 @@ struct SignUpBottomSheetView: View {
                 VStack(alignment: .leading,spacing: 4){
                     Text("앱 사용을 위해 권한을 허용해주세요.")
                         .titleSemiBold20()
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.white)
                     Text("꼭 필요한 권한만 받아요.")
                         .titleSemiBold20()
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.white)
                 }
                 
                 VStack(alignment: .leading, spacing: 16) {
@@ -97,24 +96,13 @@ struct SignUpBottomSheetView: View {
                                 print("개인정보 약관 상세보기 클릭됨")
                             }
                         )
-                        
-                        CheckButton(
-                            title: "위치 정보 액세스 권한",
-                            isRequired: false,
-                            isChecked: $locationAgree,
-                            onTap: {
-                                print("위치 정보 액세스 권한 버튼 클릭됨")
-                                print("클릭 후 locationAgree: \(locationAgree)")
-                                updateAllAgreeStatus()
-                            }
-                        )
                     }
                 }
                 .padding(.top, 12)
 
                 Spacer()
                 
-                Button("허용하고 계속하기") {
+                Button("다음") {
                     print("허용하고 계속하기 버튼 클릭됨")
                     print("canProceed: \(canProceed)")
                     onComplete()
@@ -131,6 +119,7 @@ struct SignUpBottomSheetView: View {
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.hidden)
+        .background(.gray750)
     }
     
     private func toggleAllAgree() {
@@ -141,13 +130,12 @@ struct SignUpBottomSheetView: View {
         ageAgree = newValue
         serviceAgree = newValue
         privacyAgree = newValue
-        locationAgree = newValue
 
     }
     
     private func updateAllAgreeStatus() {
         let oldAllAgree = allAgree
-        allAgree = ageAgree && serviceAgree && privacyAgree && locationAgree
+        allAgree = ageAgree && serviceAgree && privacyAgree
     }
 }
 

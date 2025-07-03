@@ -32,7 +32,9 @@ struct ProfileSettingView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            customNavigationBar
+            CustomNavigationBar(title: "프로필 설정") {
+                dismiss()
+            }
             
             ScrollView {
                 VStack {
@@ -57,6 +59,7 @@ struct ProfileSettingView: View {
                 hideKeyboard()
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
         .ignoresSafeArea(.container, edges: .bottom)
@@ -83,6 +86,7 @@ struct ProfileSettingView: View {
                     .foregroundColor(.white)
             }
             .frame(width: 44, height: 44)
+            .padding(.leading, -8)
             
             Spacer()
             

@@ -9,22 +9,33 @@ import SwiftUI
 
 struct LoginView: View {
     @State var isPresented = false
+    @State private var showProfileSetting = false
+       
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                backgroundLayer
-                bottomImageLayer
-                contentLayer(geometry: geometry)
+        NavigationStack {
+            GeometryReader { geometry in
+                ZStack {
+                    backgroundLayer
+                    bottomImageLayer
+                    contentLayer(geometry: geometry)
+                }
+            }
+            .navigationDestination(isPresented: $showProfileSetting) {
+                ProfileSettingView()
             }
         }
+
         .sheet(isPresented: $isPresented) {
             SignUpBottomSheetView(
                 onComplete: {
                     print("SignUpBottomSheet Clicked()")
+                    isPresented = false  // 바텀시트 닫기
+                    showProfileSetting = true
                 }
             )
-            .presentationDetents([.fraction(0.7)])
+            .presentationDetents([.fraction(0.5)])
         }
+
     }
 
     private var backgroundLayer: some View {

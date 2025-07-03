@@ -58,17 +58,17 @@ struct CheckButton: View {
                         if isRequired {
                             Text("[필수]")
                                 .bodyMedium16()
-                                .foregroundColor(.red)
+                                .foregroundColor(.gray300)
                         } else {
                             Text("[선택]")
                                 .bodyMedium16()
-                                .foregroundColor(.gray)
+                                .foregroundColor(.gray300)
                         }
                     }
                     
                     Text(title)
                         .bodyMedium16()
-                        .foregroundColor(.black)
+                        .foregroundColor(.gray300)
                 }
                 
                 Spacer()
@@ -77,13 +77,10 @@ struct CheckButton: View {
                     Button {
                         onDetailTap?()
                     } label: {
-                        Text("보기")
-                            .bodyMedium16()
-                            .foregroundColor(.gray)
-                            .underline()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.gray300)
                     }
-
-
                 }
             }
         }
