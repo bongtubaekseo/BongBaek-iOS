@@ -22,7 +22,7 @@ struct HomeView: View {
                     }
                     ScheduleAlarmView(alarms: scheduleDummy)
                         .frame(height: 276)
-                        .padding(.leading, 20)
+                        .padding(.top, 30)
                     RecommendsView()
                         .padding(.top, 10)
                     ScheduleView(schedules: scheduleDummy)

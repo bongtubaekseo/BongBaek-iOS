@@ -11,20 +11,30 @@ struct ScheduleAlarmView: View {
     @State private var selectedIndex = 0
 
     var body: some View {
-        VStack(spacing: 1) {
+        VStack(spacing: 0) {
             TabView(selection: $selectedIndex) {
-                ForEach(Array(alarms.enumerated()).filter { $0.offset < 3 }, id: \.element.id) { index, schedule in
+                ForEach(Array(alarms.enumerated()).prefix(3), id: \.element.id) { index, schedule in
                     ScheduleIndicatorCellView(schedule: schedule)
                         .tag(index)
                         .padding(.horizontal, 8)
                 }
             }
             .tabViewStyle(.page)
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            .indexViewStyle(.page(backgroundDisplayMode: .never))
+
+            HStack(spacing: 6) {
+                ForEach(0..<min(alarms.count, 3), id: \.self) { index in
+                    Circle()
+                        .fill(index == selectedIndex ? Color.white : Color.gray.opacity(0.5))
+                        .frame(width: 6, height: 6)
+                }
+            }
+            .padding(.top, 12) // Cell과 충분히 떨어지도록 조정
         }
-        .padding(.bottom, 12)
     }
 }
+
+
 
 
 #Preview {
