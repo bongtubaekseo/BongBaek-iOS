@@ -188,6 +188,7 @@ enum ValidationState {
     }
 }
 
+
 struct ValidationRule {
     let minLength: Int?
     let maxLength: Int?

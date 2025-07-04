@@ -12,8 +12,13 @@ struct RecommendStartView: View {
         VStack {
             CustomNavigationBar(title: "금액 추천 가이드")
             
-            RecommendGuideTextView()
-                .padding(.leading, 10)
+            RecommendGuideTextView(
+                title1: "경조사비,",
+                title2: "얼마가 적당할까요?",
+                subtitle1: "내 상황에 딱 맞는 경조사비,",
+                subtitle2: "지금 바로 알아보세요!"
+            )
+            .padding(.leading, 10)
             
             Image("image_bong 1")
             
