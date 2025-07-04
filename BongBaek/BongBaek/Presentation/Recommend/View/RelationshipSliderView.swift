@@ -13,7 +13,7 @@ struct RelationshipSliderView: View {
     let range: ClosedRange<Double> = 0...4
 
     var body: some View {
-            VStack(spacing: 60) {
+            VStack(spacing: 30) {
                 SliderSection(
                     value: $contactValue,
                     range: range,
@@ -22,6 +22,8 @@ struct RelationshipSliderView: View {
                     leftLabel: "가끔",
                     rightLabel: "매일"
                 )
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
                 
                 SliderSection(
                     value: $intimacyValue,
@@ -31,12 +33,14 @@ struct RelationshipSliderView: View {
                     leftLabel: "가끔",
                     rightLabel: "매일"
                 )
+                .padding(.horizontal, 20)
                 
                 Spacer()
             }
+        
         .background(.gray750)
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(20)
+        .frame(maxWidth: .infinity)
     }
 }
 
