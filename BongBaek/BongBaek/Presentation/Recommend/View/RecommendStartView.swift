@@ -9,41 +9,45 @@ import SwiftUI
 
 struct RecommendStartView: View {
     var body: some View {
-        VStack {
-            CustomNavigationBar(title: "금액 추천 가이드")
-            
-            RecommendGuideTextView(
-                title1: "경조사비,",
-                title2: "얼마가 적당할까요?",
-                subtitle1: "내 상황에 딱 맞는 경조사비,",
-                subtitle2: "지금 바로 알아보세요!"
-            )
-            .padding(.leading, 10)
-            
-            Image("image_bong 1")
-            
-            HStack {
-                Image("icon_protect")
-                Text("개인정보 보호모드 작동 중 ")
-                    .bodyMedium14()
-                    .foregroundStyle(.gray300)
-            }
-            
-            Button {
-                print("금액추천 시작하기")
-            } label: {
-                Text("금액 추천 시작하기")
-                    .titleSemiBold18()
-                    .foregroundStyle(.white)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 60)
-            .background(.primaryNormal)
-            .cornerRadius(12)
-            .padding(.horizontal, 20)
-            .padding(.top,8)
+        
+        NavigationStack {
+            VStack {
+                CustomNavigationBar(title: "금액 추천 가이드")
+                
+                RecommendGuideTextView(
+                    title1: "경조사비,",
+                    title2: "얼마가 적당할까요?",
+                    subtitle1: "내 상황에 딱 맞는 경조사비,",
+                    subtitle2: "지금 바로 알아보세요!"
+                )
+                .padding(.leading, 10)
+                
+                Image("image_bong 1")
+                
+                HStack {
+                    Image("icon_protect")
+                    Text("개인정보 보호모드 작동 중 ")
+                        .bodyMedium14()
+                        .foregroundStyle(.gray300)
+                }
+                
+                NavigationLink(destination: RecommendView()) {
+                                    Text("금액 추천 시작하기")
+                                        .titleSemiBold18()
+                                        .foregroundStyle(.white)
+                                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 60)
+                .background(.primaryNormal)
+                .cornerRadius(12)
+                .padding(.horizontal, 20)
+                .padding(.top,8)
 
-            Spacer()
+                Spacer()
+            }
+            .background(Color.background)
+            .toolbar(.hidden, for: .navigationBar) // iOS 16+
+            .navigationBarBackButtonHidden(true)
         }
     }
 }

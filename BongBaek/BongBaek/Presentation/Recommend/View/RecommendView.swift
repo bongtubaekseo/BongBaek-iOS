@@ -58,8 +58,8 @@ struct RecommendView: View {
                            .padding(.bottom, 20)
                            
                            VStack(spacing: 12) {
-                               BorderTextField(placeholder: "이름을 적어주세요", text: $texts)
-                               BorderTextField(placeholder: "별명을 적어주세요", text: $texts)
+                               BorderTextField(placeholder: "이름을 적어주세요", text: $texts,validationRule: ValidationRule(minLength: 2, maxLength: 10))
+                               BorderTextField(placeholder: "별명을 적어주세요", text: $texts,validationRule:ValidationRule(minLength: 2, maxLength: 10) )
                            }
                        }
                        .padding(.horizontal, 40)
@@ -130,6 +130,9 @@ struct RecommendView: View {
                    Spacer(minLength: 0)
                }
            }
+           .onTapGesture {
+               hideKeyboard()
+           }
            .onChange(of: detailSelected) { newValue in
                if newValue {
                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
@@ -141,5 +144,7 @@ struct RecommendView: View {
            }
        }
        .background(Color.background)
+       .toolbar(.hidden, for: .navigationBar)
+       .navigationBarBackButtonHidden(true)
    }
 }
