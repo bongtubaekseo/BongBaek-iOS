@@ -57,9 +57,9 @@ struct ScheduleCellView: View {
                     .resizable()
                     .frame(width: 16, height: 16)
                 Text(schedule.location)
+                    .captionRegular12()
+                    .foregroundColor(.white)
             }
-            .font(.caption_regular_12)
-            .foregroundColor(.gray300)
             .padding(.horizontal, 8)
             .padding(.vertical, 6)
             .frame(height: 28)

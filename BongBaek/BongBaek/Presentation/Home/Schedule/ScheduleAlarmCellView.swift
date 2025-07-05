@@ -45,7 +45,7 @@ struct ScheduleIndicatorCellView: View {
                     .frame(width: 14, height: 16)
                 
                 Text(schedule.date)
-                    .font(.caption_regular_12)
+                    .captionRegular12()
                     .foregroundColor(.white)
             }
             .padding(.vertical, 4)
@@ -56,7 +56,6 @@ struct ScheduleIndicatorCellView: View {
             
 
         }
-//        .frame(width: 320, height: 260)
         .padding(.top, 40)
         .padding(.horizontal, 20)
         .padding(.bottom, 20)
