@@ -124,9 +124,7 @@ struct RecommendView: View {
                    .cornerRadius(12)
                    .padding(.horizontal, 20)
                    .padding(.top,8)
-
-
-                   
+ 
                    Spacer(minLength: 0)
                }
            }

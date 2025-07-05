@@ -2,7 +2,7 @@
 //  Font+.swift
 //  BongBaek
 //
-//  Created by 임재현 on 6/29/25.
+//  Created by 임재현 on 7/5/25.
 //
 
 import SwiftUI
@@ -158,4 +158,3 @@ struct TypographyHelper {
         return max(0,additionalSpacing)
     }
 }
-

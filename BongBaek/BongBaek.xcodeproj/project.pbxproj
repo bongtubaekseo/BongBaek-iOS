@@ -29,16 +29,6 @@
 		46C48B742E1019E1008C1C90 /* BongBaekUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BongBaekUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		46F75E8B2E19163C00A7E9EC /* Exceptions for "BongBaek" folder in "BongBaek" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 46C48B5C2E1019DF008C1C90 /* BongBaek */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		46C48B6D2E1019E1008C1C90 /* BongBaekTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -52,9 +42,6 @@
 		};
 		46C48B952E101B0D008C1C90 /* BongBaek */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				46F75E8B2E19163C00A7E9EC /* Exceptions for "BongBaek" folder in "BongBaek" target */,
-			);
 			path = BongBaek;
 			sourceTree = "<group>";
 		};
