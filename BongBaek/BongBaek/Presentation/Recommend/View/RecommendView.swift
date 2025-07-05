@@ -9,8 +9,11 @@ import SwiftUI
 
 struct RecommendView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("경조사비, \n얼마가 적당할까요? ")
+            .foregroundColor(.black)
+            .font(.head_bold_26)
     }
+    
 }
 
 #Preview {
