@@ -55,75 +55,77 @@ struct FullScheduleView: View {
     }
 
     var body: some View {
-        
-        ScrollView {
-            VStack(alignment: .leading, spacing: 30) {
-                Text("봉백님의 전체 일정")
-                    .titleSemiBold18()
-                    .foregroundColor(.white)
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            ForEach(ScheduleCategory.allCases, id: \.self) { category in
-                                Button(action: {
-                                    selectedCategory = category
-                                }) {
-                                    Text(category.displayName)
-                                        .bodyMedium16()
-                                        .foregroundColor(selectedCategory == category ? .black : .gray300)
-                                        .frame(height: 40)
-                                        .padding(.horizontal, 16)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .fill(selectedCategory == category ? .gray100 : .gray700)
-                                        )
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 30) {
+                    Text("봉백님의 전체 일정")
+                        .titleSemiBold18()
+                        .foregroundColor(.white)
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(ScheduleCategory.allCases, id: \.self) { category in
+                                    Button(action: {
+                                        selectedCategory = category
+                                    }) {
+                                        Text(category.displayName)
+                                            .bodyMedium16()
+                                            .foregroundColor(selectedCategory == category ? .black : .gray300)
+                                            .frame(height: 40)
+                                            .padding(.horizontal, 16)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .fill(selectedCategory == category ? .gray100 : .gray700)
+                                            )
+                                    }
+                                }
+                            }
+                            .padding(.horizontal, 4)
+                        }
+                    }
+
+                    ForEach(filteredSchedulesGrouped.keys.sorted(by: <), id: \.self) { year in
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("\(year)년")
+                                .headBold24()
+                                .foregroundColor(.white)
+
+                            let months = filteredSchedulesGrouped[year] ?? [:]
+                            ForEach(months.keys.sorted(), id: \.self) { month in
+                                VStack(alignment: .leading, spacing: 10) {
+                                    HStack(spacing: 12) {
+                                        Text("\(Int(month) ?? 0)월")
+                                            .titleSemiBold16()
+                                            .foregroundColor(.white)
+                                        
+                                        Rectangle()
+                                            .foregroundColor(.gray750)
+                                            .frame(height: 2)
+                                    }
+                                    .padding(.trailing, 20)
+
+                                    ForEach(months[month] ?? []) { schedule in
+                                        FullScheduleCellView(model: schedule)
+                                    }
                                 }
                             }
                         }
-                        .padding(.horizontal, 4)
                     }
                 }
-
-                ForEach(filteredSchedulesGrouped.keys.sorted(by: <), id: \.self) { year in
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("\(year)년")
-                            .headBold24()
-                            .foregroundColor(.white)
-
-                        let months = filteredSchedulesGrouped[year] ?? [:]
-                        ForEach(months.keys.sorted(), id: \.self) { month in
-                            VStack(alignment: .leading, spacing: 10) {
-                                HStack(spacing: 12) {
-                                    Text("\(Int(month) ?? 0)월")
-                                        .titleSemiBold16()
-                                        .foregroundColor(.white)
-                                    
-                                    Rectangle()
-                                        .foregroundColor(.gray750)
-                                        .frame(height: 2)
-                                }
-                                .padding(.trailing, 20)
-
-                                ForEach(months[month] ?? []) { schedule in
-                                    FullScheduleCellView(model: schedule)
-                                }
-                            }
-                        }
-                    }
-                }
+                .padding()
             }
-            .padding()
-        }
-        .background(Color.black.edgesIgnoringSafeArea(.all))
-        CustomTabView(selectedTab: $selectedTab)
-            .background(Color.gray750)
-            .clipShape(
-                .rect(
-                    topLeadingRadius: 10,
-                    topTrailingRadius: 10
+            
+            CustomTabView(selectedTab: $selectedTab)
+                .background(Color.gray750)
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 10,
+                        topTrailingRadius: 10
+                    )
                 )
-            )
+        }
+        .background(Color.black.ignoresSafeArea())
     }
 }
 
