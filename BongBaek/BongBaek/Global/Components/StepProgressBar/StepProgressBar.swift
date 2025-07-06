@@ -62,10 +62,21 @@ struct StepProgressBar: View {
                             width: geometry.size.width * progress,
                             height: height
                         )
-                        .animation(.easeInOut(duration: 0.3), value: progress)
+                        .animation(.spring(response: 0.6, dampingFraction: 0.8), value: progress)
                 }
             }
             .frame(height: height)
+        }
+    }
+}
+
+struct StepProgressDemoApp: View {
+    @StateObject private var stepManager = GlobalStepManager()
+    
+    var body: some View {
+        NavigationView {
+            RecommendView()
+                .environmentObject(stepManager)
         }
     }
 }

@@ -11,6 +11,7 @@ struct RecommendView: View {
    @State var texts: String = ""
    @State private var selectedRelation = ""
    @State private var detailSelected: Bool = false
+   @EnvironmentObject var stepManager: GlobalStepManager
    
    let relationships = [
        ("icon_family", "가족"),
@@ -29,12 +30,14 @@ struct RecommendView: View {
    var body: some View {
        ScrollViewReader { proxy in
            ScrollView {
+               
+               CustomNavigationBar(title: "관계정보")
+               
+               StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
+                   .padding(.horizontal, 20)
+
                VStack {
-                   CustomNavigationBar(title: "관계정보")
-                   
-                   StepProgressBar(currentStep: 1, totalSteps: 4)
-                       .padding(.horizontal, 20)
-                   
+
                    RecommendGuideTextView(
                        title1: "먼저, 마음을 전하고 싶은 분의",
                        title2: "정보를 적어주세요,",
@@ -111,22 +114,42 @@ struct RecommendView: View {
                            .id("sliderView")
                    }
                    
-                   Button {
-                       print("금액추천 시작하기")
-                   } label: {
+                   NavigationLink(destination: Step2View().environmentObject(stepManager)) {
                        Text("금액 추천 시작하기")
                            .titleSemiBold18()
                            .foregroundStyle(.white)
                    }
+                   .simultaneousGesture(TapGesture().onEnded {
+                       withAnimation {
+                           stepManager.nextStep()
+                       }
+                   })
                    .frame(maxWidth: .infinity)
                    .frame(height: 60)
                    .background(.primaryNormal)
                    .cornerRadius(12)
                    .padding(.horizontal, 20)
-                   .padding(.top,8)
+                   .padding(.top, 8)
+                   
+//                   Button {
+//                       print("금액추천 시작하기")
+//                   } label: {
+//                       Text("금액 추천 시작하기")
+//                           .titleSemiBold18()
+//                           .foregroundStyle(.white)
+//                   }
+//                   .frame(maxWidth: .infinity)
+//                   .frame(height: 60)
+//                   .background(.primaryNormal)
+//                   .cornerRadius(12)
+//                   .padding(.horizontal, 20)
+//                   .padding(.top,8)
  
                    Spacer(minLength: 0)
                }
+           }
+           .onAppear {
+               stepManager.currentStep = 1
            }
            .onTapGesture {
                hideKeyboard()
@@ -145,4 +168,60 @@ struct RecommendView: View {
        .toolbar(.hidden, for: .navigationBar)
        .navigationBarBackButtonHidden(true)
    }
+}
+
+struct Step2View: View {
+    @EnvironmentObject var stepManager: GlobalStepManager
+    @Environment(\.presentationMode) var presentationMode
+    
+    var body: some View {
+        ScrollView {
+            VStack {
+                CustomNavigationBar(title: "금액정보") {
+                    withAnimation {
+                        stepManager.previousStep()
+                    }
+                    presentationMode.wrappedValue.dismiss()
+                }
+                
+                StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
+                    .padding(.horizontal, 20)
+                
+                VStack(spacing: 30) {
+                    Spacer()
+                    
+                    Text("Step 2 화면입니다")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Button {
+                        withAnimation {
+                            stepManager.nextStep()
+                        }
+                        // 다음 화면으로 이동 (Step3View가 있다면)
+                        // navigateToStep3 = true
+                    } label: {
+                        Text("다음 단계로")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 60)
+                    .background(.blue)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 20)
+                }
+                .padding()
+            }
+        }
+        .background(Color.background)
+        .toolbar(.hidden, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+        .onAppear {
+            stepManager.currentStep = 2
+        }
+    }
 }
