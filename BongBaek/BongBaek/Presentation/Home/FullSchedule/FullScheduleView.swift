@@ -6,13 +6,26 @@
 //
 import SwiftUI
 
+enum ScheduleCategory: String, CaseIterable {
+    case all = "전체"
+    case wedding = "결혼식"
+    case babyParty = "돌잔치"
+    case birthday = "생일"
+    case funeral = "장례식"
+    
+    var displayName: String {
+        return self.rawValue
+    }
+}
+
 struct FullScheduleView: View {
+    @State private var selectedCategory: ScheduleCategory = .all
     
     var schedulesGrouped: [String: [String: [ScheduleModel]]] {
         let grouped = Dictionary(grouping: scheduleDummy) { model in
             let components = model.date.split(separator: ".")
-            let year = components[safe: 0].map { String($0).trimmingCharacters(in: .whitespaces) } ?? "기타"
-            let month = components[safe: 1].map { String($0).trimmingCharacters(in: .whitespaces) } ?? "기타"
+            let year = components.count > 0 ? String(components[0]).trimmingCharacters(in: .whitespaces) : "기타"
+            let month = components.count > 1 ? String(components[1]).trimmingCharacters(in: .whitespaces) : "기타"
             return "\(year)/\(month)"
         }
         
@@ -24,21 +37,59 @@ struct FullScheduleView: View {
             result[year, default: [:]][month, default: []] += pair.value
         }
     }
+    
+    var filteredSchedulesGrouped: [String: [String: [ScheduleModel]]] {
+        if selectedCategory == .all {
+            return schedulesGrouped
+        } else {
+            return schedulesGrouped.mapValues { months in
+                months.mapValues { schedules in
+                    schedules.filter { schedule in
+                        // 추후 필터링 로직 추가
+                        return true
+                    }
+                }
+            }
+        }
+    }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 50) {
+            VStack(alignment: .leading, spacing: 30) {
                 Text("봉백님의 전체 일정")
                     .titleSemiBold18()
                     .foregroundColor(.white)
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(ScheduleCategory.allCases, id: \.self) { category in
+                                Button(action: {
+                                    selectedCategory = category
+                                }) {
+                                    Text(category.displayName)
+                                        .bodyMedium16()
+                                        .foregroundColor(selectedCategory == category ? .black : .gray300)
+                                        .frame(height: 40)
+                                        .padding(.horizontal, 16)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(selectedCategory == category ? .gray100 : .gray700)
+                                        )
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                    }
+                }
 
-                ForEach(schedulesGrouped.keys.sorted(by: <), id: \.self) { year in
+                ForEach(filteredSchedulesGrouped.keys.sorted(by: <), id: \.self) { year in
                     VStack(alignment: .leading, spacing: 16) {
                         Text("\(year)년")
                             .headBold24()
                             .foregroundColor(.white)
 
-                        let months = schedulesGrouped[year] ?? [:]
+                        let months = filteredSchedulesGrouped[year] ?? [:]
                         ForEach(months.keys.sorted(), id: \.self) { month in
                             VStack(alignment: .leading, spacing: 10) {
                                 HStack(spacing: 12) {
@@ -63,14 +114,10 @@ struct FullScheduleView: View {
             .padding()
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
+        
     }
 }
 
-extension Array {
-    subscript(safe index: Int) -> Element? {
-        return indices.contains(index) ? self[index] : nil
-    }
-}
 #Preview {
     FullScheduleView()
 }
