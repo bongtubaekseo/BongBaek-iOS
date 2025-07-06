@@ -8,8 +8,15 @@
 import SwiftUI
 
 struct ModifyEventView: View {
-    
     @State var nickname: String = ""
+    @State private var selectedAttend: TextDropdownItem?
+    
+    let eventItems = [
+        TextDropdownItem(title: "참석"),
+        TextDropdownItem(title: "미참석"),
+
+    ]
+    
     var body: some View {
         VStack {
             ScrollView {
@@ -17,7 +24,6 @@ struct ModifyEventView: View {
                     Button(action: {
                         
                     }) {
-                        
                         Text("취소")
                             .bodyRegular16()
                             .foregroundStyle(.gray200)
@@ -43,31 +49,36 @@ struct ModifyEventView: View {
                 .background(.gray900)
                 
                 VStack {
-                    CustomTextField(
-                        title: "닉네임",
-                        icon: "person.circle",
-                        placeholder: "닉네임을 입력하세요",
-                        text: $nickname,
-                        validationRule: ValidationRule(
-                            minLength: 2,
-                            maxLength: 10
+                    VStack {
+                        CustomTextField(
+                            title: "닉네임",
+                            icon: "person.circle",
+                            placeholder: "닉네임을 입력하세요",
+                            text: $nickname,
+                            validationRule: ValidationRule(
+                                minLength: 2,
+                                maxLength: 10
+                            )
                         )
-                    )
-                    
-                    CustomTextField(
-                        title: "별명",
-                        icon: "icon_nickname_16",
-                        placeholder: "닉네임을 입력하세요",
-                        text: $nickname,
-                        validationRule: ValidationRule(
-                            minLength: 2,
-                            maxLength: 10
+                        
+                        CustomTextField(
+                            title: "별명",
+                            icon: "icon_nickname_16",
+                            placeholder: "닉네임을 입력하세요",
+                            text: $nickname,
+                            validationRule: ValidationRule(
+                                minLength: 2,
+                                maxLength: 10
+                            )
                         )
-                    )
-                    .padding(.top, 32)
+                        .padding(.top, 32)
+                    }
+                    .padding(.horizontal, 20)
+
+                    DropdownView()
+                        .padding(.top, 16)
 
                     VStack(alignment: .leading, spacing: 8) {
-
                         HStack(spacing: 8) {
                             CustomTextField(
                                 title: "경조사",
@@ -84,12 +95,19 @@ struct ModifyEventView: View {
                                 .bodyRegular16()
                                 .foregroundColor(.white)
                         }
+                        
+                        CustomDropdown(
+                            title: "참석여부",
+                            icon: "icon_come_16",
+                            placeholder: "경조사를 선택하세요",
+                            items: eventItems,
+                            selectedItem: $selectedAttend
+                        )
+                        .padding(.top, 16)
                     }
-                    .padding(.top, 32)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 16)
                 }
-                .padding(.horizontal, 20)
- 
-
             }
         }
         .background(Color.background)
