@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct FullScheduleView: View {
-    // 연도 → 월 → 일정 목록 형태로 정리
+    
     var schedulesGrouped: [String: [String: [ScheduleModel]]] {
         let grouped = Dictionary(grouping: scheduleDummy) { model in
             let components = model.date.split(separator: ".")
@@ -27,12 +27,12 @@ struct FullScheduleView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 50) {
                 Text("봉백님의 전체 일정")
                     .titleSemiBold18()
                     .foregroundColor(.white)
 
-                ForEach(schedulesGrouped.keys.sorted(by: >), id: \.self) { year in
+                ForEach(schedulesGrouped.keys.sorted(by: <), id: \.self) { year in
                     VStack(alignment: .leading, spacing: 16) {
                         Text("\(year)년")
                             .headBold24()
@@ -41,9 +41,16 @@ struct FullScheduleView: View {
                         let months = schedulesGrouped[year] ?? [:]
                         ForEach(months.keys.sorted(), id: \.self) { month in
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("\(Int(month) ?? 0)월")
-                                    .titleSemiBold16()
-                                    .foregroundColor(.white)
+                                HStack(spacing: 12) {
+                                    Text("\(Int(month) ?? 0)월")
+                                        .titleSemiBold16()
+                                        .foregroundColor(.white)
+                                    
+                                    Rectangle()
+                                        .foregroundColor(.gray750)
+                                        .frame(height: 2)
+                                }
+                                .padding(.trailing, 20)
 
                                 ForEach(months[month] ?? []) { schedule in
                                     FullScheduleCellView(model: schedule)
@@ -59,13 +66,11 @@ struct FullScheduleView: View {
     }
 }
 
-
 extension Array {
     subscript(safe index: Int) -> Element? {
         return indices.contains(index) ? self[index] : nil
     }
 }
-
 #Preview {
     FullScheduleView()
 }
