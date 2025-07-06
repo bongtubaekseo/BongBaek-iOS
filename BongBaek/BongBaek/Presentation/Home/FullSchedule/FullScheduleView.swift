@@ -29,21 +29,21 @@ struct FullScheduleView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 Text("봉백님의 전체 일정")
-                    .font(.title)
+                    .titleSemiBold18()
                     .foregroundColor(.white)
 
                 ForEach(schedulesGrouped.keys.sorted(by: >), id: \.self) { year in
                     VStack(alignment: .leading, spacing: 16) {
                         Text("\(year)년")
-                            .font(.title2).bold()
+                            .headBold24()
                             .foregroundColor(.white)
 
                         let months = schedulesGrouped[year] ?? [:]
                         ForEach(months.keys.sorted(), id: \.self) { month in
                             VStack(alignment: .leading, spacing: 10) {
                                 Text("\(Int(month) ?? 0)월")
-                                    .font(.headline)
-                                    .foregroundColor(.gray)
+                                    .titleSemiBold16()
+                                    .foregroundColor(.white)
 
                                 ForEach(months[month] ?? []) { schedule in
                                     FullScheduleCellView(model: schedule)
@@ -59,7 +59,7 @@ struct FullScheduleView: View {
     }
 }
 
-// Array의 safe subscript extension
+
 extension Array {
     subscript(safe index: Int) -> Element? {
         return indices.contains(index) ? self[index] : nil

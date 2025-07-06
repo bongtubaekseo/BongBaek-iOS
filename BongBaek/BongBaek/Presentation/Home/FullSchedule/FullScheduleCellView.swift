@@ -26,26 +26,33 @@ struct FullScheduleCellView: View {
                     .foregroundColor(.white)
             }
 
-            HStack(spacing: 4) {
-                Text(model.type)
+            HStack {
+                HStack(spacing: 8) {
+                    Text(model.type)
+                        .captionRegular12()
+                        .foregroundColor(.primaryNormal)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(.primaryNormal.opacity(0.1))
+                        .cornerRadius(4)
+                    Text(model.relation)
+                        .captionRegular12()
+                        .foregroundColor(.primaryNormal)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(.primaryNormal.opacity(0.1))
+                        .cornerRadius(4)
+                }
+                
+                Spacer()
+                
+                Text(model.date)
                     .captionRegular12()
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(.primaryNormal)
-                    .cornerRadius(4)
-                Text(model.relation)
-                    .captionRegular12()
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(.primaryNormal)
-                    .cornerRadius(4)
+                    .foregroundColor(.gray400)
             }
-
-            Text(model.date)
-                .captionRegular12()
-                .foregroundColor(.gray400)
         }
-        .padding()
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
         .background(.gray750)
         .cornerRadius(10)
     }
