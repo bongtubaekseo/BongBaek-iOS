@@ -20,6 +20,7 @@ enum ScheduleCategory: String, CaseIterable {
 
 struct FullScheduleView: View {
     @State private var selectedCategory: ScheduleCategory = .all
+    @State private var selectedTab: Tab = .home
     
     var schedulesGrouped: [String: [String: [ScheduleModel]]] {
         let grouped = Dictionary(grouping: scheduleDummy) { model in
@@ -54,6 +55,7 @@ struct FullScheduleView: View {
     }
 
     var body: some View {
+        
         ScrollView {
             VStack(alignment: .leading, spacing: 30) {
                 Text("봉백님의 전체 일정")
@@ -114,7 +116,14 @@ struct FullScheduleView: View {
             .padding()
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
-        
+        CustomTabView(selectedTab: $selectedTab)
+            .background(Color.gray750)
+            .clipShape(
+                .rect(
+                    topLeadingRadius: 10,
+                    topTrailingRadius: 10
+                )
+            )
     }
 }
 
