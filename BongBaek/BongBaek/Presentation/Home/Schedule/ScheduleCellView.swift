@@ -33,7 +33,6 @@ struct ScheduleCellView: View {
                 }
             }
 
-            // 태그들
             HStack(spacing: 6) {
                 Text(schedule.type)
                     .captionRegular12()
@@ -58,7 +57,7 @@ struct ScheduleCellView: View {
                     .frame(width: 16, height: 16)
                 Text(schedule.location)
                     .captionRegular12()
-                    .foregroundColor(.white)
+                    .foregroundColor(.gray200)
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 6)
@@ -74,7 +73,7 @@ struct ScheduleCellView: View {
                 Text(schedule.date)
             }
             .font(.caption_regular_12)
-            .foregroundColor(.gray300)
+            .foregroundColor(.gray200)
             .padding(.horizontal, 8)
             .padding(.vertical, 6)
             .frame(height: 28)
