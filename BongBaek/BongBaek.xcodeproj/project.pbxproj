@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2C5D695D2E1B9C950042F76E /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5D695C2E1B9C950042F76E /* Lottie */; };
+		2C5D695F2E1B9C950042F76E /* Lottie-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5D695E2E1B9C950042F76E /* Lottie-Dynamic */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		46C48B6B2E1019E1008C1C90 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C5D695D2E1B9C950042F76E /* Lottie in Frameworks */,
+				2C5D695F2E1B9C950042F76E /* Lottie-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +119,8 @@
 			);
 			name = BongBaek;
 			packageProductDependencies = (
+				2C5D695C2E1B9C950042F76E /* Lottie */,
+				2C5D695E2E1B9C950042F76E /* Lottie-Dynamic */,
 			);
 			productName = BongBaek;
 			productReference = 46C48B5D2E1019DF008C1C90 /* BongBaek.app */;
@@ -195,6 +204,9 @@
 			);
 			mainGroup = 46C48B542E1019DF008C1C90;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2C5D695B2E1B9C950042F76E /* XCRemoteSwiftPackageReference "lottie-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 46C48B5E2E1019DF008C1C90 /* Products */;
 			projectDirPath = "";
@@ -562,6 +574,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2C5D695B2E1B9C950042F76E /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2C5D695C2E1B9C950042F76E /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C5D695B2E1B9C950042F76E /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		2C5D695E2E1B9C950042F76E /* Lottie-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C5D695B2E1B9C950042F76E /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = "Lottie-Dynamic";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 46C48B552E1019DF008C1C90 /* Project object */;
 }
