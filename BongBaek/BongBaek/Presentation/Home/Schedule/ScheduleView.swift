@@ -26,7 +26,6 @@ struct ScheduleView: View {
                         .padding(.horizontal, 8)
                         .background(Color.clear)
                 }
-                //.buttonStyle(PlainButtonStyle())
             }
             .padding(.bottom, 20)
             

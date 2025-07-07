@@ -50,7 +50,7 @@ struct ScheduleIndicatorCellView: View {
             }
             .padding(.vertical, 4)
             .padding(.horizontal, 4)
-            .background(.black)
+            .background(.gray750)
             .cornerRadius(6)
             .offset(y: -65)
             
