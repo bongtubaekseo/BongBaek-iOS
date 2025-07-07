@@ -17,6 +17,7 @@ struct ProfileSettingView: View {
     @FocusState private var focusedField: FocusField?
     @Environment(\.dismiss) private var dismiss
     @State private var previousFocusedField: FocusField? = nil
+    @State private var navigateToHome = false
     
     enum FocusField {
         case nickname
@@ -59,6 +60,9 @@ struct ProfileSettingView: View {
                 hideKeyboard()
             }
         }
+        .navigationDestination(isPresented: $navigateToHome) {
+              HomeView()
+          }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
@@ -276,6 +280,8 @@ struct ProfileSettingView: View {
             case .none:
                 print("수입이 선택되지 않음")
             }
+            
+            navigateToHome = true
         }
         .frame(maxWidth: .infinity)
         .padding()
