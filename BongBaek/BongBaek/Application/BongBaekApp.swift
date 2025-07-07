@@ -12,7 +12,7 @@ struct BongBaekApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ModifyEventView()
+                EventLocationView()
             }
         }
     }
