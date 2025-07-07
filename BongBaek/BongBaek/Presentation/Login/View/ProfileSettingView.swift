@@ -119,19 +119,19 @@ struct ProfileSettingView: View {
             )
             .focused($focusedField, equals: .nickname)
             
-            CustomTextField(
-                title: "생년월일",
-                icon: "icon_calendar_16",
-                placeholder: "생년월일을 입력하세요",
-                text: $selectedDate,
-                isReadOnly: true) {
-                    print("생년월일 필드 터치됨")
-                    previousFocusedField = focusedField
-                    focusedField = nil
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        showDatePicker = true
+                CustomTextField(
+                    title: "생년월일",
+                    icon: "icon_calendar_16",
+                    placeholder: "생년월일을 입력하세요",
+                    text: $selectedDate,
+                    isReadOnly: true) {
+                        print("생년월일 필드 터치됨")
+                        previousFocusedField = focusedField
+                        focusedField = nil
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            showDatePicker = true
+                        }
                     }
-                }
         }
         .padding(.top, 30)
     }

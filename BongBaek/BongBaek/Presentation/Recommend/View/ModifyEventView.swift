@@ -10,6 +10,8 @@ import SwiftUI
 struct ModifyEventView: View {
     @State var nickname: String = ""
     @State private var selectedAttend: TextDropdownItem?
+    @State private var showDatePicker = false
+    @State var selectedDate: String = ""
     
     let eventItems = [
         TextDropdownItem(title: "참석"),
@@ -104,9 +106,44 @@ struct ModifyEventView: View {
                             selectedItem: $selectedAttend
                         )
                         .padding(.top, 16)
+                        
+                        CustomTextField(
+                            title: "날짜",
+                            icon: "icon_calendar_16",
+                            placeholder: "생년월일을 입력하세요",
+                            text: $selectedDate,
+                            isReadOnly: true) {
+                                print("생년월일 필드 터치됨")
+                              
+                               
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    showDatePicker = true
+                                }
+                            }
+                            .padding(.top, 16)
+                        
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
+                    
+                    EventMapView()
+                        .padding(.top, 16)
+                    
+                    
+                    Button {
+
+                    } label: {
+                        Text("다음 단계로")
+                            .titleSemiBold18()
+                            .foregroundColor(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 55)
+                    .background(.primaryNormal)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+
                 }
             }
         }
@@ -117,3 +154,5 @@ struct ModifyEventView: View {
 #Preview {
     ModifyEventView()
 }
+
+
