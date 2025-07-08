@@ -11,6 +11,7 @@ extension Font {
     static let head_bold_26 = Font.custom("Pretendard-Bold", size: 26)
     static let head_bold_24 = Font.custom("Pretendard-Bold", size: 24)
     
+    static let title_semibold_22 = Font.custom("Pretendard-SemiBold", size: 22)
     static let title_semibold_20 = Font.custom("Pretendard-SemiBold", size: 20)
     static let title_semibold_18 = Font.custom("Pretendard-SemiBold", size: 18)
     static let title_semibold_16 = Font.custom("Pretendard-SemiBold", size: 16)
@@ -48,6 +49,17 @@ extension Text {
         )
     }
     
+    func titleSemiBold22() -> some View {
+        self.font(.title_semibold_22)
+            .kerning(TypographyHelper.customLetterSpacing(fontSize: 22, percent: -3))
+            .lineSpacing(TypographyHelper.customLineHeight(
+                fontSize: 22,
+                weight: .semibold,
+                targetLineHeightPercent: 150
+            )
+        )
+    }
+    
     func titleSemiBold20() -> some View {
         self.font(.title_semibold_20)
             .kerning(TypographyHelper.customLetterSpacing(fontSize: 20, percent: -3))
@@ -61,7 +73,7 @@ extension Text {
     
     func titleSemiBold18() -> some View {
         self.font(.title_semibold_18)
-            .kerning(TypographyHelper.customLetterSpacing(fontSize: 18, percent: -2))
+            .kerning(TypographyHelper.customLetterSpacing(fontSize: 18, percent: -3))
             .lineSpacing(TypographyHelper.customLineHeight(
                 fontSize: 18,
                 weight: .semibold,
