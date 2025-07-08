@@ -7,25 +7,43 @@
 import SwiftUI
 
 struct RecommendLottie: View {
+    @State private var showRectangle = false
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.gray900
-                    .ignoresSafeArea(.all)
-                
-                VStack(spacing: 0) {
-                    CustomNavigationBar(title: "금액추천")
-                    VStack(spacing: 30) {
-                        Spacer()
-                        Lottie(animationFileName: "envelope", loopMode: .playOnce)
-                            .frame(width: 335, height: 230)
-                        Spacer()
+        ZStack {
+            if !showRectangle {
+                LottieView(
+                    animationFileName: "envelope",
+                    loopMode: .playOnce,
+                    completion: { finished in
+                        if finished {
+                            withAnimation(.easeInOut(duration: 0.8)) {
+                                showRectangle = true
+                            }
+                        }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                )
+            }
+            if showRectangle {
+                ZStack(alignment: .center){
+                    Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color(hex: "#A6BEF3"),
+                                Color(hex: "#D3D9FF")
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .cornerRadius(12)
                 }
+                .padding(.top, 20)
+                .padding(.vertical, 30)
             }
         }
-        .navigationBarHidden(true)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.gray900)
     }
 }
 
