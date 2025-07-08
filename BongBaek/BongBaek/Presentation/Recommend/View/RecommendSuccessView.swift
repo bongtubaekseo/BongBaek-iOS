@@ -17,7 +17,7 @@ struct RecommendSuccessView: View {
                     CustomNavigationBar(title: "기록완료")
                     VStack(spacing: 20) {
                         Spacer()
-                        LottieTest(animationFileName: "success", loopMode: .loop)
+                        Lottie(animationFileName: "success", loopMode: .playOnce)
                             .frame(width: 270, height: 256)
                         
                         Text("기록이 완료됐어요!")
