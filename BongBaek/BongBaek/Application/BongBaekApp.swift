@@ -13,7 +13,7 @@ struct BongBaekApp: App {
         WindowGroup {
 
             NavigationView {
-                LoginView()
+                MainTabView()
             }
 
         }

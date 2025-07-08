@@ -12,7 +12,7 @@ struct RecommendView: View {
    @State private var selectedRelation = ""
    @State private var detailSelected: Bool = false
    @EnvironmentObject var stepManager: GlobalStepManager
-   
+   @Environment(\.dismiss) private var dismiss
    let relationships = [
        ("icon_family", "가족"),
        ("icon_friends", "친구"),
@@ -31,7 +31,10 @@ struct RecommendView: View {
        ScrollViewReader { proxy in
            ScrollView {
                
-               CustomNavigationBar(title: "관계정보")
+               
+               CustomNavigationBar(title: "관계정보") {
+                   dismiss()
+               }
                
                StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                    .padding(.horizontal, 20)
@@ -130,21 +133,7 @@ struct RecommendView: View {
                    .cornerRadius(12)
                    .padding(.horizontal, 20)
                    .padding(.top, 8)
-                   
-//                   Button {
-//                       print("금액추천 시작하기")
-//                   } label: {
-//                       Text("금액 추천 시작하기")
-//                           .titleSemiBold18()
-//                           .foregroundStyle(.white)
-//                   }
-//                   .frame(maxWidth: .infinity)
-//                   .frame(height: 60)
-//                   .background(.primaryNormal)
-//                   .cornerRadius(12)
-//                   .padding(.horizontal, 20)
-//                   .padding(.top,8)
- 
+
                    Spacer(minLength: 0)
                }
            }

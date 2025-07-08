@@ -17,7 +17,7 @@ struct ProfileSettingView: View {
     @FocusState private var focusedField: FocusField?
     @Environment(\.dismiss) private var dismiss
     @State private var previousFocusedField: FocusField? = nil
-    @State private var navigateToHome = false
+    @State private var navigateToMain = false
     
     enum FocusField {
         case nickname
@@ -60,8 +60,8 @@ struct ProfileSettingView: View {
                 hideKeyboard()
             }
         }
-        .navigationDestination(isPresented: $navigateToHome) {
-              HomeView()
+        .navigationDestination(isPresented: $navigateToMain) {
+              MainTabView()
           }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -281,7 +281,7 @@ struct ProfileSettingView: View {
                 print("수입이 선택되지 않음")
             }
             
-            navigateToHome = true
+            navigateToMain = true
         }
         .frame(maxWidth: .infinity)
         .padding()

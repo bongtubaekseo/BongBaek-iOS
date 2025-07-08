@@ -29,14 +29,14 @@ struct HomeView: View {
                     ScheduleView(schedules: scheduleDummy)
                         .padding(.top, 32)
                 }
-                CustomTabView(selectedTab: $selectedTab)
-                    .background(Color.gray750)
-                    .clipShape(
-                        .rect(
-                            topLeadingRadius: 10,
-                            topTrailingRadius: 10
-                        )
-                    )
+//                CustomTabView(selectedTab: $selectedTab)
+//                    .background(Color.gray750)
+//                    .clipShape(
+//                        .rect(
+//                            topLeadingRadius: 10,
+//                            topTrailingRadius: 10
+//                        )
+//                    )
             }
             .navigationBarHidden(true)
             .toolbar(.hidden, for: .navigationBar)
