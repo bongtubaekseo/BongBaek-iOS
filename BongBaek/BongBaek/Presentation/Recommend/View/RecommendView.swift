@@ -117,7 +117,7 @@ struct RecommendView: View {
                            .id("sliderView")
                    }
                    
-                   NavigationLink(destination: Step2View().environmentObject(stepManager)) {
+                   NavigationLink(destination: EventInformationView().environmentObject(stepManager)) {
                        Text("금액 추천 시작하기")
                            .titleSemiBold18()
                            .foregroundStyle(.white)

@@ -18,6 +18,7 @@ enum EventType: String, CaseIterable {
 // MARK: - EventInformationView
 struct EventInformationView: View {
     @StateObject private var viewModel = EventInformationViewModel()
+    @EnvironmentObject var stepManager: GlobalStepManager
     
     var body: some View {
         VStack(spacing: 0) {
