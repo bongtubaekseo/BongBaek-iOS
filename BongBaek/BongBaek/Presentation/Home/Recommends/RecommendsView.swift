@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct RecommendsView: View {
+    @StateObject private var stepManager = GlobalStepManager()
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top) {
@@ -27,7 +28,7 @@ struct RecommendsView: View {
                     .frame(width: 57, height: 54)
             }
             
-            NavigationLink(destination: RecommendView()) {
+            NavigationLink(destination: RecommendView().environmentObject(stepManager)) {
                 Text("경조사비 추천 받기")
                     .font(.title_semibold_16)
                     .foregroundColor(.white)

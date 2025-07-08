@@ -17,6 +17,7 @@ struct ProfileSettingView: View {
     @FocusState private var focusedField: FocusField?
     @Environment(\.dismiss) private var dismiss
     @State private var previousFocusedField: FocusField? = nil
+    @State private var navigateToMain = false
     
     enum FocusField {
         case nickname
@@ -59,6 +60,9 @@ struct ProfileSettingView: View {
                 hideKeyboard()
             }
         }
+        .navigationDestination(isPresented: $navigateToMain) {
+              MainTabView()
+          }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
@@ -119,19 +123,19 @@ struct ProfileSettingView: View {
             )
             .focused($focusedField, equals: .nickname)
             
-            CustomTextField(
-                title: "생년월일",
-                icon: "icon_calendar_16",
-                placeholder: "생년월일을 입력하세요",
-                text: $selectedDate,
-                isReadOnly: true) {
-                    print("생년월일 필드 터치됨")
-                    previousFocusedField = focusedField
-                    focusedField = nil
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        showDatePicker = true
+                CustomTextField(
+                    title: "생년월일",
+                    icon: "icon_calendar_16",
+                    placeholder: "생년월일을 입력하세요",
+                    text: $selectedDate,
+                    isReadOnly: true) {
+                        print("생년월일 필드 터치됨")
+                        previousFocusedField = focusedField
+                        focusedField = nil
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            showDatePicker = true
+                        }
                     }
-                }
         }
         .padding(.top, 30)
     }
@@ -276,6 +280,8 @@ struct ProfileSettingView: View {
             case .none:
                 print("수입이 선택되지 않음")
             }
+            
+            navigateToMain = true
         }
         .frame(maxWidth: .infinity)
         .padding()
