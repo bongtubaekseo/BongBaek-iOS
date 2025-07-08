@@ -10,8 +10,9 @@ import Combine
 
 // MARK: - EventInformationViewModel
 class EventInformationViewModel: ObservableObject {
-    // MARK: - Published Properties
+    // MARK: - Published P  roperties
     @Published var selectedEventType: EventType? = nil
+    @Published var showEventDateView = false
     
     // MARK: - Computed Properties
     var isNextButtonEnabled: Bool {
@@ -37,6 +38,7 @@ class EventInformationViewModel: ObservableObject {
         print("선택된 경조사: \(selectedEventType.rawValue)")
         // 여기에 다음 화면으로 이동하는 로직 추가
         // 예: NavigationManager, Router 등을 통한 화면 전환
+        showEventDateView = true
     }
     
     // MARK: - Helper Methods

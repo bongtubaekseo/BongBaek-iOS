@@ -8,6 +8,7 @@ class EventDateViewModel: ObservableObject {
     @Published var selectedAttendance: AttendanceType? = nil
     @Published var isDatePickerVisible: Bool = false
     @Published var isPastDate: Bool = false
+    @Published var showEventLocationView = false
     
     // MARK: - Computed Properties
     var isNextButtonEnabled: Bool {
@@ -61,6 +62,7 @@ class EventDateViewModel: ObservableObject {
         
         print("행사 날짜: \(dateFormatter.string(from: selectedDate))")
         print("참석 여부: \(selectedAttendance.rawValue)")
+        showEventLocationView = true
     }
     
     // MARK: - Helper Methods

@@ -21,6 +21,7 @@ enum ScheduleCategory: String, CaseIterable {
 struct FullScheduleView: View {
     @State private var selectedCategory: ScheduleCategory = .all
     @State private var selectedTab: Tab = .home
+    @Environment(\.dismiss) private var dismiss
     
     var schedulesGrouped: [String: [String: [ScheduleModel]]] {
         let grouped = Dictionary(grouping: scheduleDummy) { model in
@@ -58,9 +59,23 @@ struct FullScheduleView: View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 30) {
-                    Text("봉백님의 전체 일정")
-                        .titleSemiBold18()
-                        .foregroundColor(.white)
+                    
+                    HStack {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .foregroundStyle(.white)
+                        }
+                        .contentShape(Rectangle())
+                        
+                        Text("봉백님의 전체 일정")
+                            .titleSemiBold18()
+                            .foregroundColor(.white)
+                            .padding(.leading, 12)
+                    }
+                    
+
                     
                     VStack(alignment: .leading, spacing: 12) {
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -115,16 +130,19 @@ struct FullScheduleView: View {
                 }
                 .padding()
             }
-            
-            CustomTabView(selectedTab: $selectedTab)
-                .background(Color.gray750)
-                .clipShape(
-                    .rect(
-                        topLeadingRadius: 10,
-                        topTrailingRadius: 10
-                    )
-                )
+//            
+//            CustomTabView(selectedTab: $selectedTab)
+//                .background(Color.gray750)
+//                .clipShape(
+//                    .rect(
+//                        topLeadingRadius: 10,
+//                        topTrailingRadius: 10
+//                    )
+//                )
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .background(Color.black.ignoresSafeArea())
     }
 }
