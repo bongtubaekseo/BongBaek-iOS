@@ -16,11 +16,19 @@ enum AttendanceType: String, CaseIterable {
 // MARK: - EventDateView
 struct EventDateView: View {
     @StateObject private var viewModel = EventDateViewModel()
+    @EnvironmentObject var stepManager: GlobalStepManager
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
-                .frame(height: 80)
+            CustomNavigationBar(title: "날짜 정보") {
+                           dismiss()
+                       }
+                       .padding(.top, 40)
+                       
+                       StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
+                           .padding(.horizontal, 20)
+                           .padding(.bottom, 10)
             
             EventDateTitleView()
             
@@ -39,6 +47,9 @@ struct EventDateView: View {
             .padding(.horizontal, 24)
             .padding(.bottom, 50)
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("background"))
         .ignoresSafeArea()
@@ -53,6 +64,21 @@ struct EventDateView: View {
                 ),
                 onDismiss: { viewModel.isDatePickerVisible = false }
             )
+        }
+        .navigationDestination(isPresented: $viewModel.showEventLocationView) {
+            EventLocationView().environmentObject(stepManager)
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeInOut(duration: 0.8)) {
+                    stepManager.currentStep = 3
+                }
+            }
+        }
+        .onDisappear {
+            if !viewModel.showEventLocationView {
+                stepManager.previousStep()
+            }
         }
     }
 }
@@ -286,14 +312,6 @@ struct DatePickerBottomSheet: View {
                     .fill(.gray750)
             )
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("닫기") {
-                        onDismiss()
-                    }
-                    .foregroundColor(.white)
-                }
-            }
         }
         .preferredColorScheme(.dark)
         .presentationDetents([.medium])

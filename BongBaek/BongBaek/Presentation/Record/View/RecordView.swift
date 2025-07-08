@@ -216,16 +216,17 @@ struct RecordCellView: View {
     @State private var isSelected = false
     
     var body: some View {
-        HStack {
+        HStack(spacing: 12) { // spacing을 0에서 12로 변경
             if isDeleteMode {
                 Button(action: {
                     isSelected.toggle()
                 }) {
                     Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(isSelected ? .blue : .gray)
+                        .foregroundColor(isSelected ? .red : .gray)
                         .font(.system(size: 20))
                 }
-                .padding(.trailing, 12)
+                .frame(width: 30)
+                .transition(.move(edge: .leading).combined(with: .opacity))
             }
             
             VStack(alignment: .leading, spacing: 8) {
@@ -268,16 +269,17 @@ struct RecordCellView: View {
                         .foregroundColor(.gray400)
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .background(.gray750)
+            .cornerRadius(10)
+            .frame(maxWidth: .infinity)
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 16)
-        .background(.gray750)
-        .cornerRadius(10)
-        .padding(.horizontal, 20)
         .padding(.bottom, 8)
+        .animation(.easeInOut(duration: 0.3), value: isDeleteMode)
     }
 }
-
 
 enum RecordSection {
     case attended

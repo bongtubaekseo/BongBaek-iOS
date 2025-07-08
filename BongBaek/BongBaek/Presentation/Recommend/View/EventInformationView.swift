@@ -20,10 +20,21 @@ struct EventInformationView: View {
     @StateObject private var viewModel = EventInformationViewModel()
     @EnvironmentObject var stepManager: GlobalStepManager
     
+    @State private var showEventDateView = false
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
-                .frame(height: 80)
+
+            CustomNavigationBar(title: "관계정보") {
+                dismiss()
+            }
+            .padding(.top, 40)
+            
+            StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 10)
+
             
             EventInformationTitleView()
             
@@ -45,6 +56,24 @@ struct EventInformationView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("background"))
         .ignoresSafeArea()
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeInOut(duration: 0.8)) {
+                    stepManager.currentStep = 2
+                }
+            }
+        }
+        .onDisappear {
+            if !viewModel.showEventDateView {
+                stepManager.previousStep()
+            }
+        }
+        .navigationDestination(isPresented: $viewModel.showEventDateView) {
+            EventDateView().environmentObject(stepManager)
+        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden()
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 

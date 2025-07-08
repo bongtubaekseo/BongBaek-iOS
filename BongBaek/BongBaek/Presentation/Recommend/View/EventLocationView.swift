@@ -11,12 +11,15 @@ struct EventLocationView: View {
     @State private var searchText = ""
     @State private var selectedLocation: LocationItem?
     @FocusState private var isSearchFieldFocused: Bool // 포커스 상태 추가
+    @EnvironmentObject var stepManager: GlobalStepManager
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ScrollView {
             VStack {
-                
-                CustomNavigationBar(title: "행사장 위치")
+                CustomNavigationBar(title: "행사장 위치") {
+                    dismiss()
+                }
                 StepProgressBar(currentStep: 4, totalSteps: 4)
                     .padding(.horizontal, 20)
                 
@@ -163,9 +166,22 @@ struct EventLocationView: View {
                 .padding(.top,20)
             }
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .background(Color.background)
         .onTapGesture {
             isSearchFieldFocused = false // 포커스 해제로 키보드와 드롭다운 모두 숨김
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeInOut(duration: 0.8)) {
+                    stepManager.currentStep = 4
+                }
+            }
+        }
+        .onDisappear {
+            stepManager.previousStep()
         }
     }
     
