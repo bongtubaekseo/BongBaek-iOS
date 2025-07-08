@@ -24,7 +24,7 @@ struct RecommendLottie: View {
                 )
             }
             if showRectangle {
-                ZStack(alignment: .center){
+                VStack(alignment: .center){
                     Rectangle()
                     .fill(
                         LinearGradient(
@@ -38,8 +38,8 @@ struct RecommendLottie: View {
                     )
                     .cornerRadius(12)
                 }
-                .padding(.top, 20)
-                .padding(.vertical, 30)
+//                .padding(.top, 20)
+//                .padding(.vertical, 30)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
