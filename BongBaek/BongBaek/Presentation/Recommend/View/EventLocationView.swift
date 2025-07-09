@@ -69,7 +69,8 @@ struct EventLocationView: View {
                             .cornerRadius(8)
                             .padding(.horizontal, 20)
                             
-                            Rectangle()
+                            
+                            MapView()
                                 .foregroundStyle(.red)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 312)
