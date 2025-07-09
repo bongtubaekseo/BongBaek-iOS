@@ -1,11 +1,15 @@
 //
-//  KLDocument.swift
+//  KakaoSearchResponse.swift
 //  BongBaek
 //
 //  Created by 임재현 on 7/9/25.
 //
 
 import SwiftUI
+
+struct KakaoSearchResponse: Codable {
+    let documents: [KLDocument]
+}
 
 struct KLDocument: Codable, Identifiable, Hashable {
     let id = UUID()
