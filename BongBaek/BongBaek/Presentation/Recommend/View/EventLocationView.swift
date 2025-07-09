@@ -14,6 +14,7 @@ struct EventLocationView: View {
     @EnvironmentObject var stepManager: GlobalStepManager
     @StateObject private var keywordSearch = KeyWordSearch()
     @Environment(\.dismiss) private var dismiss
+    @State private var mapView: KakaoMapView?
     
     var body: some View {
         ScrollView {
@@ -58,6 +59,20 @@ struct EventLocationView: View {
                                         keywordSearch.query = newValue
                                         keywordSearch.searchResults.removeAll()
                                     }
+                                
+                                // Clear 버튼 추가
+                                if !searchText.isEmpty {
+                                    Button(action: {
+                                        searchText = ""
+                                        keywordSearch.searchResults.removeAll()
+                                        isSearchFieldFocused = false
+                                    }) {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundColor(.gray)
+                                            .font(.system(size: 16))
+                                    }
+                                    .transition(.scale.combined(with: .opacity))
+                                }
                             }
                             .padding(.horizontal, 16)
                             .padding(.vertical, 14)
@@ -69,13 +84,24 @@ struct EventLocationView: View {
                             .cornerRadius(8)
                             .padding(.horizontal, 20)
                             
+                            if let mapView = mapView {
+                                 mapView
+                                     .frame(height: 312)
+                                     .cornerRadius(12)
+                                     .padding(.horizontal, 20)
+                             } else {
+                                 Rectangle()
+                                     .foregroundStyle(.red)
+                                     .frame(maxWidth: .infinity)
+                                     .frame(height: 312)
+                                     .cornerRadius(12)
+                                     .padding(.horizontal, 20)
+                                     .onAppear {
+                                         mapView = KakaoMapView(draw: .constant(true))
+                                     }
+                             }
                             
-                            MapView()
-                                .foregroundStyle(.red)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 312)
-                                .cornerRadius(12)
-                                .padding(.horizontal, 20)
+
                         }
                         
                         // 드롭다운 오버레이
@@ -95,6 +121,17 @@ struct EventLocationView: View {
                                             searchText = document.placeName
                                             isSearchFieldFocused = false
                                             keywordSearch.searchResults = []
+                                            print("선택된 장소: \(document.placeName)")
+                                                print("주소: \(document.addressName)")
+                                                print("도로명 주소: \(document.roadAddressName)")
+                                                print("선택된 document: \(document)")
+                                            
+                                            if let longitude = Double(document.x),
+                                                let latitude = Double(document.y) {
+                                                 mapView?.updateLocation(longitude: longitude, latitude: latitude)
+                                                 print("지도 위치 업데이트: \(document.placeName)")
+                                                 print("좌표: \(longitude), \(latitude)")
+                                             }
                                         }) {
                                             HStack {
                                                 VStack(alignment: .leading, spacing: 2) {

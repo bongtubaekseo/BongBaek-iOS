@@ -29,7 +29,7 @@ final class KakaoMapCoordinator: NSObject, MapControllerDelegate {
             viewName: "mapview",
             viewInfoName: "map",
             defaultPosition: self.userMapPoint,
-            defaultLevel: 16
+            defaultLevel: 14
         )
         
         guard let controller else {
@@ -144,18 +144,79 @@ final class KakaoMapCoordinator: NSObject, MapControllerDelegate {
         }
     }
     
-}
+    
+    func updateLocation(longitude: Double, latitude: Double) {
+        // 새로운 MapPoint 생성
+        let newMapPoint = MapPoint(longitude: longitude, latitude: latitude)
+        self.userMapPoint = newMapPoint
+        
+        // 지도 뷰 가져오기
+        guard let mapView = controller?.getView("mapview") as? KakaoMap else {
+            return
+        }
+        
+        // 카메라 이동
+        let cameraUpdate = CameraUpdate.make(
+            target: newMapPoint,
+            zoomLevel: 50,
+            mapView: mapView
+        )
+        mapView.moveCamera(cameraUpdate)
+        
+        // 기존 POI 제거 후 새 위치에 POI 추가
+        updatePoi(at: newMapPoint)
+    }
 
+    // POI 업데이트 메서드
+    func updatePoi(at mapPoint: MapPoint) {
+        guard let mapView = controller?.getView("mapview") as? KakaoMap else {
+            return
+        }
+        
+        let manager = mapView.getLabelManager()
+        
+        // 기존 레이어 제거
+        manager.removeLabelLayer(layerID: "PoiLayer")
+        
+        // 새로운 레이어 생성
+        let layerOption = LabelLayerOptions(layerID: "PoiLayer", competitionType: .none, competitionUnit: .symbolFirst, orderType: .rank, zOrder: 10001)
+        let layer = manager.addLabelLayer(option: layerOption)
+        
+        // 새 위치에 POI 추가
+        guard let originalImage = UIImage(named: "icon_flag"),
+              let pngData = originalImage.pngData(),
+              let safeImage = UIImage(data: pngData) else {
+            return
+        }
+        
+        let resizedImage = safeImage.resized(to: CGSize(width: 100, height: 100))
+        let tintedImage = resizedImage?.withTintColor(.red, renderingMode: .alwaysOriginal)
+        
+        if let finalImage = tintedImage {
+            let iconStyle = PoiIconStyle(symbol: finalImage, anchorPoint: CGPoint(x: 0.5, y: 1.0))
+            let poiStyle = PoiStyle(styleID: "PerLevelStyle", styles: [
+                PerLevelPoiStyle(iconStyle: iconStyle, level: 0)
+            ])
+            manager.addPoiStyle(poiStyle)
+            
+            let poiOption = PoiOptions(styleID: "PerLevelStyle")
+            let poi = layer?.addPoi(option: poiOption, at: mapPoint)
+            poi?.show()
+        }
+    }
+    
+}
 
 struct KakaoMapView: UIViewRepresentable {
     
     @Binding var draw: Bool
+    let coordinator = KakaoMapCoordinator()
     
     func makeUIView(context: Self.Context) -> KMViewContainer {
         let view: KMViewContainer = KMViewContainer()
         view.sizeToFit()
-        context.coordinator.createController(view)
-        context.coordinator.controller?.prepareEngine()
+        coordinator.createController(view)
+        coordinator.controller?.prepareEngine()
         
         return view
     }
@@ -164,16 +225,20 @@ struct KakaoMapView: UIViewRepresentable {
         if draw {
             Task {
                 try? await Task.sleep(for: .seconds(0.5))
-                context.coordinator.controller?.activateEngine()
-                context.coordinator.controller?.prepareEngine()
+                coordinator.controller?.activateEngine()
+                coordinator.controller?.prepareEngine()
             }
         } else {
-            context.coordinator.controller?.resetEngine()
+            coordinator.controller?.resetEngine()
         }
     }
     
     func makeCoordinator() -> KakaoMapCoordinator {
-        return KakaoMapCoordinator()
+        return coordinator
+    }
+    
+    func updateLocation(longitude: Double, latitude: Double) {
+        coordinator.updateLocation(longitude: longitude, latitude: latitude)
     }
     
     static func dismantleUIView(_ uiView: KMViewContainer, coordinator: KakaoMapCoordinator) {
