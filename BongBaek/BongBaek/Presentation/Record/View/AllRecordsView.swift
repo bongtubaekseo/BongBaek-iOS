@@ -75,7 +75,16 @@ struct AllRecordsView: View {
 
                     }
                     .padding(20)
-                    .background(.blue)
+                    .background(
+                        LinearGradient(
+                            colors: [
+                                Color(.primaryNormal),
+                                Color(hex:"#6F53FF")
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top,8)
@@ -137,7 +146,7 @@ struct AllRecordsView: View {
                     
                     VStack(alignment: .leading) {
                         TextEditor(text: $memoText)
-                            .font(.system(size: 16))
+                            .body2_regular_16
                             .foregroundColor(.white)
                             .scrollContentBackground(.hidden)
                             .background(Color.clear)
