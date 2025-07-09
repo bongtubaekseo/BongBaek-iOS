@@ -20,6 +20,14 @@ struct KLDocument: Codable, Identifiable, Hashable {
     let y: String
     let distance: String
     
+    var displayText: String {
+        return "\(placeName) - \(addressName)"
+    }
+    
+    var primaryAddress: String {
+        return roadAddressName.isEmpty ? addressName : roadAddressName
+    }
+    
     enum CodingKeys: String, CodingKey {
         case x, y, distance
         case placeName = "place_name"

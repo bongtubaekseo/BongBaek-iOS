@@ -12,18 +12,23 @@ import Alamofire
 /// TextField 에 장소 검색시 해당 String 값을 쿼리로 parameter 에 담아서 전송후, 카카오에서 제공하는 해당 검색어 기반 위치 정보를 받아오는 객체
 class KeyWordSearch: ObservableObject {
     @Published var searchResults: [KLDocument] = []
+    let APIKEY = Bundle.main.infoDictionary?["KAKAOAPIKEY"] as? String ?? ""
     
     @Published var query = "" {
         didSet {
-            print("set")
-            search()
+            if query.isEmpty {
+                searchResults = []
+            } else {
+                search()
+            }
         }
     }
     
     func search() {
         let url = "https://dapi.kakao.com/v2/local/search/keyword.json"
+        
         let headers: HTTPHeaders = [
-            "Authorization": "KakaoAK API KEY "
+            "Authorization": "KakaoAK \(APIKEY)"
         ]
         let parameters: [String: Any] = [
             "query": query,
