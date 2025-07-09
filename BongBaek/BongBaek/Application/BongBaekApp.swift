@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Moya
+import KakaoMapsSDK
 
 @main
 struct BongBaekApp: App {

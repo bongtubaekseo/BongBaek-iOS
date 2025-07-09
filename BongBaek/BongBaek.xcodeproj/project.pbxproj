@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		46A1D4102E1E0A9500343DCB /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 46A1D40F2E1E0A9500343DCB /* CombineMoya */; };
+		46A1D4122E1E0A9500343DCB /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 46A1D4112E1E0A9500343DCB /* Moya */; };
+		46A1D4152E1E0AB300343DCB /* KakaoMapsSDK-SPM in Frameworks */ = {isa = PBXBuildFile; productRef = 46A1D4142E1E0AB300343DCB /* KakaoMapsSDK-SPM */; };
 		46A237DA2E1CFFBF00CC2E90 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 46A237D92E1CFFBF00CC2E90 /* Lottie */; };
 /* End PBXBuildFile section */
 
@@ -69,7 +72,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46A1D4102E1E0A9500343DCB /* CombineMoya in Frameworks */,
 				46A237DA2E1CFFBF00CC2E90 /* Lottie in Frameworks */,
+				46A1D4122E1E0A9500343DCB /* Moya in Frameworks */,
+				46A1D4152E1E0AB300343DCB /* KakaoMapsSDK-SPM in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +137,9 @@
 			name = BongBaek;
 			packageProductDependencies = (
 				46A237D92E1CFFBF00CC2E90 /* Lottie */,
+				46A1D40F2E1E0A9500343DCB /* CombineMoya */,
+				46A1D4112E1E0A9500343DCB /* Moya */,
+				46A1D4142E1E0AB300343DCB /* KakaoMapsSDK-SPM */,
 			);
 			productName = BongBaek;
 			productReference = 46C48B5D2E1019DF008C1C90 /* BongBaek.app */;
@@ -216,6 +225,8 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				46A237D82E1CFFBF00CC2E90 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				46A1D40E2E1E0A9500343DCB /* XCRemoteSwiftPackageReference "Moya" */,
+				46A1D4132E1E0AB300343DCB /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 46C48B5E2E1019DF008C1C90 /* Products */;
@@ -588,6 +599,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		46A1D40E2E1E0A9500343DCB /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
+		46A1D4132E1E0AB300343DCB /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao-mapsSDK/KakaoMapsSDK-SPM.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.12.7;
+			};
+		};
 		46A237D82E1CFFBF00CC2E90 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -599,6 +626,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		46A1D40F2E1E0A9500343DCB /* CombineMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46A1D40E2E1E0A9500343DCB /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = CombineMoya;
+		};
+		46A1D4112E1E0A9500343DCB /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46A1D40E2E1E0A9500343DCB /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		46A1D4142E1E0AB300343DCB /* KakaoMapsSDK-SPM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46A1D4132E1E0AB300343DCB /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */;
+			productName = "KakaoMapsSDK-SPM";
+		};
 		46A237D92E1CFFBF00CC2E90 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 46A237D82E1CFFBF00CC2E90 /* XCRemoteSwiftPackageReference "lottie-ios" */;
