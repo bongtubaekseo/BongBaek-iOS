@@ -43,7 +43,7 @@ struct RecommendCostView: View {
             VStack(spacing: 24) {
                 headerSection
                 
-                emptyRecommendationBox
+                //emptyRecommendationBox
                 
                 amountRangeSection
                 
@@ -64,26 +64,101 @@ struct RecommendCostView: View {
     
     // MARK: - Header Section
     private var headerSection: some View {
-        VStack() {
-            
-        }
+       VStack() {
+           VStack(spacing: 20) {
+               Text("결혼식")
+                   .bodyMedium14()
+                   .foregroundColor(.white)
+                   .padding(.horizontal, 16)
+                   .padding(.vertical, 8)
+                   .background(
+                       RoundedRectangle(cornerRadius: 6)
+                        .stroke(.primaryNormal, lineWidth: 1)
+                        .background(.gray750)
+                   )
+
+               VStack(spacing: 24) {
+                   Text("추천 금액")
+                       .captionRegular12()
+                       .foregroundColor(.white)
+                       .padding(.horizontal, 8)
+                       .padding(.vertical, 2)
+                       .background(
+                           RoundedRectangle(cornerRadius: 4)
+                            .fill(.primaryNormal)
+                       )
+                   
+                   HStack(alignment: .bottom, spacing: 4) {
+                       Text("100,000")
+                           .font(.system(size: 46, weight: .bold))
+                           .foregroundStyle(
+                               LinearGradient(
+                                   colors: [
+                                       Color(hex: "#4E62FF"),
+                                       Color(hex: "#502EFF")
+                                   ],
+                                   startPoint: .leading,
+                                   endPoint: .trailing
+                               )
+                           )
+                       
+                       Text("원")
+                           .titleSemiBold22()
+                           .foregroundColor(.gray600)
+                           .padding(.bottom, 8)
+                   }
+                   
+                   VStack(spacing: 6) {
+                       Text("적절한 금액이에요!")
+                           .bodyMedium16()
+                           .foregroundColor(.white)
+                       
+                       Text("알려주신 정보를 고려한 추천입니다")
+                           .bodyRegular14()
+                           .foregroundColor(.gray200)
+                   }
+                   .padding(.horizontal, 24)
+                   .padding(.vertical, 10)
+                   .background(
+                       RoundedRectangle(cornerRadius: 10)
+                        .fill(.gray750.opacity(0.6))
+                   )
+               }
+               .padding(.horizontal, 30)
+               .padding(.vertical, 30)
+               .background(
+                   RoundedRectangle(cornerRadius: 12)
+                       .fill(
+                           LinearGradient(
+                               colors: [
+                                   Color(hex: "#A6BEF3"),
+                                   Color(hex: "#D3D9FF")
+                               ],
+                               startPoint: .topLeading,
+                               endPoint: .bottomTrailing
+                           )
+                       )
+               )
+           }
+           .transition(.opacity.combined(with: .scale))
+       }
     }
     
     // MARK: - Empty Recommendation Box
-    private var emptyRecommendationBox: some View {
-        VStack(spacing: 16) {
-            
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.gray.opacity(0.2))
-                .frame(height: 120)
-            
-        }
-        .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white.opacity(0.1))
-        )
-    }
+//    private var emptyRecommendationBox: some View {
+//        VStack(spacing: 16) {
+//            
+//            RoundedRectangle(cornerRadius: 16)
+//                .fill(Color.gray.opacity(0.2))
+//                .frame(height: 120)
+//            
+//        }
+//        .padding(20)
+//        .background(
+//            RoundedRectangle(cornerRadius: 20)
+//                .fill(Color.white.opacity(0.1))
+//        )
+//    }
     
     // MARK: - Amount Range Section
     private var amountRangeSection: some View {
