@@ -14,7 +14,7 @@ struct BongBaekApp: App {
     var body: some Scene {
         WindowGroup {
 
-            RecommendLoadingView()
+            ContentView()
 
         }
     }

@@ -304,6 +304,8 @@
 /* Begin XCBuildConfiguration section */
 		46C48B7C2E1019E1008C1C90 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 46C48B952E101B0D008C1C90 /* BongBaek */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
