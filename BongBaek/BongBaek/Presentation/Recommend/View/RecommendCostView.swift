@@ -164,19 +164,28 @@ struct RecommendCostView: View {
     private var amountRangeSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("적정 범위")
-                .font(.system(size: 18, weight: .bold))
+                .titleSemiBold18()
                 .foregroundColor(.white)
             
             //MARK: - 커스텀 슬라이더, (필요 없으면 삭제해도 됨.)
             VStack(spacing: 8) {
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.gray.opacity(0.3))
-                        .frame(width: 300, height: 8)
+                        .fill(Color(hex:"#292929"))
+                        .frame(width: 300, height: 12)
                     
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color("primary_normal"))
-                        .frame(width: CGFloat(viewModel.sliderProgress) * 300, height: 8)
+                        .fill(
+                               LinearGradient(
+                                   colors: [
+                                       Color(hex: "#502EFF"),
+                                       Color(hex: "#807FFF")
+                                   ],
+                                   startPoint: .leading,
+                                   endPoint: .trailing
+                               )
+                           )
+                        .frame(width: CGFloat(viewModel.sliderProgress) * 300, height: 12)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .gesture(
@@ -190,20 +199,20 @@ struct RecommendCostView: View {
                 
                 HStack {
                     Text("\(viewModel.formattedMinAmount)원")
-                        .font(.system(size: 12))
-                        .foregroundColor(.gray)
+                        .captionRegular12()
+                        .foregroundColor(.gray400)
                     
                     Spacer()
                     
                     Text("\(viewModel.formattedMaxAmount)원")
-                        .font(.system(size: 12))
-                        .foregroundColor(.gray)
+                        .captionRegular12()
+                        .foregroundColor(.gray400)
                 }
             }
         }
         .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 10)
                 .fill(Color.black)
         )
     }
@@ -214,18 +223,17 @@ struct RecommendCostView: View {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(Color.black)
+                        .fill(.gray900)
                         .frame(width: 40, height: 40)
                     
                     Image("icon_star")
-                        .foregroundColor(Color("primary_normal"))
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text("경조사 종류")
-                        .font(.system(size: 12))
-                        .foregroundColor(.gray)
+                        .captionRegular12()
+                        .foregroundColor(.gray400)
                     Text("결혼식")
-                        .font(.system(size: 16, weight: .semibold))
+                        .bodyMedium16()
                         .foregroundColor(.white)
                 }
                 
@@ -242,18 +250,17 @@ struct RecommendCostView: View {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(Color.black)
+                        .fill(.gray900)
                         .frame(width: 40, height: 40)
                     
                     Image("icon_location 2")
-                        .foregroundColor(Color("primary_normal"))
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text("장소")
-                        .font(.system(size: 12))
-                        .foregroundColor(.gray)
+                        .captionRegular12()
+                        .foregroundColor(.gray400)
                     Text("강남 웨딩홀")
-                        .font(.system(size: 16, weight: .semibold))
+                        .bodyMedium16()
                         .foregroundColor(.white)
                 }
                 
@@ -274,29 +281,27 @@ struct RecommendCostView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image("icon_info")
-                    .foregroundColor(.blue)
-                    .font(.system(size: 16))
                 Text("이렇게 계산했어요")
-                    .font(.system(size: 16, weight: .semibold))
+                    .titleSemiBold18()
                     .foregroundColor(.white)
                 Spacer()
             }
             
             VStack(alignment: .leading, spacing: 4) {
                 Text("• 월 수입 고려")
-                    .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
                 Text("• 친구 관계 (친밀도 보통)")
-                    .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
                 Text("• 식사 참석 여부")
-                    .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
             }
         }
         .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 10)
                 .fill(Color("gray750"))
         )
     }
@@ -306,24 +311,22 @@ struct RecommendCostView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image("icon_colorcheck")
-                    .foregroundColor(.blue)
-                    .font(.system(size: 16))
                 Text("참고해주세요!")
-                    .font(.system(size: 16, weight: .semibold))
+                    .bodyRegular16()
                     .foregroundColor(.white)
                 Spacer()
             }
             
             VStack(alignment: .leading, spacing: 4) {
                 Text("• 홀수 금액으로 준비해주세요")
-                    .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
                 Text("• 새 지폐로 준비하는게 좋아요")
-                    .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
                 Text("• 봉투에 정성스럽게 마음을 표현해보세요")
-                    .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
             }
         }
         .padding(16)
@@ -340,21 +343,21 @@ struct RecommendCostView: View {
                 // 결정 액션
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
+            .padding(.vertical, 14)
             .background(Color("primary_normal"))
             .foregroundColor(.white)
-            .font(.system(size: 16, weight: .semibold))
-            .cornerRadius(12)
+            .font(.title_semibold_18)
+            .cornerRadius(10)
             
             Button("추천받은 금액 수정하기") {
                 // 수정 액션
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
+            .padding(.vertical, 14)
             .background(Color("gray700"))
-            .foregroundColor(.white)
-            .font(.system(size: 16, weight: .medium))
-            .cornerRadius(12)
+            .foregroundColor(.gray200)
+            .font(.title_semibold_18)
+            .cornerRadius(10)
         }
     }
 }
