@@ -30,7 +30,7 @@ struct RecommendStartView: View {
             HStack {
                 Image("icon_protect")
                 Text("개인정보 보호모드 작동 중 ")
-                    .bodyMedium14()
+                    .bodyRegular14()
                     .foregroundStyle(.gray300)
             }
             
