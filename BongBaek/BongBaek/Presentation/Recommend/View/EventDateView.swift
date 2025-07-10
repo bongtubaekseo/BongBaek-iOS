@@ -88,16 +88,16 @@ struct EventDateTitleView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("행사 날짜와 참석여부를")
-                .font(.system(size: 28, weight: .bold))
+                .headBold24()
                 .foregroundColor(.white)
             
             Text("알려주세요")
-                .font(.system(size: 28, weight: .bold))
+                .headBold24()
                 .foregroundColor(.white)
             
             Text("봉투백서가 경조사 일정을 관리해드릴게요!")
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(.gray)
+                .bodyRegular14()
+                .foregroundColor(Color(hex: "#7A7F8A"))
                 .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -118,7 +118,7 @@ struct EventDateFormView: View {
                         .frame(width: 22, height: 22)
                     
                     Text("행사 날짜를 알려주세요")
-                        .font(.system(size: 16, weight: .medium))
+                        .titleSemiBold18()
                         .foregroundColor(.white)
                 }
                 
@@ -128,10 +128,10 @@ struct EventDateFormView: View {
                     HStack(spacing: 8) {
                         Image("icon_caution")
                             .foregroundColor(.secondaryRed)
-                            .font(.system(size: 14))
+                            //.font(.system(size: 14))
                         
                         Text("앞으로 다가올 일정만 입력할 수 있어요")
-                            .font(.system(size: 14, weight: .medium))
+                            .captionRegular12()
                             .foregroundColor(.secondaryRed)
                     }
                 }
@@ -150,7 +150,7 @@ struct EventDateFormView: View {
                         .frame(width: 22, height: 22)
                     
                     Text("참석 여부")
-                        .font(.system(size: 16, weight: .medium))
+                        .titleSemiBold18()
                         .foregroundColor(.white)
                 }
                 
@@ -184,11 +184,11 @@ struct EventDatePickerView: View {
                 Text(viewModel.selectedDate != nil ?
                      DateFormatter.displayFormatter.string(from: viewModel.selectedDate!) :
                      "날짜를 입력해주세요")
-                    .font(.system(size: 16, weight: .regular))
+                    .bodyRegular16()
                     .foregroundColor(
                         viewModel.selectedDate != nil ?
                         (viewModel.isPastDate ? .secondaryRed : .white) :
-                        .gray
+                        .gray500
                     )
                 
                 Spacer()
@@ -219,7 +219,7 @@ struct AttendanceButton: View {
     var body: some View {
         Button(action: action) {
             Text(attendanceType.rawValue)
-                .font(.system(size: 16, weight: .medium))
+                .bodyMedium16()
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
@@ -271,7 +271,7 @@ struct DatePickerBottomSheet: View {
                     .padding(.top, 8)
                 
                 Text("날짜 선택")
-                    .font(.system(size: 20, weight: .semibold))
+                    .titleSemiBold18()
                     .foregroundColor(.white)
                 
                 DatePicker(
@@ -296,12 +296,12 @@ struct DatePickerBottomSheet: View {
                     selectedDate = tempDate
                     onDismiss()
                 }
-                .font(.system(size: 18, weight: .semibold))
+                .font(.title_semibold_18)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: 10)
                         .fill(Color("primary_normal"))
                 )
                 .padding(.horizontal, 24)

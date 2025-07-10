@@ -75,7 +75,16 @@ struct AllRecordsView: View {
 
                     }
                     .padding(20)
-                    .background(.blue)
+                    .background(
+                        LinearGradient(
+                            colors: [
+                                Color(.primaryNormal),
+                                Color(hex: "#6F53FF")
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top,8)
@@ -216,4 +225,8 @@ struct DetailRow: View {
                 .cornerRadius(valueBackgroundColor != nil ? 6 : 0)
         }
     }
+}
+
+#Preview{
+    AllRecordsView()
 }

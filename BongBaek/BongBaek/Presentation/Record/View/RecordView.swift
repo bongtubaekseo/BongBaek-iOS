@@ -108,7 +108,7 @@ struct RecordSectionHeaderView: View {
                     
                     Rectangle()
                         .fill(selectedSection == .attended ? .blue : .clear)
-                        .frame(height: 2)
+                        .frame(height: 1)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -127,7 +127,7 @@ struct RecordSectionHeaderView: View {
                     
                     Rectangle()
                         .fill(selectedSection == .notAttended ? .blue : .clear)
-                        .frame(height: 2)
+                        .frame(height: 1)
                 }
             }
             .frame(maxWidth: .infinity)
