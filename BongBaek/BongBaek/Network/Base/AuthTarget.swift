@@ -6,35 +6,63 @@
 //
 
 import Moya
+import Foundation
 
 
-enum APITarget {
-    case login
-    case signUp
+enum AuthTarget {
+    case login(accessToken: String)
+    case signUp(memberInfo: MemberInfo)
     case retryToken
 }
 
-
-extension APITarget: TargetType {
+extension AuthTarget: TargetType {
     var baseURL: URL {
-        <#code#>
+        guard let url = URL(string: AppConfig.shared.baseURL) else {
+            fatalError("Invalid base URL")
+        }
+        return url
     }
     
     var path: String {
-        <#code#>
+        switch self {
+        case .login:
+            "/api/v1/oauth/kakao"
+        case .signUp:
+            "/api/v1/member/profile"
+        case .retryToken:
+            "/api/v1/member/reissue"
+        }
     }
     
     var method: Moya.Method {
-        <#code#>
+        switch self {
+        case .login, .signUp,. retryToken: .post
+        }
     }
     
     var task: Moya.Task {
-        <#code#>
+        return .requestPlain
     }
     
     var headers: [String : String]? {
-        <#code#>
+        switch self {
+        case .login(let accessToken):
+            return [
+                "Content-Type": "application/json",
+                "authorizationCode": accessToken
+            ]
+        case .signUp(let memberInfo):
+            return [
+                "Content-Type": "application/json",
+                "kakaoId" : memberInfo.kakaoID,
+                "appleId" : memberInfo.appleID ?? "",
+                "memberBirthday": memberInfo.memberBirthday,
+                "memberIncome" : memberInfo.memberIncome
+            ]
+        case .retryToken:
+            return [
+                "":""
+            ]
+        }
     }
-    
-    
 }
