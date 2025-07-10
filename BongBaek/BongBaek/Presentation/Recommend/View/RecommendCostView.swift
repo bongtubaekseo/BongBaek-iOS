@@ -373,5 +373,8 @@ extension NumberFormatter {
 
 // MARK: - Preview
 #Preview {
+    @Previewable @StateObject var stepManager = GlobalStepManager()
+    
     RecommendCostView()
+        .environmentObject(stepManager)
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RecordCompleteView: View {
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             HStack {
                 Spacer()
                 Text("기록완료")
@@ -18,10 +18,8 @@ struct RecordCompleteView: View {
                 Spacer()
             }
             
-            Rectangle()
-                .frame(width: 270,height: 270)
-                .foregroundStyle(.red)
-                .padding(.top, 50)
+            LottieView(animationFileName: "success", loopMode: .playOnce)
+                .frame(width: 270, height: 256)
             
             
             
@@ -32,33 +30,33 @@ struct RecordCompleteView: View {
                 
                 Text("경조사 기록이 저장되었습니다")
                     .bodyRegular14()
-                    .foregroundStyle(.gray300)
+                    .foregroundStyle(.gray400)
                     .padding(.top, 20)
                 
                 Text("[기록하기] 확인하실 수 있어요")
                     .bodyRegular14()
-                    .foregroundStyle(.gray300)
+                    .foregroundStyle(.gray400)
             }
             .padding(.top,50)
             
-            VStack(spacing: 16) {
+            VStack(spacing: 10) {
                 NavigationLink(destination: HomeView()) {
                     Text("홈으로 가기")
                         .titleSemiBold18()
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 55)
-                        .background(.blue)
-                        .cornerRadius(12)
+                        .background(.primaryNormal)
+                        .cornerRadius(10)
                 }
                 
                 NavigationLink(destination: LoginView()) {
                     Text("내 기록보기")
                         .titleSemiBold18()
-                        .foregroundStyle(.primaryNormal)
+                        .foregroundStyle(.gray100)
                         .frame(maxWidth: .infinity)
                         .frame(height: 55)
-                        .background(.clear)
+                        .background(.gray700)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
                                 .stroke(.primaryNormal, lineWidth: 1)

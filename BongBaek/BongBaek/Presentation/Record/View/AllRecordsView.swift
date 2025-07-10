@@ -12,42 +12,6 @@ struct AllRecordsView: View {
     @State private var memoText = ""
     @State private var keyboardHeight: CGFloat = 0
     
-    struct DetailRow: View {
-        let image: String
-        let title: String
-        let value: String
-        let valueTextColor: Color?
-        let valueBackgroundColor: Color?
-        
-        init(image: String, title: String, value: String, valueTextColor: Color? = nil, valueBackgroundColor: Color? = nil) {
-            self.image = image
-            self.title = title
-            self.value = value
-            self.valueTextColor = valueTextColor
-            self.valueBackgroundColor = valueBackgroundColor
-        }
-        
-        var body: some View {
-            HStack {
-                HStack {
-                    Image(image)
-                    Text(title)
-                        .bodyRegular14()
-                        .foregroundColor(.gray)
-                }
-                
-                Spacer()
-                
-                Text(value)
-                    .bodyRegular14()
-                    .foregroundColor(valueTextColor ?? .white)
-                    .padding(.horizontal, valueBackgroundColor != nil ? 4 : 0)
-                    .padding(.vertical, valueBackgroundColor != nil ? 4 : 0)
-                    .background(valueBackgroundColor ?? .clear)
-                    .cornerRadius(valueBackgroundColor != nil ? 6 : 0)
-            }
-        }
-    }
     var body: some View {
         VStack {
             ScrollView {
@@ -111,7 +75,16 @@ struct AllRecordsView: View {
 
                     }
                     .padding(20)
-                    .background(.blue)
+                    .background(
+                        LinearGradient(
+                            colors: [
+                                Color(.primaryNormal),
+                                Color(hex: "#6F53FF")
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top,8)
@@ -215,4 +188,45 @@ struct AllRecordsView: View {
             hideKeyboard()
         }
     }
+}
+
+struct DetailRow: View {
+    let image: String
+    let title: String
+    let value: String
+    let valueTextColor: Color?
+    let valueBackgroundColor: Color?
+    
+    init(image: String, title: String, value: String, valueTextColor: Color? = nil, valueBackgroundColor: Color? = nil) {
+        self.image = image
+        self.title = title
+        self.value = value
+        self.valueTextColor = valueTextColor
+        self.valueBackgroundColor = valueBackgroundColor
+    }
+    
+    var body: some View {
+        HStack {
+            HStack {
+                Image(image)
+                Text(title)
+                    .bodyRegular14()
+                    .foregroundColor(.gray)
+            }
+            
+            Spacer()
+            
+            Text(value)
+                .bodyRegular14()
+                .foregroundColor(valueTextColor ?? .white)
+                .padding(.horizontal, valueBackgroundColor != nil ? 4 : 0)
+                .padding(.vertical, valueBackgroundColor != nil ? 4 : 0)
+                .background(valueBackgroundColor ?? .clear)
+                .cornerRadius(valueBackgroundColor != nil ? 6 : 0)
+        }
+    }
+}
+
+#Preview{
+    AllRecordsView()
 }
