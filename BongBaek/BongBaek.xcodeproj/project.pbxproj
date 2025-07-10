@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		46A237DA2E1CFFBF00CC2E90 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 46A237D92E1CFFBF00CC2E90 /* Lottie */; };
+		46C6943B2E1F712300FD6255 /* KakaoMapsSDK-SPM in Frameworks */ = {isa = PBXBuildFile; productRef = 46C6943A2E1F712300FD6255 /* KakaoMapsSDK-SPM */; };
+		46C6943E2E1F712E00FD6255 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 46C6943D2E1F712E00FD6255 /* CombineMoya */; };
+		46C694402E1F712E00FD6255 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 46C6943F2E1F712E00FD6255 /* Moya */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +73,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				46A237DA2E1CFFBF00CC2E90 /* Lottie in Frameworks */,
+				46C6943B2E1F712300FD6255 /* KakaoMapsSDK-SPM in Frameworks */,
+				46C694402E1F712E00FD6255 /* Moya in Frameworks */,
+				46C6943E2E1F712E00FD6255 /* CombineMoya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +137,9 @@
 			name = BongBaek;
 			packageProductDependencies = (
 				46A237D92E1CFFBF00CC2E90 /* Lottie */,
+				46C6943A2E1F712300FD6255 /* KakaoMapsSDK-SPM */,
+				46C6943D2E1F712E00FD6255 /* CombineMoya */,
+				46C6943F2E1F712E00FD6255 /* Moya */,
 			);
 			productName = BongBaek;
 			productReference = 46C48B5D2E1019DF008C1C90 /* BongBaek.app */;
@@ -216,6 +225,8 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				46A237D82E1CFFBF00CC2E90 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				46C694392E1F712300FD6255 /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */,
+				46C6943C2E1F712E00FD6255 /* XCRemoteSwiftPackageReference "Moya" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 46C48B5E2E1019DF008C1C90 /* Products */;
@@ -293,6 +304,8 @@
 /* Begin XCBuildConfiguration section */
 		46C48B7C2E1019E1008C1C90 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 46C48B952E101B0D008C1C90 /* BongBaek */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -357,6 +370,8 @@
 		};
 		46C48B7D2E1019E1008C1C90 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 46C48B952E101B0D008C1C90 /* BongBaek */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -596,6 +611,22 @@
 				minimumVersion = 4.5.2;
 			};
 		};
+		46C694392E1F712300FD6255 /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao-mapsSDK/KakaoMapsSDK-SPM.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.12.7;
+			};
+		};
+		46C6943C2E1F712E00FD6255 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -603,6 +634,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 46A237D82E1CFFBF00CC2E90 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		46C6943A2E1F712300FD6255 /* KakaoMapsSDK-SPM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46C694392E1F712300FD6255 /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */;
+			productName = "KakaoMapsSDK-SPM";
+		};
+		46C6943D2E1F712E00FD6255 /* CombineMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46C6943C2E1F712E00FD6255 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = CombineMoya;
+		};
+		46C6943F2E1F712E00FD6255 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 46C6943C2E1F712E00FD6255 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

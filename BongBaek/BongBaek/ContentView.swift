@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    let NATIVEAPPKEY = Bundle.main.infoDictionary?["KAKAONATIVEAPPKEY"] as? String ?? ""
+    let APIKEY = Bundle.main.infoDictionary?["KAKAOAPIKEY"] as? String ?? ""
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text("\(NATIVEAPPKEY)")
+            Text("\(APIKEY)")
         }
         .padding()
     }

@@ -7,38 +7,25 @@
 
 import SwiftUI
 
-struct LocationItem: Identifiable, Hashable {
-    let id = UUID()
-    let name: String
-    let address: String?
-    let category: String?
-    
-    var displayText: String {
-        if let address = address {
-            return "\(name) - \(address)"
-        }
-        return name
-    }
-}
 
 // MARK: - Search Dropdown Field
 struct SearchDropdownField: View {
     @Binding var searchText: String
-    @Binding var selectedLocation: LocationItem?
+    @Binding var selectedLocation: KLDocument?
     let placeholder: String
     let onSearch: (String) -> Void
-    let onLocationSelected: (LocationItem) -> Void
+    let onLocationSelected: (KLDocument) -> Void
     
-    @State private var searchResults: [LocationItem] = []
+    @StateObject private var keywordSearch = KeyWordSearch()
     @State private var isShowingResults = false
     @State private var isSearching = false
     
     init(
         searchText: Binding<String>,
-        selectedLocation: Binding<LocationItem?> = .constant(nil),
+        selectedLocation: Binding<KLDocument?> = .constant(nil),
         placeholder: String = "장소를 검색하세요",
         onSearch: @escaping (String) -> Void = { _ in },
-        onLocationSelected: @escaping (LocationItem) -> Void = { _ in }
+        onLocationSelected: @escaping (KLDocument) -> Void = { _ in }
     ) {
         self._searchText = searchText
         self._selectedLocation = selectedLocation
@@ -49,20 +36,18 @@ struct SearchDropdownField: View {
     
     var body: some View {
         ZStack(alignment: .top) {
-            // 검색 입력 필드만 (레이아웃에 영향)
+
             SearchInputField()
             
-            // 검색 결과 드롭다운 (완전한 오버레이)
-            if isShowingResults && !searchResults.isEmpty {
+            if isShowingResults && !keywordSearch.searchResults.isEmpty {
                 VStack(spacing: 0) {
-                    // 검색창 높이만큼 공간 확보
+
                     Spacer()
-                        .frame(height: 62) // 검색창 높이 + 간격
-                    
-                    // 실제 드롭다운 결과
+                        .frame(height: 62)
+
                     SearchResultsList()
                 }
-                .zIndex(1) // 다른 요소들 위에 표시
+                .zIndex(1) 
             }
         }
     }
@@ -101,27 +86,25 @@ struct SearchDropdownField: View {
     // MARK: - Search Results List
     private func SearchResultsList() -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            ForEach(searchResults, id: \.id) { location in
+            ForEach(keywordSearch.searchResults, id: \.id) { document in // API 결과 사용
                 Button(action: {
-                    selectLocation(location)
+                    selectLocation(document)
                 }) {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(location.name)
+                                Text(document.placeName) // KLDocument 프로퍼티 사용
                                     .font(.system(size: 16, weight: .medium))
                                     .foregroundColor(.white)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 
-                                if let address = location.address {
-                                    Text(address)
-                                        .font(.system(size: 14))
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
+                                Text(document.addressName) // KLDocument 프로퍼티 사용
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.gray)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                 
-                                if let category = location.category {
-                                    Text(category)
+                                if !document.roadAddressName.isEmpty { // 도로명 주소 표시
+                                    Text(document.roadAddressName)
                                         .font(.system(size: 12))
                                         .foregroundColor(.blue)
                                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -141,13 +124,9 @@ struct SearchDropdownField: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(PlainButtonStyle())
-                .background(
-                    Color.gray.opacity(0.1)
-                        .opacity(0) // 기본은 투명
-                )
                 
-                // 구분선 (마지막 항목 제외)
-                if location.id != searchResults.last?.id {
+                // 구분선
+                if document.id != keywordSearch.searchResults.last?.id {
                     Divider()
                         .background(Color.gray.opacity(0.3))
                         .padding(.horizontal, 16)
@@ -175,37 +154,29 @@ struct SearchDropdownField: View {
         
         if newValue.isEmpty {
             withAnimation {
-                searchResults = []
+                keywordSearch.searchResults = []
                 isShowingResults = false
             }
         } else {
-            // 실제 앱에서는 API 호출이나 데이터베이스 검색
-            performMockSearch(query: newValue)
+            // 실제 API 호출
+            keywordSearch.query = newValue
+            withAnimation {
+                isShowingResults = true
+            }
         }
     }
-    
-    private func performMockSearch(query: String) {
-        // 모의 검색 데이터 (실제로는 API 호출)
-        let mockData = generateMockSearchResults(for: query)
-        
-        withAnimation {
-            searchResults = mockData
-            isShowingResults = !mockData.isEmpty
-        }
-    }
-    
-    private func selectLocation(_ location: LocationItem) {
-        selectedLocation = location
-        searchText = location.name // 선택된 장소 이름으로 텍스트 업데이트
+    private func selectLocation(_ document: KLDocument) { // 타입 변경
+        selectedLocation = document
+        searchText = document.placeName // placeName 사용
         
         withAnimation {
             isShowingResults = false
-            searchResults = []
+            keywordSearch.searchResults = []
         }
         
-        // 선택된 장소로 검색 실행
-        onLocationSelected(location)
-        onSearch(location.name)
+        // 콜백 호출
+        onLocationSelected(document)
+        onSearch(document.placeName)
     }
     
     private func performSearch() {
@@ -213,32 +184,5 @@ struct SearchDropdownField: View {
             isShowingResults = false
         }
         onSearch(searchText)
-    }
-    
-    // MARK: - Mock Data Generator
-    private func generateMockSearchResults(for query: String) -> [LocationItem] {
-        let query = query.lowercased()
-        
-        // 모의 데이터
-        let allLocations = [
-            LocationItem(name: "강남역 10번출구", address: "서울 강남구 강남대로 지하396", category: "지하철역"),
-            LocationItem(name: "강남역 2번출구", address: "서울 강남구 강남대로 지하390", category: "지하철역"),
-            LocationItem(name: "강남CGV", address: "서울 강남구 강남대로 456", category: "영화관"),
-            LocationItem(name: "강남구청", address: "서울 강남구 학동로 426", category: "관공서"),
-            LocationItem(name: "강남세브란스병원", address: "서울 강남구 언주로 211", category: "병원"),
-            LocationItem(name: "영등포역", address: "서울 영등포구 영등포동", category: "지하철역"),
-            LocationItem(name: "영등포시장", address: "서울 영등포구 영등포로 지하", category: "전통시장"),
-            LocationItem(name: "영등포타임스퀘어", address: "서울 영등포구 영중로 15", category: "쇼핑몰"),
-            LocationItem(name: "홍대입구역", address: "서울 마포구 양화로 지하", category: "지하철역"),
-            LocationItem(name: "홍대클럽", address: "서울 마포구 홍익로 3길", category: "클럽"),
-        ]
-        
-        let filteredResults = allLocations.filter { location in
-            location.name.lowercased().contains(query) ||
-            location.address?.lowercased().contains(query) == true ||
-            location.category?.lowercased().contains(query) == true
-        }
-        
-        return Array(filteredResults.prefix(5))
     }
 }
