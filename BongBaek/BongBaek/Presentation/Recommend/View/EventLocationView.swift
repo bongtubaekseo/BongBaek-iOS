@@ -194,7 +194,7 @@ struct EventLocationView: View {
                     Button {
                         // 다음 단계 로직
                     } label: {
-                        Text("다음 단계로")
+                        Text("금액 추천 받기")
                             .titleSemiBold18()
                             .foregroundColor(.white)
                     }
