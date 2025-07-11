@@ -76,11 +76,11 @@ struct LoginView: View {
            SignUpBottomSheetView(
                onComplete: {
                    print("SignUpBottomSheet Clicked()")
-                   isPresented = false  // 바텀시트 닫기
+                   isPresented = false
                    showProfileSetting = true
                }
            )
-           .presentationDetents([.height(424)])
+           .presentationDetents([.medium])
            .presentationDragIndicator(.visible)
        }
    }

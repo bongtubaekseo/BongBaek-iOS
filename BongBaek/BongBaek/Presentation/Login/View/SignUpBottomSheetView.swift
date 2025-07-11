@@ -31,10 +31,10 @@ struct SignUpBottomSheetView: View {
                 
                 VStack(alignment: .leading,spacing: 4){
                     Text("앱 사용을 위해 권한을 허용해주세요.")
-                        .titleSemiBold20()
+                        .titleSemiBold18()
                         .foregroundStyle(.white)
-                    Text("꼭 필요한 권한만 받아요.")
-                        .titleSemiBold20()
+                    Text("서비스 이용에 필수적인 약관들이에요.")
+                        .titleSemiBold18()
                         .foregroundStyle(.white)
                 }
                 
@@ -102,20 +102,28 @@ struct SignUpBottomSheetView: View {
 
                 Spacer()
                 
-                Button("다음") {
+                Button(action: {
                     print("허용하고 계속하기 버튼 클릭됨")
                     print("canProceed: \(canProceed)")
                     onComplete()
+                }) {
+                    HStack {
+                        Spacer()
+                        Text("다음")
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .frame(height: 52)
+                    .background(canProceed ? .primaryNormal : Color.gray.opacity(0.3))
+                    .cornerRadius(12)
                 }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(canProceed ? Color.blue : Color.gray.opacity(0.3))
-                .foregroundColor(.white)
-                .cornerRadius(12)
+                .disabled(!canProceed)
+                .buttonStyle(PlainButtonStyle())
             }
             .padding(.horizontal, 20)
-            
-            Spacer()
+            .padding(.bottom,12)
+
+    
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.hidden)

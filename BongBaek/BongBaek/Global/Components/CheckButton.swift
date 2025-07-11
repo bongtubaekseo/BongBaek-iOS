@@ -57,17 +57,17 @@ struct CheckButton: View {
                     if let isRequired = isRequired {
                         if isRequired {
                             Text("[필수]")
-                                .bodyMedium16()
+                                .bodyRegular16()
                                 .foregroundColor(.gray300)
                         } else {
                             Text("[선택]")
-                                .bodyMedium16()
+                                .bodyRegular16()
                                 .foregroundColor(.gray300)
                         }
                     }
                     
                     Text(title)
-                        .bodyMedium16()
+                        .bodyRegular16()
                         .foregroundColor(.gray300)
                 }
                 
