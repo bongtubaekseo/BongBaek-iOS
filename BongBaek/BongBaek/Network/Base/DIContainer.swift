@@ -17,13 +17,27 @@ class DIContainer {
             plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))]
         )
     }()
+    
+    lazy var eventProvider: MoyaProvider<EventsTarget> = {
+        return MoyaProvider<EventsTarget>(
+            plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))]
+        )
+    }()
 
     
     lazy var authNetworkService: NetworkService<AuthTarget> = NetworkService(
         provider: authProvider
     )
     
+    lazy var eventNetworkService: NetworkService<EventsTarget> = NetworkService(
+        provider: eventProvider
+    )
+    
     lazy var authService: AuthServiceProtocol = AuthService(
         networkService: authNetworkService
+    )
+    
+    lazy var eventService: EventServiceProtocol = EventService(
+        networkService: eventNetworkService
     )
 }
