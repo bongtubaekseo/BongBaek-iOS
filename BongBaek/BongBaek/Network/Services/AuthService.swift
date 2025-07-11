@@ -22,10 +22,10 @@ class AuthService: AuthServiceProtocol {
         )
     }
     
-    func signUp(memberInfo: MemberInfo) -> AnyPublisher<String, Error> {
+    func signUp(memberInfo: MemberInfo) -> AnyPublisher<SignUpResponse, Error> {
         return networkService.request(
             .signUp(memberInfo: memberInfo),
-            responseType: String.self
+            responseType: SignUpResponse.self
         )
     }
     

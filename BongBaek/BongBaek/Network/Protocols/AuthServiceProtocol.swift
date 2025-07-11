@@ -10,6 +10,6 @@ import Combine
 
 protocol AuthServiceProtocol {
     func login(accessToken: String) -> AnyPublisher<String, Error>
-    func signUp(memberInfo: MemberInfo) -> AnyPublisher<String, Error>
+    func signUp(memberInfo: MemberInfo) -> AnyPublisher<SignUpResponse, Error>
     func retryToken() -> AnyPublisher<String, Error>
 }
