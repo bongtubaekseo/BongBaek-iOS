@@ -81,4 +81,36 @@ class AuthViewModel: ObservableObject {
         // ToDo:- 회원가입 화면으로 이동 로직
         // kakaoId와 kakaoAccessToken을 전달
     }
+    
+    func retryToken() {
+        isLoading = true
+        errorMessage = nil
+        
+        authService.retryToken()
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    if response.isSuccess, let tokenData = response.data {
+                        // 토큰 재발급 성공
+                        // ToDo: - 성공 처리 후 토큰 save 함수 생성
+                        print("토큰 재발급 성공")
+                    } else {
+                        // 토큰 재발급 실패 (리프레시 토큰 만료 등)
+                        self?.errorMessage = response.message
+                        self?.handleRefreshTokenExpired()
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
+
+    private func handleRefreshTokenExpired() {
+        // 리프레시 토큰도 만료된 경우 로그아웃 처리
+        // 로그인 화면으로 이동 로직
+    }
 }

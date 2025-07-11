@@ -29,10 +29,10 @@ class AuthService: AuthServiceProtocol {
         )
     }
     
-    func retryToken() -> AnyPublisher<String, Error> {
+    func retryToken() -> AnyPublisher<RefreshTokenResponse, Error> {
         return networkService.request(
             .retryToken,
-            responseType: String.self
+            responseType: RefreshTokenResponse.self
         )
     }
 }

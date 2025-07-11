@@ -60,8 +60,10 @@ extension AuthTarget: TargetType {
                 "memberIncome" : memberInfo.memberIncome
             ]
         case .retryToken:
+            let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
             return [
-                "":""
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(refreshToken)"
             ]
         }
     }
