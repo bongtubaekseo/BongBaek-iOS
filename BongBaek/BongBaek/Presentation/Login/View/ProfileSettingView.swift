@@ -31,6 +31,16 @@ struct ProfileSettingView: View {
    
     @State private var currentSelection: IncomeSelection = .none
     
+    private var isStartButtonEnabled: Bool {
+        let basicFieldsValid = (nickname.count >= 2 && nickname.count <= 10) && !selectedDate.isEmpty
+        
+        if someBinding {
+            return basicFieldsValid && currentSelection != .none
+        } else {
+            return basicFieldsValid
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             CustomNavigationBar(title: "프로필 설정") {
@@ -112,14 +122,15 @@ struct ProfileSettingView: View {
     private var textFieldSection: some View {
         VStack(spacing: 16) {
             CustomTextField(
-                title: "닉네임",
+                title: "이름",
                 icon: "person.circle",
                 placeholder: "닉네임을 입력하세요",
                 text: $nickname,
                 validationRule: ValidationRule(
                     minLength: 2,
                     maxLength: 10
-                )
+                ),
+                isRequired: true
             )
             .focused($focusedField, equals: .nickname)
             
@@ -128,7 +139,8 @@ struct ProfileSettingView: View {
                     icon: "icon_calendar_16",
                     placeholder: "생년월일을 입력하세요",
                     text: $selectedDate,
-                    isReadOnly: true) {
+                    isReadOnly: true,
+                    isRequired: true) {
                         print("생년월일 필드 터치됨")
                         previousFocusedField = focusedField
                         focusedField = nil
@@ -150,7 +162,7 @@ struct ProfileSettingView: View {
             
             Toggle("", isOn: $someBinding)
                 .labelsHidden()
-                .tint(.blue)
+                .tint(.primaryNormal)
                 .onChange(of: someBinding) { _, newValue in
                     if !newValue {
                         currentSelection = .none
@@ -217,13 +229,13 @@ struct ProfileSettingView: View {
             .padding(.horizontal, 16)
             .background(
                 isSelected(.under200) ?
-                    .blue.opacity(0.3) : .clear.opacity(0.1)
+                    .primaryNormal.opacity(0.3) : .clear.opacity(0.1)
             )
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        isSelected(.under200) ? .blue : .gray100,
+                        isSelected(.under200) ? .primaryNormal : .gray100,
                         lineWidth: isSelected(.under200) ? 2 : 1
                     )
             )
@@ -254,13 +266,13 @@ struct ProfileSettingView: View {
             .padding(.horizontal, 16)
             .background(
                 isSelected(.over200) ?
-                    .blue.opacity(0.3) : .clear.opacity(0.1)
+                    .primaryNormal.opacity(0.3) : .clear.opacity(0.1)
             )
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        isSelected(.over200) ? .blue : .gray100,
+                        isSelected(.over200) ? .primaryNormal : .gray100,
                         lineWidth: isSelected(.over200) ? 2 : 1
                     )
             )
@@ -285,10 +297,12 @@ struct ProfileSettingView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(.blue)
+        .background(isStartButtonEnabled ? .primaryNormal :  Color.gray.opacity(0.3))
         .foregroundColor(.white)
         .cornerRadius(12)
         .padding(.top, 20)
+        .disabled(!isStartButtonEnabled)
+        .animation(.easeInOut(duration: 0.2), value: isStartButtonEnabled)
     }
     
     private func isSelected(_ selection: IncomeSelection) -> Bool {
