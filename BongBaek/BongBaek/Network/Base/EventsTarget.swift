@@ -19,7 +19,7 @@ enum EventsTarget {
     case updateEvent(eventId: Int, eventData: UpdateEventData)
     case deleteEvent(eventId: Int)
     case deleteMultipleEvents(eventIds: [Int])
-    case getAmountRecommendation(eventType: String, relationship: String)
+    case getAmountRecommendation(request: AmountRecommendationRequest)
 }
 
 extension EventsTarget: TargetType {
@@ -106,14 +106,8 @@ extension EventsTarget: TargetType {
                 encoding: JSONEncoding.default
             )
             
-        case .getAmountRecommendation(let eventType, let relationship):
-            return .requestParameters(
-                parameters: [
-                    "eventType": eventType,
-                    "relationship": relationship
-                ],
-                encoding: URLEncoding.queryString
-            )
+        case .getAmountRecommendation(let request):
+            return .requestJSONEncodable(request)
         }
     }
     

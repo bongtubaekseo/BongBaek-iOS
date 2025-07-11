@@ -15,4 +15,7 @@ protocol EventServiceProtocol {
     func getEventDetail(eventId: Int) -> AnyPublisher<EventDetailResponse, Error>
     func createEvent(eventData: CreateEventData) -> AnyPublisher<CreateEventResponse, Error>
     func updateEvent(eventId: Int, eventData: UpdateEventData) -> AnyPublisher<UpdateEventResponse, Error>
+    func deleteEvent(eventId: Int) -> AnyPublisher<DeleteEventResponse, Error>
+    func deleteMultipleEvents(eventIds: [Int]) -> AnyPublisher<DeleteMultipleEventsResponse, Error>
+    func getAmountRecommendation(request: AmountRecommendationRequest) -> AnyPublisher<AmountRecommendationResponse, Error>
 }

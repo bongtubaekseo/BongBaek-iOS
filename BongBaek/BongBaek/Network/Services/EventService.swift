@@ -56,4 +56,25 @@ class EventService: EventServiceProtocol {
             responseType: UpdateEventResponse.self
         )
     }
+    
+    func deleteEvent(eventId: Int) -> AnyPublisher<DeleteEventResponse, Error> {
+        return networkService.request(
+            .deleteEvent(eventId: eventId),
+            responseType: DeleteEventResponse.self
+        )
+    }
+    
+    func deleteMultipleEvents(eventIds: [Int]) -> AnyPublisher<DeleteMultipleEventsResponse, Error> {
+        return networkService.request(
+            .deleteMultipleEvents(eventIds: eventIds),
+            responseType: DeleteMultipleEventsResponse.self
+        )
+    }
+    
+    func getAmountRecommendation(request: AmountRecommendationRequest) -> AnyPublisher<AmountRecommendationResponse, Error> {
+        return networkService.request(
+            .getAmountRecommendation(request: request),
+            responseType: AmountRecommendationResponse.self
+        )
+    }
 }

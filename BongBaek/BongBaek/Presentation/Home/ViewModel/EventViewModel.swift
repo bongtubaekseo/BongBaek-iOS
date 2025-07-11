@@ -30,6 +30,16 @@ class EventViewModel: ObservableObject {
     @Published var isUpdating = false
     @Published var updateSuccess = false
     
+    @Published var isDeleting = false
+    @Published var deleteSuccess = false
+    
+    
+    @Published var isDeletingMultiple = false
+    @Published var deleteMultipleSuccess = false
+    
+    @Published var isLoadingRecommendation = false
+    @Published var recommendationResult: AmountRecommendationData?
+    
     private let eventService: EventServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     
@@ -205,4 +215,124 @@ class EventViewModel: ObservableObject {
             )
             .store(in: &cancellables)
     }
+    
+    func deleteEvent(eventId: Int) {
+        isDeleting = true
+        errorMessage = nil
+        deleteSuccess = false
+        
+        eventService.deleteEvent(eventId: eventId)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isDeleting = false
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    if response.isSuccess {
+                        // 삭제 성공 (status: 200)
+                        self?.deleteSuccess = true
+                        // 목록에서 해당 이벤트 제거
+                        self?.removeEventFromLists(eventId: eventId)
+                        // 홈 데이터 새로고침
+                        self?.loadHome()
+                    } else {
+                        // 삭제 실패
+                        self?.errorMessage = response.message
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+    private func removeEventFromLists(eventId: Int) {
+        let eventIdString = String(eventId)
+        
+
+        homeEvents.removeAll { $0.eventId == eventIdString }
+        
+        attendedEvents.removeAll { $0.eventId == eventIdString }
+        
+        upcomingEvents.removeAll { $0.eventId == eventIdString }
+        
+        
+        if eventDetail?.eventId == eventIdString {
+            eventDetail = nil
+        }
+    }
+    
+    func clearDeleteState() {
+        deleteSuccess = false
+        errorMessage = nil
+    }
+    
+    func deleteMultipleEvents(eventIds: [Int]) {
+        isDeletingMultiple = true
+        errorMessage = nil
+        deleteMultipleSuccess = false
+        
+        eventService.deleteMultipleEvents(eventIds: eventIds)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isDeletingMultiple = false
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    if response.isSuccess {
+                        self?.deleteMultipleSuccess = true
+                        // ToDo: 목록에서 삭제된 이벤트들 제거
+                        // 선택된 항목 초기화
+                        // 홈 데이터 새로고침
+                        self?.loadHome()
+                    } else {
+                        self?.errorMessage = response.message
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+    func getAmountRecommendation(
+         category: String,
+         relationship: String,
+         attended: Bool,
+         location: String,
+         contactFrequency: Int = 3,
+         meetFrequency: Int = 3
+     ) {
+         isLoadingRecommendation = true
+         errorMessage = nil
+         
+         let request = AmountRecommendationRequest(
+             category: category,
+             relationship: relationship,
+             attended: attended,
+             locationInfo: RecommendationLocationInfo(location: location),
+             highAccuracy: HighAccuracyInfo(
+                 contactFrequency: contactFrequency,
+                 meetFrequency: meetFrequency
+             )
+         )
+         
+         eventService.getAmountRecommendation(request: request)
+             .sink(
+                 receiveCompletion: { [weak self] completion in
+                     self?.isLoadingRecommendation = false
+                     if case .failure(let error) = completion {
+                         self?.errorMessage = error.localizedDescription
+                     }
+                 },
+                 receiveValue: { [weak self] response in
+                     if response.isSuccess, let data = response.data {
+                         self?.recommendationResult = data
+                     } else {
+                         self?.errorMessage = response.message
+                     }
+                 }
+             )
+             .store(in: &cancellables)
+     }
 }

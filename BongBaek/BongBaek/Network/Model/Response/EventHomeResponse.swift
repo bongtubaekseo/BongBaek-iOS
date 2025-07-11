@@ -13,6 +13,9 @@ typealias UpcomingEventsResponse = BaseResponse<PagedEventsData>
 typealias EventDetailResponse = BaseResponse<EventDetailData>
 typealias CreateEventResponse = BaseResponse<EmptyData>
 typealias UpdateEventResponse = BaseResponse<EmptyData>
+typealias DeleteEventResponse = BaseResponse<EmptyData>
+typealias DeleteMultipleEventsResponse = BaseResponse<EmptyData>
+typealias AmountRecommendationResponse = BaseResponse<AmountRecommendationData>
 
 
 // MARK: - 경조사 홈 조회
@@ -96,3 +99,29 @@ struct LocationDetailInfo: Codable {
 
 struct EmptyData: Codable {}
 
+
+// MARK: - 경조사 금액 추천 결과 반환
+struct AmountRecommendationData: Codable {
+    let cost: Int
+    let range: AmountRange
+    let category: String
+    let location: String
+    let params: RecommendationParams
+}
+
+
+struct AmountRange: Codable {
+    let min: Int
+    let max: Int
+}
+
+
+struct RecommendationParams: Codable {
+    let age: Int
+    let income: String
+    let category: String
+    let relationship: String
+    let attended: Bool
+    let contactFrequency: Int?
+    let meetFrequency: Int?
+}
