@@ -6,12 +6,12 @@
 //
 
 import Combine
+import Moya
 
 class AuthService: AuthServiceProtocol {
 
-    private let networkService: NetworkServiceProtocol
-    
-    init(networkService: NetworkServiceProtocol) {
+    private let networkService: NetworkService<AuthTarget>
+    init(networkService: NetworkService<AuthTarget>) {
         self.networkService = networkService
     }
     

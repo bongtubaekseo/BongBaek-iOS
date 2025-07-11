@@ -10,15 +10,15 @@ import Combine
 import CombineMoya
 import Foundation
 
-class NetworkService: NetworkServiceProtocol {
+class NetworkService<Target: TargetType>: NetworkServiceProtocol {
     
-    private let provider: MoyaProvider<AuthTarget>
+    private let provider: MoyaProvider<Target>
     
-    init(provider: MoyaProvider<AuthTarget> = MoyaProvider<AuthTarget>()) {
+    init(provider: MoyaProvider<Target> = MoyaProvider<Target>()) {
         self.provider = provider
     }
     
-    func request<T: Codable>(_ target: AuthTarget, responseType: T.Type) -> AnyPublisher<T, Error> {
+    func request<T: Codable>(_ target: Target, responseType: T.Type) -> AnyPublisher<T, Error> {
         
         return provider.requestPublisher(target)
             .map(\.data)

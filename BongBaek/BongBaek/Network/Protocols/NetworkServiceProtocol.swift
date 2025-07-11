@@ -7,9 +7,11 @@
 
 import SwiftUI
 import Combine
+import Moya
 
 protocol NetworkServiceProtocol {
-    func request<T: Codable>(_ target: AuthTarget, responseType: T.Type) -> AnyPublisher<T, Error>
+    associatedtype Target: TargetType
+    func request<T: Codable>(_ target: Target, responseType: T.Type) -> AnyPublisher<T, Error>
 }
 
 

@@ -11,17 +11,19 @@ class DIContainer {
     static let shared = DIContainer()
     private init() {}
     
-    lazy var authMoyaProvider: MoyaProvider<AuthTarget> = {
+
+    lazy var authProvider: MoyaProvider<AuthTarget> = {
         return MoyaProvider<AuthTarget>(
             plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))]
         )
     }()
+
     
-    lazy var networkService: NetworkServiceProtocol = NetworkService(
-        provider: authMoyaProvider
+    lazy var authNetworkService: NetworkService<AuthTarget> = NetworkService(
+        provider: authProvider
     )
     
     lazy var authService: AuthServiceProtocol = AuthService(
-        networkService: networkService
+        networkService: authNetworkService
     )
 }
