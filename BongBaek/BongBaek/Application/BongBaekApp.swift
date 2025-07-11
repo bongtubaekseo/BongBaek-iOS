@@ -28,7 +28,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         
-       if let APIKEY = Bundle.main.infoDictionary?["KAKAONATIVEAPPKEY"] as? String {
+       if let APIKEY = Bundle.main.infoDictionary?["KAKAO_NATIVE_APPKEY"] as? String {
            SDKInitializer.InitSDK(appKey: APIKEY)
        } else {
            fatalError("Kakao App Key is missing in Info.plist")
