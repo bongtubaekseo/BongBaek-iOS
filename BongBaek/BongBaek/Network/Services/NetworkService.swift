@@ -5,14 +5,26 @@
 //  Created by 임재현 on 7/10/25.
 //
 
-import SwiftUI
+import Moya
+import Combine
+import CombineMoya
+import Foundation
 
-struct NetworkService: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+class NetworkService: NetworkServiceProtocol {
+    
+    private let provider: MoyaProvider<AuthTarget>
+    
+    init(provider: MoyaProvider<AuthTarget> = MoyaProvider<AuthTarget>()) {
+        self.provider = provider
     }
-}
-
-#Preview {
-    NetworkService()
+    
+    func request<T: Codable>(_ target: AuthTarget, responseType: T.Type) -> AnyPublisher<T, Error> {
+        
+        return provider.requestPublisher(target)
+            .map(\.data)
+            .decode(type: T.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    
 }

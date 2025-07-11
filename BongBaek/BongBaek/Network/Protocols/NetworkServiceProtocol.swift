@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 protocol NetworkServiceProtocol {
-    func request<T: Codable>(_ target: String, responseType: T.Type) -> AnyPublisher<T, Error>
+    func request<T: Codable>(_ target: AuthTarget, responseType: T.Type) -> AnyPublisher<T, Error>
 }
 
 

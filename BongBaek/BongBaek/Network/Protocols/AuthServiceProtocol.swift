@@ -9,7 +9,7 @@ import Moya
 import Combine
 
 protocol AuthServiceProtocol {
-    func login() -> AnyPublisher<String, Error>
-    func signUp() -> AnyPublisher<String, Error>
+    func login(accessToken: String) -> AnyPublisher<String, Error>
+    func signUp(memberInfo: MemberInfo) -> AnyPublisher<String, Error>
     func retryToken() -> AnyPublisher<String, Error>
 }
