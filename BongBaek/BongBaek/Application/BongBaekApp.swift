@@ -12,10 +12,11 @@ import KakaoMapsSDK
 @main
 struct BongBaekApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @State private var showLoginView = false
+
     var body: some Scene {
         WindowGroup {
-            
-            LoginView()
+            RootView()
 
         }
     }
