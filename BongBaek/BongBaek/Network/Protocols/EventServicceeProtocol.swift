@@ -12,4 +12,7 @@ protocol EventServiceProtocol {
     func getHome() -> AnyPublisher<EventHomeResponse, Error>
     func getAttendedEvents(page: Int, attended: Bool, category: String?) -> AnyPublisher<AttendedEventsResponse, Error>
     func getUpcomingEvents(page: Int, category: String?) -> AnyPublisher<UpcomingEventsResponse, Error>
+    func getEventDetail(eventId: Int) -> AnyPublisher<EventDetailResponse, Error>
+    func createEvent(eventData: CreateEventData) -> AnyPublisher<CreateEventResponse, Error>
+    func updateEvent(eventId: Int, eventData: UpdateEventData) -> AnyPublisher<UpdateEventResponse, Error>
 }

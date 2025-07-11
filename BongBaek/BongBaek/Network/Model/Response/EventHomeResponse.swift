@@ -10,6 +10,9 @@ import Foundation
 typealias EventHomeResponse = BaseResponse<EventHomeData>
 typealias AttendedEventsResponse = BaseResponse<PagedEventsData>
 typealias UpcomingEventsResponse = BaseResponse<PagedEventsData>
+typealias EventDetailResponse = BaseResponse<EventDetailData>
+typealias CreateEventResponse = BaseResponse<EmptyData>
+typealias UpdateEventResponse = BaseResponse<EmptyData>
 
 
 // MARK: - 경조사 홈 조회
@@ -64,4 +67,32 @@ struct AttendedEventInfo: Codable {
     let eventDate: String
 }
 
+
+// MARK: - 경조사 상세 조회
+struct EventDetailData: Codable {
+    let eventId: String
+    let hostInfo: HostInfo
+    let eventInfo: EventDetailInfo
+    let locationInfo: LocationDetailInfo
+}
+
+
+struct EventDetailInfo: Codable {
+    let eventCategory: String
+    let relationship: String
+    let cost: Int
+    let isAttend: Bool
+    let eventDate: String
+    let note: String
+}
+
+struct LocationDetailInfo: Codable {
+    let location: String
+    let address: String
+    let latitude: Double
+    let longitude: Double
+}
+
+
+struct EmptyData: Codable {}
 

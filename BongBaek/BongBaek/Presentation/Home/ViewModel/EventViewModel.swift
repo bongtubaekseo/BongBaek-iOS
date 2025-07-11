@@ -22,6 +22,14 @@ class EventViewModel: ObservableObject {
     @Published var upcomingCurrentPage = 1
     @Published var upcomingIsLastPage = false
     
+    @Published var eventDetail: EventDetailData?
+    
+    @Published var isCreating = false
+    @Published var createSuccess = false
+    
+    @Published var isUpdating = false
+    @Published var updateSuccess = false
+    
     private let eventService: EventServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     
@@ -122,4 +130,79 @@ class EventViewModel: ObservableObject {
         loadUpcomingEvents(page: upcomingCurrentPage + 1, category: category)
     }
     
+    func loadEventDetail(eventId: Int) {
+        isLoading = true
+        errorMessage = nil
+        
+        eventService.getEventDetail(eventId: eventId)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    if response.isSuccess, let data = response.data {
+                        self?.eventDetail = data
+                    } else {
+                        self?.errorMessage = response.message
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+    func createEvent(eventData: CreateEventData) {
+        isCreating = true
+        errorMessage = nil
+        createSuccess = false
+        
+        eventService.createEvent(eventData: eventData)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isCreating = false
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    if response.isSuccess {
+                        self?.createSuccess = true
+                        // 생성 성공시 홈 화면 다시 재호출 (새로고침)
+                        self?.loadHome()
+                    } else {
+                        self?.errorMessage = response.message
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+    func updateEvent(eventId: Int, eventData: UpdateEventData) {
+        isUpdating = true
+        errorMessage = nil
+        updateSuccess = false
+        
+        eventService.updateEvent(eventId: eventId, eventData: eventData)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isUpdating = false
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    if response.isSuccess {
+                        self?.updateSuccess = true
+                        self?.loadEventDetail(eventId: eventId)
+                        // 수정 성공시 홈 화면 다시 재호출 (새로고침)
+                        self?.loadHome()
+                    } else {
+                        self?.errorMessage = response.message
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
 }

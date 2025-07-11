@@ -9,9 +9,6 @@ import Foundation
 import Moya
 
 
-struct CreateEventData: Encodable {}
-struct UpdateEventData: Encodable {}
-
 
 enum EventsTarget {
     case getHome

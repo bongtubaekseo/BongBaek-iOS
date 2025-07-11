@@ -35,4 +35,25 @@ class EventService: EventServiceProtocol {
             responseType: UpcomingEventsResponse.self
         )
     }
+    
+    func getEventDetail(eventId: Int) -> AnyPublisher<EventDetailResponse, Error> {
+        return networkService.request(
+            .getEventDetail(eventId: eventId),
+            responseType: EventDetailResponse.self
+        )
+    }
+    
+    func createEvent(eventData: CreateEventData) -> AnyPublisher<CreateEventResponse, Error> {
+        return networkService.request(
+            .createEvent(eventData: eventData),
+            responseType: CreateEventResponse.self
+        )
+    }
+    
+    func updateEvent(eventId: Int, eventData: UpdateEventData) -> AnyPublisher<UpdateEventResponse, Error> {
+        return networkService.request(
+            .updateEvent(eventId: eventId, eventData: eventData),
+            responseType: UpdateEventResponse.self
+        )
+    }
 }
