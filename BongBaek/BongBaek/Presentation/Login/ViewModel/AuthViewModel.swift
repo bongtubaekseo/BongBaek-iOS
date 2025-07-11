@@ -10,6 +10,7 @@ import Combine
 
 class AuthViewModel: ObservableObject {
     @Published var isLoading = false
+    @Published var isLoginSuccess = false
     @Published var errorMessage: String?
     @Published var isSignUpSuccess = false
     
@@ -42,5 +43,42 @@ class AuthViewModel: ObservableObject {
                 }
             )
             .store(in: &cancellables)
+    }
+    
+    func login(accessToken: String) {
+        isLoading = true
+        errorMessage = nil
+        
+        authService.login(accessToken: accessToken)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isLoading = false
+                    if case .failure(let error) = completion {
+                        self?.errorMessage = error.localizedDescription
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    if response.isSuccess, let data = response.data {
+                        if data.isCompletedSignUp {
+                            // 기존 회원 - 로그인 성공
+                            if let token = data.token {
+                                // ToDo: - 성공 처리 후 토큰 save 함수 생성
+                                self?.isLoginSuccess = true
+                            }
+                        } else {
+                            // ToDo: - 신규 회원/회원가입 필요
+                            self?.navigateToSignUp(kakaoId: data.kakaoId, kakaoAccessToken: data.kakaoAccessToken)
+                        }
+                    } else {
+                        self?.errorMessage = response.message
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+    private func navigateToSignUp(kakaoId: Int, kakaoAccessToken: String?) {
+        // ToDo:- 회원가입 화면으로 이동 로직
+        // kakaoId와 kakaoAccessToken을 전달
     }
 }

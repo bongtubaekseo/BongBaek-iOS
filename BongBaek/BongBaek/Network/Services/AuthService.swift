@@ -15,10 +15,10 @@ class AuthService: AuthServiceProtocol {
         self.networkService = networkService
     }
     
-    func login(accessToken: String) -> AnyPublisher<String, Error> {
+    func login(accessToken: String) -> AnyPublisher<LoginResponse, Error> {
         return networkService.request(
             .login(accessToken: accessToken),
-            responseType: String.self 
+            responseType: LoginResponse.self
         )
     }
     

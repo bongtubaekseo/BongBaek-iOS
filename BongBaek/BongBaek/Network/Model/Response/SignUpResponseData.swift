@@ -7,13 +7,14 @@
 
 import Foundation
 
-typealias SignUpResponse = BaseResponse<SignUpResponseData>
+typealias SignUpResponse = BaseResponse<AuthData>
+typealias LoginResponse = BaseResponse<AuthData>
 
-struct SignUpResponseData: Codable {
-    let token: TokenInfo
+struct AuthData: Codable {
+    let token: TokenInfo?
     let isCompletedSignUp: Bool
     let kakaoId: Int
-    let kakaoAccessToken: String
+    let kakaoAccessToken: String?
 }
 
 struct TokenInfo: Codable {
