@@ -4,6 +4,7 @@
 //
 //  Created by hyunwoo on 7/2/25.
 //
+
 import SwiftUI
 
 struct ScheduleView: View {
@@ -29,15 +30,18 @@ struct ScheduleView: View {
             }
             .padding(.bottom, 20)
             
-            ForEach(schedules) { schedule in
-                ScheduleCellView(schedule: schedule)
+            if schedules.isEmpty {
+                EmptyCardView()
+            } else {
+                ForEach(schedules) { schedule in
+                    ScheduleCellView(schedule: schedule)
+                }
             }
         }
         .padding(.horizontal)
         .background(Color.black)
     }
 }
-
 #Preview {
     ScheduleView(schedules: scheduleDummy)
 }
