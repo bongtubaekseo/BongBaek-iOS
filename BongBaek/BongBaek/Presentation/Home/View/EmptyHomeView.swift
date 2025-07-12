@@ -22,10 +22,12 @@ struct EmptyHomeView: View {
                     }
                     EmptyScheduleView()
                         .frame(height: 276)
-                        .padding(.top, 30)
+                        .padding(.top, 32)
+                    
                     RecommendsView()
                         .environmentObject(stepManager)
-                        .padding(.top, 10)
+                        .padding(.top, 32)
+                    
                     HStack {
                         Text("봉백님의 일정")
                             .titleSemiBold20()
@@ -34,6 +36,7 @@ struct EmptyHomeView: View {
                             .padding(.top,40)
                         Spacer()
                     }
+                    
                     EmptyCardView()
                         .environmentObject(stepManager)
                         .padding(.top, 20)
