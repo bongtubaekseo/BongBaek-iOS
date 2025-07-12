@@ -9,9 +9,10 @@ import SwiftUI
 struct RecommendLoadingView: View {
     
     @State private var showSuccessView = false
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
-        NavigationStack {
+//        NavigationStack {
             ZStack {
                 Color.gray900
                     .ignoresSafeArea(.all)
@@ -46,14 +47,18 @@ struct RecommendLoadingView: View {
                 }
                 .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        showSuccessView = true
+                        router.push(to: .recommendLottie)
                     }
                 }
-                .navigationDestination(isPresented: $showSuccessView) {
-                    RecommendLottie()
-                }
+//                .navigationDestination(isPresented: $showSuccessView) {
+//                    RecommendLottie()
+//                        .environmentObject(router)
+//                }
             }
-        }
+            .onAppear {
+                print("⏳ RecommendLoadingView 나타남 - path.count: \(router.path.count)")
+            }
+//        }
         .navigationBarHidden(true)
     }
 }

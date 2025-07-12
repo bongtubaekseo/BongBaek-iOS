@@ -16,7 +16,7 @@ struct BongBaekApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            MainTabView()
 
         }
     }

@@ -38,6 +38,7 @@ class RecommendationAmountViewModel: ObservableObject {
 struct RecommendCostView: View {
     @StateObject private var viewModel = RecommendationAmountViewModel()
     @State private var showSuccessView = false
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         ScrollView {
@@ -56,9 +57,13 @@ struct RecommendCostView: View {
                 
                 bottomButtons
             }
-            .navigationDestination(isPresented: $showSuccessView) {
-                 RecommendSuccessView()
-             }
+//            .onAppear {
+//                print("⏳ RecommendCostView 나타남 - path.count: \(pathManager.path.count)")
+//            }
+//            .navigationDestination(isPresented: $showSuccessView) {
+//                 RecommendSuccessView()
+//                    .environmentObject(pathManager)
+//             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
@@ -358,7 +363,7 @@ struct RecommendCostView: View {
         VStack(spacing: 12) {
             Button("이 금액으로 결정하기") {
                 // 결정 액션
-                showSuccessView = true
+                router.push(to: .recommendSuccessView)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)

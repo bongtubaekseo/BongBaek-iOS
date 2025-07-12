@@ -9,6 +9,8 @@ import SwiftUI
 struct HomeView: View {
     @State private var selectedTab: Tab = .home
     @StateObject private var stepManager = GlobalStepManager()
+    @EnvironmentObject var router: NavigationRouter
+    
     var body: some View {
 //        NavigationStack {
             VStack(spacing: 0) {
@@ -26,6 +28,7 @@ struct HomeView: View {
                         .padding(.top, 30)
                     RecommendsView()
                         .environmentObject(stepManager)
+                        .environmentObject(router)
                         .padding(.top, 10)
                     ScheduleView(schedules: scheduleDummy)
                         .padding(.top, 32)

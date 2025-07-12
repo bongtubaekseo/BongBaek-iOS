@@ -10,6 +10,8 @@ import SwiftUI
 struct RecommendStartView: View {
     let onBackPressed: () -> Void
     @EnvironmentObject var stepManager: GlobalStepManager
+    @EnvironmentObject var router: NavigationRouter
+    @State private var navigateToRecommend = false
     
     var body: some View {
         VStack {
@@ -34,7 +36,9 @@ struct RecommendStartView: View {
                     .foregroundStyle(.gray300)
             }
             
-            NavigationLink(destination: RecommendView().environmentObject(stepManager)) {
+            Button {
+                router.push(to: .recommendView)
+            } label: {
                 HStack {
                     Spacer()
                     Text("금액 추천 시작하기")
@@ -48,21 +52,17 @@ struct RecommendStartView: View {
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)
-            
-//            NavigationLink(destination: RecommendView().environmentObject(stepManager)) {
-//                Text("금액 추천 시작하기")
-//                    .titleSemiBold18()
-//                    .foregroundStyle(.white)
-//            }
-//            .frame(maxWidth: .infinity)
-//            .frame(height: 60)
-//            .background(.primaryNormal)
-//            .cornerRadius(12)
-//            .padding(.horizontal, 20)
-//            .padding(.top, 20)
 
             Spacer()
         }
+        .onAppear {
+            print("🏠 RecommendStartView 나타남 - path.count: \(router.path.count)")
+         }
+//        .navigationDestination(isPresented: $navigateToRecommend) {
+//            RecommendView()
+//                .environmentObject(stepManager)
+//                .environmentObject(router)
+//        }
         .background(Color.background)
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)

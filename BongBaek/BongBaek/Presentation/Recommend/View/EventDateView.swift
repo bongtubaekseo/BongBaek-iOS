@@ -17,6 +17,7 @@ enum AttendanceType: String, CaseIterable {
 struct EventDateView: View {
     @StateObject private var viewModel = EventDateViewModel()
     @EnvironmentObject var stepManager: GlobalStepManager
+    @EnvironmentObject var router: NavigationRouter
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -42,11 +43,16 @@ struct EventDateView: View {
             
             NextButton(
                 isEnabled: viewModel.isNextButtonEnabled,
-                action: viewModel.proceedToNext
+                action: {
+                    router.push(to: .eventLocationView)
+                }
             )
             .padding(.horizontal, 24)
             .padding(.bottom, 50)
         }
+        .onAppear {
+              print("📅 EventDateView 나타남 - path.count: \(router.path.count)")
+          }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
@@ -65,9 +71,11 @@ struct EventDateView: View {
                 onDismiss: { viewModel.isDatePickerVisible = false }
             )
         }
-        .navigationDestination(isPresented: $viewModel.showEventLocationView) {
-            EventLocationView().environmentObject(stepManager)
-        }
+//        .navigationDestination(isPresented: $viewModel.showEventLocationView) {
+//            EventLocationView()
+//                .environmentObject(stepManager)
+//                .environmentObject(router)
+//        }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation(.easeInOut(duration: 0.8)) {

@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct RecommendView: View {
-   @State var nameTexts: String = ""
-   @State var nicknameTexts: String = ""
-   @State private var selectedRelation = ""
-   @State private var detailSelected: Bool = false
-   @EnvironmentObject var stepManager: GlobalStepManager
-   @Environment(\.dismiss) private var dismiss
+    @State var nameTexts: String = ""
+    @State var nicknameTexts: String = ""
+    @State private var selectedRelation = ""
+    @State private var detailSelected: Bool = false
+    @EnvironmentObject var stepManager: GlobalStepManager
+    @EnvironmentObject var router: NavigationRouter
+    @State private var navigateToEventInfo = false
+    @Environment(\.dismiss) private var dismiss
     @State private var showEventInformation = false
    let relationships = [
        ("icon_family", "가족"),
@@ -133,11 +135,24 @@ struct RecommendView: View {
                                .id("sliderView")
                        }
                        
-                       NavigationLink(destination: EventInformationView().environmentObject(stepManager)) {
+                       Button {
+                           if isNextButtonEnabled {
+                               router.push(to: .eventInformationView)
+                           }
+                       } label: {
                            Text("금액 추천 시작하기")
                                .titleSemiBold18()
                                .foregroundStyle(isNextButtonEnabled ? .white : .gray400)
                        }
+                       
+//                       NavigationLink(destination: EventInformationView()
+//                        .environmentObject(stepManager)
+//                        .environmentObject(pathManager)
+//                       ) {
+//                           Text("금액 추천 시작하기")
+//                               .titleSemiBold18()
+//                               .foregroundStyle(isNextButtonEnabled ? .white : .gray400)
+//                       }
                        .disabled(!isNextButtonEnabled)
                        .frame(maxWidth: .infinity)
                        .frame(height: 60)
@@ -171,6 +186,7 @@ struct RecommendView: View {
        .ignoresSafeArea()
        .onAppear {
            stepManager.currentStep = 1
+           print("👤 RecommendView 나타남 - path.count: \(router.path.count)")
        }
        .onDisappear {
 

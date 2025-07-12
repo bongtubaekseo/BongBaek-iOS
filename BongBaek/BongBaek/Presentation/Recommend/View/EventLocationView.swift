@@ -13,6 +13,7 @@ struct EventLocationView: View {
     @FocusState private var isSearchFieldFocused: Bool
     @EnvironmentObject var stepManager: GlobalStepManager
     @StateObject private var keywordSearch = KeyWordSearch()
+    @EnvironmentObject var router: NavigationRouter
     @Environment(\.dismiss) private var dismiss
     @State private var mapView: KakaoMapView?
     @State private var showRecommendLoading = false
@@ -56,7 +57,7 @@ struct EventLocationView: View {
                                     .font(.system(size: 16))
                                     .foregroundColor(.white)
                                     .focused($isSearchFieldFocused)
-                                    .onChange(of: searchText) { newValue in
+                                    .onChange(of: searchText) { _ , newValue in
                                         keywordSearch.query = newValue
                                         keywordSearch.searchResults.removeAll()
                                     }
@@ -194,7 +195,7 @@ struct EventLocationView: View {
                     
                     Button {
                         // 다음 단계 로직
-                        showRecommendLoading = true
+                        router.push(to: .recommendLoadingView)
                     } label: {
                         Text("금액 추천 받기")
                             .titleSemiBold18()
@@ -209,16 +210,20 @@ struct EventLocationView: View {
                 }
                 .padding(.top,20)
             }
+            .onAppear {
+                print("⏳ RecommendLoadingView 나타남 - path.count: \(router.path.count)")
+            }
             .offset(y: isSearchFieldFocused ? -140 : 0)
 
         }
         .onTapGesture {
             hideKeyboard()
         }
-        .navigationDestination(isPresented: $showRecommendLoading) {
-            RecommendLoadingView()
-//                .environmentObject(stepManager)
-        }
+//        .navigationDestination(isPresented: $showRecommendLoading) {
+//            RecommendLoadingView()
+//                .environmentObject(pathManager)
+////                .environmentObject(stepManager)
+//        }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)

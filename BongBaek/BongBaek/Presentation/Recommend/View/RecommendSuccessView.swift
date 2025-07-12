@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct RecommendSuccessView: View {
+    @EnvironmentObject var router: NavigationRouter
+    
     var body: some View {
-        NavigationStack {
+//        NavigationStack {
             ZStack {
                 Color.gray900
                     .ignoresSafeArea(.all)
@@ -38,6 +40,10 @@ struct RecommendSuccessView: View {
                         
                         VStack(spacing: 10) {
                             Button(action: {
+                                print("홈으로 가기 버튼 클릭됨")
+                                   print("pathManager.path.count: \(router.path.count)")
+                                router.popToRootAndSelectTab(.home)
+                                   print("popToRootAndSelectTab 호출 완료")
                             }) {
                                 Text("홈으로 가기")
                                     .titleSemiBold18()
@@ -49,6 +55,7 @@ struct RecommendSuccessView: View {
                             }
                             
                             Button(action: {
+                                router.popToRootAndSelectTab(.record)
                             }) {
                                 Text("내 기록 보기")
                                     .titleSemiBold18()
@@ -66,7 +73,10 @@ struct RecommendSuccessView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-        }
+            .onAppear {
+                print("⏳ RecommendSuccessView 나타남 - path.count: \(router.path.count)")
+            }
+//        }
         .navigationBarHidden(true)
     }
 }
