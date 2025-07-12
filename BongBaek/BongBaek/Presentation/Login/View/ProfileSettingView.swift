@@ -58,7 +58,7 @@ struct ProfileSettingView: View {
                     }
                     
                     startButton
-                        .padding(.top, 30)
+                        .padding(.top, 20)
                     
                     Spacer()
                 }

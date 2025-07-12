@@ -51,12 +51,14 @@ struct MainTabView: View {
                                 topTrailingRadius: 10
                             )
                         )
+//                        .ignoresSafeArea(.all)
 //                        .transition(.move(edge: .bottom))
                 }
             }
+            .ignoresSafeArea(.all, edges: .bottom)
             .navigationBarHidden(true)
             .toolbar(.hidden, for: .navigationBar)
-            .background(Color.black.ignoresSafeArea())
+            .background(Color.red.ignoresSafeArea())
             .onChange(of: selectedTab) { oldValue, newValue in
                 if newValue == .recommend {
                     previousTab = oldValue

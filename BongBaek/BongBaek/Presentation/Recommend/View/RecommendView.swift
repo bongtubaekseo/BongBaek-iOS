@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct RecommendView: View {
-   @State var texts: String = ""
+   @State var nameTexts: String = ""
+   @State var nicknameTexts: String = ""
    @State private var selectedRelation = ""
    @State private var detailSelected: Bool = false
    @EnvironmentObject var stepManager: GlobalStepManager
@@ -27,6 +28,19 @@ struct RecommendView: View {
        GridItem(.flexible(), spacing: 10),
        GridItem(.flexible(), spacing: 10)
    ]
+    
+    private var isNextButtonEnabled: Bool {
+        // 1. 이름 필수 입력 + 유효성 검사 (2-10자)
+        let nameValid = nameTexts.count >= 2 && nameTexts.count <= 10
+        
+        // 2. 별명 유효성 검사 (비어있거나, 입력된 경우 2-10자)
+        let nicknameValid = nicknameTexts.isEmpty || (nicknameTexts.count >= 2 && nicknameTexts.count <= 10)
+        
+        // 3. 관계 선택 필수
+        let relationSelected = !selectedRelation.isEmpty
+        
+        return nameValid && nicknameValid && relationSelected
+    }
    
    var body: some View {
        VStack(spacing: 0) {
@@ -66,8 +80,8 @@ struct RecommendView: View {
                                .padding(.bottom, 20)
                                
                                VStack(spacing: 12) {
-                                   BorderTextField(placeholder: "이름을 적어주세요", text: $texts, validationRule: ValidationRule(minLength: 2, maxLength: 10))
-                                   BorderTextField(placeholder: "별명을 적어주세요", text: $texts, validationRule: ValidationRule(minLength: 2, maxLength: 10))
+                                   BorderTextField(placeholder: "이름을 적어주세요", text: $nameTexts, validationRule: ValidationRule(minLength: 2, maxLength: 10))
+                                   BorderTextField(placeholder: "별명을 적어주세요", text: $nicknameTexts, validationRule: ValidationRule(minLength: 2, maxLength: 10))
                                }
                            }
                            .padding(.horizontal, 40)
@@ -122,15 +136,18 @@ struct RecommendView: View {
                        NavigationLink(destination: EventInformationView().environmentObject(stepManager)) {
                            Text("금액 추천 시작하기")
                                .titleSemiBold18()
-                               .foregroundStyle(.white)
+                               .foregroundStyle(isNextButtonEnabled ? .white : .gray400)
                        }
-
+                       .disabled(!isNextButtonEnabled)
                        .frame(maxWidth: .infinity)
                        .frame(height: 60)
-                       .background(.primaryNormal)
+                       .background(isNextButtonEnabled ? .primaryNormal : .gray600)
                        .cornerRadius(12)
                        .padding(.horizontal, 20)
                        .padding(.top, 8)
+                       .padding(.bottom, 24)
+                       .animation(.easeInOut(duration: 0.2), value: isNextButtonEnabled)
+
 
                        Spacer(minLength: 0)
                    }
@@ -138,7 +155,7 @@ struct RecommendView: View {
                .onTapGesture {
                    hideKeyboard()
                }
-               .onChange(of: detailSelected) { newValue in
+               .onChange(of: detailSelected) {_ , newValue in
                    if newValue {
                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                            withAnimation(.easeInOut(duration: 0.3)) {

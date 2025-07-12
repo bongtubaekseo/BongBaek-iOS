@@ -20,6 +20,7 @@ struct HomeView: View {
                             .padding(.leading, 20)
                         Spacer()
                     }
+                    .padding(.top, 20)
                     ScheduleAlarmView(alarms: scheduleDummy)
                         .frame(height: 276)
                         .padding(.top, 30)

@@ -31,12 +31,12 @@ struct EventDateView: View {
                            .padding(.bottom, 10)
             
             EventDateTitleView()
+                .padding(.top, 12)
             
-            Spacer()
-                .frame(height: 60)
             
             EventDateFormView(viewModel: viewModel)
                 .padding(.horizontal, 24)
+                .padding(.top, 30)
             
             Spacer()
             

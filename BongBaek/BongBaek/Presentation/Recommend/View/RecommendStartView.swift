@@ -23,7 +23,7 @@ struct RecommendStartView: View {
                 subtitle1: "내 상황에 딱 맞는 경조사비,",
                 subtitle2: "지금 바로 알아보세요!"
             )
-            .padding(.leading, 10)
+            .padding(.leading, 20)
             
             Image("image_bong 1")
             
@@ -35,16 +35,31 @@ struct RecommendStartView: View {
             }
             
             NavigationLink(destination: RecommendView().environmentObject(stepManager)) {
-                Text("금액 추천 시작하기")
-                    .titleSemiBold18()
-                    .foregroundStyle(.white)
+                HStack {
+                    Spacer()
+                    Text("금액 추천 시작하기")
+                        .titleSemiBold18()
+                        .foregroundStyle(.white)
+                    Spacer()
+                }
+                .frame(height: 60)
+                .background(.primaryNormal)
+                .cornerRadius(12)
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 60)
-            .background(.primaryNormal)
-            .cornerRadius(12)
             .padding(.horizontal, 20)
-            .padding(.top, 8)
+            .padding(.top, 20)
+            
+//            NavigationLink(destination: RecommendView().environmentObject(stepManager)) {
+//                Text("금액 추천 시작하기")
+//                    .titleSemiBold18()
+//                    .foregroundStyle(.white)
+//            }
+//            .frame(maxWidth: .infinity)
+//            .frame(height: 60)
+//            .background(.primaryNormal)
+//            .cornerRadius(12)
+//            .padding(.horizontal, 20)
+//            .padding(.top, 20)
 
             Spacer()
         }

@@ -37,12 +37,14 @@ struct EventInformationView: View {
 
             
             EventInformationTitleView()
+                .padding(.top, 12)
             
-            Spacer()
-                .frame(height: 60)
+//            Spacer()
+//                .frame(height: 60)
             
             EventTypeOptionsView(viewModel: viewModel)
                 .padding(.horizontal, 24)
+                .padding(.top, 30)
             
             Spacer()
             
