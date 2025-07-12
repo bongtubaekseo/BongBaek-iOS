@@ -37,6 +37,7 @@ class RecommendationAmountViewModel: ObservableObject {
 // MARK: - View
 struct RecommendCostView: View {
     @StateObject private var viewModel = RecommendationAmountViewModel()
+    @State private var showSuccessView = false
     
     var body: some View {
         ScrollView {
@@ -55,9 +56,15 @@ struct RecommendCostView: View {
                 
                 bottomButtons
             }
+            .navigationDestination(isPresented: $showSuccessView) {
+                 RecommendSuccessView()
+             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .background(Color("gray900"))
         .foregroundColor(.white)
     }
@@ -66,6 +73,16 @@ struct RecommendCostView: View {
     private var headerSection: some View {
        VStack() {
            VStack(spacing: 20) {
+               
+               HStack {
+                   Text("금액 추천")
+                       .titleSemiBold18()
+                       .foregroundColor(.white)
+                       .padding(.top, 12)
+
+                       
+               }
+
                Text("결혼식")
                    .bodyMedium14()
                    .foregroundColor(.white)
@@ -341,6 +358,7 @@ struct RecommendCostView: View {
         VStack(spacing: 12) {
             Button("이 금액으로 결정하기") {
                 // 결정 액션
+                showSuccessView = true
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)

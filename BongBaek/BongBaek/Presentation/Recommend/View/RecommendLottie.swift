@@ -29,6 +29,9 @@ struct RecommendLottie: View {
                     .transition(.opacity.combined(with: .scale))
             }
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
     }

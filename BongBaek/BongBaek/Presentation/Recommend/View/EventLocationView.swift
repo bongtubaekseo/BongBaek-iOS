@@ -15,6 +15,7 @@ struct EventLocationView: View {
     @StateObject private var keywordSearch = KeyWordSearch()
     @Environment(\.dismiss) private var dismiss
     @State private var mapView: KakaoMapView?
+    @State private var showRecommendLoading = false
     
     var body: some View {
         ScrollView {
@@ -193,6 +194,7 @@ struct EventLocationView: View {
                     
                     Button {
                         // 다음 단계 로직
+                        showRecommendLoading = true
                     } label: {
                         Text("금액 추천 받기")
                             .titleSemiBold18()
@@ -212,6 +214,10 @@ struct EventLocationView: View {
         }
         .onTapGesture {
             hideKeyboard()
+        }
+        .navigationDestination(isPresented: $showRecommendLoading) {
+            RecommendLoadingView()
+//                .environmentObject(stepManager)
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)

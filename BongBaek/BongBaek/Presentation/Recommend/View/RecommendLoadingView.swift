@@ -7,6 +7,9 @@
 import SwiftUI
 
 struct RecommendLoadingView: View {
+    
+    @State private var showSuccessView = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -14,7 +17,15 @@ struct RecommendLoadingView: View {
                     .ignoresSafeArea(.all)
                 
                 VStack(spacing: 0) {
-                    CustomNavigationBar(title: "금액추천중")
+//                    CustomNavigationBar(title: "금액추천중")
+                    
+                    HStack {
+                        
+                        Text("금액추천중")
+                            .titleSemiBold18()
+                            .foregroundColor(.white)
+                            .padding(.top, 20)
+                    }
                     VStack(spacing: 30) {
                         Spacer()
                         LottieTest(animationFileName: "find_amount", loopMode: .loop)
@@ -32,6 +43,14 @@ struct RecommendLoadingView: View {
                         Spacer()
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        showSuccessView = true
+                    }
+                }
+                .navigationDestination(isPresented: $showSuccessView) {
+                    RecommendLottie()
                 }
             }
         }

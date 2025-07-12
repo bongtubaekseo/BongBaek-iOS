@@ -10,7 +10,7 @@ struct HomeView: View {
     @State private var selectedTab: Tab = .home
     @StateObject private var stepManager = GlobalStepManager()
     var body: some View {
-        NavigationStack {
+//        NavigationStack {
             VStack(spacing: 0) {
                 ScrollView {
                     HStack {
@@ -43,7 +43,7 @@ struct HomeView: View {
             .toolbar(.hidden, for: .navigationBar)
             .navigationBarBackButtonHidden(true)
             .background(Color.black.ignoresSafeArea())
-        }
+//        }
     }
 }
 

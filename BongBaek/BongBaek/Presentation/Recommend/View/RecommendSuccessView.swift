@@ -14,7 +14,14 @@ struct RecommendSuccessView: View {
                 Color.gray900
                     .ignoresSafeArea(.all)
                 VStack(spacing: 0) {
-                    CustomNavigationBar(title: "기록완료")
+
+                    HStack {
+                        Text("기록 완료")
+                            .titleSemiBold18()
+                            .foregroundStyle(.white)
+                    }
+                    
+                    
                     VStack(spacing: 20) {
                         Spacer()
                         LottieView(animationFileName: "success", loopMode: .playOnce)

@@ -10,6 +10,8 @@ import SwiftUI
 struct LoginView: View {
     @State var isPresented = false
     @State private var showProfileSetting = false
+    @EnvironmentObject var appStateManager: AppStateManager
+    @StateObject private var loginViewModel = LoginViewModel()
     
    var body: some View {
   
@@ -31,7 +33,9 @@ struct LoginView: View {
                    VStack(spacing: 16) {
 
                        Button(action: {
-                           isPresented = true
+//                           isPresented = true
+                           handleKakaoLogin()
+                           // ToDo - viewModel.kakaoLogin 시작하는 로직
                        }) {
                            Image("btn_kakao")
                                .resizable()
@@ -41,7 +45,14 @@ struct LoginView: View {
                        }
                        .buttonStyle(PlainButtonStyle())
                        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                       .disabled(loginViewModel.isLoading)
+                       .overlay(
+                           loginViewModel.isLoading ?
+                           ProgressView().tint(.white) : nil
+                       )
 
+
+                     
                        VStack(alignment: .leading,spacing: 8) {
                            Text("로그인하시면 아래 내용에 동의하는 것으로 간주됩니다.")
                                .captionRegular12()
@@ -71,12 +82,18 @@ struct LoginView: View {
            .navigationDestination(isPresented: $showProfileSetting) {
                ProfileSettingView()
            }
+           .alert("로그인 실패", isPresented: $loginViewModel.showError) {
+               Button("확인") { }
+           } message: {
+               Text(loginViewModel.errorMessage ?? "알수 없는 에러가 발생했습니다.")
+           }
        }
-       .sheet(isPresented: $isPresented) {
+       .sheet(isPresented: $appStateManager.showSignUpSheet) {
            SignUpBottomSheetView(
                onComplete: {
                    print("SignUpBottomSheet Clicked()")
-                   isPresented = false
+//                   isPresented = false
+                   appStateManager.showSignUpSheet = false
                    showProfileSetting = true
                }
            )
@@ -84,5 +101,22 @@ struct LoginView: View {
            .presentationDragIndicator(.visible)
        }
    }
+    
+    private func handleKakaoLogin() {
+        loginViewModel.isLoading = true
+        
+        // 테스트용 가짜 응답 - 실제로는 loginViewModel.kakaoLogin() 호출
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            let mockAuthData = AuthData(
+                token: TokenInfo(accessToken: "mock_access", refreshToken: "mock_refresh"),
+                isCompletedSignUp: false, // 랜덤으로 true/false 테스트
+                kakaoId: 12345,
+                kakaoAccessToken: "mock_kakao_token"
+            )
+            
+            loginViewModel.isLoading = false
+            appStateManager.handleLoginResult(mockAuthData)
+        }
+    }
 }
 
