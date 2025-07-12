@@ -1,12 +1,12 @@
 //
-//  HomeView.swift
+//  EmptyHomeView.swift
 //  BongBaek
 //
-//  Created by 임재현 on 6/28/25.
+//  Created by hyunwoo on 7/12/25.
 //
 import SwiftUI
 
-struct HomeView: View {
+struct EmptyHomeView: View {
     @State private var selectedTab: Tab = .home
     @StateObject private var stepManager = GlobalStepManager()
     var body: some View {
@@ -15,19 +15,31 @@ struct HomeView: View {
                 ScrollView {
                     HStack {
                         Text("봉투백서")
-                            .font(.head_bold_24)
+                            .headBold24()
                             .foregroundColor(.white)
                             .padding(.leading, 20)
                         Spacer()
                     }
-                    ScheduleAlarmView(alarms: sDummy)
+                    EmptyScheduleView()
                         .frame(height: 276)
-                        .padding(.top, 30)
+                        .padding(.top, 32)
+                    
                     RecommendsView()
                         .environmentObject(stepManager)
-                        .padding(.top, 10)
-                    ScheduleView(schedules: sDummy)
                         .padding(.top, 32)
+                    
+                    HStack {
+                        Text("봉백님의 일정")
+                            .titleSemiBold20()
+                            .foregroundColor(.white)
+                            .padding(.leading, 20)
+                            .padding(.top,40)
+                        Spacer()
+                    }
+                    
+                    EmptyCardView()
+                        .environmentObject(stepManager)
+                        .padding(.top, 20)
                 }
 //                CustomTabView(selectedTab: $selectedTab)
 //                    .background(Color.gray750)
@@ -47,5 +59,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    EmptyHomeView()
 }
+
