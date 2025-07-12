@@ -15,7 +15,7 @@ struct EmptyHomeView: View {
                 ScrollView {
                     HStack {
                         Text("봉투백서")
-                            .font(.head_bold_24)
+                            .headBold24()
                             .foregroundColor(.white)
                             .padding(.leading, 20)
                         Spacer()
@@ -26,8 +26,17 @@ struct EmptyHomeView: View {
                     RecommendsView()
                         .environmentObject(stepManager)
                         .padding(.top, 10)
-                    ScheduleView(schedules: scheduleDummy)
-                        .padding(.top, 32)
+                    HStack {
+                        Text("봉백님의 일정")
+                            .titleSemiBold20()
+                            .foregroundColor(.white)
+                            .padding(.leading, 20)
+                            .padding(.top,40)
+                        Spacer()
+                    }
+                    EmptyCardView()
+                        .environmentObject(stepManager)
+                        .padding(.top, 20)
                 }
 //                CustomTabView(selectedTab: $selectedTab)
 //                    .background(Color.gray750)

@@ -1,0 +1,49 @@
+//
+//  EmptyCardView.swift
+//  BongBaek
+//
+//  Created by hyunwoo on 7/12/25.
+//
+
+import SwiftUI
+
+struct EmptyCardView: View {
+    @StateObject private var stepManager = GlobalStepManager()
+    var body: some View {
+        VStack(spacing: 20) {
+            VStack {
+                Image("icon_plus")
+                    .foregroundColor(.black)
+                    .frame(width: 34, height: 34)
+                    .background(Circle().fill(Color(hex:"#6E7FFF")))
+            }
+
+            Text("예정된 일정이 없습니다")
+                .titleSemiBold18()
+                .foregroundColor(.white)
+                //.padding(.top, 12)
+               
+            NavigationLink(destination: AllRecordsView().environmentObject(stepManager)) {
+                HStack(spacing: 4) {
+                    Text("일정추가하기 >")
+                        .captionRegular12()
+                        .foregroundColor(.gray300)
+                }
+                .padding(.vertical, 6)
+                .padding(.horizontal, 10)
+                .background(.gray900)
+                .cornerRadius(6)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(.gray800)
+        .cornerRadius(10)
+        .padding(.horizontal)
+    }
+}
+
+#Preview {
+    EmptyCardView()
+}
+
