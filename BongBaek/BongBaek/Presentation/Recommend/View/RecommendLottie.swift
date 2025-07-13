@@ -15,7 +15,9 @@ struct RecommendLottie: View {
     var body: some View {
         ZStack {
             if !showRectangle {
-                VStack(spacing: 0) {
+                VStack(spacing: 30) {
+                    Spacer()
+                    
                     LottieView(
                         animationFileName: "envelope",
                         loopMode: .playOnce,
@@ -27,12 +29,15 @@ struct RecommendLottie: View {
                             }
                         }
                     )
+                    .offset(y: -20)
                     
-                    VStack(spacing: 20) {
+                    VStack(spacing: 40) {
                         amountRangeSection
                         categorySection
                     }
                     .padding(.horizontal, 20)
+                    .padding(.bottom, 40)
+                    Spacer()
                 }
             }
             
@@ -99,7 +104,6 @@ struct RecommendLottie: View {
         )
     }
 
-    // MARK: - Category Section
     var categorySection: some View {
         HStack(spacing: 12) {
             HStack(spacing: 12) {
