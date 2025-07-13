@@ -62,7 +62,7 @@ struct DatePickerBottomSheetView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(.blue)
+                    .background(.primaryNormal)
                     .cornerRadius(12)
             }
             .padding(.horizontal, 20)

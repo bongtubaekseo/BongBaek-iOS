@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ScheduleModel: Identifiable {
+struct ScheduleModel: Identifiable,Hashable {
     let id =  UUID()
     let type: String
     let relation: String
@@ -23,4 +23,6 @@ let scheduleDummy: [ScheduleModel] = [
     ScheduleModel(type: "생일", relation: "선후배", name: "임재현", money: "30,000원", location: "강남구 테헤란로 30 웨딩홀", date: "2027.10.01 (월)")
 ]
 
+
 let sDummy: [ScheduleModel] = []
+

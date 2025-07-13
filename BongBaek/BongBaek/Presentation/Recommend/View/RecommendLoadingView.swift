@@ -7,14 +7,26 @@
 import SwiftUI
 
 struct RecommendLoadingView: View {
+    
+    @State private var showSuccessView = false
+    @EnvironmentObject var router: NavigationRouter
+    
     var body: some View {
-        NavigationStack {
+//        NavigationStack {
             ZStack {
                 Color.gray900
                     .ignoresSafeArea(.all)
                 
                 VStack(spacing: 0) {
-                    CustomNavigationBar(title: "금액추천중")
+//                    CustomNavigationBar(title: "금액추천중")
+                    
+                    HStack {
+                        
+                        Text("금액추천중")
+                            .titleSemiBold18()
+                            .foregroundColor(.white)
+                            .padding(.top, 20)
+                    }
                     VStack(spacing: 30) {
                         Spacer()
                         LottieTest(animationFileName: "find_amount", loopMode: .loop)
@@ -33,8 +45,20 @@ struct RecommendLoadingView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        router.push(to: .recommendLottie)
+                    }
+                }
+//                .navigationDestination(isPresented: $showSuccessView) {
+//                    RecommendLottie()
+//                        .environmentObject(router)
+//                }
             }
-        }
+            .onAppear {
+                print("⏳ RecommendLoadingView 나타남 - path.count: \(router.path.count)")
+            }
+//        }
         .navigationBarHidden(true)
     }
 }

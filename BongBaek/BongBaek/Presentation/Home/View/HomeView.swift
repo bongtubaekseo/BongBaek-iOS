@@ -9,8 +9,10 @@ import SwiftUI
 struct HomeView: View {
     @State private var selectedTab: Tab = .home
     @StateObject private var stepManager = GlobalStepManager()
+    @EnvironmentObject var router: NavigationRouter
+    
     var body: some View {
-        NavigationStack {
+//        NavigationStack {
             VStack(spacing: 0) {
                 ScrollView {
                     HStack {
@@ -20,11 +22,14 @@ struct HomeView: View {
                             .padding(.leading, 20)
                         Spacer()
                     }
+
                     ScheduleAlarmView(alarms: sDummy)
+
                         .frame(height: 276)
                         .padding(.top, 30)
                     RecommendsView()
                         .environmentObject(stepManager)
+                        .environmentObject(router)
                         .padding(.top, 10)
                     ScheduleView(schedules: sDummy)
                         .padding(.top, 32)
@@ -42,7 +47,7 @@ struct HomeView: View {
             .toolbar(.hidden, for: .navigationBar)
             .navigationBarBackButtonHidden(true)
             .background(Color.black.ignoresSafeArea())
-        }
+//        }
     }
 }
 
