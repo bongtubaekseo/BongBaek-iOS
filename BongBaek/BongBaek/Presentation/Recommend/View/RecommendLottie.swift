@@ -23,9 +23,10 @@ struct RecommendLottie: View {
                         loopMode: .playOnce,
                         completion: { finished in
                             if finished {
-                                withAnimation(.easeInOut(duration: 0.8)) {
-                                    showRectangle = true
-                                }
+                                showRectangle = true
+//                                withAnimation(.easeInOut(duration: 0.8)) {
+//                                    showRectangle = true
+//                                }
                             }
                         }
                     )
