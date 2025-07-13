@@ -161,7 +161,7 @@ struct RecommendCostView: View {
 //    }
     
     // MARK: - Amount Range Section
-    private var amountRangeSection: some View {
+    var amountRangeSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("적정 범위")
                 .titleSemiBold18()
@@ -218,7 +218,7 @@ struct RecommendCostView: View {
     }
     
     // MARK: - Category Section
-    private var categorySection: some View {
+    var categorySection: some View {
         HStack(spacing: 12) {
             HStack(spacing: 12) {
                 ZStack {
