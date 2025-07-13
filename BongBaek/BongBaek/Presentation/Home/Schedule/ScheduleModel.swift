@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ScheduleModel: Identifiable {
+struct ScheduleModel: Identifiable,Hashable {
     let id =  UUID()
     let type: String
     let relation: String

@@ -15,6 +15,7 @@ enum ModifyMode {
 struct ModifyEventView: View {
    let mode: ModifyMode
    let existingEvent: ScheduleModel?
+   @EnvironmentObject var router: NavigationRouter
    
    @State var nickname: String = ""
    @State var alias: String = ""
@@ -182,6 +183,7 @@ struct ModifyEventView: View {
    
    private func updateEvent() {
        // 기존 이벤트 수정 로직
+       router.push(to: .recommendSuccessView)
    }
 }
 

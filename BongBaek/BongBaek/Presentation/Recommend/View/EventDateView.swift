@@ -44,14 +44,16 @@ struct EventDateView: View {
             NextButton(
                 isEnabled: viewModel.isNextButtonEnabled,
                 action: {
-                    router.push(to: .eventLocationView)
+                    handleNextNavigation()
+//                    router.push(to: .eventLocationView)
                 }
             )
             .padding(.horizontal, 24)
             .padding(.bottom, 50)
         }
         .onAppear {
-              print("📅 EventDateView 나타남 - path.count: \(router.path.count)")
+              stepManager.currentStep = 3
+              print("EventDateView 나타남 - path.count: \(router.path.count)")
           }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -76,17 +78,36 @@ struct EventDateView: View {
 //                .environmentObject(stepManager)
 //                .environmentObject(router)
 //        }
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                withAnimation(.easeInOut(duration: 0.8)) {
-                    stepManager.currentStep = 3
-                }
-            }
-        }
-        .onDisappear {
-            if !viewModel.showEventLocationView {
-                stepManager.previousStep()
-            }
+//        .onAppear {
+//            stepManager.currentStep = 3
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                withAnimation(.easeInOut(duration: 0.8)) {
+//                    stepManager.currentStep = 3
+//                }
+//            }
+//        }
+//        .onDisappear {
+//            if !viewModel.showEventLocationView {
+////                stepManager.previousStep()
+//            }
+//        }
+    }
+    
+    private func handleNextNavigation() {
+        switch viewModel.selectedAttendance {
+        case .yes:
+            // 참석 → 장소 선택 필요
+            print("참석 예정 → EventLocationView로 이동")
+            router.push(to: .eventLocationView)
+            
+        case .no:
+            // 불참 → 장소 건너뛰고 바로 추천으로
+            print("불참 → EventLocationView 건너뛰고 RecommendLoadingView로 이동")
+            router.push(to: .recommendLoadingView)
+            
+        case .none:
+            // 선택 안함 (일반적으로 버튼이 비활성화되어야 함)
+            print("참석 여부 미선택")
         }
     }
 }

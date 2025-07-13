@@ -211,6 +211,8 @@ struct EventLocationView: View {
                 .padding(.top,20)
             }
             .onAppear {
+                stepManager.currentStep = 4
+                print("📍 EventLocationView 나타남 - step: 4/4")
                 print("⏳ RecommendLoadingView 나타남 - path.count: \(router.path.count)")
             }
             .offset(y: isSearchFieldFocused ? -140 : 0)

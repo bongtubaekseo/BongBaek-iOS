@@ -127,6 +127,9 @@ struct MainTabView: View {
         case .recommendSuccessView:
             RecommendSuccessView()
                 .environmentObject(router)
+        case .modifyEventView(let mode, let existingEvent):
+            ModifyEventView(mode: mode, existingEvent: existingEvent)
+                .environmentObject(router)
         }
     }
 }

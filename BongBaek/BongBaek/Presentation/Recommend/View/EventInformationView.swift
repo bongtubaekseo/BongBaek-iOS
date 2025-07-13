@@ -71,11 +71,11 @@ struct EventInformationView: View {
                 }
             }
         }
-        .onDisappear {
-            if !viewModel.showEventDateView {
-                stepManager.previousStep()
-            }
-        }
+//        .onDisappear {
+//            if !viewModel.showEventDateView {
+//                stepManager.previousStep()
+//            }
+//        }
 
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
