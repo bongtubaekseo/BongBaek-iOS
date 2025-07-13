@@ -9,7 +9,9 @@ import SwiftUI
 struct RecommendLottie: View {
     @StateObject private var viewModel = RecommendationAmountViewModel()
     @State private var showRectangle = false
-    
+
+    @EnvironmentObject var router: NavigationRouter
+
     var body: some View {
         ZStack {
             if !showRectangle {
@@ -37,9 +39,16 @@ struct RecommendLottie: View {
             
             if showRectangle {
                 RecommendCostView()
+                    .environmentObject(router)
                     .transition(.opacity.combined(with: .scale))
             }
         }
+        .onAppear {
+            print("⏳ RecommendLottie 나타남 - path.count: \(router.path.count)")
+        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
     }
@@ -160,6 +169,6 @@ var categorySection: some View {
     }
 }
 
-#Preview {
-    RecommendLottie()
-}
+//#Preview {
+//    RecommendLottie()
+//}

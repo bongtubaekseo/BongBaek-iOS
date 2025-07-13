@@ -8,6 +8,7 @@ import SwiftUI
 
 struct RecommendsView: View {
     @StateObject private var stepManager = GlobalStepManager()
+    @EnvironmentObject var router: NavigationRouter
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top) {
@@ -28,7 +29,9 @@ struct RecommendsView: View {
                     .frame(width: 57, height: 54)
             }
             
-            NavigationLink(destination: RecommendView().environmentObject(stepManager)) {
+            Button {
+                router.push(to: .recommendView) // 🎯 RecommendStartView 건너뛰고 바로!
+            } label: {
                 Text("경조사비 추천 받기")
                     .font(.title_semibold_16)
                     .foregroundColor(.white)
@@ -37,6 +40,16 @@ struct RecommendsView: View {
                     .background(.buttonBack)
                     .cornerRadius(8)
             }
+            
+//            NavigationLink(destination: RecommendView().environmentObject(stepManager)) {
+//                Text("경조사비 추천 받기")
+//                    .font(.title_semibold_16)
+//                    .foregroundColor(.white)
+//                    .frame(maxWidth: .infinity)
+//                    .padding()
+//                    .background(.buttonBack)
+//                    .cornerRadius(8)
+//            }
         }
         .padding()
         .background(.gray750)
