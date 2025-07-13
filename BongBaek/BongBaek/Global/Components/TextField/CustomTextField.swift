@@ -14,6 +14,7 @@ struct CustomTextField: View {
     @Binding var text: String
     let validationRule: ValidationRule?
     let isSecure: Bool
+    let isRequired: Bool
     
     @State private var validationState: ValidationState = .normal
     @State private var validationMessage: String = ""
@@ -29,6 +30,7 @@ struct CustomTextField: View {
          validationRule: ValidationRule? = nil,
          isSecure: Bool = false,
          isReadOnly: Bool = false,
+         isRequired: Bool = false,
          onTap: (() -> Void)? = nil) {
         self.title = title
         self.icon = icon
@@ -37,6 +39,7 @@ struct CustomTextField: View {
         self.validationRule = validationRule
         self.isSecure = isSecure
         self.isReadOnly = isReadOnly
+        self.isRequired = isRequired
         self.onTap = onTap
     }
     
@@ -50,9 +53,24 @@ struct CustomTextField: View {
                     .frame(width: 16,height: 16)
                     .foregroundStyle(.white)
                 
-                Text(title)
-                    .bodyMedium16()
-                    .foregroundColor(.white)
+                HStack(spacing: 2) {  
+                    Text(title)
+                        .bodyMedium16()
+                        .foregroundColor(.white)
+                    
+                    if isRequired {
+                        
+                        VStack {
+                            Text("*")
+                                .bodyMedium16()
+                                .foregroundColor(.blue)
+                                .padding(.top, 2)
+                                .padding(.leading, 1)
+                            
+                            Spacer()
+                        }
+                    }
+                }
             }
             
             VStack(alignment: .leading, spacing: 2) {

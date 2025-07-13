@@ -19,6 +19,7 @@ enum EventType: String, CaseIterable {
 struct EventInformationView: View {
     @StateObject private var viewModel = EventInformationViewModel()
     @EnvironmentObject var stepManager: GlobalStepManager
+    @EnvironmentObject var router: NavigationRouter
     
     @State private var showEventDateView = false
     @Environment(\.dismiss) private var dismiss
@@ -37,21 +38,28 @@ struct EventInformationView: View {
 
             
             EventInformationTitleView()
+                .padding(.top, 12)
             
-            Spacer()
-                .frame(height: 60)
+//            Spacer()
+//                .frame(height: 60)
             
             EventTypeOptionsView(viewModel: viewModel)
                 .padding(.horizontal, 24)
+                .padding(.top, 30)
             
             Spacer()
             
             NextButton(
                 isEnabled: viewModel.isNextButtonEnabled,
-                action: viewModel.proceedToNext
+                action: {
+                    router.push(to: .eventDateView)
+                }
             )
             .padding(.horizontal, 24)
             .padding(.bottom, 50)
+        }
+        .onAppear {
+            print("📋 EventInformationView 나타남 - path.count: \(router.path.count)")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("background"))
@@ -63,14 +71,12 @@ struct EventInformationView: View {
                 }
             }
         }
-        .onDisappear {
-            if !viewModel.showEventDateView {
-                stepManager.previousStep()
-            }
-        }
-        .navigationDestination(isPresented: $viewModel.showEventDateView) {
-            EventDateView().environmentObject(stepManager)
-        }
+//        .onDisappear {
+//            if !viewModel.showEventDateView {
+//                stepManager.previousStep()
+//            }
+//        }
+
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)

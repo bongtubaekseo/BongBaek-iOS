@@ -10,33 +10,41 @@ import SwiftUI
 struct WelcomeTextView: View {
     var body: some View {
         
-        VStack(alignment: .leading,spacing: 28) {
+        VStack(alignment: .leading,spacing: 20) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 0) {
                     Text("경조사비")
-                        .foregroundStyle(.primaryStrong)
+                        .foregroundStyle(Color(hex: "#CDC9FF"))
                         .headBold26()
                     
                     Text(" 고민 끝,")
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Color(hex: "#CDC9FF"))
                         .headBold26()
                     
                     Spacer()
                 }
                 
-                Text("봉투백서에 오신 것을")
-                    .foregroundStyle(.white)
-                    .headBold26()
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack(spacing: 0) {
+                    Text("봉투백서")
+                        .foregroundStyle(.white)
+                        .headBold26()
+                    
+                    Text("에 오신 것을")
+                        .foregroundStyle(Color(hex: "#CDC9FF"))
+                        .headBold26()
+                    
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Text("환영합니다!")
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color(hex: "#CDC9FF"))
                     .headBold26()
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             
             Text("3초 가입으로 바로 시작해보세요")
-                .foregroundStyle(.white)
+                .foregroundStyle(.gray100)
                 .bodyMedium16()
                 .frame(maxWidth: .infinity, alignment: .leading)
         }

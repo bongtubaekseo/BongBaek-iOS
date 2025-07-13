@@ -17,6 +17,7 @@ enum AttendanceType: String, CaseIterable {
 struct EventDateView: View {
     @StateObject private var viewModel = EventDateViewModel()
     @EnvironmentObject var stepManager: GlobalStepManager
+    @EnvironmentObject var router: NavigationRouter
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -31,22 +32,29 @@ struct EventDateView: View {
                            .padding(.bottom, 10)
             
             EventDateTitleView()
+                .padding(.top, 12)
             
-            Spacer()
-                .frame(height: 60)
             
             EventDateFormView(viewModel: viewModel)
                 .padding(.horizontal, 24)
+                .padding(.top, 30)
             
             Spacer()
             
             NextButton(
                 isEnabled: viewModel.isNextButtonEnabled,
-                action: viewModel.proceedToNext
+                action: {
+                    handleNextNavigation()
+//                    router.push(to: .eventLocationView)
+                }
             )
             .padding(.horizontal, 24)
             .padding(.bottom, 50)
         }
+        .onAppear {
+              stepManager.currentStep = 3
+              print("EventDateView 나타남 - path.count: \(router.path.count)")
+          }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
@@ -65,20 +73,41 @@ struct EventDateView: View {
                 onDismiss: { viewModel.isDatePickerVisible = false }
             )
         }
-        .navigationDestination(isPresented: $viewModel.showEventLocationView) {
-            EventLocationView().environmentObject(stepManager)
-        }
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                withAnimation(.easeInOut(duration: 0.8)) {
-                    stepManager.currentStep = 3
-                }
-            }
-        }
-        .onDisappear {
-            if !viewModel.showEventLocationView {
-                stepManager.previousStep()
-            }
+//        .navigationDestination(isPresented: $viewModel.showEventLocationView) {
+//            EventLocationView()
+//                .environmentObject(stepManager)
+//                .environmentObject(router)
+//        }
+//        .onAppear {
+//            stepManager.currentStep = 3
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                withAnimation(.easeInOut(duration: 0.8)) {
+//                    stepManager.currentStep = 3
+//                }
+//            }
+//        }
+//        .onDisappear {
+//            if !viewModel.showEventLocationView {
+////                stepManager.previousStep()
+//            }
+//        }
+    }
+    
+    private func handleNextNavigation() {
+        switch viewModel.selectedAttendance {
+        case .yes:
+            // 참석 → 장소 선택 필요
+            print("참석 예정 → EventLocationView로 이동")
+            router.push(to: .eventLocationView)
+            
+        case .no:
+            // 불참 → 장소 건너뛰고 바로 추천으로
+            print("불참 → EventLocationView 건너뛰고 RecommendLoadingView로 이동")
+            router.push(to: .recommendLoadingView)
+            
+        case .none:
+            // 선택 안함 (일반적으로 버튼이 비활성화되어야 함)
+            print("참석 여부 미선택")
         }
     }
 }

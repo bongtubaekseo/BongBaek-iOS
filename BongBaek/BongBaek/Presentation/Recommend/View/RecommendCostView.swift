@@ -37,6 +37,8 @@ class RecommendationAmountViewModel: ObservableObject {
 // MARK: - View
 struct RecommendCostView: View {
     @StateObject private var viewModel = RecommendationAmountViewModel()
+    @State private var showSuccessView = false
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         ScrollView {
@@ -55,9 +57,19 @@ struct RecommendCostView: View {
                 
                 bottomButtons
             }
+//            .onAppear {
+//                print("⏳ RecommendCostView 나타남 - path.count: \(pathManager.path.count)")
+//            }
+//            .navigationDestination(isPresented: $showSuccessView) {
+//                 RecommendSuccessView()
+//                    .environmentObject(pathManager)
+//             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .background(Color("gray900"))
         .foregroundColor(.white)
     }
@@ -66,6 +78,16 @@ struct RecommendCostView: View {
     private var headerSection: some View {
        VStack() {
            VStack(spacing: 20) {
+               
+               HStack {
+                   Text("금액 추천")
+                       .titleSemiBold18()
+                       .foregroundColor(.white)
+                       .padding(.top, 12)
+
+                       
+               }
+
                Text("결혼식")
                    .bodyMedium14()
                    .foregroundColor(.white)
@@ -341,6 +363,7 @@ struct RecommendCostView: View {
         VStack(spacing: 12) {
             Button("이 금액으로 결정하기") {
                 // 결정 액션
+                router.push(to: .recommendSuccessView)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
@@ -351,6 +374,7 @@ struct RecommendCostView: View {
             
             Button("추천받은 금액 수정하기") {
                 // 수정 액션
+                router.push(to: .modifyEventView(mode: .edit, existingEvent: nil))
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
