@@ -52,14 +52,12 @@ struct RecommendLottie: View {
         .background(.gray900)
     }
     
-    // MARK: - Amount Range Section
     var amountRangeSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("적정 범위")
                 .titleSemiBold18()
                 .foregroundColor(.white)
-            
-            //MARK: - 커스텀 슬라이더, (필요 없으면 삭제해도 됨.)
+
             VStack(spacing: 8) {
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
@@ -77,7 +75,7 @@ struct RecommendLottie: View {
                                    endPoint: .trailing
                                )
                            )
-                        .frame(width: 0, height: 12)
+                        .frame(width: 5, height: 12)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
@@ -160,6 +158,3 @@ struct RecommendLottie: View {
         }
     }
 }
-//#Preview {
-//    RecommendLottie()
-//}
