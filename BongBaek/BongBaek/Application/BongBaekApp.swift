@@ -8,16 +8,28 @@
 import SwiftUI
 import Moya
 import KakaoMapsSDK
+import KakaoSDKCommon
+import KakaoSDKAuth
 
 @main
 struct BongBaekApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @State private var showLoginView = false
 
+    init() {
+        let API_KEY = AppConfig.shared.kakaoAppKey
+        KakaoSDK.initSDK(appKey: API_KEY)
+        }
+    
+    
     var body: some Scene {
         WindowGroup {
-            MainTabView()
-
+            RootView()
+                .onOpenURL(perform:{ url in
+                    if(AuthApi.isKakaoTalkLoginUrl(url)){
+                        _ = AuthController.handleOpenUrl(url:url)
+                    }
+                })
         }
     }
 }

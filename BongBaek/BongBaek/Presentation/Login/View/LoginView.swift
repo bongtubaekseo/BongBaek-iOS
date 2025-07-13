@@ -35,6 +35,7 @@ struct LoginView: View {
                        Button(action: {
 //                           isPresented = true
                            handleKakaoLogin()
+                           loginViewModel.loginwithKakao()
                            // ToDo - viewModel.kakaoLogin 시작하는 로직
                        }) {
                            Image("btn_kakao")

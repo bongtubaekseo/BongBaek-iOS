@@ -6,6 +6,8 @@
 //
 
 import Combine
+import KakaoSDKAuth
+import KakaoSDKUser
 
 
 class LoginViewModel: ObservableObject {
@@ -82,6 +84,28 @@ class LoginViewModel: ObservableObject {
         // ToDo:- 회원가입 화면으로 이동 로직
         // kakaoId와 kakaoAccessToken을 전달
     }
+    
+   func loginwithKakao() {
+       if(UserApi.isKakaoTalkLoginAvailable()){
+           UserApi.shared.loginWithKakaoTalk{ oauthToken, error in
+               guard let oauthToken = oauthToken,
+                     error == nil else {return}
+               self.kakaologin(oauthToken:oauthToken)
+           }
+       } else {
+           UserApi.shared.loginWithKakaoAccount{ oauthToken, error in
+               guard let oauthToken = oauthToken,
+                     error == nil else {return}
+               self.kakaologin(oauthToken:oauthToken)
+           }
+       }
+        print("kakao로그인 성공")
+    }
+    
+    func kakaologin(oauthToken:OAuthToken){
+        print("accessToken: ", oauthToken.accessToken)
+    }
+    
     
     func retryToken() {
         isLoading = true
