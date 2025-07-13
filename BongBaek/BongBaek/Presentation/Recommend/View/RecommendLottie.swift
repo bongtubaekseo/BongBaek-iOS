@@ -42,9 +42,24 @@ struct RecommendLottie: View {
             }
             
             if showRectangle {
-                RecommendCostView()
-                    .environmentObject(router)
-                    .transition(.opacity.combined(with: .scale))
+                VStack(spacing: 24) {
+                    headerSection
+                    
+                    //emptyRecommendationBox
+                    
+                    amountRangeSection
+                    
+                    categorySection
+                    
+                    noticeSection
+                    
+                    participationSection
+                    
+                    bottomButtons
+                }
+//                RecommendCostView()
+//                    .environmentObject(router)
+//                    .transition(.opacity.combined(with: .scale))
             }
         }
         .onAppear {
@@ -55,6 +70,97 @@ struct RecommendLottie: View {
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
+    }
+    
+    var headerSection: some View {
+       VStack() {
+           VStack(spacing: 20) {
+               
+               HStack {
+                   Text("금액 추천")
+                       .titleSemiBold18()
+                       .foregroundColor(.white)
+                       .padding(.top, 12)
+
+                       
+               }
+
+               Text("결혼식")
+                   .bodyMedium14()
+                   .foregroundColor(.white)
+                   .padding(.horizontal, 16)
+                   .padding(.vertical, 8)
+                   .background(
+                       RoundedRectangle(cornerRadius: 6)
+                        .stroke(.primaryNormal, lineWidth: 1)
+                        .background(.gray750)
+                   )
+
+               VStack(spacing: 24) {
+                   Text("추천 금액")
+                       .captionRegular12()
+                       .foregroundColor(.white)
+                       .padding(.horizontal, 8)
+                       .padding(.vertical, 2)
+                       .background(
+                           RoundedRectangle(cornerRadius: 4)
+                            .fill(.primaryNormal)
+                       )
+                   
+                   HStack(alignment: .bottom, spacing: 4) {
+                       Text("100,000")
+                           .font(.system(size: 46, weight: .bold))
+                           .foregroundStyle(
+                               LinearGradient(
+                                   colors: [
+                                       Color(hex: "#4E62FF"),
+                                       Color(hex: "#502EFF")
+                                   ],
+                                   startPoint: .leading,
+                                   endPoint: .trailing
+                               )
+                           )
+                       
+                       Text("원")
+                           .titleSemiBold22()
+                           .foregroundColor(.gray600)
+                           .padding(.bottom, 8)
+                   }
+                   
+                   VStack(spacing: 6) {
+                       Text("적절한 금액이에요!")
+                           .bodyMedium16()
+                           .foregroundColor(.white)
+                       
+                       Text("알려주신 정보를 고려한 추천입니다")
+                           .bodyRegular14()
+                           .foregroundColor(.gray200)
+                   }
+                   .padding(.horizontal, 24)
+                   .padding(.vertical, 10)
+                   .background(
+                       RoundedRectangle(cornerRadius: 10)
+                        .fill(.gray750.opacity(0.6))
+                   )
+               }
+               .padding(.horizontal, 30)
+               .padding(.vertical, 30)
+               .background(
+                   RoundedRectangle(cornerRadius: 12)
+                       .fill(
+                           LinearGradient(
+                               colors: [
+                                   Color(hex: "#A6BEF3"),
+                                   Color(hex: "#D3D9FF")
+                               ],
+                               startPoint: .topLeading,
+                               endPoint: .bottomTrailing
+                           )
+                       )
+               )
+           }
+           .transition(.opacity.combined(with: .scale))
+       }
     }
     
     var amountRangeSection: some View {
@@ -102,6 +208,90 @@ struct RecommendLottie: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.black)
         )
+    }
+    
+    var noticeSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image("icon_info")
+                Text("이렇게 계산했어요")
+                    .titleSemiBold18()
+                    .foregroundColor(.white)
+                Spacer()
+            }
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text("• 월 수입 고려")
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
+                Text("• 친구 관계 (친밀도 보통)")
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
+                Text("• 식사 참석 여부")
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color("gray750"))
+        )
+    }
+    
+    var participationSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image("icon_colorcheck")
+                Text("참고해주세요!")
+                    .bodyRegular16()
+                    .foregroundColor(.white)
+                Spacer()
+            }
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text("• 홀수 금액으로 준비해주세요")
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
+                Text("• 새 지폐로 준비하는게 좋아요")
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
+                Text("• 봉투에 정성스럽게 마음을 표현해보세요")
+                    .bodyRegular16()
+                    .foregroundColor(.gray400)
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color("gray750"))
+        )
+    }
+    
+    var bottomButtons: some View {
+        VStack(spacing: 12) {
+            Button("이 금액으로 결정하기") {
+                // 결정 액션
+                router.push(to: .recommendSuccessView)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(Color("primary_normal"))
+            .foregroundColor(.white)
+            .font(.title_semibold_18)
+            .cornerRadius(10)
+            
+            Button("추천받은 금액 수정하기") {
+                // 수정 액션
+                router.push(to: .modifyEventView(mode: .edit, existingEvent: nil))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(Color("gray700"))
+            .foregroundColor(.gray200)
+            .font(.title_semibold_18)
+            .cornerRadius(10)
+        }
     }
 
     var categorySection: some View {
