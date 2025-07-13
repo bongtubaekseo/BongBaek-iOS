@@ -12,33 +12,37 @@ struct ScheduleAlarmView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(Array(alarms.enumerated()).prefix(3), id: \.element.id) { index, schedule in
-                        ScheduleIndicatorCellView(schedule: schedule)
-                            .frame(width: UIScreen.main.bounds.width - 48)
-                            .background(
-                                GeometryReader { geo -> Color in
-                                    let midX = geo.frame(in: .global).midX
-                                    DispatchQueue.main.async {
-                                        updateCurrentIndex(midX: midX, index: index)
+            if alarms.isEmpty {
+                EmptyScheduleView()
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        ForEach(Array(alarms.enumerated()).prefix(3), id: \.element.id) { index, schedule in
+                            ScheduleIndicatorCellView(schedule: schedule)
+                                .frame(width: UIScreen.main.bounds.width - 48)
+                                .background(
+                                    GeometryReader { geo -> Color in
+                                        let midX = geo.frame(in: .global).midX
+                                        DispatchQueue.main.async {
+                                            updateCurrentIndex(midX: midX, index: index)
+                                        }
+                                        return Color.clear
                                     }
-                                    return Color.clear
-                                }
-                            )
+                                )
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                }
+
+                HStack(spacing: 6) {
+                    ForEach(0..<min(alarms.count, 3), id: \.self) { index in
+                        Circle()
+                            .fill(index == currentIndex ? Color.white : Color.gray.opacity(0.5))
+                            .frame(width: 6, height: 6)
                     }
                 }
-                .padding(.horizontal, 16)
+                .padding(.top, 12)
             }
-
-            HStack(spacing: 6) {
-                ForEach(0..<min(alarms.count, 3), id: \.self) { index in
-                    Circle()
-                        .fill(index == currentIndex ? Color.white : Color.gray.opacity(0.5))
-                        .frame(width: 6, height: 6)
-                }
-            }
-            .padding(.top, 12)
         }
     }
 
