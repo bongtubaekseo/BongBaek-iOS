@@ -75,7 +75,7 @@ struct RecommendCostView: View {
     }
     
     // MARK: - Header Section
-    private var headerSection: some View {
+    var headerSection: some View {
        VStack() {
            VStack(spacing: 20) {
                
@@ -299,7 +299,7 @@ struct RecommendCostView: View {
     }
     
     // MARK: - Notice Section
-    private var noticeSection: some View {
+    var noticeSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image("icon_info")
@@ -329,7 +329,7 @@ struct RecommendCostView: View {
     }
     
     // MARK: - Participation Section
-    private var participationSection: some View {
+    var participationSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image("icon_colorcheck")
@@ -359,7 +359,7 @@ struct RecommendCostView: View {
     }
     
     // MARK: - Bottom Buttons
-    private var bottomButtons: some View {
+    var bottomButtons: some View {
         VStack(spacing: 12) {
             Button("이 금액으로 결정하기") {
                 // 결정 액션
