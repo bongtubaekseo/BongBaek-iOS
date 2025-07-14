@@ -47,8 +47,7 @@ struct FullScheduleView: View {
             return schedulesGrouped.mapValues { months in
                 months.mapValues { schedules in
                     schedules.filter { schedule in
-                        schedule.type == selectedCategory.rawValue
-                        //return true
+                        schedule.type == selectedCategory.rawValue // 추후 type 대신 eventCategory필요
                     }
                 }
                 .filter{ !$0.value.isEmpty}
@@ -76,8 +75,6 @@ struct FullScheduleView: View {
                             .foregroundColor(.white)
                             .padding(.leading, 12)
                     }
-                    
-
                     
                     VStack(alignment: .leading, spacing: 12) {
                         ScrollView(.horizontal, showsIndicators: false) {
