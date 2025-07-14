@@ -9,6 +9,17 @@ import SwiftUI
 
 struct EmptyCardView: View {
     @StateObject private var stepManager = GlobalStepManager()
+    
+    // 더미 데이터 생성
+    private let emptySchedule = ScheduleModel(
+        type: "새 일정",
+        relation: "",
+        name: "",
+        money: "0원",
+        location: "",
+        date: ""
+    )
+    
     var body: some View {
         VStack(spacing: 20) {
             VStack {
@@ -23,7 +34,7 @@ struct EmptyCardView: View {
                 .foregroundColor(.white)
                 //.padding(.top, 12)
                
-            NavigationLink(destination: AllRecordsView().environmentObject(stepManager)) {
+            NavigationLink(destination: AllRecordsView(scheduleData: emptySchedule).environmentObject(stepManager)) {
                 HStack(spacing: 4) {
                     Text("일정추가하기 >")
                         .captionRegular12()
@@ -46,4 +57,3 @@ struct EmptyCardView: View {
 #Preview {
     EmptyCardView()
 }
-

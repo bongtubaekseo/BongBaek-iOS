@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AllRecordsView: View {
+    let scheduleData: ScheduleModel
     @State private var isDetailExpanded = false
     @State private var memoText = ""
     @State private var keyboardHeight: CGFloat = 0
@@ -46,11 +47,11 @@ struct AllRecordsView: View {
                 
                 VStack(spacing: 12) {
                     VStack {
-                        Text("김승우의 결혼식")
+                        Text("\(scheduleData.name)의 \(scheduleData.type)")
                             .titleSemiBold16()
                             .foregroundStyle(.white)
                             
-                        Text("2024.08.10 (토)")
+                        Text(scheduleData.date)
                             .bodyRegular14()
                             .foregroundStyle(.gray300)
       
@@ -69,7 +70,7 @@ struct AllRecordsView: View {
                         
                         Spacer()
                         
-                        Text("50,000원")
+                        Text(scheduleData.money)
                             .titleSemiBold18()
                             .foregroundStyle(.white)
 
@@ -114,14 +115,15 @@ struct AllRecordsView: View {
                     
                     if isDetailExpanded {
                         VStack(alignment: .leading, spacing: 24) {
-                            DetailRow(image: "icon_person_16", title: "이름", value: "김봉백")
+                            DetailRow(image: "icon_person_16", title: "이름", value: scheduleData.name)
                             DetailRow(image: "icon_nickname_16", title: "별명", value: "봉봉")
-                            DetailRow(image: "icon_event_16", title: "관계", value: "가족/친척", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
+                            DetailRow(image: "icon_event_16", title: "관계", value: scheduleData.relation, valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
                             
-                            DetailRow(image: "icon_event_16", title: "경조사", value: "결혼식", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-                            DetailRow(image: "icon_event_16", title: "경조사비", value: "50,000원")
+                            DetailRow(image: "icon_event_16", title: "경조사", value: scheduleData.type, valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
+                            DetailRow(image: "icon_event_16", title: "경조사비", value: scheduleData.money)
                             DetailRow(image: "icon_event_16", title: "참석여부", value: "참석", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-                            DetailRow(image: "icon_event_16", title: "날짜", value: "Jun 10, 2024", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
+                            DetailRow(image: "icon_event_16", title: "날짜", value: scheduleData.date, valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
+                            DetailRow(image: "icon_location_16", title: "장소", value: scheduleData.location)
                         }
                         .padding(20)
                         .background(.gray750)
@@ -228,5 +230,5 @@ struct DetailRow: View {
 }
 
 #Preview{
-    AllRecordsView()
+    AllRecordsView(scheduleData: scheduleDummy[0])
 }
