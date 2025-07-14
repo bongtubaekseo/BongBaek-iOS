@@ -112,6 +112,19 @@ extension EventsTarget: TargetType {
     }
     
     var headers: [String : String]? {
-        ["":""]
+        // 기본 헤더
+        var headers = [
+            "Content-Type": "application/json"
+        ]
+        
+        // KeyChain에서 accessToken 가져오기
+        if let accessToken = KeychainManager.shared.accessToken {
+            headers["Authorization"] = "Bearer \(accessToken)"
+            print("Authorization 헤더 추가됨: Bearer \(accessToken.prefix(10))...")
+        } else {
+            print("AccessToken이 KeyChain에 없습니다")
+        }
+        
+        return headers
     }
 }

@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct ScheduleView: View {
-    let schedules: [ScheduleModel]
+    let events: [Event]
+    
+    private var sortedEvents: [Event] {
+           return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
+       }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -30,18 +34,15 @@ struct ScheduleView: View {
             }
             .padding(.bottom, 20)
             
-            if schedules.isEmpty {
+            if events.isEmpty {
                 EmptyCardView()
             } else {
-                ForEach(schedules) { schedule in
-                    ScheduleCellView(schedule: schedule)
+                ForEach(sortedEvents, id: \.eventId) { event in
+                    ScheduleCellView(event: event)
                 }
             }
         }
         .padding(.horizontal)
         .background(Color.black)
     }
-}
-#Preview {
-    ScheduleView(schedules: scheduleDummy)
 }

@@ -9,6 +9,7 @@ import SwiftUI
 struct RecommendsView: View {
     @StateObject private var stepManager = GlobalStepManager()
     @EnvironmentObject var router: NavigationRouter
+    let homeData: EventHomeData?
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top) {
@@ -30,7 +31,7 @@ struct RecommendsView: View {
             }
             
             Button {
-                router.push(to: .recommendView) // 🎯 RecommendStartView 건너뛰고 바로!
+                router.push(to: .recommendView)
             } label: {
                 Text("경조사비 추천 받기")
                     .font(.title_semibold_16)
@@ -40,16 +41,6 @@ struct RecommendsView: View {
                     .background(.buttonBack)
                     .cornerRadius(8)
             }
-            
-//            NavigationLink(destination: RecommendView().environmentObject(stepManager)) {
-//                Text("경조사비 추천 받기")
-//                    .font(.title_semibold_16)
-//                    .foregroundColor(.white)
-//                    .frame(maxWidth: .infinity)
-//                    .padding()
-//                    .background(.buttonBack)
-//                    .cornerRadius(8)
-//            }
         }
         .padding()
         .background(.gray750)
@@ -58,6 +49,3 @@ struct RecommendsView: View {
     }
 }
 
-#Preview {
-    RecommendsView()
-}

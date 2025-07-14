@@ -7,18 +7,23 @@
 import SwiftUI
 
 struct ScheduleAlarmView: View {
-    let alarms: [ScheduleModel]
+    @Binding var homeData: EventHomeData?
     @State private var currentIndex: Int = 0
+    
+    private var sortedEvents: [Event] {
+        let events = homeData?.events ?? []
+        return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
-            if alarms.isEmpty {
+            if sortedEvents.isEmpty {
                 EmptyScheduleView()
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
-                        ForEach(Array(alarms.enumerated()).prefix(3), id: \.element.id) { index, schedule in
-                            ScheduleIndicatorCellView(schedule: schedule)
+                        ForEach(Array(sortedEvents.enumerated()).prefix(3), id: \.element.eventId) { index, event in
+                            ScheduleIndicatorCellView(event: event)
                                 .frame(width: UIScreen.main.bounds.width - 48)
                                 .background(
                                     GeometryReader { geo -> Color in
@@ -35,7 +40,7 @@ struct ScheduleAlarmView: View {
                 }
 
                 HStack(spacing: 6) {
-                    ForEach(0..<min(alarms.count, 3), id: \.self) { index in
+                    ForEach(0..<min(sortedEvents.count, 3), id: \.self) { index in
                         Circle()
                             .fill(index == currentIndex ? Color.white : Color.gray.opacity(0.5))
                             .frame(width: 6, height: 6)
@@ -56,6 +61,3 @@ struct ScheduleAlarmView: View {
     }
 }
 
-#Preview {
-    ScheduleAlarmView(alarms: scheduleDummy)
-}
