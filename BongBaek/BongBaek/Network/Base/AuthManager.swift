@@ -135,6 +135,7 @@ class AuthManager: ObservableObject {
         if case .failure(let error) = result {
             print("토큰 삭제 실패: \(error)")
         }
+        currentKakaoId = nil
         authState = .needsLogin
     }
     
