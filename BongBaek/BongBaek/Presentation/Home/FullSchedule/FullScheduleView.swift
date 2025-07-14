@@ -47,11 +47,13 @@ struct FullScheduleView: View {
             return schedulesGrouped.mapValues { months in
                 months.mapValues { schedules in
                     schedules.filter { schedule in
-                        // 추후 필터링 로직 추가
-                        return true
+                        schedule.type == selectedCategory.rawValue
+                        //return true
                     }
                 }
+                .filter{ !$0.value.isEmpty}
             }
+            .filter{ !$0.value.isEmpty}
         }
     }
 
