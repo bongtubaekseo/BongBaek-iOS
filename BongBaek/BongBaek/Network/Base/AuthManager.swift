@@ -13,6 +13,7 @@ class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
     @Published var authState: AuthState = .loading
+    @Published var currentKakaoId: Int? = nil
     
     private let authService: AuthServiceProtocol
     private let keychainManager = KeychainManager.shared
@@ -80,7 +81,7 @@ class AuthManager: ObservableObject {
                 receiveCompletion: { [weak self] completion in
                     if case .failure(let error) = completion {
                         print("회원가입 실패: \(error)")
-                        self?.authState = .needsSignUp
+//                        self?.authState = .needsSignUp
                     }
                 },
                 receiveValue: { [weak self] response in
@@ -153,6 +154,9 @@ class AuthManager: ObservableObject {
             authState = .needsLogin
             return
         }
+        
+        currentKakaoId = authData.kakaoId
+        print("저장된 kakaoId: \(currentKakaoId ?? 0)")
         
         // 회원가입 완료 여부 먼저 확인
         if authData.isCompletedSignUp {
@@ -266,6 +270,14 @@ class AuthManager: ObservableObject {
             print("토큰 업데이트 실패: \(error)")
             logout()
         }
+    }
+    
+    func getCurrentKakaoId() -> String {
+        guard let kakaoId = currentKakaoId else {
+            print("kakaoId가 없습니다. 로그인이 필요할 수 있습니다.")
+            return "0"
+        }
+        return String(kakaoId)
     }
 }
 

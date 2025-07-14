@@ -66,11 +66,7 @@ extension AuthTarget: TargetType {
             ]
         case .signUp(let memberInfo):
             return [
-                "Content-Type": "application/json",
-                "kakaoId" : memberInfo.kakaoID,
-                "appleId" : memberInfo.appleID ?? "",
-                "memberBirthday": memberInfo.memberBirthday,
-                "memberIncome" : memberInfo.memberIncome
+                "Content-Type": "application/json"
             ]
         case .retryToken:
             let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
