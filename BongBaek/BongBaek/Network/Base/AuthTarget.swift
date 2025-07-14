@@ -9,6 +9,10 @@ import Moya
 import Foundation
 
 
+struct LoginRequest: Codable {
+    let accessToken: String
+}
+
 enum AuthTarget {
     case login(accessToken: String)
     case signUp(memberInfo: MemberInfo)
@@ -41,15 +45,24 @@ extension AuthTarget: TargetType {
     }
     
     var task: Moya.Task {
-        return .requestPlain
+        switch self {
+        case .login(let accessToken):
+            let loginRequest = LoginRequest(accessToken: accessToken)
+            return .requestJSONEncodable(loginRequest)
+            
+        case .signUp(let memberInfo):
+            return .requestJSONEncodable(memberInfo)
+            
+        case .retryToken:
+            return .requestPlain
+        }
     }
     
     var headers: [String : String]? {
         switch self {
         case .login(let accessToken):
             return [
-                "Content-Type": "application/json",
-                "authorizationCode": accessToken
+                "Content-Type": "application/json"
             ]
         case .signUp(let memberInfo):
             return [

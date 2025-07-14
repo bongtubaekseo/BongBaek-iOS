@@ -18,7 +18,7 @@ struct RootView: View {
                 LaunchView()
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                            appStateManager.moveToLogin()
+                            appStateManager.checkAuthStatus()
                         }
                     }
             case .login:
@@ -31,6 +31,12 @@ struct RootView: View {
             }
         }
         .animation(.easeInOut(duration: 0.3), value: appStateManager.currentState)
+        .sheet(isPresented: $appStateManager.showSignUpSheet) {
+            SignUpBottomSheetView {
+                print("hi")
+            }
+                .environmentObject(appStateManager)
+        }
 
     }
 }

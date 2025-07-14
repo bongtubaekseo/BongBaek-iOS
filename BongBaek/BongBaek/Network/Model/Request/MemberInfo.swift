@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MemberInfo {
+struct MemberInfo: Codable {
     let kakaoID: String
     let appleID: String? = nil
     let memberName: String

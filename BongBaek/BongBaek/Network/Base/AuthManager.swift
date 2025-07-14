@@ -16,6 +16,7 @@ class AuthManager: ObservableObject {
     
     private let authService: AuthServiceProtocol
     private let keychainManager = KeychainManager.shared
+    private let kakaoLoginManager = KakaoLoginManager.shared
 
     private var cancellables = Set<AnyCancellable>()
     
@@ -32,19 +33,37 @@ class AuthManager: ObservableObject {
     }
     
     // MARK: - 카카오 로그인 후 처리
-    func loginWithKakao(kakaoToken: String) {
+    
+    func loginWithKakao() async {
         authState = .loading
+        
+        do {
+            // 1. 카카오에서 토큰 획득
+            let kakaoToken = try await kakaoLoginManager.login()
+            print("카카오 로그인 성공, accessToken: \(kakaoToken)")
+            
+            // 2. 서버에 카카오 토큰 전송하여 앱 토큰 획득
+            await loginWithKakaoToken(kakaoToken)
+            
+        } catch {
+            print("카카오 로그인 실패: \(error)")
+            authState = .needsLogin
+        }
+    }
+    
+    private func loginWithKakaoToken(_ kakaoToken: String) async {
         
         authService.login(accessToken: kakaoToken)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
                     if case .failure(let error) = completion {
-                        print("로그인 실패: \(error)")
+                        print("서버 로그인 실패: \(error)")
                         self?.authState = .needsLogin
                     }
                 },
                 receiveValue: { [weak self] response in
+                    print("response:123 \(response)")
                     self?.handleLoginResponse(response)
                 }
             )
@@ -77,7 +96,7 @@ class AuthManager: ObservableObject {
             authState = .needsLogin
             return
         }
-        
+        print("keyChain에 저장된 토큰 \(accessToken)")
         // 저장된 토큰으로 자동 로그인 시도
         // 여기서는 토큰이 있으면 일단 authenticated로 처리
         authState = .authenticated
@@ -135,28 +154,50 @@ class AuthManager: ObservableObject {
             return
         }
         
-        // TokenInfo 확인 및 저장
-        guard let tokenInfo = authData.token else {
-            print("토큰 정보가 없습니다")
-            authState = .needsLogin
-            return
-        }
-        
-        // 키체인에 토큰 저장
-        let saveResult = keychainManager.saveTokens(
-            access: tokenInfo.accessToken,
-            refresh: tokenInfo.refreshToken
-        )
-        
-        switch saveResult {
-        case .success:
-            // 회원가입 완료 여부에 따라 상태 결정
-            authState = authData.isCompletedSignUp ? .authenticated : .needsSignUp
-            print("로그인 성공, 회원가입 완료: \(authData.isCompletedSignUp)")
+        // 회원가입 완료 여부 먼저 확인
+        if authData.isCompletedSignUp {
+            // 기존 회원 - 토큰이 있어야 함
+            guard let tokenInfo = authData.token else {
+                print("기존 회원인데 토큰 정보가 없습니다")
+                authState = .needsLogin
+                return
+            }
             
-        case .failure(let error):
-            print("토큰 저장 실패: \(error)")
-            authState = .needsLogin
+            // 키체인에 토큰 저장
+            let saveResult = keychainManager.saveTokens(
+                access: tokenInfo.accessToken,
+                refresh: tokenInfo.refreshToken
+            )
+            
+            switch saveResult {
+            case .success:
+                authState = .authenticated
+                print("기존 회원 로그인 성공")
+                
+            case .failure(let error):
+                print("토큰 저장 실패: \(error)")
+                authState = .needsLogin
+            }
+            
+        } else {
+            // 신규 회원 - 토큰이 없을 수 있음, 회원가입 필요
+            print("신규 회원 - 회원가입 필요")
+            print("kakaoId: \(authData.kakaoId)")
+            
+            // 회원가입이 필요한 상태로 설정
+            authState = .needsSignUp
+            
+            // 만약 토큰이 있다면 임시로 저장 (회원가입 과정에서 사용할 수 있음)
+            if let tokenInfo = authData.token {
+                let saveResult = keychainManager.saveTokens(
+                    access: tokenInfo.accessToken,
+                    refresh: tokenInfo.refreshToken
+                )
+                
+                if case .failure(let error) = saveResult {
+                    print("임시 토큰 저장 실패: \(error)")
+                }
+            }
         }
     }
     

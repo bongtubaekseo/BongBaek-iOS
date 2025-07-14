@@ -19,6 +19,7 @@ class LoginViewModel: ObservableObject {
     
     private let authService: AuthServiceProtocol
     private var cancellables = Set<AnyCancellable>()
+    private let authManager = AuthManager.shared
     
     init(authService: AuthServiceProtocol = DIContainer.shared.authService) {
         self.authService = authService
@@ -86,20 +87,10 @@ class LoginViewModel: ObservableObject {
     }
     
    func loginwithKakao() {
-       if(UserApi.isKakaoTalkLoginAvailable()){
-           UserApi.shared.loginWithKakaoTalk{ oauthToken, error in
-               guard let oauthToken = oauthToken,
-                     error == nil else {return}
-               self.kakaologin(oauthToken:oauthToken)
-           }
-       } else {
-           UserApi.shared.loginWithKakaoAccount{ oauthToken, error in
-               guard let oauthToken = oauthToken,
-                     error == nil else {return}
-               self.kakaologin(oauthToken:oauthToken)
-           }
+       
+       Task {
+           await authManager.loginWithKakao()
        }
-        print("kakao로그인 성공")
     }
     
     func kakaologin(oauthToken:OAuthToken){
