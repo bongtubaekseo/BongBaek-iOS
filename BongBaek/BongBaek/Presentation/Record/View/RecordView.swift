@@ -22,6 +22,7 @@ enum EventsCategory: String, CaseIterable {
 struct RecordView: View {
     @State private var isDeleteMode = false
     @State private var selectedSection: RecordSection = .attended
+    @State private var selectedCategory: EventsCategory = .all
 
     var attendedRecords: [ScheduleModel] {
 
@@ -38,11 +39,17 @@ struct RecordView: View {
             VStack(spacing: 0) {
                 RecordsHeaderView(isDeleteMode: $isDeleteMode)
                 
+//                CategoryFilterView(selectedCategory: $selectedCategory)
+                
                 RecordSectionHeaderView(
                     selectedSection: $selectedSection,
                     attendedCount: attendedRecords.count,
                     notAttendedCount: notAttendedRecords.count
                 )
+                .padding(.bottom, 20)
+                
+                CategoryFilterView(selectedCategory: $selectedCategory)
+                    .padding(.leading, 20)
                 
                 RecordContentView(
                     selectedSection: selectedSection,
