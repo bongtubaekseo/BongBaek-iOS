@@ -23,6 +23,17 @@ struct FullScheduleView: View {
     @State private var selectedTab: Tab = .home
     @Environment(\.dismiss) private var dismiss
     
+    var emptyMessage: String {
+            switch selectedCategory {
+            case .babyParty:
+                return "돌잔치가 없습니다"
+            case .wedding, .birthday, .funeral:
+                return "참석한 \(selectedCategory.displayName)이 없습니다"
+            case .all:
+                return "기록한 경조사가 없습니다. "
+            }
+        }
+    
     var schedulesGrouped: [String: [String: [ScheduleModel]]] {
         let grouped = Dictionary(grouping: scheduleDummy) { model in
             let components = model.date.split(separator: ".")
