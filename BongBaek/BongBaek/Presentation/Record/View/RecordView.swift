@@ -56,6 +56,32 @@ struct RecordView: View {
     }
 }
 
+struct CategoryFilterView: View {
+    @Binding var selectedCategory: EventsCategory
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false){
+            HStack(spacing: 10){
+                ForEach(EventsCategory.allCases, id: \.self) { category in
+                    Button(action : {
+                        selectedCategory = category
+                    }){
+                        Text(category.display)
+                            .bodyMedium14()
+                            .foregroundColor(selectedCategory == category ? .black : .gray300)
+                            .frame(height : 40)
+                            .padding(.horizontal, 16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(selectedCategory == category ? .gray100 : .gray700)
+                            )
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
