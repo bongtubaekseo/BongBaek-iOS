@@ -23,6 +23,7 @@ struct RecordView: View {
     @State private var isDeleteMode = false
     @State private var selectedSection: RecordSection = .attended
     @State private var selectedCategory: EventsCategory = .all
+    @State private var selectedRecordIDs: Set<UUID> = []
 
     var attendedRecords: [ScheduleModel] {
 
@@ -86,7 +87,8 @@ struct RecordView: View {
                     selectedSection: selectedSection,
                     attendedRecords: attendedRecords,
                     notAttendedRecords: notAttendedRecords,
-                    isDeleteMode: isDeleteMode
+                    isDeleteMode: isDeleteMode,
+                    selectedRecordIDs: $selectedRecordIDs
                 )
             }
         }
@@ -124,6 +126,8 @@ struct CategoryFilterView: View {
 struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
     @State private var showModifyView = false
+    var onDeleteTapped: () -> Void = {}
+    @State private var showAlert = false
     
     var body: some View {
         HStack {
@@ -144,8 +148,13 @@ struct RecordsHeaderView: View {
             
 
                 Button(action: {
-                    print("삭제하기 버튼 클릭됨")
-                    isDeleteMode.toggle()
+                    if isDeleteMode {
+                        showAlert = true
+                        //onDeleteTapped() // ✅ 콜백 실행
+                    } else{
+                        isDeleteMode = true
+                    }
+                    //isDeleteMode.toggle()
                 }) {
                     Image(systemName: isDeleteMode ? "checkmark" : "trash")
                         .font(.system(size: 18, weight: .medium))
@@ -153,6 +162,17 @@ struct RecordsHeaderView: View {
                 }
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
+                .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
+                    Button("취소", role: .cancel) { }
+                    Button("삭제", role: .destructive) {
+                        onDeleteTapped()
+                        isDeleteMode = false
+                    }
+                } message: {
+                    Text("이 기록의 모든 내용이 삭제됩니다.")
+                        .bodyRegular14()
+                        .foregroundStyle(.gray600)
+                }
             }
         }
         .padding(.horizontal, 20)
@@ -218,6 +238,7 @@ struct RecordContentView: View {
     let attendedRecords: [ScheduleModel]
     let notAttendedRecords: [ScheduleModel]
     let isDeleteMode: Bool
+    @Binding var selectedRecordIDs: Set<UUID>
     
     var body: some View {
         VStack {
@@ -227,7 +248,7 @@ struct RecordContentView: View {
                     RecordsEmptyView(message: "참석한 경조사가 없습니다")
                 } else {
                     ForEach(attendedRecords, id: \.id) { record in
-                        RecordCellView(record: record, isDeleteMode: isDeleteMode)
+                        RecordCellView(record: record, isDeleteMode: isDeleteMode, selectedRecordIDs: $selectedRecordIDs/*, selectedRecordID: $selectedRecordID*/)
                     }
                 }
                 
@@ -236,7 +257,7 @@ struct RecordContentView: View {
                     RecordsEmptyView(message: "불참한 경조사가 없습니다")
                 } else {
                     ForEach(notAttendedRecords, id: \.id) { record in
-                        RecordCellView(record: record, isDeleteMode: isDeleteMode)
+                        RecordCellView(record: record, isDeleteMode: isDeleteMode, selectedRecordIDs: $selectedRecordIDs)
                     }
                 }
             }
@@ -289,22 +310,30 @@ struct RecordsEmptyView: View {
 struct RecordCellView: View {
     let record: ScheduleModel
     let isDeleteMode: Bool
+    @Binding var selectedRecordIDs: Set<UUID>
+
     @State private var isSelected = false
-    
+
     var body: some View {
-        HStack(spacing: 12) { // spacing을 0에서 12로 변경
+        HStack(spacing: 12) {
             if isDeleteMode {
                 Button(action: {
                     isSelected.toggle()
+                    if isSelected {
+                        selectedRecordIDs.insert(record.id)
+                    } else {
+                        selectedRecordIDs.remove(record.id)
+                    }
+                    print("선택된 ID: ", selectedRecordIDs)
                 }) {
                     Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(isSelected ? .red : .gray)
+                        .foregroundColor(isSelected ? .secondaryRed : .gray400)
                         .font(.system(size: 20))
                 }
                 .frame(width: 30)
                 .transition(.move(edge: .leading).combined(with: .opacity))
             }
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 Text("nickname")
                     .captionRegular12()
@@ -337,9 +366,9 @@ struct RecordCellView: View {
                             .background(.primaryNormal.opacity(0.1))
                             .cornerRadius(4)
                     }
-                    
+
                     Spacer()
-                    
+
                     Text(record.date)
                         .captionRegular12()
                         .foregroundColor(.gray400)
@@ -356,6 +385,7 @@ struct RecordCellView: View {
         .animation(.easeInOut(duration: 0.3), value: isDeleteMode)
     }
 }
+
 
 enum RecordSection {
     case attended

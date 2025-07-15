@@ -19,10 +19,56 @@ enum ScheduleCategory: String, CaseIterable {
 }
 
 struct FullScheduleView: View {
+    @State private var selectedCategory: ScheduleCategory = .all
     @StateObject private var viewModel = FullScheduleViewModel()
     @EnvironmentObject var router: NavigationRouter
     @Environment(\.dismiss) private var dismiss
     
+    var emptyMessage: String {
+            switch selectedCategory {
+            case .babyParty:
+                return "돌잔치가 없습니다"
+            case .wedding, .birthday, .funeral:
+                return "참석한 \(selectedCategory.displayName)이 없습니다"
+            case .all:
+                return "기록한 경조사가 없습니다. "
+            }
+        }
+    
+    var schedulesGrouped: [String: [String: [ScheduleModel]]] {
+        let grouped = Dictionary(grouping: scheduleDummy) { model in
+            let components = model.date.split(separator: ".")
+            let year = components.count > 0 ? String(components[0]).trimmingCharacters(in: .whitespaces) : "기타"
+            let month = components.count > 1 ? String(components[1]).trimmingCharacters(in: .whitespaces) : "기타"
+            return "\(year)/\(month)"
+        }
+        
+        return grouped.reduce(into: [String: [String: [ScheduleModel]]]()) { result, pair in
+            let parts = pair.key.split(separator: "/")
+            guard parts.count == 2 else { return }
+            let year = String(parts[0])
+            let month = String(parts[1])
+            result[year, default: [:]][month, default: []] += pair.value
+        }
+    }
+    
+    var filteredSchedulesGrouped: [String: [String: [ScheduleModel]]] {
+        if selectedCategory == .all {
+            return schedulesGrouped
+        } else {
+            return schedulesGrouped.mapValues { months in
+                months.mapValues { schedules in
+                    schedules.filter { schedule in
+                        schedule.type == selectedCategory.rawValue // 추후 type 대신 eventCategory필요
+                    }
+                }
+                .filter{ !$0.value.isEmpty}
+            }
+            .filter{ !$0.value.isEmpty}
+        }
+    }
+
+
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -111,7 +157,6 @@ struct FullScheduleView: View {
         }
     }
     
-    // 🔄 eventContentView로 변경
     private var eventContentView: some View {
         ForEach(viewModel.sortedYears, id: \.self) { year in
             yearSectionView(for: year)

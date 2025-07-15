@@ -42,7 +42,7 @@ extension EventsTarget: TargetType {
             return path
             
         case .getUpcomingEvents(let page, let category):
-            var path = "/api/v1/events/\(page)"
+            var path = "/api/v1/events/upcoming/\(page)"
             if let category = category {
                 path += "?category=\(category)"
             }
