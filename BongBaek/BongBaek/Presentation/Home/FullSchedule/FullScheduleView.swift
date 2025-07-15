@@ -19,54 +19,25 @@ enum ScheduleCategory: String, CaseIterable {
 }
 
 struct FullScheduleView: View {
-    @State private var selectedCategory: ScheduleCategory = .all
-    @State private var selectedTab: Tab = .home
+    @StateObject private var viewModel = FullScheduleViewModel()
     @Environment(\.dismiss) private var dismiss
     
-    var schedulesGrouped: [String: [String: [ScheduleModel]]] {
-        let grouped = Dictionary(grouping: scheduleDummy) { model in
-            let components = model.date.split(separator: ".")
-            let year = components.count > 0 ? String(components[0]).trimmingCharacters(in: .whitespaces) : "기타"
-            let month = components.count > 1 ? String(components[1]).trimmingCharacters(in: .whitespaces) : "기타"
-            return "\(year)/\(month)"
-        }
-        
-        return grouped.reduce(into: [String: [String: [ScheduleModel]]]()) { result, pair in
-            let parts = pair.key.split(separator: "/")
-            guard parts.count == 2 else { return }
-            let year = String(parts[0])
-            let month = String(parts[1])
-            result[year, default: [:]][month, default: []] += pair.value
-        }
-    }
-    
-    var filteredSchedulesGrouped: [String: [String: [ScheduleModel]]] {
-        if selectedCategory == .all {
-            return schedulesGrouped
-        } else {
-            return schedulesGrouped.mapValues { months in
-                months.mapValues { schedules in
-                    schedules.filter { schedule in
-                        // 추후 필터링 로직 추가
-                        return true
-                    }
-                }
-            }
-        }
-    }
-    
-    private var sortedYears: [String] {
-        filteredSchedulesGrouped.keys.sorted(by: <)
-    }
-
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 30) {
-                    
                     headerView
                     categoryScrollView
-                    scheduleContentView
+                    
+                    if viewModel.isLoading {
+                        loadingView
+                    } else if viewModel.hasError {
+                        errorView
+                    } else if viewModel.hasData {
+                        scheduleContentView
+                    } else {
+                        emptyView
+                    }
                 }
                 .padding()
             }
@@ -75,6 +46,16 @@ struct FullScheduleView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .background(Color.black.ignoresSafeArea())
+        .onAppear {
+            Task {
+                await viewModel.loadAllSchedules()
+            }
+        }
+        .refreshable {
+            Task {
+                await viewModel.refreshSchedules()
+            }
+        }
     }
     
     private var headerView: some View {
@@ -91,6 +72,9 @@ struct FullScheduleView: View {
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.leading, 12)
+            
+            Spacer()
+
         }
     }
     
@@ -109,22 +93,22 @@ struct FullScheduleView: View {
     
     private func categoryButton(for category: ScheduleCategory) -> some View {
         Button(action: {
-            selectedCategory = category
+            viewModel.updateCategory(category)
         }) {
             Text(category.displayName)
                 .bodyMedium16()
-                .foregroundColor(selectedCategory == category ? .black : .gray300)
+                .foregroundColor(viewModel.selectedCategory == category ? .black : .gray300)
                 .frame(height: 40)
                 .padding(.horizontal, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(selectedCategory == category ? .gray100 : .gray700)
+                        .fill(viewModel.selectedCategory == category ? .gray100 : .gray700)
                 )
         }
     }
     
     private var scheduleContentView: some View {
-        ForEach(sortedYears, id: \.self) { year in
+        ForEach(viewModel.sortedYears, id: \.self) { year in
             yearSectionView(for: year)
         }
     }
@@ -140,11 +124,13 @@ struct FullScheduleView: View {
     }
     
     private func monthsView(for year: String) -> some View {
-        let months = filteredSchedulesGrouped[year] ?? [:]
-        let sortedMonths = months.keys.sorted()
+        let months = viewModel.monthsForYear(year)
+        let sortedMonths = viewModel.sortedMonthsForYear(year)
         
         return ForEach(sortedMonths, id: \.self) { month in
-            monthSectionView(month: month, schedules: months[month] ?? [])
+            if let schedules = months[month], !schedules.isEmpty {
+                monthSectionView(month: month, schedules: schedules)
+            }
         }
     }
     
@@ -165,6 +151,54 @@ struct FullScheduleView: View {
                 FullScheduleCellView(model: schedule)
             }
         }
+    }
+    
+    private var loadingView: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .tint(.primaryNormal)
+            Text("일정을 불러오는 중...")
+                .bodyRegular14()
+                .foregroundColor(.gray400)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 50)
+    }
+    
+    private var errorView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 40))
+                .foregroundColor(.red)
+            
+            Text(viewModel.errorMessage ?? "알 수 없는 오류가 발생했습니다")
+                .bodyRegular14()
+                .foregroundColor(.gray400)
+                .multilineTextAlignment(.center)
+            
+            Button("다시 시도") {
+                Task {
+                    await viewModel.loadAllSchedules()
+                }
+            }
+            .foregroundColor(.primaryNormal)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 50)
+    }
+    
+    private var emptyView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "calendar.badge.exclamationmark")
+                .font(.system(size: 40))
+                .foregroundColor(.gray400)
+            
+            Text("일정이 없습니다")
+                .bodyRegular14()
+                .foregroundColor(.gray400)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 50)
     }
 }
 

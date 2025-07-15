@@ -24,15 +24,15 @@ struct ScheduleView: View {
                 
                 Spacer()
 
-                Button(action: {
-                    router.push(to: .fullScheduleView)
-                }) {
-                    Text("더보기")
-                        .bodyRegular14()
-                        .foregroundColor(.gray)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 8)
-                        .background(Color.clear)
+                    Button(action: {
+                        router.push(to: .fullScheduleView)
+                    }) {
+                        Text("더보기")
+                            .bodyRegular14()
+                            .foregroundColor(.gray)
+                            .padding(.vertical, 4)
+                            .padding(.horizontal, 8)
+                            .background(Color.clear)
                 }
             }
             .padding(.bottom, 20)
