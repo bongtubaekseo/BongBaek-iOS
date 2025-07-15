@@ -23,6 +23,7 @@ struct RecordView: View {
     @State private var isDeleteMode = false
     @State private var selectedSection: RecordSection = .attended
     @State private var selectedCategory: EventsCategory = .all
+    @State private var selectedRecordID: Set<UUID> = []
 
     var attendedRecords: [ScheduleModel] {
 
