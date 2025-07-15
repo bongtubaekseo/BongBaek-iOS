@@ -23,7 +23,7 @@ struct HomeView: View {
                         Spacer()
                     }
 
-                    ScheduleAlarmView(alarms: sDummy)
+                    ScheduleAlarmView(alarms: scheduleDummy)
 
                         .frame(height: 276)
                         .padding(.top, 30)
@@ -31,7 +31,7 @@ struct HomeView: View {
                         .environmentObject(stepManager)
                         .environmentObject(router)
                         .padding(.top, 10)
-                    ScheduleView(schedules: sDummy)
+                    ScheduleView(schedules: scheduleDummy)
                         .padding(.top, 32)
                 }
 //                CustomTabView(selectedTab: $selectedTab)

@@ -1,5 +1,5 @@
 {
-  "originHash" : "87610ed6f93e194adaa697c5ba92a5e68a92832bd93aa4e7fc91b489fd298dc4",
+  "originHash" : "84dd32bcdd9b98eddec88a295fea3d6da7617990586310208002c2bdae255513",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -62,6 +62,15 @@
       "state" : {
         "revision" : "5dd1907d64f0d36f158f61a466bab75067224893",
         "version" : "6.9.0"
+      }
+    },
+    {
+      "identity" : "swiftuipager",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fermoya/SwiftUIPager",
+      "state" : {
+        "revision" : "4ddc04c801aac143090bb14cf26603a3bf9c74cb",
+        "version" : "2.5.0"
       }
     }
   ],

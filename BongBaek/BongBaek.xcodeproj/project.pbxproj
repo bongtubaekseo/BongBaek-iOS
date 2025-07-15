@@ -19,6 +19,7 @@
 		2C5D73512E2150320042F76E /* KakaoSDKTalk in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5D73502E2150320042F76E /* KakaoSDKTalk */; };
 		2C5D73532E2150320042F76E /* KakaoSDKTemplate in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5D73522E2150320042F76E /* KakaoSDKTemplate */; };
 		2C5D73552E2150320042F76E /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5D73542E2150320042F76E /* KakaoSDKUser */; };
+		2C5D7D462E2666E90042F76E /* SwiftUIPager in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5D7D452E2666E90042F76E /* SwiftUIPager */; };
 		46A237DA2E1CFFBF00CC2E90 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 46A237D92E1CFFBF00CC2E90 /* Lottie */; };
 		46C6943B2E1F712300FD6255 /* KakaoMapsSDK-SPM in Frameworks */ = {isa = PBXBuildFile; productRef = 46C6943A2E1F712300FD6255 /* KakaoMapsSDK-SPM */; };
 		46C6943E2E1F712E00FD6255 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 46C6943D2E1F712E00FD6255 /* CombineMoya */; };
@@ -95,6 +96,7 @@
 				46C6943B2E1F712300FD6255 /* KakaoMapsSDK-SPM in Frameworks */,
 				2C5D73472E2150320042F76E /* KakaoSDKCommon in Frameworks */,
 				46C694402E1F712E00FD6255 /* Moya in Frameworks */,
+				2C5D7D462E2666E90042F76E /* SwiftUIPager in Frameworks */,
 				2C5D734F2E2150320042F76E /* KakaoSDKShare in Frameworks */,
 				2C5D734B2E2150320042F76E /* KakaoSDKFriendCore in Frameworks */,
 				46C6943E2E1F712E00FD6255 /* CombineMoya in Frameworks */,
@@ -176,6 +178,7 @@
 				2C5D73502E2150320042F76E /* KakaoSDKTalk */,
 				2C5D73522E2150320042F76E /* KakaoSDKTemplate */,
 				2C5D73542E2150320042F76E /* KakaoSDKUser */,
+				2C5D7D452E2666E90042F76E /* SwiftUIPager */,
 			);
 			productName = BongBaek;
 			productReference = 46C48B5D2E1019DF008C1C90 /* BongBaek.app */;
@@ -264,6 +267,7 @@
 				46C694392E1F712300FD6255 /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */,
 				46C6943C2E1F712E00FD6255 /* XCRemoteSwiftPackageReference "Moya" */,
 				2C5D733D2E2150320042F76E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				2C5D7D442E2666E90042F76E /* XCRemoteSwiftPackageReference "SwiftUIPager" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 46C48B5E2E1019DF008C1C90 /* Products */;
@@ -648,6 +652,14 @@
 				minimumVersion = 2.24.5;
 			};
 		};
+		2C5D7D442E2666E90042F76E /* XCRemoteSwiftPackageReference "SwiftUIPager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fermoya/SwiftUIPager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.0;
+			};
+		};
 		46A237D82E1CFFBF00CC2E90 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -734,6 +746,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2C5D733D2E2150320042F76E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKUser;
+		};
+		2C5D7D452E2666E90042F76E /* SwiftUIPager */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C5D7D442E2666E90042F76E /* XCRemoteSwiftPackageReference "SwiftUIPager" */;
+			productName = SwiftUIPager;
 		};
 		46A237D92E1CFFBF00CC2E90 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
