@@ -51,6 +51,22 @@ struct RecordView: View {
             }
         }
     
+    var filteredSchedulesGrouped: [String: [String: [ScheduleModel]]] {
+        if selectedCategory == .all {
+            return schedulesGrouped
+        } else {
+            return schedulesGrouped.mapValues { months in
+                months.mapValues { schedules in
+                    schedules.filter { schedule in
+                        schedule.type == selectedCategory.rawValue
+                    }
+                }
+                .filter{ !$0.value.isEmpty}
+            }
+            .filter{ !$0.value.isEmpty}
+        }
+    }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
