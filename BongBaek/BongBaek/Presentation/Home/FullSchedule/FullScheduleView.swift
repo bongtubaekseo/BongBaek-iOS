@@ -20,6 +20,7 @@ enum ScheduleCategory: String, CaseIterable {
 
 struct FullScheduleView: View {
     @StateObject private var viewModel = FullScheduleViewModel()
+    @EnvironmentObject var router: NavigationRouter
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {

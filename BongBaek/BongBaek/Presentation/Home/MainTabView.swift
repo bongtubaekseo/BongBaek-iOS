@@ -143,6 +143,10 @@ struct MainTabView: View {
         case .fullScheduleView:
             FullScheduleView()
                 .environmentObject(router)
+        case .allRecordView(let eventId):
+            AllRecordsView(eventId: eventId)
+                .environmentObject(router)
+            
         }
     }
 }

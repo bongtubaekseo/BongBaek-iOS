@@ -40,13 +40,14 @@ struct ScheduleView: View {
             if events.isEmpty {
                 EmptyCardView()
             } else {
-
-                ForEach(sortedEvents,id: \.eventId) { event in
-                    NavigationLink(destination: AllRecordsView(event: event)) {
+                
+                ForEach(sortedEvents, id: \.eventId) { event in
+                    Button(action: {
+                        router.push(to: .allRecordView(eventId: event.eventId))
+                    }) {
                         ScheduleCellView(event: event)
                     }
                     .buttonStyle(PlainButtonStyle())
-
                 }
             }
         }

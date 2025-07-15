@@ -12,7 +12,7 @@ enum EventsTarget {
     case getHome
     case getAttendedEvents(page: Int, attended: Bool, category: String?)
     case getUpcomingEvents(page: Int, category: String?)
-    case getEventDetail(eventId: Int)
+    case getEventDetail(eventId: String)
     case createEvent(eventData: CreateEventData)
     case updateEvent(eventId: Int, eventData: UpdateEventData)
     case deleteEvent(eventId: Int)

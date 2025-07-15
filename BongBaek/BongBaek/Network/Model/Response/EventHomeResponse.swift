@@ -42,6 +42,7 @@ struct EventInfo: Codable {
     let cost: Int
     let eventDate: String
     let dDay: Int
+    let note: String?
 }
 
 struct LocationInfo: Codable {
@@ -86,7 +87,7 @@ struct EventDetailInfo: Codable {
     let cost: Int
     let isAttend: Bool
     let eventDate: String
-    let note: String
+    let note: String?
 }
 
 struct LocationDetailInfo: Codable {
