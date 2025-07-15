@@ -34,7 +34,10 @@ struct ScheduleView: View {
                 EmptyCardView()
             } else {
                 ForEach(schedules) { schedule in
-                    ScheduleCellView(schedule: schedule)
+                    NavigationLink(destination: AllRecordsView(scheduleData: schedule)) {
+                        ScheduleCellView(schedule: schedule)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
         }
@@ -42,6 +45,7 @@ struct ScheduleView: View {
         .background(Color.black)
     }
 }
+
 #Preview {
     ScheduleView(schedules: scheduleDummy)
 }
