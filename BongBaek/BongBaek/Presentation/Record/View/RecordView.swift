@@ -34,12 +34,27 @@ struct RecordView: View {
         return Array(scheduleDummy.suffix(1))
     }
     
+    var schedulesGrouped: [String: [String: [ScheduleModel]]] {
+            let grouped = Dictionary(grouping: scheduleDummy) { model in
+                let components = model.date.split(separator: ".")
+                let year = components.count > 0 ? String(components[0]).trimmingCharacters(in: .whitespaces) : "기타"
+                let month = components.count > 1 ? String(components[1]).trimmingCharacters(in: .whitespaces) : "기타"
+                return "\(year)/\(month)"
+            }
+            
+            return grouped.reduce(into: [String: [String: [ScheduleModel]]]()) { result, pair in
+                let parts = pair.key.split(separator: "/")
+                guard parts.count == 2 else { return }
+                let year = String(parts[0])
+                let month = String(parts[1])
+                result[year, default: [:]][month, default: []] += pair.value
+            }
+        }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
                 RecordsHeaderView(isDeleteMode: $isDeleteMode)
-                
-//                CategoryFilterView(selectedCategory: $selectedCategory)
                 
                 RecordSectionHeaderView(
                     selectedSection: $selectedSection,
