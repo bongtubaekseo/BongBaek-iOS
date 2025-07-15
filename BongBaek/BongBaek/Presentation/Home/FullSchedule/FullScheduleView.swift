@@ -111,7 +111,7 @@ struct FullScheduleView: View {
                     }
 
                     if filteredSchedulesGrouped.isEmpty{
-                        RecordsEmptyView(message: "참석한 경조사가 없습니다")
+                        RecordsEmptyView(message: emptyMessage)
                             .frame(maxWidth: .infinity, minHeight: 150)
                             .padding(.top, 40)
                     } else{
