@@ -298,7 +298,7 @@ struct RecordCellView: View {
                     isSelected.toggle()
                 }) {
                     Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(isSelected ? .red : .gray)
+                        .foregroundColor(isSelected ? .secondaryRed : .gray400)
                         .font(.system(size: 20))
                 }
                 .frame(width: 30)
