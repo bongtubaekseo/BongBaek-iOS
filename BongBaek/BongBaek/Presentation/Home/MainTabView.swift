@@ -140,6 +140,9 @@ struct MainTabView: View {
             ModifyEventView(mode: mode, existingEvent: existingEvent)
                 .environmentObject(router)
                 .environmentObject(eventManager)
+        case .fullScheduleView:
+            FullScheduleView()
+                .environmentObject(router)
         }
     }
 }

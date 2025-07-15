@@ -8,8 +8,6 @@
 import Foundation
 import Moya
 
-
-
 enum EventsTarget {
     case getHome
     case getAttendedEvents(page: Int, attended: Bool, category: String?)

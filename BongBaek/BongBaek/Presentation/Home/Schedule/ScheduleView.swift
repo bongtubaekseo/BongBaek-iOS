@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ScheduleView: View {
     let events: [Event]
+    @EnvironmentObject var router: NavigationRouter
     
     private var sortedEvents: [Event] {
            return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
@@ -22,8 +23,10 @@ struct ScheduleView: View {
                     .foregroundStyle(.white)
                 
                 Spacer()
-                
-                NavigationLink(destination: FullScheduleView()) {
+
+                Button(action: {
+                    router.push(to: .fullScheduleView)
+                }) {
                     Text("더보기")
                         .bodyRegular14()
                         .foregroundColor(.gray)
