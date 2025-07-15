@@ -170,6 +170,8 @@ struct RecordsHeaderView: View {
                     }
                 } message: {
                     Text("이 기록의 모든 내용이 삭제됩니다.")
+                        .bodyRegular14()
+                        .foregroundStyle(.gray600)
                 }
             }
         }
