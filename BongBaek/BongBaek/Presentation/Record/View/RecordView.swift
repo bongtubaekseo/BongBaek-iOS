@@ -7,9 +7,22 @@
 
 import SwiftUI
 
+enum EventsCategory: String, CaseIterable {
+    case all = "전체"
+    case wedding = "결혼식"
+    case babyParty = "돌잔치"
+    case birthday = "생일"
+    case funeral = "장례식"
+    
+    var display: String {
+        return self.rawValue
+    }
+}
+
 struct RecordView: View {
     @State private var isDeleteMode = false
     @State private var selectedSection: RecordSection = .attended
+    @State private var selectedCategory: EventsCategory = .all
 
     var attendedRecords: [ScheduleModel] {
 
@@ -19,6 +32,39 @@ struct RecordView: View {
     var notAttendedRecords: [ScheduleModel] {
 
         return Array(scheduleDummy.suffix(1))
+    }
+    
+    var schedulesGrouped: [String: [String: [ScheduleModel]]] {
+            let grouped = Dictionary(grouping: scheduleDummy) { model in
+                let components = model.date.split(separator: ".")
+                let year = components.count > 0 ? String(components[0]).trimmingCharacters(in: .whitespaces) : "기타"
+                let month = components.count > 1 ? String(components[1]).trimmingCharacters(in: .whitespaces) : "기타"
+                return "\(year)/\(month)"
+            }
+            
+            return grouped.reduce(into: [String: [String: [ScheduleModel]]]()) { result, pair in
+                let parts = pair.key.split(separator: "/")
+                guard parts.count == 2 else { return }
+                let year = String(parts[0])
+                let month = String(parts[1])
+                result[year, default: [:]][month, default: []] += pair.value
+            }
+        }
+    
+    var filteredSchedulesGrouped: [String: [String: [ScheduleModel]]] {
+        if selectedCategory == .all {
+            return schedulesGrouped
+        } else {
+            return schedulesGrouped.mapValues { months in
+                months.mapValues { schedules in
+                    schedules.filter { schedule in
+                        schedule.type == selectedCategory.rawValue
+                    }
+                }
+                .filter{ !$0.value.isEmpty}
+            }
+            .filter{ !$0.value.isEmpty}
+        }
     }
     
     var body: some View {
@@ -31,6 +77,10 @@ struct RecordView: View {
                     attendedCount: attendedRecords.count,
                     notAttendedCount: notAttendedRecords.count
                 )
+                .padding(.bottom, 20)
+                
+                CategoryFilterView(selectedCategory: $selectedCategory)
+                    .padding(.leading, 20)
                 
                 RecordContentView(
                     selectedSection: selectedSection,
@@ -41,6 +91,32 @@ struct RecordView: View {
             }
         }
         .background(Color.background)
+    }
+}
+
+struct CategoryFilterView: View {
+    @Binding var selectedCategory: EventsCategory
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false){
+            HStack(spacing: 10){
+                ForEach(EventsCategory.allCases, id: \.self) { category in
+                    Button(action : {
+                        selectedCategory = category
+                    }){
+                        Text(category.display)
+                            .bodyMedium14()
+                            .foregroundColor(selectedCategory == category ? .black : .gray300)
+                            .frame(height : 40)
+                            .padding(.horizontal, 16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(selectedCategory == category ? .gray100 : .gray700)
+                            )
+                    }
+                }
+            }
+        }
     }
 }
 

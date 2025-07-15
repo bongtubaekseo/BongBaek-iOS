@@ -11,10 +11,16 @@ import Combine
 @MainActor
 class FullScheduleViewModel: ObservableObject {
     
-    @Published var schedules: [ScheduleModel] = []
+    @Published var events: [AttendedEvent] = []
     @Published var isLoading: Bool = false
+    @Published var isLoadingMore: Bool = false
     @Published var errorMessage: String?
     @Published var selectedCategory: ScheduleCategory = .all
+    
+    // 페이지네이션 관련 상태
+    private var currentPage: Int = 1
+    private var isLastPage: Bool = false
+    private var isLoadingData: Bool = false
     
     private let eventService: EventServiceProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -23,17 +29,27 @@ class FullScheduleViewModel: ObservableObject {
         self.eventService = DIContainer.shared.eventService
     }
     
+    // MARK: - Computed Properties
     
-    /// 년/월별로 그룹핑된 일정들
-    var schedulesGrouped: [String: [String: [ScheduleModel]]] {
-        let grouped = Dictionary(grouping: filteredSchedules) { model in
-            let components = model.date.split(separator: ".")
-            let year = components.count > 0 ? String(components[0]).trimmingCharacters(in: .whitespaces) : "기타"
-            let month = components.count > 1 ? String(components[1]).trimmingCharacters(in: .whitespaces) : "기타"
+    var hasData: Bool {
+        !events.isEmpty
+    }
+    
+    var hasError: Bool {
+        errorMessage != nil
+    }
+    
+    /// 년/월별로 그룹핑된 이벤트들
+    var eventsGrouped: [String: [String: [AttendedEvent]]] {
+        let grouped = Dictionary(grouping: events) { event in
+            // eventDate: "2025-01-18" → "2025/01"
+            let dateComponents = event.eventInfo.eventDate.split(separator: "-")
+            let year = dateComponents.count > 0 ? String(dateComponents[0]) : "기타"
+            let month = dateComponents.count > 1 ? String(dateComponents[1]) : "기타"
             return "\(year)/\(month)"
         }
         
-        return grouped.reduce(into: [String: [String: [ScheduleModel]]]()) { result, pair in
+        return grouped.reduce(into: [String: [String: [AttendedEvent]]]()) { result, pair in
             let parts = pair.key.split(separator: "/")
             guard parts.count == 2 else { return }
             let year = String(parts[0])
@@ -42,168 +58,143 @@ class FullScheduleViewModel: ObservableObject {
         }
     }
     
-    /// 카테고리별 필터링된 일정들
-    private var filteredSchedules: [ScheduleModel] {
-        if selectedCategory == .all {
-            return schedules
-        } else {
-            return schedules.filter { schedule in
-                schedule.type == selectedCategory.rawValue
-            }
-        }
-    }
-    
     /// 정렬된 년도 목록
     var sortedYears: [String] {
-        schedulesGrouped.keys.sorted(by: <)
+        eventsGrouped.keys.sorted(by: <)
     }
     
-    /// 특정 년도의 월별 일정
-    func monthsForYear(_ year: String) -> [String: [ScheduleModel]] {
-        return schedulesGrouped[year] ?? [:]
+    /// 특정 년도의 월별 이벤트
+    func monthsForYear(_ year: String) -> [String: [AttendedEvent]] {
+        return eventsGrouped[year] ?? [:]
     }
     
     /// 특정 년도의 정렬된 월 목록
     func sortedMonthsForYear(_ year: String) -> [String] {
-        let months = schedulesGrouped[year] ?? [:]
+        let months = eventsGrouped[year] ?? [:]
         return months.keys.sorted()
     }
     
     // MARK: - API Methods
     
-    /// 전체 일정 로드
-    func loadAllSchedules() async {
-        guard !isLoading else { return }
+    /// 첫 페이지 로드 (새로고침/카테고리 변경 시)
+    func loadAllEvents() async {
+        guard !isLoadingData else { return }
         
         isLoading = true
+        isLoadingData = true
         errorMessage = nil
         
-        do {
-
-            
-            //Todo - 실제 더보기 API 구현
-            // let response = try await eventService.getAllEvents().async()
-            
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 1초 대기
-            
-            let dummySchedules = createDummySchedules()
-            schedules = dummySchedules
-            
-            print("전체 일정 로드 성공: \(schedules.count)개")
-            
-        } catch {
-            errorMessage = "일정을 불러오는데 실패했습니다: \(error.localizedDescription)"
-            print("전체 일정 로드 실패: \(error)")
-        }
+        // 페이지네이션 상태 초기화
+        currentPage = 1
+        isLastPage = false
+        events.removeAll()
+        
+        await loadEvents(isRefresh: true)
         
         isLoading = false
+        isLoadingData = false
     }
     
-    func refreshSchedules() async {
-        print("전체 일정 새로고침")
-        await loadAllSchedules()
+    /// 다음 페이지 로드 (무한스크롤)
+    func loadMoreEvents() async {
+        guard !isLoadingData && !isLastPage else { return }
+        
+        print("더 많은 이벤트 로드 - 페이지: \(currentPage + 1)")
+        
+        isLoadingMore = true
+        isLoadingData = true
+        
+        currentPage += 1
+        await loadEvents(isRefresh: false)
+        
+        isLoadingMore = false
+        isLoadingData = false
     }
     
+    /// 실제 API 호출 메서드
+    private func loadEvents(isRefresh: Bool) async {
+        do {
+            let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
+            
+            print("📡 이벤트 로드 - 페이지: \(currentPage), 카테고리: \(categoryParam ?? "전체")")
+            
+            let response = try await eventService.getUpcomingEvents(page: currentPage, category: categoryParam)
+                .async()
+            
+            if response.isSuccess, let data = response.data {
+                let newEvents = data.events
+                
+                if isRefresh {
+                    events = newEvents
+                } else {
+                    events.append(contentsOf: newEvents)
+                }
+                
+                isLastPage = data.isLast
+                
+                print("이벤트 로드 성공:")
+                print("  - 새로 로드된 이벤트: \(newEvents.count)개")
+                print("  - 전체 이벤트: \(events.count)개")
+                print("  - 현재 페이지: \(currentPage)")
+                print("  - 마지막 페이지: \(isLastPage)")
+                
+            } else {
+                errorMessage = response.message
+                print("이벤트 로드 실패: \(response.message)")
+            }
+            
+        } catch {
+            errorMessage = "이벤트를 불러오는데 실패했습니다: \(error.localizedDescription)"
+            print("이벤트 로드 에러: \(error)")
+        }
+        
+        
+    }
+    
+    /// 새로고침
+    func refreshEvents() async {
+        print(" 이벤트 새로고침")
+        await loadAllEvents()
+    }
+    
+    /// 카테고리 변경 (새로 로드)
     func updateCategory(_ category: ScheduleCategory) {
+        guard selectedCategory != category else { return }
+        
         selectedCategory = category
-        print("📂 카테고리 변경: \(category.displayName)")
+        print("카테고리 변경: \(category.displayName)")
+        
+        Task {
+            await loadAllEvents()
+        }
+    }
+    
+    /// 무한스크롤 트리거 확인
+    func shouldLoadMore(for event: AttendedEvent) -> Bool {
+        guard let lastEvent = events.last else { return false }
+        return event.eventId == lastEvent.eventId && !isLastPage && !isLoadingMore
     }
     
     func clearError() {
         errorMessage = nil
     }
-    
-
-    private func createDummySchedules() -> [ScheduleModel] {
-        return [
-            ScheduleModel(
-                type: "결혼식",
-                relation: "친구",
-                name: "김철수",
-                money: "10만원",
-                location: "강남구 웨딩홀",
-                date: "2024.12.15"
-            ),
-            ScheduleModel(
-                type: "돌잔치",
-                relation: "가족",
-                name: "이영희",
-                money: "5만원",
-                location: "서초구 한정식집",
-                date: "2024.11.20"
-            ),
-            ScheduleModel(
-                type: "생일",
-                relation: "동료",
-                name: "박민수",
-                money: "3만원",
-                location: "홍대 카페",
-                date: "2024.10.08"
-            ),
-            ScheduleModel(
-                type: "결혼식",
-                relation: "가족",
-                name: "최미영",
-                money: "20만원",
-                location: "잠실 롯데호텔",
-                date: "2024.09.25"
-            ),
-            ScheduleModel(
-                type: "장례식",
-                relation: "지인",
-                name: "정대호",
-                money: "10만원",
-                location: "서울대병원 장례식장",
-                date: "2024.08.12"
-            ),
-            ScheduleModel(
-                type: "결혼식",
-                relation: "친구",
-                name: "안소영",
-                money: "15만원",
-                location: "여의도 63빌딩",
-                date: "2025.01.18"
-            ),
-            ScheduleModel(
-                type: "돌잔치",
-                relation: "동료",
-                name: "송민호",
-                money: "7만원",
-                location: "분당 레스토랑",
-                date: "2025.02.28"
-            ),
-            ScheduleModel(
-                type: "생일",
-                relation: "가족",
-                name: "김하늘",
-                money: "5만원",
-                location: "집",
-                date: "2025.03.12"
-            )
-        ]
-    }
 }
 
-// MARK: - Computed Properties Extension
-extension FullScheduleViewModel {
-    
-    /// 데이터가 있는지 확인
-    var hasData: Bool {
-        return !schedules.isEmpty
-    }
-    
-    /// 에러가 있는지 확인
-    var hasError: Bool {
-        return errorMessage != nil
-    }
-    
-    /// 로딩 가능 여부
-    var canLoad: Bool {
-        return !isLoading
-    }
-    
-    /// 필터링된 일정 개수
-    var filteredCount: Int {
-        return filteredSchedules.count
+
+extension ScheduleCategory {
+    /// API에서 사용할 카테고리 값
+    var apiValue: String {
+        switch self {
+        case .all:
+            return ""
+        case .wedding:
+            return "결혼식"
+        case .babyParty:
+            return "돌잔치"
+        case .birthday:
+            return "생일"
+        case .funeral:
+            return "장례식"
+        }
     }
 }

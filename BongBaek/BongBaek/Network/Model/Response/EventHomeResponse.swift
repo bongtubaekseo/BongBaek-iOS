@@ -69,6 +69,7 @@ struct AttendedEventInfo: Codable {
     let relationship: String
     let cost: Int
     let eventDate: String
+    let note: String?
 }
 
 

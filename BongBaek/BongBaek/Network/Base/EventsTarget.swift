@@ -46,6 +46,7 @@ extension EventsTarget: TargetType {
             if let category = category {
                 path += "?category=\(category)"
             }
+            print("생성된 path: \(path)") 
             return path
             
         case .getEventDetail(let eventId):

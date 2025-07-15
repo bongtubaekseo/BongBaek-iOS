@@ -26,7 +26,7 @@ struct FullScheduleView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 30) {
+                LazyVStack(alignment: .leading, spacing: 30) {
                     headerView
                     categoryScrollView
                     
@@ -35,9 +35,13 @@ struct FullScheduleView: View {
                     } else if viewModel.hasError {
                         errorView
                     } else if viewModel.hasData {
-                        scheduleContentView
+                        eventContentView
                     } else {
                         emptyView
+                    }
+                    
+                    if viewModel.isLoadingMore {
+                        loadingMoreView
                     }
                 }
                 .padding()
@@ -49,12 +53,12 @@ struct FullScheduleView: View {
         .background(Color.black.ignoresSafeArea())
         .onAppear {
             Task {
-                await viewModel.loadAllSchedules()
+                await viewModel.loadAllEvents()
             }
         }
         .refreshable {
             Task {
-                await viewModel.refreshSchedules()
+                await viewModel.refreshEvents()
             }
         }
     }
@@ -75,7 +79,6 @@ struct FullScheduleView: View {
                 .padding(.leading, 12)
             
             Spacer()
-
         }
     }
     
@@ -108,7 +111,8 @@ struct FullScheduleView: View {
         }
     }
     
-    private var scheduleContentView: some View {
+    // 🔄 eventContentView로 변경
+    private var eventContentView: some View {
         ForEach(viewModel.sortedYears, id: \.self) { year in
             yearSectionView(for: year)
         }
@@ -129,13 +133,13 @@ struct FullScheduleView: View {
         let sortedMonths = viewModel.sortedMonthsForYear(year)
         
         return ForEach(sortedMonths, id: \.self) { month in
-            if let schedules = months[month], !schedules.isEmpty {
-                monthSectionView(month: month, schedules: schedules)
+            if let events = months[month], !events.isEmpty {
+                monthSectionView(month: month, events: events)
             }
         }
     }
     
-    private func monthSectionView(month: String, schedules: [ScheduleModel]) -> some View {
+    private func monthSectionView(month: String, events: [AttendedEvent]) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 12) {
                 Text("\(Int(month) ?? 0)월")
@@ -148,8 +152,16 @@ struct FullScheduleView: View {
             }
             .padding(.trailing, 20)
             
-            ForEach(schedules) { schedule in
-                FullScheduleCellView(model: schedule)
+            ForEach(events, id: \.eventId) { event in
+                EventCellView(event: event)
+                    .onAppear {
+                        // 무한스크롤
+                        if viewModel.shouldLoadMore(for: event) {
+                            Task {
+                                await viewModel.loadMoreEvents()
+                            }
+                        }
+                    }
             }
         }
     }
@@ -166,6 +178,21 @@ struct FullScheduleView: View {
         .padding(.top, 50)
     }
     
+    // 추가 로딩 뷰
+    private var loadingMoreView: some View {
+        HStack(spacing: 12) {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: .primaryNormal))
+                .scaleEffect(0.8)
+            
+            Text("더 많은 일정을 불러오는 중...")
+                .bodyRegular14()
+                .foregroundColor(.gray400)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 20)
+    }
+    
     private var errorView: some View {
         VStack(spacing: 16) {
             Image(systemName: "exclamationmark.triangle")
@@ -179,7 +206,7 @@ struct FullScheduleView: View {
             
             Button("다시 시도") {
                 Task {
-                    await viewModel.loadAllSchedules()
+                    await viewModel.loadAllEvents()
                 }
             }
             .foregroundColor(.primaryNormal)
@@ -200,6 +227,80 @@ struct FullScheduleView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.top, 50)
+    }
+}
+
+
+struct EventCellView: View {
+    let event: AttendedEvent
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                // 이벤트 카테고리
+                Text(event.eventInfo.eventCategory)
+                    .bodyMedium14()
+                    .foregroundColor(.primaryNormal)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(.primaryNormal.opacity(0.1))
+                    )
+                
+                Spacer()
+                
+                // 날짜
+                Text(formatDate(event.eventInfo.eventDate))
+                    .captionRegular12()
+                    .foregroundColor(.gray400)
+            }
+            
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    // 호스트 이름
+                    Text(event.hostInfo.hostName)
+                        .titleSemiBold16()
+                        .foregroundColor(.white)
+                    
+                    // 관계
+                    Text(event.eventInfo.relationship)
+                        .captionRegular12()
+                        .foregroundColor(.gray400)
+                }
+                
+                Spacer()
+                
+                // 금액
+                Text(formatMoney(event.eventInfo.cost))
+                    .titleSemiBold16()
+                    .foregroundColor(.white)
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.gray750)
+        )
+    }
+    
+    // 날짜 포맷팅: "2025-01-18" → "1월 18일"
+    private func formatDate(_ dateString: String) -> String {
+        let components = dateString.split(separator: "-")
+        if components.count >= 3 {
+            let month = Int(components[1]) ?? 1
+            let day = Int(components[2]) ?? 1
+            return "\(month)월 \(day)일"
+        }
+        return dateString
+    }
+    
+    // 금액 포맷팅: 1000000 → "100만원"
+    private func formatMoney(_ amount: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        let formattedAmount = formatter.string(from: NSNumber(value: amount)) ?? "\(amount)"
+        return "\(formattedAmount)원"
     }
 }
 
