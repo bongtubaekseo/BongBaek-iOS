@@ -37,8 +37,13 @@ struct ScheduleView: View {
             if events.isEmpty {
                 EmptyCardView()
             } else {
-                ForEach(sortedEvents, id: \.eventId) { event in
-                    ScheduleCellView(event: event)
+
+                ForEach(sortedEvents,id: \.eventId) { event in
+                    NavigationLink(destination: AllRecordsView(event: event)) {
+                        ScheduleCellView(event: event)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+
                 }
             }
         }
