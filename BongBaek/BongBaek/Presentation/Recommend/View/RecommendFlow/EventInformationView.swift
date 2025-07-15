@@ -17,42 +17,42 @@ enum EventType: String, CaseIterable {
 
 // MARK: - EventInformationView
 struct EventInformationView: View {
-    @StateObject private var viewModel = EventInformationViewModel()
     @EnvironmentObject var stepManager: GlobalStepManager
     @EnvironmentObject var router: NavigationRouter
+    @EnvironmentObject var eventManager: EventCreationManager
     
     @State private var showEventDateView = false
     @Environment(\.dismiss) private var dismiss
     
+
+    private var isNextButtonEnabled: Bool {
+        return !eventManager.eventCategory.isEmpty && !eventManager.selectedEventType.isEmpty
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
-
             CustomNavigationBar(title: "관계정보") {
                 dismiss()
             }
             .padding(.top, 40)
             
             StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
-            .padding(.horizontal, 20)
-            .padding(.bottom, 10)
-
+                .padding(.horizontal, 20)
+                .padding(.bottom, 10)
             
             EventInformationTitleView()
                 .padding(.top, 12)
             
-//            Spacer()
-//                .frame(height: 60)
-            
-            EventTypeOptionsView(viewModel: viewModel)
+            EventTypeOptionsView()
                 .padding(.horizontal, 24)
                 .padding(.top, 30)
             
             Spacer()
             
             NextButton(
-                isEnabled: viewModel.isNextButtonEnabled,
+                isEnabled: isNextButtonEnabled,
                 action: {
-                    router.push(to: .eventDateView)
+                    handleFormSubmission()
                 }
             )
             .padding(.horizontal, 24)
@@ -60,26 +60,46 @@ struct EventInformationView: View {
         }
         .onAppear {
             print("📋 EventInformationView 나타남 - path.count: \(router.path.count)")
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color("background"))
-        .ignoresSafeArea()
-        .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation(.easeInOut(duration: 0.8)) {
                     stepManager.currentStep = 2
                 }
             }
         }
-//        .onDisappear {
-//            if !viewModel.showEventDateView {
-//                stepManager.previousStep()
-//            }
-//        }
-
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color("background"))
+        .ignoresSafeArea()
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
+    }
+    
+    // MARK: - Methods
+    
+    private func handleFormSubmission() {
+        guard isNextButtonEnabled else {
+            print("⚠️ EventInformationView: UI 검증 실패")
+            return
+        }
+        
+        // 현재 선택된 모든 데이터 출력
+        printCurrentSelections()
+        
+        // 다음 화면으로 이동
+        if eventManager.canCompleteEventInfoStep {
+            print("✅ EventInformationView: 폼 제출 성공, 다음 화면으로 이동")
+            router.push(to: .eventDateView)
+        } else {
+            print("❌ EventInformationView: EventCreationManager 이중 검증 실패")
+        }
+    }
+    
+    private func printCurrentSelections() {
+        print("📋 EventInformationView 현재 선택된 값들:")
+        print("  🎉 이벤트 카테고리: '\(eventManager.eventCategory)'")
+        print("  📝 선택된 이벤트 타입: '\(eventManager.selectedEventType)'")
+        print("  ✅ 다음 단계 진행 가능: \(eventManager.canCompleteEventInfoStep)")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
 }
 
@@ -106,15 +126,20 @@ struct EventInformationTitleView: View {
 }
 
 struct EventTypeOptionsView: View {
-    @ObservedObject var viewModel: EventInformationViewModel
+    @EnvironmentObject var eventManager: EventCreationManager
     
     var body: some View {
         VStack(spacing: 16) {
             ForEach(EventType.allCases, id: \.self) { eventType in
                 EventTypeButton(
                     eventType: eventType,
-                    isSelected: viewModel.selectedEventType == eventType,
-                    action: { viewModel.selectEventType(eventType) }
+                    isSelected: eventManager.selectedEventType == eventType.rawValue,
+                    action: {
+                        // EventCreationManager에 직접 할당
+                        eventManager.eventCategory = eventType.rawValue
+                        eventManager.selectedEventType = eventType.rawValue
+                        print("🎉 이벤트 선택: \(eventType.rawValue)")
+                    }
                 )
             }
         }

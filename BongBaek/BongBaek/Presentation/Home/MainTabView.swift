@@ -13,6 +13,7 @@ struct MainTabView: View {
     @State private var isRecommendFlowActive = false
     @StateObject private var stepManager = GlobalStepManager()
     @StateObject private var router = NavigationRouter()
+    @StateObject private var eventManager = EventCreationManager()
     
     var body: some View {
         NavigationStack(path: $router.path) {
@@ -96,40 +97,49 @@ struct MainTabView: View {
             RecommendView()
                 .environmentObject(stepManager)
                 .environmentObject(router)
+                .environmentObject(eventManager)
                 
         case .eventInformationView:
             EventInformationView()
                 .environmentObject(stepManager)
                 .environmentObject(router)
+                .environmentObject(eventManager)
                 
         case .eventDateView:
             EventDateView()
                 .environmentObject(stepManager)
                 .environmentObject(router)
+                .environmentObject(eventManager)
                 
         case .eventLocationView:
             EventLocationView()
                 .environmentObject(stepManager)
                 .environmentObject(router)
+                .environmentObject(eventManager)
                 
         case .recommendLoadingView:
             RecommendLoadingView()
                 .environmentObject(router)
+                .environmentObject(eventManager)
                 
         case .recommendLottie:
             RecommendLottie()
                 .environmentObject(router)
+                .environmentObject(eventManager)
                 
         case .recommendCostView:
             RecommendCostView()
                 .environmentObject(router)
+                .environmentObject(eventManager)
                 
         case .recommendSuccessView:
             RecommendSuccessView()
                 .environmentObject(router)
+                .environmentObject(eventManager)
         case .modifyEventView(let mode, let existingEvent):
             ModifyEventView(mode: mode, existingEvent: existingEvent)
                 .environmentObject(router)
+                .environmentObject(eventManager)
         }
     }
 }
