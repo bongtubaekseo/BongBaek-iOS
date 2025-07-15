@@ -23,6 +23,17 @@ struct FullScheduleView: View {
     @State private var selectedTab: Tab = .home
     @Environment(\.dismiss) private var dismiss
     
+    var emptyMessage: String {
+            switch selectedCategory {
+            case .babyParty:
+                return "돌잔치가 없습니다"
+            case .wedding, .birthday, .funeral:
+                return "참석한 \(selectedCategory.displayName)이 없습니다"
+            case .all:
+                return "기록한 경조사가 없습니다. "
+            }
+        }
+    
     var schedulesGrouped: [String: [String: [ScheduleModel]]] {
         let grouped = Dictionary(grouping: scheduleDummy) { model in
             let components = model.date.split(separator: ".")
@@ -99,28 +110,34 @@ struct FullScheduleView: View {
                         }
                     }
 
-                    ForEach(filteredSchedulesGrouped.keys.sorted(by: <), id: \.self) { year in
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("\(year)년")
-                                .headBold24()
-                                .foregroundColor(.white)
+                    if filteredSchedulesGrouped.isEmpty{
+                        RecordsEmptyView(message: emptyMessage)
+                            .frame(maxWidth: .infinity, minHeight: 150)
+                            .padding(.top, 40)
+                    } else{
+                        ForEach(filteredSchedulesGrouped.keys.sorted(by: <), id: \.self) { year in
+                            VStack(alignment: .leading, spacing: 16) {
+                                Text("\(year)년")
+                                    .headBold24()
+                                    .foregroundColor(.white)
 
-                            let months = filteredSchedulesGrouped[year] ?? [:]
-                            ForEach(months.keys.sorted(), id: \.self) { month in
-                                VStack(alignment: .leading, spacing: 10) {
-                                    HStack(spacing: 12) {
-                                        Text("\(Int(month) ?? 0)월")
-                                            .titleSemiBold16()
-                                            .foregroundColor(.white)
-                                        
-                                        Rectangle()
-                                            .foregroundColor(.gray750)
-                                            .frame(height: 2)
-                                    }
-                                    .padding(.trailing, 20)
+                                let months = filteredSchedulesGrouped[year] ?? [:]
+                                ForEach(months.keys.sorted(), id: \.self) { month in
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        HStack(spacing: 12) {
+                                            Text("\(Int(month) ?? 0)월")
+                                                .titleSemiBold16()
+                                                .foregroundColor(.white)
+                                            
+                                            Rectangle()
+                                                .foregroundColor(.gray750)
+                                                .frame(height: 2)
+                                        }
+                                        .padding(.trailing, 20)
 
-                                    ForEach(months[month] ?? []) { schedule in
-                                        FullScheduleCellView(model: schedule)
+                                        ForEach(months[month] ?? []) { schedule in
+                                            FullScheduleCellView(model: schedule)
+                                        }
                                     }
                                 }
                             }
