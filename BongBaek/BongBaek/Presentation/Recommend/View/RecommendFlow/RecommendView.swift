@@ -17,7 +17,7 @@ struct RecommendView: View {
     @EnvironmentObject var eventManager: EventCreationManager
     
     let relationships = [
-        ("icon_family", "가족"),
+        ("icon_family", "가족/친구"),
         ("icon_friends", "친구"),
         ("icon_handshakes", "직장"),
         ("icon_colleague", "선후배"),

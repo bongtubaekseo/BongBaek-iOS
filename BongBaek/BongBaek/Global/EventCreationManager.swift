@@ -495,6 +495,210 @@ class EventCreationManager: ObservableObject {
         
         print("EventCreationManager: 데이터 복원 완료")
     }
+    
+
+
+    /// 추천받은 금액으로 이벤트 생성
+    func submitEventWithRecommendedAmount() async -> Bool {
+        // 1. 추천 응답이 있는지 확인
+        guard let recommendationResponse = recommendationResponse,
+              let recommendedData = recommendationResponse.data else {
+            submitError = "추천 금액 정보가 없습니다."
+            print("❌ 추천 응답 데이터 없음")
+            return false
+        }
+        
+        // 2. API 요청 데이터 생성 (추천받은 금액 포함)
+        guard let requestData = createAPIRequestDataWithRecommendedAmount(recommendedAmount: recommendedData.cost) else {
+            submitError = "이벤트 생성 데이터를 만들 수 없습니다."
+            return false
+        }
+        
+        isSubmitting = true
+        submitError = nil
+        
+        do {
+            print("🚀 추천받은 금액(\(recommendedData.cost)원)으로 이벤트 생성 시작...")
+            
+            let response = try await eventService.createEvent(eventData: requestData)
+                .async()
+            
+            if response.isSuccess {
+                apiResponse = response
+                submitSuccess = true
+                print("✅ 이벤트 생성 성공!")
+                logAPIRequestData(requestData)
+                isSubmitting = false
+                return true
+            } else {
+                submitError = response.message
+                print("❌ 이벤트 생성 실패: \(response.message)")
+                isSubmitting = false
+                return false
+            }
+            
+        } catch {
+            submitError = "이벤트 생성에 실패했습니다: \(error.localizedDescription)"
+            print("❌ 이벤트 생성 에러: \(error)")
+            isSubmitting = false
+            return false
+        }
+    }
+
+    /// 추천받은 금액을 포함한 API 요청용 데이터 생성
+    private func createAPIRequestDataWithRecommendedAmount(recommendedAmount: Int) -> CreateEventData? {
+        guard isFormComplete else {
+            print("EventCreationManager: 폼이 완성되지 않음")
+            return nil
+        }
+        
+        // HostInfo 생성
+        let hostInfo = HostInfo(
+            hostName: hostName,
+            hostNickname: hostNickname.isEmpty ? hostName : hostNickname
+        )
+        
+        // CreateEventInfo 생성 (추천받은 금액 사용)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let eventDateString = formatter.string(from: eventDate)
+        
+        let eventInfo = CreateEventInfo(
+            eventCategory: eventCategory,
+            relationship: relationship,
+            cost: recommendedAmount, // 🎯 추천받은 금액 사용
+            isAttend: isAttend,
+            eventDate: eventDateString
+        )
+        
+        // LocationDetailInfo 생성
+        let locationInfo = LocationDetailInfo(
+            location: hasLocationData ? locationName : "미정",
+            address: hasLocationData ? locationAddress : "미정",
+            latitude: latitude,
+            longitude: longitude
+        )
+        
+        // HighAccuracyInfo 생성
+        let highAccuracy = HighAccuracyInfo(
+            contactFrequency: detailSelected ? Int(contactFrequency) : 3,
+            meetFrequency: detailSelected ? Int(meetFrequency) : 3
+        )
+        
+        let requestData = CreateEventData(
+            hostInfo: hostInfo,
+            eventInfo: eventInfo,
+            locationInfo: locationInfo,
+            highAccuracy: highAccuracy
+        )
+        
+        print("💰 추천받은 금액(\(recommendedAmount)원)으로 API 요청 데이터 생성 완료")
+        return requestData
+    }
+    
+    // EventCreationManager에 추가할 메서드들
+
+    /// 수정된 금액으로 이벤트 생성
+    func submitEventWithModifiedAmount(modifiedAmount: Int) async -> Bool {
+        guard isFormComplete else {
+            submitError = "입력 정보가 완전하지 않습니다."
+            print("❌ 폼이 완성되지 않음")
+            return false
+        }
+        
+        // API 요청 데이터 생성 (수정된 금액 사용)
+        guard let requestData = createAPIRequestDataWithModifiedAmount(modifiedAmount: modifiedAmount) else {
+            submitError = "이벤트 생성 데이터를 만들 수 없습니다."
+            return false
+        }
+        
+        isSubmitting = true
+        submitError = nil
+        
+        do {
+            print("🚀 수정된 금액(\(modifiedAmount)원)으로 이벤트 생성 시작...")
+            
+            let response = try await eventService.createEvent(eventData: requestData)
+                .async()
+            
+            if response.isSuccess {
+                apiResponse = response
+                submitSuccess = true
+                print("✅ 수정된 금액으로 이벤트 생성 성공!")
+                logAPIRequestData(requestData)
+                isSubmitting = false
+                return true
+            } else {
+                submitError = response.message
+                print("❌ 이벤트 생성 실패: \(response.message)")
+                isSubmitting = false
+                return false
+            }
+            
+        } catch {
+            submitError = "이벤트 생성에 실패했습니다: \(error.localizedDescription)"
+            print("❌ 이벤트 생성 에러: \(error)")
+            isSubmitting = false
+            return false
+        }
+    }
+
+    /// 수정된 금액을 포함한 API 요청용 데이터 생성
+    private func createAPIRequestDataWithModifiedAmount(modifiedAmount: Int) -> CreateEventData? {
+        guard isFormComplete else {
+            print("EventCreationManager: 폼이 완성되지 않음")
+            return nil
+        }
+        
+        // HostInfo 생성
+        let hostInfo = HostInfo(
+            hostName: hostName,
+            hostNickname: hostNickname.isEmpty ? hostName : hostNickname
+        )
+        
+        // CreateEventInfo 생성 (수정된 금액 사용)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let eventDateString = formatter.string(from: eventDate)
+        
+        let eventInfo = CreateEventInfo(
+            eventCategory: eventCategory,
+            relationship: relationship,
+            cost: modifiedAmount, // 🎯 수정된 금액 사용
+            isAttend: isAttend,
+            eventDate: eventDateString
+        )
+        
+        // LocationDetailInfo 생성
+        let locationInfo = LocationDetailInfo(
+            location: hasLocationData ? locationName : "미정",
+            address: hasLocationData ? locationAddress : "미정",
+            latitude: latitude,
+            longitude: longitude
+        )
+        
+        // HighAccuracyInfo 생성
+        let highAccuracy = HighAccuracyInfo(
+            contactFrequency: detailSelected ? Int(contactFrequency) : 3,
+            meetFrequency: detailSelected ? Int(meetFrequency) : 3
+        )
+        
+        let requestData = CreateEventData(
+            hostInfo: hostInfo,
+            eventInfo: eventInfo,
+            locationInfo: locationInfo,
+            highAccuracy: highAccuracy
+        )
+        
+        print("✏️ 수정된 금액(\(modifiedAmount)원)으로 API 요청 데이터 생성 완료")
+        if let originalAmount = recommendationResponse?.data?.cost {
+            print("  📊 원래 추천 금액: \(originalAmount)원")
+            print("  📝 수정된 금액: \(modifiedAmount)원")
+            print("  📈 차이: \(modifiedAmount - originalAmount)원")
+        }
+        
+        return requestData
+    }
 }
 
 

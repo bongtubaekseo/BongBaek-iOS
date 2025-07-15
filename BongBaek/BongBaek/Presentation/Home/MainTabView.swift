@@ -136,8 +136,8 @@ struct MainTabView: View {
             RecommendSuccessView()
                 .environmentObject(router)
                 .environmentObject(eventManager)
-        case .modifyEventView(let mode, let existingEvent):
-            ModifyEventView(mode: mode, existingEvent: existingEvent)
+        case .modifyEventView(let mode):
+            ModifyEventView(mode: mode)
                 .environmentObject(router)
                 .environmentObject(eventManager)
         case .fullScheduleView:
