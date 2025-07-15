@@ -127,6 +127,7 @@ struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
     @State private var showModifyView = false
     var onDeleteTapped: () -> Void = {}
+    @State private var showAlert = false
     
     var body: some View {
         HStack {
@@ -148,9 +149,12 @@ struct RecordsHeaderView: View {
 
                 Button(action: {
                     if isDeleteMode {
-                        onDeleteTapped() // ✅ 콜백 실행
+                        showAlert = true
+                        //onDeleteTapped() // ✅ 콜백 실행
+                    } else{
+                        isDeleteMode = true
                     }
-                    isDeleteMode.toggle()
+                    //isDeleteMode.toggle()
                 }) {
                     Image(systemName: isDeleteMode ? "checkmark" : "trash")
                         .font(.system(size: 18, weight: .medium))
@@ -158,6 +162,15 @@ struct RecordsHeaderView: View {
                 }
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
+                .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
+                    Button("취소", role: .cancel) { }
+                    Button("삭제", role: .destructive) {
+                        onDeleteTapped()
+                        isDeleteMode = false
+                    }
+                } message: {
+                    Text("이 기록의 모든 내용이 삭제됩니다.")
+                }
             }
         }
         .padding(.horizontal, 20)
