@@ -37,8 +37,9 @@ struct AllRecordsView: View {
                     Spacer()
                     
                     Button(action: {
-                        // 편집 액션
-                        router.push(to: .modifyEventView(mode: .edit))
+//                         편집 액션
+                        router.push(to: .modifyEventView(mode: .edit,eventDetailData: viewModel.eventDetail))
+                        
                     }) {
                         Image("icon_edit")
                             .foregroundColor(.white)

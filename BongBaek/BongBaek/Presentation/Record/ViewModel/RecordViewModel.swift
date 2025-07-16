@@ -23,8 +23,8 @@ class RecordViewModel: ObservableObject {
     @Published var isLoadingMore = false
     @Published var errorMessage: String?
     
-    private var attendedCurrentPage = 1
-    private var notAttendedCurrentPage = 1
+    private var attendedCurrentPage = 0
+    private var notAttendedCurrentPage = 0
     private var attendedIsLastPage = false
     private var notAttendedIsLastPage = false
     private var isLoadingData = false
@@ -157,8 +157,8 @@ class RecordViewModel: ObservableObject {
         errorMessage = nil
         
         // 페이지네이션 상태 초기화
-        attendedCurrentPage = 1
-        notAttendedCurrentPage = 1
+        attendedCurrentPage = 0
+        notAttendedCurrentPage = 0
         attendedIsLastPage = false
         notAttendedIsLastPage = false
         
@@ -221,6 +221,8 @@ class RecordViewModel: ObservableObject {
                     attendedEvents.append(contentsOf: newEvents)
                 }
                 
+                
+                print(attendedEvents)
                 attendedIsLastPage = data.isLast
                 
                 print("참석 이벤트 로드 성공:")
@@ -262,7 +264,7 @@ class RecordViewModel: ObservableObject {
                 }
                 
                 notAttendedIsLastPage = data.isLast
-                
+                print(notAttendedEvents)
                 print("불참 이벤트 로드 성공:")
                 print("  - 새로 로드된 이벤트: \(newEvents.count)개")
                 print("  - 전체 불참 이벤트: \(notAttendedEvents.count)개")

@@ -327,7 +327,7 @@ struct RecommendLottie: View {
                         }
                     } else {
                         // 실패 시 에러 처리 (예: 알럿 표시)
-                        print("❌ 이벤트 생성 실패: \(eventManager.submitError ?? "알 수 없는 오류")")
+                        print("이벤트 생성 실패: \(eventManager.submitError ?? "알 수 없는 오류")")
                         // TODO: 에러 알럿 표시 로직 추가
                     }
                 }
@@ -342,7 +342,7 @@ struct RecommendLottie: View {
             Button("추천받은 금액 수정하기") {
                 // EventCreationManager에서 추천 데이터 가져와서 전달
                 router.push(to: .modifyEventView(
-                    mode: .edit
+                    mode: .edit, eventDetailData: nil
                 ))
             }
             .frame(maxWidth: .infinity)
