@@ -36,7 +36,7 @@ class EventService: EventServiceProtocol {
         )
     }
     
-    func getEventDetail(eventId: Int) -> AnyPublisher<EventDetailResponse, Error> {
+    func getEventDetail(eventId: String ) -> AnyPublisher<EventDetailResponse, Error> {
         return networkService.request(
             .getEventDetail(eventId: eventId),
             responseType: EventDetailResponse.self

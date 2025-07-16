@@ -12,6 +12,7 @@ struct RecommendLottie: View {
     @State private var progressWidth: CGFloat = 5
 
     @EnvironmentObject var router: NavigationRouter
+    @EnvironmentObject var eventManager: EventCreationManager
 
     var body: some View {
         VStack(spacing: 30) {
@@ -315,7 +316,21 @@ struct RecommendLottie: View {
     var bottomButtons: some View {
         VStack(spacing: 12) {
             Button("이 금액으로 결정하기") {
-                router.push(to: .recommendSuccessView)
+                Task {
+                    // 추천받은 금액으로 이벤트 생성
+                    let success = await eventManager.submitEventWithRecommendedAmount()
+                    
+                    if success {
+                        // 성공하면 성공 화면으로 이동
+                        await MainActor.run {
+                            router.push(to: .recommendSuccessView)
+                        }
+                    } else {
+                        // 실패 시 에러 처리 (예: 알럿 표시)
+                        print("❌ 이벤트 생성 실패: \(eventManager.submitError ?? "알 수 없는 오류")")
+                        // TODO: 에러 알럿 표시 로직 추가
+                    }
+                }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
@@ -325,9 +340,10 @@ struct RecommendLottie: View {
             .cornerRadius(10)
 
             Button("추천받은 금액 수정하기") {
-                router.push(
-                    to: .modifyEventView(mode: .edit, existingEvent: nil)
-                )
+                // EventCreationManager에서 추천 데이터 가져와서 전달
+                router.push(to: .modifyEventView(
+                    mode: .edit
+                ))
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)

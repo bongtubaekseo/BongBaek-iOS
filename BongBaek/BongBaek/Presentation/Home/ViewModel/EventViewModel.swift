@@ -140,7 +140,7 @@ class EventViewModel: ObservableObject {
         loadUpcomingEvents(page: upcomingCurrentPage + 1, category: category)
     }
     
-    func loadEventDetail(eventId: Int) {
+    func loadEventDetail(eventId: String) {
         isLoading = true
         errorMessage = nil
         
@@ -189,32 +189,32 @@ class EventViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func updateEvent(eventId: Int, eventData: UpdateEventData) {
-        isUpdating = true
-        errorMessage = nil
-        updateSuccess = false
-        
-        eventService.updateEvent(eventId: eventId, eventData: eventData)
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    self?.isUpdating = false
-                    if case .failure(let error) = completion {
-                        self?.errorMessage = error.localizedDescription
-                    }
-                },
-                receiveValue: { [weak self] response in
-                    if response.isSuccess {
-                        self?.updateSuccess = true
-                        self?.loadEventDetail(eventId: eventId)
-                        // 수정 성공시 홈 화면 다시 재호출 (새로고침)
-                        self?.loadHome()
-                    } else {
-                        self?.errorMessage = response.message
-                    }
-                }
-            )
-            .store(in: &cancellables)
-    }
+//    func updateEvent(eventId: String, eventData: UpdateEventData) {
+//        isUpdating = true
+//        errorMessage = nil
+//        updateSuccess = false
+//        
+//        eventService.updateEvent(eventId: eventId, eventData: eventData)
+//            .sink(
+//                receiveCompletion: { [weak self] completion in
+//                    self?.isUpdating = false
+//                    if case .failure(let error) = completion {
+//                        self?.errorMessage = error.localizedDescription
+//                    }
+//                },
+//                receiveValue: { [weak self] response in
+//                    if response.isSuccess {
+//                        self?.updateSuccess = true
+//                        self?.loadEventDetail(eventId: eventId)
+//                        // 수정 성공시 홈 화면 다시 재호출 (새로고침)
+//                        self?.loadHome()
+//                    } else {
+//                        self?.errorMessage = response.message
+//                    }
+//                }
+//            )
+//            .store(in: &cancellables)
+//    }
     
     func deleteEvent(eventId: Int) {
         isDeleting = true

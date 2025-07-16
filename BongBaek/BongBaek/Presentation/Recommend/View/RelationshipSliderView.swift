@@ -8,36 +8,34 @@
 import SwiftUI
 
 struct RelationshipSliderView: View {
-    @State private var contactValue: Double = 0
-    @State private var intimacyValue: Double = 0
+    @EnvironmentObject var eventManager: EventCreationManager
     let range: ClosedRange<Double> = 0...4
 
     var body: some View {
-            VStack(spacing: 30) {
-                SliderSection(
-                    value: $contactValue,
-                    range: range,
-                    icon: "icon_message",
-                    title: "얼마나 자주 연락하나요?",
-                    leftLabel: "가끔",
-                    rightLabel: "매일"
-                )
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
-                
-                SliderSection(
-                    value: $intimacyValue,
-                    range: range,
-                    icon: "icon_family",
-                    title: "얼마나 자주 만나나요?",
-                    leftLabel: "가끔",
-                    rightLabel: "매일"
-                )
-                .padding(.horizontal, 20)
-                
-                Spacer()
-            }
-        
+        VStack(spacing: 30) {
+            SliderSection(
+                value: $eventManager.contactFrequency,  // 직접 바인딩
+                range: range,
+                icon: "icon_message",
+                title: "얼마나 자주 연락하나요?",
+                leftLabel: "가끔",
+                rightLabel: "매일"
+            )
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+            
+            SliderSection(
+                value: $eventManager.meetFrequency,     // 직접 바인딩
+                range: range,
+                icon: "icon_family",
+                title: "얼마나 자주 만나나요?",
+                leftLabel: "가끔",
+                rightLabel: "매일"
+            )
+            .padding(.horizontal, 20)
+            
+            Spacer()
+        }
         .background(.gray750)
         .padding(20)
         .frame(maxWidth: .infinity)
