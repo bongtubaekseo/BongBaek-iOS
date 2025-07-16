@@ -374,7 +374,7 @@ struct RecommendCostView: View {
             
             Button("추천받은 금액 수정하기") {
                 // 수정 액션
-                router.push(to: .modifyEventView(mode: .edit, existingEvent: nil))
+                router.push(to: .modifyEventView(mode: .edit, eventDetailData: nil))
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)

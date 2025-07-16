@@ -20,96 +20,70 @@ enum EventsCategory: String, CaseIterable {
 }
 
 struct RecordView: View {
-    @State private var isDeleteMode = false
-    @State private var selectedSection: RecordSection = .attended
-    @State private var selectedCategory: EventsCategory = .all
-    @State private var selectedRecordIDs: Set<UUID> = []
-
-    var attendedRecords: [ScheduleModel] {
-
-        return Array(scheduleDummy.prefix(2))
-    }
-    
-    var notAttendedRecords: [ScheduleModel] {
-
-        return Array(scheduleDummy.suffix(1))
-    }
-    
-    var schedulesGrouped: [String: [String: [ScheduleModel]]] {
-            let grouped = Dictionary(grouping: scheduleDummy) { model in
-                let components = model.date.split(separator: ".")
-                let year = components.count > 0 ? String(components[0]).trimmingCharacters(in: .whitespaces) : "기타"
-                let month = components.count > 1 ? String(components[1]).trimmingCharacters(in: .whitespaces) : "기타"
-                return "\(year)/\(month)"
-            }
-            
-            return grouped.reduce(into: [String: [String: [ScheduleModel]]]()) { result, pair in
-                let parts = pair.key.split(separator: "/")
-                guard parts.count == 2 else { return }
-                let year = String(parts[0])
-                let month = String(parts[1])
-                result[year, default: [:]][month, default: []] += pair.value
-            }
-        }
-    
-    var filteredSchedulesGrouped: [String: [String: [ScheduleModel]]] {
-        if selectedCategory == .all {
-            return schedulesGrouped
-        } else {
-            return schedulesGrouped.mapValues { months in
-                months.mapValues { schedules in
-                    schedules.filter { schedule in
-                        schedule.type == selectedCategory.rawValue
-                    }
-                }
-                .filter{ !$0.value.isEmpty}
-            }
-            .filter{ !$0.value.isEmpty}
-        }
-    }
+    @StateObject private var viewModel = RecordViewModel()
     
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                RecordsHeaderView(isDeleteMode: $isDeleteMode)
+                RecordsHeaderView(
+                    isDeleteMode: $viewModel.isDeleteMode,
+                    onDeleteTapped: {
+                        viewModel.deleteSelectedRecords()
+                    }
+                )
                 
                 RecordSectionHeaderView(
-                    selectedSection: $selectedSection,
-                    attendedCount: attendedRecords.count,
-                    notAttendedCount: notAttendedRecords.count
+                    selectedSection: $viewModel.selectedSection,
+                    attendedCount: viewModel.attendedCount,
+                    notAttendedCount: viewModel.notAttendedCount,
+                    onSectionChange: { section in
+                        viewModel.changeSection(to: section)
+                    }
                 )
                 .padding(.bottom, 20)
                 
-                CategoryFilterView(selectedCategory: $selectedCategory)
-                    .padding(.leading, 20)
+                CategoryFilterView(
+                    selectedCategory: $viewModel.selectedCategory,
+                    onCategoryChange: { category in
+                        viewModel.changeCategory(to: category)
+                    }
+                )
+                .padding(.leading, 20)
                 
                 RecordContentView(
-                    selectedSection: selectedSection,
-                    attendedRecords: attendedRecords,
-                    notAttendedRecords: notAttendedRecords,
-                    isDeleteMode: isDeleteMode,
-                    selectedRecordIDs: $selectedRecordIDs
+                    viewModel: viewModel
                 )
             }
         }
         .background(Color.background)
+        .onAppear {
+            Task {
+                await viewModel.loadAllRecords()
+            }
+        }
+        .refreshable {
+            Task {
+                await viewModel.refreshRecords()
+            }
+        }
     }
 }
 
 struct CategoryFilterView: View {
     @Binding var selectedCategory: EventsCategory
+    let onCategoryChange: (EventsCategory) -> Void
     
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false){
-            HStack(spacing: 10){
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
                 ForEach(EventsCategory.allCases, id: \.self) { category in
-                    Button(action : {
-                        selectedCategory = category
-                    }){
+                    Button(action: {
+                        onCategoryChange(category)
+                    }) {
                         Text(category.display)
                             .bodyMedium14()
                             .foregroundColor(selectedCategory == category ? .black : .gray300)
-                            .frame(height : 40)
+                            .frame(height: 40)
                             .padding(.horizontal, 16)
                             .background(
                                 RoundedRectangle(cornerRadius: 8)
@@ -125,8 +99,7 @@ struct CategoryFilterView: View {
 
 struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
-    @State private var showModifyView = false
-    var onDeleteTapped: () -> Void = {}
+    let onDeleteTapped: () -> Void
     @State private var showAlert = false
     
     var body: some View {
@@ -146,15 +119,12 @@ struct RecordsHeaderView: View {
                .frame(width: 44, height: 44)
                .contentShape(Rectangle())
             
-
                 Button(action: {
                     if isDeleteMode {
                         showAlert = true
-                        //onDeleteTapped() // ✅ 콜백 실행
-                    } else{
+                    } else {
                         isDeleteMode = true
                     }
-                    //isDeleteMode.toggle()
                 }) {
                     Image(systemName: isDeleteMode ? "checkmark" : "trash")
                         .font(.system(size: 18, weight: .medium))
@@ -166,7 +136,6 @@ struct RecordsHeaderView: View {
                     Button("취소", role: .cancel) { }
                     Button("삭제", role: .destructive) {
                         onDeleteTapped()
-                        isDeleteMode = false
                     }
                 } message: {
                     Text("이 기록의 모든 내용이 삭제됩니다.")
@@ -185,21 +154,19 @@ struct RecordSectionHeaderView: View {
     @Binding var selectedSection: RecordSection
     let attendedCount: Int
     let notAttendedCount: Int
+    let onSectionChange: (RecordSection) -> Void
     
     var body: some View {
         HStack(spacing: 0) {
             // 참석했어요 탭
             Button(action: {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    selectedSection = .attended
-                }
+                onSectionChange(.attended)
             }) {
                 VStack(spacing: 8) {
                     HStack {
                         Text("참석했어요")
                             .titleSemiBold16()
                             .foregroundColor(selectedSection == .attended ? .white : .gray)
-
                     }
                     
                     Rectangle()
@@ -209,10 +176,9 @@ struct RecordSectionHeaderView: View {
             }
             .frame(maxWidth: .infinity)
             
+            // 불참했어요 탭
             Button(action: {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    selectedSection = .notAttended
-                }
+                onSectionChange(.notAttended)
             }) {
                 VStack(spacing: 8) {
                     HStack {
@@ -234,36 +200,52 @@ struct RecordSectionHeaderView: View {
 }
 
 struct RecordContentView: View {
-    let selectedSection: RecordSection
-    let attendedRecords: [ScheduleModel]
-    let notAttendedRecords: [ScheduleModel]
-    let isDeleteMode: Bool
-    @Binding var selectedRecordIDs: Set<UUID>
+    @ObservedObject var viewModel: RecordViewModel
     
     var body: some View {
         VStack {
-            switch selectedSection {
-            case .attended:
-                if attendedRecords.isEmpty {
-                    RecordsEmptyView(message: "참석한 경조사가 없습니다")
-                } else {
-                    ForEach(attendedRecords, id: \.id) { record in
-                        RecordCellView(record: record, isDeleteMode: isDeleteMode, selectedRecordIDs: $selectedRecordIDs/*, selectedRecordID: $selectedRecordID*/)
+            if viewModel.isLoading {
+                LoadingView2()
+            } else if viewModel.isCurrentSectionEmpty {
+                RecordsEmptyView(message: viewModel.emptyMessage)
+            } else {
+                ForEach(viewModel.currentEvents, id: \.eventId) { event in  
+                    RecordCellView(
+                        event: event,
+                        isDeleteMode: viewModel.isDeleteMode,
+                        isSelected: viewModel.selectedRecordIDs.contains(event.eventId),
+                        onSelectionToggle: {
+                            viewModel.toggleRecordSelection(event.eventId)
+                        }
+                    )
+                    .onAppear {
+                        // 무한스크롤
+                        if viewModel.shouldLoadMore(for: event) {
+                            Task {
+                                await viewModel.loadMoreEvents()
+                            }
+                        }
                     }
                 }
                 
-            case .notAttended:
-                if notAttendedRecords.isEmpty {
-                    RecordsEmptyView(message: "불참한 경조사가 없습니다")
-                } else {
-                    ForEach(notAttendedRecords, id: \.id) { record in
-                        RecordCellView(record: record, isDeleteMode: isDeleteMode, selectedRecordIDs: $selectedRecordIDs)
+                // 🆕 추가 로딩 인디케이터
+                if viewModel.isLoadingMore {
+                    HStack(spacing: 12) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .primaryNormal))
+                            .scaleEffect(0.8)
+                        
+                        Text("더 많은 기록을 불러오는 중...")
+                            .bodyRegular14()
+                            .foregroundColor(.gray400)
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
                 }
             }
         }
         .padding(.top, 20)
-        .animation(.easeInOut(duration: 0.2), value: selectedSection)
+        .animation(.easeInOut(duration: 0.2), value: viewModel.selectedSection)
     }
 }
 
@@ -308,24 +290,15 @@ struct RecordsEmptyView: View {
 }
 
 struct RecordCellView: View {
-    let record: ScheduleModel
+    let event: AttendedEvent
     let isDeleteMode: Bool
-    @Binding var selectedRecordIDs: Set<UUID>
-
-    @State private var isSelected = false
+    let isSelected: Bool
+    let onSelectionToggle: () -> Void
 
     var body: some View {
         HStack(spacing: 12) {
             if isDeleteMode {
-                Button(action: {
-                    isSelected.toggle()
-                    if isSelected {
-                        selectedRecordIDs.insert(record.id)
-                    } else {
-                        selectedRecordIDs.remove(record.id)
-                    }
-                    print("선택된 ID: ", selectedRecordIDs)
-                }) {
+                Button(action: onSelectionToggle) {
                     Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                         .foregroundColor(isSelected ? .secondaryRed : .gray400)
                         .font(.system(size: 20))
@@ -335,30 +308,30 @@ struct RecordCellView: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("nickname")
+                Text(event.hostInfo.hostNickname)
                     .captionRegular12()
                     .foregroundColor(.primaryNormal)
 
                 HStack {
-                    Text(record.name)
+                    Text(event.hostInfo.hostName)
                         .titleSemiBold18()
                         .foregroundColor(.white)
                     Spacer()
-                    Text(record.money)
+                    Text(formatMoney(event.eventInfo.cost))
                         .titleSemiBold18()
                         .foregroundColor(.white)
                 }
 
                 HStack {
                     HStack(spacing: 8) {
-                        Text(record.type)
+                        Text(event.eventInfo.eventCategory)
                             .captionRegular12()
                             .foregroundColor(.primaryNormal)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
                             .background(.primaryNormal.opacity(0.1))
                             .cornerRadius(4)
-                        Text(record.relation)
+                        Text(event.eventInfo.relationship)
                             .captionRegular12()
                             .foregroundColor(.primaryNormal)
                             .padding(.horizontal, 6)
@@ -369,7 +342,7 @@ struct RecordCellView: View {
 
                     Spacer()
 
-                    Text(record.date)
+                    Text(formatDate(event.eventInfo.eventDate))
                         .captionRegular12()
                         .foregroundColor(.gray400)
                 }
@@ -383,6 +356,35 @@ struct RecordCellView: View {
         .padding(.horizontal, 20)
         .padding(.bottom, 8)
         .animation(.easeInOut(duration: 0.3), value: isDeleteMode)
+    }
+    
+    // MARK: - Helper Methods
+    
+    /// 금액 포맷팅: 1000000 → "1,000,000원"
+    private func formatMoney(_ amount: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        let formattedAmount = formatter.string(from: NSNumber(value: amount)) ?? "\(amount)"
+        return "\(formattedAmount)원"
+    }
+    
+    /// 날짜 포맷팅: "2025-01-18" → "2025.01.18"
+    private func formatDate(_ dateString: String) -> String {
+        return dateString.replacingOccurrences(of: "-", with: ".")
+    }
+}
+
+struct LoadingView2: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .tint(.primaryNormal)
+            Text("기록을 불러오는 중...")
+                .bodyRegular14()
+                .foregroundColor(.gray400)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 50)
     }
 }
 

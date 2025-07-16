@@ -10,44 +10,80 @@ struct HomeView: View {
     @State private var selectedTab: Tab = .home
     @StateObject private var stepManager = GlobalStepManager()
     @EnvironmentObject var router: NavigationRouter
+    @StateObject private var homeViewModel = HomeViewModel()
     
     var body: some View {
-//        NavigationStack {
-            VStack(spacing: 0) {
-                ScrollView {
-                    HStack {
-                        Text("봉투백서")
-                            .font(.head_bold_24)
-                            .foregroundColor(.white)
-                            .padding(.leading, 20)
-                        Spacer()
-                    }
+        VStack(spacing: 0) {
+            ScrollView {
+                HStack {
+                    Text("봉투백서")
+                        .font(.head_bold_24)
+                        .foregroundColor(.white)
+                        .padding(.leading, 20)
+                    Spacer()
+                }
 
-                    ScheduleAlarmView(alarms: scheduleDummy)
-
+                
+                if homeViewModel.hasData {
+                    ScheduleAlarmView(homeData: $homeViewModel.homeData)
                         .frame(height: 276)
                         .padding(.top, 30)
-                    RecommendsView()
+                } else if homeViewModel.isLoading {
+                    // 로딩 중일 때 ScheduleAlarmView 자리
+                    VStack {
+                        ProgressView("일정을 불러오는 중...")
+                            .foregroundColor(.white)
+                    }
+                    .frame(height: 276)
+                    .padding(.top, 30)
+                } else {
+                    // 데이터가 없거나 에러일 때 더미 데이터 또는 빈 뷰
+                    ScheduleAlarmView(homeData: .constant(nil))
+                        .frame(height: 276)
+                        .padding(.top, 30)
+                }
+                
+//                Button("로그아웃 테스트") {
+//                    AuthManager.shared.logout()
+//                    KeychainManager.shared.printTokenStatus()
+//                }
+//                .foregroundColor(.red)
+//
+//
+                if homeViewModel.hasData {
+                    RecommendsView(homeData: homeViewModel.homeData)
                         .environmentObject(stepManager)
                         .environmentObject(router)
                         .padding(.top, 10)
-                    ScheduleView(schedules: scheduleDummy)
+                } else {
+                    RecommendsView(homeData: nil)
+                        .environmentObject(stepManager)
+                        .environmentObject(router)
+                        .padding(.top, 10)
+                }
+                
+                if homeViewModel.hasData {
+                    ScheduleView(events: homeViewModel.homeData?.events ?? [])
+                        .padding(.top, 32)
+                } else {
+
+                    ScheduleView(events: [])
                         .padding(.top, 32)
                 }
-//                CustomTabView(selectedTab: $selectedTab)
-//                    .background(Color.gray750)
-//                    .clipShape(
-//                        .rect(
-//                            topLeadingRadius: 10,
-//                            topTrailingRadius: 10
-//                        )
-//                    )
             }
-            .navigationBarHidden(true)
-            .toolbar(.hidden, for: .navigationBar)
-            .navigationBarBackButtonHidden(true)
-            .background(Color.black.ignoresSafeArea())
-//        }
+        }
+        .onAppear {
+            print("HomeView 나타남 - 데이터 로드 시작")
+            homeViewModel.loadData()
+        }
+        .refreshable {
+            print("HomeView 새로고침")
+            homeViewModel.refreshData()
+        }
+        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
+        .navigationBarBackButtonHidden(true)
+        .background(Color.black.ignoresSafeArea())
     }
 }
 

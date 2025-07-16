@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct ScheduleView: View {
-    let schedules: [ScheduleModel]
+    let events: [Event]
+    @EnvironmentObject var router: NavigationRouter
+    
+    private var sortedEvents: [Event] {
+           return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
+       }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -18,24 +23,29 @@ struct ScheduleView: View {
                     .foregroundStyle(.white)
                 
                 Spacer()
-                
-                NavigationLink(destination: FullScheduleView()) {
-                    Text("더보기")
-                        .bodyRegular14()
-                        .foregroundColor(.gray)
-                        .padding(.vertical, 4)
-                        .padding(.horizontal, 8)
-                        .background(Color.clear)
+
+                    Button(action: {
+                        router.push(to: .fullScheduleView)
+                    }) {
+                        Text("더보기")
+                            .bodyRegular14()
+                            .foregroundColor(.gray)
+                            .padding(.vertical, 4)
+                            .padding(.horizontal, 8)
+                            .background(Color.clear)
                 }
             }
             .padding(.bottom, 20)
             
-            if schedules.isEmpty {
+            if events.isEmpty {
                 EmptyCardView()
             } else {
-                ForEach(schedules) { schedule in
-                    NavigationLink(destination: AllRecordsView(scheduleData: schedule)) {
-                        ScheduleCellView(schedule: schedule)
+                
+                ForEach(sortedEvents, id: \.eventId) { event in
+                    Button(action: {
+                        router.push(to: .allRecordView(eventId: event.eventId))
+                    }) {
+                        ScheduleCellView(event: event)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
@@ -44,8 +54,4 @@ struct ScheduleView: View {
         .padding(.horizontal)
         .background(Color.black)
     }
-}
-
-#Preview {
-    ScheduleView(schedules: scheduleDummy)
 }

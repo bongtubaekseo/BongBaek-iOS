@@ -16,7 +16,9 @@ enum RecommendRoute: Hashable {
     case recommendLottie
     case recommendCostView
     case recommendSuccessView
-    case modifyEventView(mode: ModifyMode, existingEvent: ScheduleModel?)
+    case modifyEventView(mode: ModifyMode, eventDetailData: EventDetailData?) 
+    case fullScheduleView
+    case allRecordView(eventId: String)
     
     var displayName: String {
         switch self {
@@ -29,6 +31,9 @@ enum RecommendRoute: Hashable {
         case .recommendCostView: return "RecommendCostView"
         case .recommendSuccessView: return "RecommendSuccessView"
         case .modifyEventView: return "modifyEventView"
+        case .fullScheduleView: return "fullScheduleView"
+        case .allRecordView: return "allRecordView"
+            
         }
     }
 }

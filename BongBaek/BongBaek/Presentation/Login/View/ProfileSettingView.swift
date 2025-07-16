@@ -8,37 +8,14 @@
 import SwiftUI
 
 struct ProfileSettingView: View {
-    
-    @State var nickname: String = ""
-    @State var selectedDate: String = ""
+    @StateObject private var viewModel = ProfileSettingViewModel()
     @State private var showDatePicker = false
-    @State private var someBinding = true
-    @State private var selectedIncome: String? = nil
     @FocusState private var focusedField: FocusField?
     @Environment(\.dismiss) private var dismiss
     @State private var previousFocusedField: FocusField? = nil
-    @State private var navigateToMain = false
     
     enum FocusField {
         case nickname
-    }
-   
-    enum IncomeSelection: Equatable {
-        case under200
-        case over200
-        case none
-    }
-   
-    @State private var currentSelection: IncomeSelection = .none
-    
-    private var isStartButtonEnabled: Bool {
-        let basicFieldsValid = (nickname.count >= 2 && nickname.count <= 10) && !selectedDate.isEmpty
-        
-        if someBinding {
-            return basicFieldsValid && currentSelection != .none
-        } else {
-            return basicFieldsValid
-        }
     }
     
     var body: some View {
@@ -50,10 +27,9 @@ struct ProfileSettingView: View {
             ScrollView {
                 VStack {
                     textFieldSection
-                    
                     incomeToggleSection
                     
-                    if someBinding {
+                    if viewModel.hasIncome {
                         incomeSelectionSection
                     }
                     
@@ -70,9 +46,9 @@ struct ProfileSettingView: View {
                 hideKeyboard()
             }
         }
-        .navigationDestination(isPresented: $navigateToMain) {
-              MainTabView()
-          }
+        .navigationDestination(isPresented: $viewModel.navigateToMain) {
+            MainTabView()
+        }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
@@ -82,41 +58,19 @@ struct ProfileSettingView: View {
             previousFocusedField = nil
         }) {
             DatePickerBottomSheetView { selectedDateString in
-                selectedDate = selectedDateString
+                viewModel.selectedDate = selectedDateString
                 print("선택된 날짜: \(selectedDateString)")
                 focusedField = nil
             }
             .presentationDetents([.height(359)])
         }
-    }
-    
-    private var customNavigationBar: some View {
-        HStack {
-            Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(.white)
+        .alert("회원가입 실패", isPresented: $viewModel.showErrorAlert) {
+            Button("확인") {
+                viewModel.dismissError()
             }
-            .frame(width: 44, height: 44)
-            .padding(.leading, -8)
-            
-            Spacer()
-            
-            Text("프로필 설정")
-                .titleSemiBold18()
-                .foregroundColor(.white)
-            
-            Spacer()
-            
-            Color.clear
-                .frame(width: 44, height: 44)
+        } message: {
+            Text(viewModel.errorMessage)
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 8)
-        .padding(.bottom, 16)
-        .background(.gray900)
     }
     
     private var textFieldSection: some View {
@@ -125,7 +79,7 @@ struct ProfileSettingView: View {
                 title: "이름",
                 icon: "person.circle",
                 placeholder: "닉네임을 입력하세요",
-                text: $nickname,
+                text: $viewModel.nickname,
                 validationRule: ValidationRule(
                     minLength: 2,
                     maxLength: 10
@@ -134,20 +88,20 @@ struct ProfileSettingView: View {
             )
             .focused($focusedField, equals: .nickname)
             
-                CustomTextField(
-                    title: "생년월일",
-                    icon: "icon_calendar_16",
-                    placeholder: "생년월일을 입력하세요",
-                    text: $selectedDate,
-                    isReadOnly: true,
-                    isRequired: true) {
-                        print("생년월일 필드 터치됨")
-                        previousFocusedField = focusedField
-                        focusedField = nil
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            showDatePicker = true
-                        }
+            CustomTextField(
+                title: "생년월일",
+                icon: "icon_calendar_16",
+                placeholder: "생년월일을 입력하세요",
+                text: $viewModel.selectedDate,
+                isReadOnly: true,
+                isRequired: true) {
+                    print("생년월일 필드 터치됨")
+                    previousFocusedField = focusedField
+                    focusedField = nil
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        showDatePicker = true
                     }
+                }
         }
         .padding(.top, 30)
     }
@@ -160,12 +114,12 @@ struct ProfileSettingView: View {
             
             Spacer()
             
-            Toggle("", isOn: $someBinding)
+            Toggle("", isOn: $viewModel.hasIncome)
                 .labelsHidden()
                 .tint(.primaryNormal)
-                .onChange(of: someBinding) { _, newValue in
+                .onChange(of: viewModel.hasIncome) { _, newValue in
                     if !newValue {
-                        currentSelection = .none
+                        viewModel.selectIncome(.none)
                         focusedField = nil
                     }
                 }
@@ -187,8 +141,8 @@ struct ProfileSettingView: View {
                 .padding(.bottom, 20)
             
             VStack(spacing: 12) {
-                under200Button
-                over200Button
+                incomeButton(for: .under200)
+                incomeButton(for: .over200)
             }
         }
         .frame(maxWidth: .infinity, minHeight: 183)
@@ -203,22 +157,22 @@ struct ProfileSettingView: View {
             insertion: .move(edge: .top).combined(with: .opacity),
             removal: .move(edge: .top).combined(with: .opacity)
         ))
-        .animation(.easeInOut(duration: 0.4), value: someBinding)
+        .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
     }
     
-    private var under200Button: some View {
+    private func incomeButton(for selection: ProfileSettingViewModel.IncomeSelection) -> some View {
         Button {
-            currentSelection = .under200
+            viewModel.selectIncome(selection)
             focusedField = nil
-            print("월 200 이하 선택됨")
+            print("\(selection.displayText) 선택됨")
         } label: {
             HStack {
-                Text("월 200 이하")
+                Text(selection.displayText)
                     .foregroundStyle(.white)
                 
                 Spacer()
                 
-                if case .under200 = currentSelection {
+                if viewModel.isSelected(selection) {
                     Image(systemName: "checkmark")
                         .foregroundStyle(.white)
                         .font(.system(size: 16, weight: .semibold))
@@ -228,89 +182,39 @@ struct ProfileSettingView: View {
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
             .background(
-                isSelected(.under200) ?
+                viewModel.isSelected(selection) ?
                     .primaryNormal.opacity(0.3) : .clear.opacity(0.1)
             )
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        isSelected(.under200) ? .primaryNormal : .gray100,
-                        lineWidth: isSelected(.under200) ? 2 : 1
+                        viewModel.isSelected(selection) ? .primaryNormal : .gray100,
+                        lineWidth: viewModel.isSelected(selection) ? 2 : 1
                     )
             )
         }
-        .animation(.easeInOut(duration: 0.2), value: currentSelection)
-    }
-    
-    private var over200Button: some View {
-        Button {
-            currentSelection = .over200
-            focusedField = nil
-            print("월 200 이상 선택됨")
-        } label: {
-            HStack {
-                Text("월 200 이상")
-                    .foregroundStyle(.white)
-                
-                Spacer()
-                
-                if case .over200 = currentSelection {
-                    Image(systemName: "checkmark")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 16, weight: .semibold))
-                        .transition(.scale.combined(with: .opacity))
-                }
-            }
-            .padding(.vertical, 16)
-            .padding(.horizontal, 16)
-            .background(
-                isSelected(.over200) ?
-                    .primaryNormal.opacity(0.3) : .clear.opacity(0.1)
-            )
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(
-                        isSelected(.over200) ? .primaryNormal : .gray100,
-                        lineWidth: isSelected(.over200) ? 2 : 1
-                    )
-            )
-        }
-        .animation(.easeInOut(duration: 0.2), value: currentSelection)
+        .animation(.easeInOut(duration: 0.2), value: viewModel.currentSelection)
     }
 
     private var startButton: some View {
         Button("봉투백서 시작하기") {
-            print("봉투백서 시작하기 버튼 클릭됨")
-            
-            switch currentSelection {
-            case .under200:
-                print("선택된 수입: 월 200 이하")
-            case .over200:
-                print("선택된 수입: 월 200 이상")
-            case .none:
-                print("수입이 선택되지 않음")
-            }
-            
-            navigateToMain = true
+            viewModel.logCurrentSelection()
+            viewModel.performSignUp()
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(isStartButtonEnabled ? .primaryNormal :  Color.gray.opacity(0.3))
+        .background(viewModel.isStartButtonEnabled ? .primaryNormal : Color.gray.opacity(0.3))
         .foregroundColor(.white)
         .cornerRadius(12)
         .padding(.top, 20)
-        .disabled(!isStartButtonEnabled)
-        .animation(.easeInOut(duration: 0.2), value: isStartButtonEnabled)
-    }
-    
-    private func isSelected(_ selection: IncomeSelection) -> Bool {
-        switch (currentSelection, selection) {
-        case (.under200, .under200), (.over200, .over200):
-            return true
-        default:
-            return false
-        }
+        .disabled(!viewModel.isStartButtonEnabled)
+        .animation(.easeInOut(duration: 0.2), value: viewModel.isStartButtonEnabled)
+        .overlay(
+            viewModel.isSigningUp ?
+            ProgressView()
+                .tint(.white)
+                .scaleEffect(0.8) : nil
+        )
     }
 }
