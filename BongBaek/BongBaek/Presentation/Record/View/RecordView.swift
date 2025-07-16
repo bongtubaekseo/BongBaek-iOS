@@ -21,6 +21,7 @@ enum EventsCategory: String, CaseIterable {
 
 struct RecordView: View {
     @StateObject private var viewModel = RecordViewModel()
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         ScrollView {
@@ -31,6 +32,7 @@ struct RecordView: View {
                         viewModel.deleteSelectedRecords()
                     }
                 )
+                .environmentObject(router)
                 
                 RecordSectionHeaderView(
                     selectedSection: $viewModel.selectedSection,
@@ -101,6 +103,7 @@ struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
     let onDeleteTapped: () -> Void
     @State private var showAlert = false
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         HStack {
@@ -111,14 +114,16 @@ struct RecordsHeaderView: View {
             Spacer()
             
             HStack(spacing: 0) {
-                NavigationLink(destination: ModifyEventView(mode: .create)) {
-                   Image(systemName: "plus")
-                       .font(.system(size: 18, weight: .medium))
-                       .foregroundColor(.white)
-               }
-               .frame(width: 44, height: 44)
-               .contentShape(Rectangle())
-            
+                Button(action: {
+                    router.push(to: .modifyEventView(mode: .create, eventDetailData: nil))
+                }) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(.white)
+                }
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+                
                 Button(action: {
                     if isDeleteMode {
                         showAlert = true
@@ -251,6 +256,7 @@ struct RecordContentView: View {
 
 struct RecordsEmptyView: View {
     let message: String
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         VStack(alignment: .center) {
@@ -272,7 +278,9 @@ struct RecordsEmptyView: View {
                 .foregroundColor(.gray)
                 .padding(.top, 16)
             
-            NavigationLink(destination: ModifyEventView(mode: .create)) {
+            Button(action: {
+                router.push(to: .modifyEventView(mode: .create, eventDetailData: nil))
+            }) {
                 Text("지금 기록하기")
                     .titleSemiBold16()
                     .foregroundColor(.white)
