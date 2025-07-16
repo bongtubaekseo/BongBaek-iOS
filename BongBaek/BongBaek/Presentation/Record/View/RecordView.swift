@@ -71,7 +71,7 @@ struct RecordView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                RecordsHeaderView(isDeleteMode: $isDeleteMode)
+                RecordsHeaderView(isDeleteMode: $isDeleteMode, selectedRecordIDs: $selectedRecordIDs)
                 
                 RecordSectionHeaderView(
                     selectedSection: $selectedSection,
@@ -128,12 +128,29 @@ struct RecordsHeaderView: View {
     @State private var showModifyView = false
     var onDeleteTapped: () -> Void = {}
     @State private var showAlert = false
+    @Binding var selectedRecordIDs: Set<UUID>
     
     var body: some View {
         HStack {
+            if isDeleteMode {
+                Button(action: {
+                    isDeleteMode = false
+                    selectedRecordIDs.removeAll()
+                }) {
+                    Text("취소")
+                        .bodyMedium14()
+                        .foregroundColor(.white)
+                }
+                .frame(width: 60, alignment: .leading)
+            }
+            
+            Spacer()
+
             Text("경조사 전체 기록")
                 .titleSemiBold18()
                 .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, alignment: isDeleteMode ? .center : .leading)
+                .padding(.leading, isDeleteMode ? 0 : 20)
             
             Spacer()
             
