@@ -278,6 +278,7 @@ struct FullScheduleView: View {
 
 struct EventCellView: View {
     let event: AttendedEvent
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -327,6 +328,9 @@ struct EventCellView: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(.gray750)
         )
+        .onTapGesture {
+                    router.push(to: .allRecordView(eventId: event.eventId))
+                }
     }
     
     // 날짜 포맷팅: "2025-01-18" → "1월 18일"
