@@ -129,12 +129,22 @@ struct RecommendView: View {
                 BorderTextField(
                     placeholder: "이름을 적어주세요",
                     text: $eventManager.hostName,
-                    validationRule: ValidationRule(minLength: 2, maxLength: 10)
+                    validationRule: ValidationRule(
+                        minLength: 2,
+                        maxLength: 10,
+                        regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                        customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                    )
                 )
                 BorderTextField(
-                    placeholder: "별명을 적어주세요",
-                    text: $eventManager.hostNickname,
-                    validationRule: ValidationRule(minLength: 2, maxLength: 10)
+                    placeholder: "이름을 적어주세요",
+                    text: $eventManager.hostName,
+                    validationRule: ValidationRule(
+                        minLength: 2,
+                        maxLength: 10,
+                        regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                        customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                    )
                 )
             }
         }

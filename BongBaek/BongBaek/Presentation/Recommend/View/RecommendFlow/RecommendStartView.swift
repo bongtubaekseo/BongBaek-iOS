@@ -25,8 +25,11 @@ struct RecommendStartView: View {
                 subtitle2: "지금 바로 알아보세요!"
             )
             .padding(.leading, 20)
+            .padding(.top, 40)
             
             Image("image_bong 1")
+                .padding(.top,20)
+                .frame(width: 365,height: 365)
             
             HStack {
                 Image("icon_protect")
@@ -34,6 +37,7 @@ struct RecommendStartView: View {
                     .bodyRegular14()
                     .foregroundStyle(.gray300)
             }
+            .padding(.top,20)
             
             Button {
                 router.push(to: .recommendView)
