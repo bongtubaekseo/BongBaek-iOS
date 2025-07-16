@@ -81,6 +81,9 @@ struct RecordView: View {
                     onDeleteTapped: {
                         viewModel.deleteSelectedRecords()
                     },
+                    onCancelTapped: {
+                        viewModel.cancelDeleteMode()
+                    },
                     selectedRecordIDs: $selectedRecordIDs,
                     selectedStates: $selectedStates
                 )
@@ -154,6 +157,7 @@ struct CategoryFilterView: View {
 struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
     let onDeleteTapped: () -> Void
+    let onCancelTapped: () -> Void
     @State private var showAlert = false
     @Binding var selectedRecordIDs: Set<UUID>
     @Binding var selectedStates: [UUID: Bool]
@@ -162,9 +166,7 @@ struct RecordsHeaderView: View {
         HStack {
             if isDeleteMode {
                 Button(action: {
-                    isDeleteMode = false
-                    selectedRecordIDs.removeAll()
-                    selectedStates.removeAll()
+                    onCancelTapped()
                 }) {
                     Text("취소")
                         .bodyMedium14()
