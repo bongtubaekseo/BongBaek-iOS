@@ -20,8 +20,8 @@ struct ScheduleAlarmView: View {
     @State private var dragOffset: CGFloat = 0
 
     private let cardSpacing: CGFloat = 8
-    private let cardWidth: CGFloat = UIScreen.main.bounds.width - 40
-    private let sidePadding: CGFloat = 16
+    private let cardWidth: CGFloat = 340
+    private let sidePadding: CGFloat = 20
 
 
     var body: some View {
@@ -30,7 +30,7 @@ struct ScheduleAlarmView: View {
                 EmptyScheduleView()
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 16) {
+                    HStack(spacing: cardSpacing) {
                         ForEach(Array(sortedEvents.enumerated()).prefix(3), id: \.element.eventId) { index, event in
                             ScheduleIndicatorCellView(event: event)
                                 .frame(width: cardWidth)
