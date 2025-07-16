@@ -157,7 +157,6 @@ struct RecordsHeaderView: View {
             HStack(spacing: 0) {
                 NavigationLink(destination: ModifyEventView(mode: .create)) {
                    Image(systemName: "plus")
-                       .font(.system(size: 18, weight: .medium))
                        .foregroundColor(.white)
                }
                .frame(width: 44, height: 44)
@@ -167,17 +166,21 @@ struct RecordsHeaderView: View {
                 Button(action: {
                     if isDeleteMode {
                         showAlert = true
-                        //onDeleteTapped() // ✅ 콜백 실행
-                    } else{
+                    } else {
                         isDeleteMode = true
                     }
-                    //isDeleteMode.toggle()
                 }) {
-                    Image(systemName: isDeleteMode ? "checkmark" : "trash")
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(isDeleteMode ? .blue : .white)
+                    if isDeleteMode {
+                        Text("삭제")
+                            .titleSemiBold16()
+                            .foregroundColor(.secondaryRed)
+                            .frame(width: 44, height: 44)
+                    } else {
+                        Image(systemName: "trash")
+                            .foregroundColor(.white)
+                            .frame(width: 44, height: 44)
+                    }
                 }
-                .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
                 .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
                     Button("취소", role: .cancel) { }
