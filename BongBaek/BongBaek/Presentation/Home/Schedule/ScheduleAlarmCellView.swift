@@ -73,17 +73,17 @@ struct ScheduleIndicatorCellView: View {
         switch category {
         case "결혼식":
             return [
-                Color(hex: "570815"),  // 핑크 계열
-                Color(hex: "FF5757"),
-                Color(hex: "FF7373"),
-                Color(hex: "FFA5A5"),
-                Color(hex: "FFCBCD"),
+                Color(hex: "150857"),
+                Color(hex: "5F57FF"),
+                Color(hex: "7384FF"),
+                Color(hex: "9EA5FF"),
+                Color(hex: "CDCBFF"),
                 Color(hex: "FFFFFF").opacity(0.8),
             ]
         case "생일":
             return [
-                Color(hex: "081557"),  // 블루 계열
-                Color(hex: "5757FF"),
+                Color(hex: "150857"),
+                Color(hex: "5F57FF"),
                 Color(hex: "7384FF"),
                 Color(hex: "9EA5FF"),
                 Color(hex: "CDCBFF"),
@@ -91,11 +91,11 @@ struct ScheduleIndicatorCellView: View {
             ]
         case "돌잔치":
             return [
-                Color(hex: "085715"),  // 그린 계열
-                Color(hex: "57FF57"),
-                Color(hex: "73FF84"),
-                Color(hex: "A5FF9E"),
-                Color(hex: "CBFFCD"),
+                Color(hex: "150857"),
+                Color(hex: "5F57FF"),
+                Color(hex: "7384FF"),
+                Color(hex: "9EA5FF"),
+                Color(hex: "CDCBFF"),
                 Color(hex: "FFFFFF").opacity(0.8),
             ]
         default:

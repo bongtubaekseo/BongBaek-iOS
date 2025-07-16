@@ -11,7 +11,9 @@ struct AllRecordsView: View {
     let eventId: String
     @StateObject private var viewModel = AllRecordsViewModel()
     @State private var isDetailExpanded = false
+    @State private var showDeleteAlert = false
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         VStack {
@@ -35,7 +37,9 @@ struct AllRecordsView: View {
                     Spacer()
                     
                     Button(action: {
-                        // 편집 액션
+//                         편집 액션
+                        router.push(to: .modifyEventView(mode: .edit,eventDetailData: viewModel.eventDetail))
+                        
                     }) {
                         Image("icon_edit")
                             .foregroundColor(.white)
@@ -306,13 +310,13 @@ struct AllRecordsView: View {
                 Spacer()
                 
                 // 메모 저장 버튼
-                Button("저장") {
-                    Task {
-                        await viewModel.saveMemo()
-                    }
-                }
-                .foregroundColor(.primaryNormal)
-                .disabled(viewModel.isLoading)
+//                Button("저장") {
+//                    Task {
+//                        await viewModel.saveMemo()
+//                    }
+//                }
+//                .foregroundColor(.primaryNormal)
+//                .disabled(viewModel.isLoading)
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
@@ -338,11 +342,22 @@ struct AllRecordsView: View {
     
     private var deleteButton: some View {
         Button {
-            deleteEvent()
+            showDeleteAlert = true
         } label: {
-            Text("기록 삭제하기")
-                .titleSemiBold18()
-                .foregroundColor(.red)
+            if viewModel.isDeleting {
+                HStack {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .red))
+                        .scaleEffect(0.8)
+                    Text("삭제 중...")
+                        .titleSemiBold18()
+                        .foregroundColor(.red)
+                }
+            } else {
+                Text("기록 삭제하기")
+                    .titleSemiBold18()
+                    .foregroundColor(.red)
+            }
         }
         .frame(maxWidth: .infinity)
         .frame(height: 55)
@@ -354,13 +369,45 @@ struct AllRecordsView: View {
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .padding(.top, 16)
-        .disabled(viewModel.isLoading)
+        .disabled(viewModel.isDeleting)
+        .alert("경조사 기록을 삭제하시겠습니까?", isPresented: $showDeleteAlert) {
+            Button("취소", role: .cancel) { }
+            Button("삭제", role: .destructive) {
+                deleteEvent()
+            }
+        } message: {
+            Text("삭제된 기록은 복구할 수 없습니다.")
+        }
+        .alert("삭제 완료", isPresented: $viewModel.deleteSuccess) {
+            Button("확인") {
+                dismiss()
+            }
+        } message: {
+            Text("경조사 기록이 성공적으로 삭제되었습니다.")
+        }
+        .alert("삭제 실패", isPresented: .constant(viewModel.deleteError != nil)) {
+            Button("확인") {
+                viewModel.clearError()
+            }
+        } message: {
+            Text(viewModel.deleteError ?? "")
+        }
     }
     
     // MARK: - Actions
     private func deleteEvent() {
-        print("제 버튼 클릭 - eventId: \(eventId)")
-        // TODO: 삭제 확인 알럿 표시 후 viewModel.deleteEvent() 호출
+        print("🗑️ 삭제 버튼 클릭 - eventId: \(eventId)")
+        
+        Task {
+            let success = await viewModel.deleteEvent(eventId: eventId)
+            
+            if success {
+                print("삭제 성공 - 이전 화면으로 이동")
+            } else {
+                print("삭제 실패 - 에러 메시지 표시")
+            
+            }
+        }
     }
 }
 struct DetailRow: View {

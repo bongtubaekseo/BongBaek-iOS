@@ -16,7 +16,7 @@ enum RecommendRoute: Hashable {
     case recommendLottie
     case recommendCostView
     case recommendSuccessView
-    case modifyEventView(mode: ModifyMode)
+    case modifyEventView(mode: ModifyMode, eventDetailData: EventDetailData?) 
     case fullScheduleView
     case allRecordView(eventId: String)
     
