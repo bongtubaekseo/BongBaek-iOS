@@ -210,15 +210,18 @@ enum ValidationState {
 struct ValidationRule {
     let minLength: Int?
     let maxLength: Int?
+    let regex: String?
     let customRule: ((String) -> Bool)?
     let customMessage: String?
     
     init(minLength: Int? = nil,
          maxLength: Int? = nil,
+         regex: String? = nil,
          customRule: ((String) -> Bool)? = nil,
          customMessage: String? = nil) {
         self.minLength = minLength
         self.maxLength = maxLength
+        self.regex = regex
         self.customRule = customRule
         self.customMessage = customMessage
     }
@@ -247,6 +250,13 @@ struct ValidationRule {
                 return (false, "\(minLength)자에서 \(maxLength)자 내외 입력해야 합니다")
             }
             return (false, "\(maxLength)자 이하로 입력해야 합니다")
+        }
+        
+        if let regex = regex {
+            let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+            if !predicate.evaluate(with: text) {
+                return (false, customMessage ?? "올바른 형식이 아닙니다")
+            }
         }
         
         if let customRule = customRule {

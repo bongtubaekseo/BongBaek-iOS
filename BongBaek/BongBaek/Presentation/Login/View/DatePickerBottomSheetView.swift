@@ -45,7 +45,7 @@ struct DatePickerBottomSheetView: View {
             .datePickerStyle(.wheel)
             .labelsHidden()
             .environment(\.locale, Locale(identifier: "ko_KR"))
-            .colorInvert()
+            .preferredColorScheme(.dark)
             .accentColor(.blue)
             .padding(.horizontal, 20)
             
