@@ -195,6 +195,9 @@ struct RecordsHeaderView: View {
                     Button("삭제", role: .destructive) {
                         onDeleteTapped()
                         isDeleteMode = false
+                        selectedRecordIDs.removeAll()
+                        selectedStates.removeAll()
+                        print("삭제되었습니다")
                     }
                 } message: {
                     Text("이 기록의 모든 내용이 삭제됩니다.")
