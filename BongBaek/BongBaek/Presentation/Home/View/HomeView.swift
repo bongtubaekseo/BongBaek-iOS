@@ -31,7 +31,7 @@ struct HomeView: View {
                 } else if homeViewModel.isLoading {
                     // 로딩 중일 때 ScheduleAlarmView 자리
                     VStack {
-                        ProgressView("일정을 불러오는 중...")
+                        ProgressView("일정을 불러오는 중…")
                             .foregroundColor(.white)
                     }
                     .frame(height: 276)
@@ -42,7 +42,7 @@ struct HomeView: View {
                         .frame(height: 276)
                         .padding(.top, 30)
                 }
-                
+
                 Button("로그아웃 테스트") {
                     AuthManager.shared.logout()
                     KeychainManager.shared.printTokenStatus()
@@ -51,7 +51,7 @@ struct HomeView: View {
 
                 if homeViewModel.hasData {
                     RecommendsView(homeData: homeViewModel.homeData)
-                            .environmentObject(stepManager)
+                        .environmentObject(stepManager)
                         .environmentObject(router)
                         .padding(.top, 10)
                 } else {
