@@ -101,7 +101,7 @@ class AuthManager: ObservableObject {
         print("keyChain에 저장된 토큰 \(accessToken)")
         // 저장된 토큰으로 자동 로그인 시도
         // 여기서는 토큰이 있으면 일단 authenticated로 처리
-        authState = .needsLogin
+        authState = .authenticated
         
         // TODO: 실제로는 토큰 유효성 검증 API 호출
         // validateToken(accessToken)

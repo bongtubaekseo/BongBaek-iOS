@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct RecommendStartView: View {
-    let onBackPressed: () -> Void
     @EnvironmentObject var stepManager: GlobalStepManager
     @EnvironmentObject var router: NavigationRouter
     @State private var navigateToRecommend = false
     
     var body: some View {
         VStack {
-            CustomNavigationBar(title: "금액 추천") {
-                onBackPressed()
+            CustomNavigationBar(title: "금액 추천 가이드") {
+                router.pop()
             }
             
             RecommendGuideTextView(

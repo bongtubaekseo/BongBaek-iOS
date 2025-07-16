@@ -20,15 +20,7 @@ struct MainTabView: View {
             VStack(spacing: 0) {
                 Group {
                     if isRecommendFlowActive {
-                        RecommendStartView(
-                            onBackPressed: {
-//                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    isRecommendFlowActive = false
-                                    selectedTab = previousTab // 이전 탭으로 복원
-                                    router.popToRoot()
-//                                }
-                            }
-                        )
+                        RecommendStartView()
                         .environmentObject(stepManager)
                         .environmentObject(router)
                     } else {
@@ -57,8 +49,6 @@ struct MainTabView: View {
                                 topTrailingRadius: 10
                             )
                         )
-//                        .ignoresSafeArea(.all)
-//                        .transition(.move(edge: .bottom))
                 }
             }
             .ignoresSafeArea(.all, edges: .bottom)
@@ -67,10 +57,8 @@ struct MainTabView: View {
             .background(Color.black.ignoresSafeArea())
             .onChange(of: selectedTab) { oldValue, newValue in
                 if newValue == .recommend {
-                    previousTab = oldValue
-                //    withAnimation(.easeInOut(duration: 0.3)) {
-                        isRecommendFlowActive = true
-             //       }
+                    selectedTab = oldValue
+                    router.push(to: .recommendStartView)  
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: .selectTab)) { notification in
@@ -147,6 +135,9 @@ struct MainTabView: View {
             AllRecordsView(eventId: eventId)
                 .environmentObject(router)
             
+        case .recommendStartView:
+            RecommendStartView()
+            .environmentObject(router)
         }
     }
 }
