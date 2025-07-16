@@ -11,6 +11,8 @@ struct LaunchView: View {
     var body: some View {
         VStack {
             Image("Frame 2087329064")
+                .frame(width: 143,height: 45)
+
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.customBackgroundGradient)
