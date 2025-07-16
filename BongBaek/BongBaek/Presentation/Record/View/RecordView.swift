@@ -80,7 +80,9 @@ struct RecordView: View {
                     isDeleteMode: $viewModel.isDeleteMode,
                     onDeleteTapped: {
                         viewModel.deleteSelectedRecords()
-                    }
+                    },
+                    selectedRecordIDs: $selectedRecordIDs,
+                    selectedStates: $selectedStates
                 )
                 
                 RecordSectionHeaderView(
@@ -153,16 +155,16 @@ struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
     let onDeleteTapped: () -> Void
     @State private var showAlert = false
-    //@Binding var selectedRecordIDs: Set<UUID>
-    //@Binding var selectedStates: [UUID: Bool]
+    @Binding var selectedRecordIDs: Set<UUID>
+    @Binding var selectedStates: [UUID: Bool]
     
     var body: some View {
         HStack {
             if isDeleteMode {
                 Button(action: {
                     isDeleteMode = false
-                    //selectedRecordIDs.removeAll()
-                   // selectedStates.removeAll()
+                    selectedRecordIDs.removeAll()
+                    selectedStates.removeAll()
                 }) {
                     Text("취소")
                         .bodyMedium14()
@@ -210,13 +212,13 @@ struct RecordsHeaderView: View {
                 .contentShape(Rectangle())
                 .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
                     Button("취소", role: .cancel) {
-                        //selectedRecordIDs.removeAll()
+                        selectedRecordIDs.removeAll()
                     }
                     Button("삭제", role: .destructive) {
                         onDeleteTapped()
                         isDeleteMode = false
-                        //selectedRecordIDs.removeAll()
-                        //selectedStates.removeAll()
+                        selectedRecordIDs.removeAll()
+                        selectedStates.removeAll()
                         print("삭제되었습니다")
 
                     }
