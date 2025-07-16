@@ -58,10 +58,10 @@ class RecordViewModel: ObservableObject {
         currentEvents.isEmpty
     }
     
+    // 다른 선택 관련 상태들도 초기화
     func cancelDeleteMode() {
         isDeleteMode = false
         selectedRecordIDs.removeAll()
-        // 다른 선택 관련 상태들도 초기화
     }
     
     /// 현재 섹션의 빈 상태 메시지
