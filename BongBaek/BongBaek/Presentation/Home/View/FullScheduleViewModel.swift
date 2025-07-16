@@ -18,7 +18,7 @@ class FullScheduleViewModel: ObservableObject {
     @Published var selectedCategory: ScheduleCategory = .all
     
     // 페이지네이션 관련 상태
-    private var currentPage: Int = 1
+    private var currentPage: Int = 0
     private var isLastPage: Bool = false
     private var isLoadingData: Bool = false
     
@@ -85,7 +85,7 @@ class FullScheduleViewModel: ObservableObject {
         errorMessage = nil
         
         // 페이지네이션 상태 초기화
-        currentPage = 1
+        currentPage = 0
         isLastPage = false
         events.removeAll()
         
@@ -131,6 +131,8 @@ class FullScheduleViewModel: ObservableObject {
                 }
                 
                 isLastPage = data.isLast
+                
+                print(events)
                 
                 print("이벤트 로드 성공:")
                 print("  - 새로 로드된 이벤트: \(newEvents.count)개")

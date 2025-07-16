@@ -63,10 +63,50 @@ class EventService: EventServiceProtocol {
     }
     
     func getUpcomingEvents(page: Int, category: String?) -> AnyPublisher<UpcomingEventsResponse, Error> {
-        return networkService.request(
-            .getUpcomingEvents(page: page, category: category),
-            responseType: UpcomingEventsResponse.self
-        )
+        return getUpcomingEventsDirectly(page: page, category: category)
+    }
+
+    private func getUpcomingEventsDirectly(page: Int, category: String?) -> AnyPublisher<UpcomingEventsResponse, Error> {
+        
+
+        var urlString = "\(AppConfig.shared.baseURL)/api/v1/events/upcoming/\(page)"
+        if let category = category, !category.isEmpty {
+            urlString += "?category=\(category)"
+        }
+        
+        guard let url = URL(string: urlString) else {
+            return Fail(error: NSError(domain: "InvalidURL", code: 0, userInfo: nil))
+                .eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // 인증 토큰 추가
+        if let accessToken = KeychainManager.shared.accessToken {
+            request.setValue("Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIzNDEzMjAsImV4cCI6MTc1MzU1MDkyMCwibWVtYmVySWQiOiI0Y2I2YTQzYi02MDdmLTRjYTgtYTc5NC1mOTQ2OWJkOTBhN2YifQ.1pLkdYMn5bwl6W7mnlWMvFd-5XOPpYjIPEiMTd3lllnXV18kUjBjlZ9S0iwiM0d-uaX0oC2Lk9t-fMlM9ui0NQ", forHTTPHeaderField: "Authorization")
+        }
+        
+        print("📡 직접 생성된 URL: \(urlString)")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map { output in
+                // 🆕 응답 데이터 프린트 (필요시)
+                if let jsonString = String(data: output.data, encoding: .utf8) {
+                    print("📄 서버 응답:")
+                    print(jsonString)
+                }
+                
+                if let httpResponse = output.response as? HTTPURLResponse {
+                    print("📊 상태 코드: \(httpResponse.statusCode)")
+                }
+                
+                return output.data
+            }
+            .decode(type: UpcomingEventsResponse.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
     
     func getEventDetail(eventId: String) -> AnyPublisher<EventDetailResponse, Error> {
