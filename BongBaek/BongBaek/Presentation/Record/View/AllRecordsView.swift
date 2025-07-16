@@ -13,6 +13,7 @@ struct AllRecordsView: View {
     @State private var isDetailExpanded = false
     @State private var showDeleteAlert = false
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         VStack {
@@ -37,6 +38,7 @@ struct AllRecordsView: View {
                     
                     Button(action: {
                         // 편집 액션
+                        router.push(to: .modifyEventView(mode: .edit))
                     }) {
                         Image("icon_edit")
                             .foregroundColor(.white)
