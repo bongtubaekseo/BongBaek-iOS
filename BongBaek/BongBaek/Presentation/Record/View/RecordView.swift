@@ -24,6 +24,7 @@ struct RecordView: View {
     @State private var selectedSection: RecordSection = .attended
     @State private var selectedCategory: EventsCategory = .all
     @State private var selectedRecordIDs: Set<UUID> = []
+    @State private var selectedStates: [UUID: Bool] = [:]
 
     var attendedRecords: [ScheduleModel] {
 
@@ -71,7 +72,9 @@ struct RecordView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                RecordsHeaderView(isDeleteMode: $isDeleteMode, selectedRecordIDs: $selectedRecordIDs)
+                RecordsHeaderView(isDeleteMode: $isDeleteMode, selectedRecordIDs: $selectedRecordIDs,
+                                  selectedStates: $selectedStates
+)
                 
                 RecordSectionHeaderView(
                     selectedSection: $selectedSection,
@@ -88,7 +91,8 @@ struct RecordView: View {
                     attendedRecords: attendedRecords,
                     notAttendedRecords: notAttendedRecords,
                     isDeleteMode: isDeleteMode,
-                    selectedRecordIDs: $selectedRecordIDs
+                    selectedRecordIDs: $selectedRecordIDs,
+                    selectedStates: $selectedStates
                 )
             }
         }
@@ -129,6 +133,7 @@ struct RecordsHeaderView: View {
     var onDeleteTapped: () -> Void = {}
     @State private var showAlert = false
     @Binding var selectedRecordIDs: Set<UUID>
+    @Binding var selectedStates: [UUID: Bool]
     
     var body: some View {
         HStack {
@@ -136,6 +141,7 @@ struct RecordsHeaderView: View {
                 Button(action: {
                     isDeleteMode = false
                     selectedRecordIDs.removeAll()
+                    selectedStates.removeAll()
                 }) {
                     Text("취소")
                         .bodyMedium14()
@@ -183,7 +189,9 @@ struct RecordsHeaderView: View {
                 }
                 .contentShape(Rectangle())
                 .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
-                    Button("취소", role: .cancel) { }
+                    Button("취소", role: .cancel) {
+                        selectedRecordIDs.removeAll()
+                    }
                     Button("삭제", role: .destructive) {
                         onDeleteTapped()
                         isDeleteMode = false
@@ -259,6 +267,7 @@ struct RecordContentView: View {
     let notAttendedRecords: [ScheduleModel]
     let isDeleteMode: Bool
     @Binding var selectedRecordIDs: Set<UUID>
+    @Binding var selectedStates: [UUID: Bool]
     
     var body: some View {
         VStack {
@@ -268,7 +277,11 @@ struct RecordContentView: View {
                     RecordsEmptyView(message: "참석한 경조사가 없습니다")
                 } else {
                     ForEach(attendedRecords, id: \.id) { record in
-                        RecordCellView(record: record, isDeleteMode: isDeleteMode, selectedRecordIDs: $selectedRecordIDs/*, selectedRecordID: $selectedRecordID*/)
+                        RecordCellView(record: record, isDeleteMode: isDeleteMode, selectedRecordIDs: $selectedRecordIDs,
+                        isSelected: Binding(
+                            get: { selectedStates[record.id] ?? false },
+                            set: { selectedStates[record.id] = $0 }
+                        ))
                     }
                 }
                 
@@ -277,7 +290,11 @@ struct RecordContentView: View {
                     RecordsEmptyView(message: "불참한 경조사가 없습니다")
                 } else {
                     ForEach(notAttendedRecords, id: \.id) { record in
-                        RecordCellView(record: record, isDeleteMode: isDeleteMode, selectedRecordIDs: $selectedRecordIDs)
+                        RecordCellView(record: record, isDeleteMode: isDeleteMode, selectedRecordIDs: $selectedRecordIDs,
+                        isSelected: Binding(
+                            get: { selectedStates[record.id] ?? false },
+                            set: { selectedStates[record.id] = $0 }
+                        ))
                     }
                 }
             }
@@ -331,8 +348,9 @@ struct RecordCellView: View {
     let record: ScheduleModel
     let isDeleteMode: Bool
     @Binding var selectedRecordIDs: Set<UUID>
-
-    @State private var isSelected = false
+    @Binding var isSelected: Bool
+//
+//    @State private var isSelected = false
 
     var body: some View {
         HStack(spacing: 12) {
