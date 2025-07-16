@@ -34,8 +34,9 @@ struct LoginView: View {
 
                        Button(action: {
 //                           isPresented = true
-                           handleKakaoLogin()
-                           loginViewModel.loginwithKakao()
+//                           handleKakaoLogin()
+                           appStateManager.loginWithKakao()
+//                           KeychainManager.shared.clearTokens()
                            // ToDo - viewModel.kakaoLogin 시작하는 로직
                        }) {
                            Image("btn_kakao")
@@ -102,22 +103,5 @@ struct LoginView: View {
            .presentationDragIndicator(.visible)
        }
    }
-    
-    private func handleKakaoLogin() {
-        loginViewModel.isLoading = true
-        
-        // 테스트용 가짜 응답 - 실제로는 loginViewModel.kakaoLogin() 호출
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            let mockAuthData = AuthData(
-                token: TokenInfo(accessToken: "mock_access", refreshToken: "mock_refresh"),
-                isCompletedSignUp: false, // 랜덤으로 true/false 테스트
-                kakaoId: 12345,
-                kakaoAccessToken: "mock_kakao_token"
-            )
-            
-            loginViewModel.isLoading = false
-            appStateManager.handleLoginResult(mockAuthData)
-        }
-    }
 }
 

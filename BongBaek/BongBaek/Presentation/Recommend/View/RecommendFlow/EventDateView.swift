@@ -15,86 +15,88 @@ enum AttendanceType: String, CaseIterable {
 
 // MARK: - EventDateView
 struct EventDateView: View {
-    @StateObject private var viewModel = EventDateViewModel()
+    // EventCreationManager 바인딩
     @EnvironmentObject var stepManager: GlobalStepManager
     @EnvironmentObject var router: NavigationRouter
+    @EnvironmentObject var eventManager: EventCreationManager
     @Environment(\.dismiss) private var dismiss
+    
+    // UI 전용 상태
+    @State private var isDatePickerVisible = false
+    @State private var isPastDate = false
+    
+    // 기존 검증 로직 유지 (UI 반응용)
+    private var isNextButtonEnabled: Bool {
+        return eventManager.selectedAttendance != nil && !isPastDate
+    }
     
     var body: some View {
         VStack(spacing: 0) {
             CustomNavigationBar(title: "날짜 정보") {
-                           dismiss()
-                       }
-                       .padding(.top, 40)
-                       
-                       StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
-                           .padding(.horizontal, 20)
-                           .padding(.bottom, 10)
+                dismiss()
+            }
+            .padding(.top, 40)
+            
+            StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 10)
             
             EventDateTitleView()
                 .padding(.top, 12)
             
-            
-            EventDateFormView(viewModel: viewModel)
+            EventDateFormView()
                 .padding(.horizontal, 24)
                 .padding(.top, 30)
             
             Spacer()
             
             NextButton(
-                isEnabled: viewModel.isNextButtonEnabled,
+                isEnabled: isNextButtonEnabled,
                 action: {
-                    handleNextNavigation()
-//                    router.push(to: .eventLocationView)
+                    handleFormSubmission()
                 }
             )
             .padding(.horizontal, 24)
             .padding(.bottom, 50)
         }
         .onAppear {
-              stepManager.currentStep = 3
-              print("EventDateView 나타남 - path.count: \(router.path.count)")
-          }
+            stepManager.currentStep = 3
+            print("📅 EventDateView 나타남 - path.count: \(router.path.count)")
+        }
+        .onChange(of: eventManager.eventDate) { _, newDate in
+            checkDateAndUpdateUI(newDate)
+        }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("background"))
         .ignoresSafeArea()
-        .sheet(isPresented: $viewModel.isDatePickerVisible) {
+        .sheet(isPresented: $isDatePickerVisible) {
             DatePickerBottomSheet(
-                selectedDate: Binding(
-                    get: { viewModel.selectedDate ?? Date() },
-                    set: { newDate in
-                        viewModel.selectedDate = newDate
-                        viewModel.checkDateAndUpdateUI()
-                    }
-                ),
-                onDismiss: { viewModel.isDatePickerVisible = false }
+                selectedDate: $eventManager.eventDate,
+                onDismiss: { isDatePickerVisible = false }
             )
         }
-//        .navigationDestination(isPresented: $viewModel.showEventLocationView) {
-//            EventLocationView()
-//                .environmentObject(stepManager)
-//                .environmentObject(router)
-//        }
-//        .onAppear {
-//            stepManager.currentStep = 3
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                withAnimation(.easeInOut(duration: 0.8)) {
-//                    stepManager.currentStep = 3
-//                }
-//            }
-//        }
-//        .onDisappear {
-//            if !viewModel.showEventLocationView {
-////                stepManager.previousStep()
-//            }
-//        }
+    }
+    
+    // MARK: - Methods
+    
+    private func handleFormSubmission() {
+        guard isNextButtonEnabled else {
+            print("⚠️ EventDateView: UI 검증 실패")
+            return
+        }
+        
+        // 현재 선택된 모든 데이터 출력
+        printCurrentSelections()
+        
+        // 다음 화면으로 이동
+        handleNextNavigation()
     }
     
     private func handleNextNavigation() {
-        switch viewModel.selectedAttendance {
+        switch eventManager.selectedAttendance {
         case .yes:
             // 참석 → 장소 선택 필요
             print("참석 예정 → EventLocationView로 이동")
@@ -103,12 +105,39 @@ struct EventDateView: View {
         case .no:
             // 불참 → 장소 건너뛰고 바로 추천으로
             print("불참 → EventLocationView 건너뛰고 RecommendLoadingView로 이동")
+            eventManager.clearLocationData() // 불참 시 위치 데이터 초기화
             router.push(to: .recommendLoadingView)
             
-        case .none:
+        case nil:
             // 선택 안함 (일반적으로 버튼이 비활성화되어야 함)
             print("참석 여부 미선택")
         }
+    }
+    
+    private func checkDateAndUpdateUI(_ date: Date) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let selectedDay = calendar.startOfDay(for: date)
+        
+        isPastDate = selectedDay < today
+        
+        if isPastDate {
+            print("⚠️ 과거 날짜 선택됨: \(date)")
+        }
+    }
+    
+    private func printCurrentSelections() {
+        print("📋 EventDateView 현재 선택된 값들:")
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 M월 d일"
+        formatter.locale = Locale(identifier: "ko_KR")
+        
+        print("  📅 선택된 날짜: \(formatter.string(from: eventManager.eventDate))")
+        print("  🎯 참석 여부: \(eventManager.selectedAttendance?.rawValue ?? "미선택")")
+        print("  ⚠️ 과거 날짜 여부: \(isPastDate)")
+        print("  ✅ 다음 단계 진행 가능: \(eventManager.canCompleteDateStep)")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
 }
 
@@ -135,10 +164,13 @@ struct EventDateTitleView: View {
 }
 
 struct EventDateFormView: View {
-    @ObservedObject var viewModel: EventDateViewModel
+    @EnvironmentObject var eventManager: EventCreationManager
+    @State private var isDatePickerVisible = false
+    @State private var isPastDate = false
     
     var body: some View {
         VStack(spacing: 20) {
+            // 날짜 선택 섹션
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 8) {
                     Image("icon_calendar")
@@ -151,13 +183,12 @@ struct EventDateFormView: View {
                         .foregroundColor(.white)
                 }
                 
-                EventDatePickerView(viewModel: viewModel)
+                EventDatePickerView()
                 
-                if viewModel.isPastDate {
+                if isPastDate {
                     HStack(spacing: 8) {
                         Image("icon_caution")
                             .foregroundColor(.secondaryRed)
-                            //.font(.system(size: 14))
                         
                         Text("앞으로 다가올 일정만 입력할 수 있어요")
                             .captionRegular12()
@@ -171,6 +202,7 @@ struct EventDateFormView: View {
                     .fill(Color(red: 0.25, green: 0.25, blue: 0.28))
             )
             
+            // 참석 여부 섹션
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 8) {
                     Image("icon_check")
@@ -187,8 +219,12 @@ struct EventDateFormView: View {
                     ForEach(AttendanceType.allCases, id: \.self) { attendance in
                         AttendanceButton(
                             attendanceType: attendance,
-                            isSelected: viewModel.selectedAttendance == attendance,
-                            action: { viewModel.selectAttendance(attendance) }
+                            isSelected: eventManager.selectedAttendance == attendance,
+                            action: {
+                                eventManager.selectedAttendance = attendance
+                                eventManager.isAttend = (attendance == .yes)
+                                print("🎯 참석 여부 선택: \(attendance.rawValue)")
+                            }
                         )
                     }
                 }
@@ -199,29 +235,35 @@ struct EventDateFormView: View {
                     .fill(Color(red: 0.25, green: 0.25, blue: 0.28))
             )
         }
+        .onChange(of: eventManager.eventDate) { _, newDate in
+            checkDateAndUpdateUI(newDate)
+        }
+    }
+    
+    private func checkDateAndUpdateUI(_ date: Date) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let selectedDay = calendar.startOfDay(for: date)
+        
+        isPastDate = selectedDay < today
     }
 }
 
 struct EventDatePickerView: View {
-    @ObservedObject var viewModel: EventDateViewModel
+    @EnvironmentObject var eventManager: EventCreationManager
+    @State private var isDatePickerVisible = false
+    @State private var isPastDate = false
     
     var body: some View {
         Button(action: {
-            viewModel.isDatePickerVisible.toggle()
+            isDatePickerVisible.toggle()
         }) {
             HStack {
-                Text(viewModel.selectedDate != nil ?
-                     DateFormatter.displayFormatter.string(from: viewModel.selectedDate!) :
-                     "날짜를 입력해주세요")
+                Text(DateFormatter.displayFormatter.string(from: eventManager.eventDate))
                     .bodyRegular16()
-                    .foregroundColor(
-                        viewModel.selectedDate != nil ?
-                        (viewModel.isPastDate ? .secondaryRed : .white) :
-                        .gray500
-                    )
+                    .foregroundColor(isPastDate ? .secondaryRed : .white)
                 
                 Spacer()
-                
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
@@ -232,11 +274,28 @@ struct EventDatePickerView: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(viewModel.isPastDate ? Color.secondaryRed : Color.clear, lineWidth: 2)
+                    .stroke(isPastDate ? Color.secondaryRed : Color.clear, lineWidth: 2)
             )
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
+        .onChange(of: eventManager.eventDate) { _, newDate in
+            checkDateAndUpdateUI(newDate)
+        }
+        .sheet(isPresented: $isDatePickerVisible) {
+            DatePickerBottomSheet(
+                selectedDate: $eventManager.eventDate,
+                onDismiss: { isDatePickerVisible = false }
+            )
+        }
+    }
+    
+    private func checkDateAndUpdateUI(_ date: Date) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let selectedDay = calendar.startOfDay(for: date)
+        
+        isPastDate = selectedDay < today
     }
 }
 

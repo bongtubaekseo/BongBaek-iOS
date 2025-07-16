@@ -31,7 +31,7 @@ struct Event: Codable {
 }
 
 
-struct HostInfo: Codable {
+struct HostInfo: Codable,Hashable {
     let hostName: String
     let hostNickname: String
 }
@@ -42,6 +42,7 @@ struct EventInfo: Codable {
     let cost: Int
     let eventDate: String
     let dDay: Int
+    let note: String?
 }
 
 struct LocationInfo: Codable {
@@ -68,11 +69,12 @@ struct AttendedEventInfo: Codable {
     let relationship: String
     let cost: Int
     let eventDate: String
+    let note: String?
 }
 
 
 // MARK: - 경조사 상세 조회
-struct EventDetailData: Codable {
+struct EventDetailData: Codable,Hashable {
     let eventId: String
     let hostInfo: HostInfo
     let eventInfo: EventDetailInfo
@@ -80,16 +82,16 @@ struct EventDetailData: Codable {
 }
 
 
-struct EventDetailInfo: Codable {
+struct EventDetailInfo: Codable,Hashable {
     let eventCategory: String
     let relationship: String
     let cost: Int
     let isAttend: Bool
     let eventDate: String
-    let note: String
+    let note: String?
 }
 
-struct LocationDetailInfo: Codable {
+struct LocationDetailInfo: Codable,Hashable {
     let location: String
     let address: String
     let latitude: Double

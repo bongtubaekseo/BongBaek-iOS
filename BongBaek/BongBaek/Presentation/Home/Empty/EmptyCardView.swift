@@ -34,7 +34,7 @@ struct EmptyCardView: View {
                 .foregroundColor(.white)
                 //.padding(.top, 12)
                
-            NavigationLink(destination: AllRecordsView(scheduleData: emptySchedule).environmentObject(stepManager)) {
+            NavigationLink(destination: AllRecordsView(eventId: "123").environmentObject(stepManager)) {
                 HStack(spacing: 4) {
                     Text("일정추가하기 >")
                         .captionRegular12()
@@ -54,6 +54,3 @@ struct EmptyCardView: View {
     }
 }
 
-#Preview {
-    EmptyCardView()
-}

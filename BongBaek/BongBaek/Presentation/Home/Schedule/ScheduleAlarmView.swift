@@ -7,8 +7,15 @@
 import SwiftUI
 
 struct ScheduleAlarmView: View {
-    let alarms: [ScheduleModel]
+    @Binding var homeData: EventHomeData?
     @State private var currentIndex: Int = 0
+
+    
+    private var sortedEvents: [Event] {
+        let events = homeData?.events ?? []
+        return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
+    }
+
     @State private var scrollOffset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
 
@@ -16,18 +23,16 @@ struct ScheduleAlarmView: View {
     private let cardWidth: CGFloat = UIScreen.main.bounds.width - 48
     private let sidePadding: CGFloat = 16
 
+
     var body: some View {
         VStack(spacing: 0) {
-            if alarms.isEmpty {
+            if sortedEvents.isEmpty {
                 EmptyScheduleView()
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: cardSpacing) {
-                        ForEach(
-                            Array(alarms.enumerated()).prefix(3),
-                            id: \.element.id
-                        ) { index, schedule in
-                            ScheduleIndicatorCellView(schedule: schedule)
+                    HStack(spacing: 16) {
+                        ForEach(Array(sortedEvents.enumerated()).prefix(3), id: \.element.eventId) { index, event in
+                            ScheduleIndicatorCellView(event: event)
                                 .frame(width: cardWidth)
                                 .background(
                                     GeometryReader { geo -> Color in
@@ -72,7 +77,7 @@ struct ScheduleAlarmView: View {
                 .frame(height: 260)
 
                 HStack(spacing: 6) {
-                    ForEach(0..<min(alarms.count, 3), id: \.self) { index in
+                    ForEach(0..<min(sortedEvents.count, 3), id: \.self) { index in
                         Circle()
                             .fill(
                                 index == currentIndex
@@ -96,6 +101,3 @@ struct ScheduleAlarmView: View {
     }
 }
 
-#Preview {
-    ScheduleAlarmView(alarms: scheduleDummy)
-}

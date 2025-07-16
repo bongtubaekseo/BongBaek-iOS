@@ -24,7 +24,7 @@ struct EmptyHomeView: View {
                         .frame(height: 276)
                         .padding(.top, 32)
                     
-                    RecommendsView()
+                    RecommendsView(homeData: nil)
                         .environmentObject(stepManager)
                         .padding(.top, 32)
                     
