@@ -37,6 +37,7 @@ class AuthManager: ObservableObject {
     
     func loginWithKakao() async {
         authState = .loading
+        keychainManager.clearTokens()
         
         do {
             // 1. 카카오에서 토큰 획득
@@ -100,7 +101,7 @@ class AuthManager: ObservableObject {
         print("keyChain에 저장된 토큰 \(accessToken)")
         // 저장된 토큰으로 자동 로그인 시도
         // 여기서는 토큰이 있으면 일단 authenticated로 처리
-        authState = .authenticated
+        authState = .needsLogin
         
         // TODO: 실제로는 토큰 유효성 검증 API 호출
         // validateToken(accessToken)
@@ -207,22 +208,27 @@ class AuthManager: ObservableObject {
     }
     
     private func handleSignUpResponse(_ response: SignUpResponse) {
-        // BaseResponse 성공 여부 확인
+        print("📤 회원가입 응답 받음:")
+        print("  - isSuccess: \(response.isSuccess)")
+        print("  - message: \(response.message)")
+        print("  - data: \(response.data)")
+        
         guard response.isSuccess else {
-            print("회원가입 API 실패: \(response.message)")
+            print("❌ 회원가입 API 실패: \(response.message)")
             authState = .needsSignUp
             return
         }
         
-        // AuthData 확인
         guard let authData = response.data else {
-            print("회원가입 응답 데이터가 없습니다")
+            print("❌ 회원가입 응답 데이터가 없습니다")
             authState = .needsSignUp
             return
         }
         
-        // TokenInfo 확인 및 업데이트 (회원가입 후 새로운 토큰이 올 수 있음)
+        print("✅ 회원가입 응답 데이터 있음")
+        
         if let tokenInfo = authData.token {
+            print("🔑 토큰 정보 있음, 키체인에 저장 시도")
             let saveResult = keychainManager.saveTokens(
                 access: tokenInfo.accessToken,
                 refresh: tokenInfo.refreshToken
@@ -230,18 +236,19 @@ class AuthManager: ObservableObject {
             
             switch saveResult {
             case .success:
+                print("✅ 토큰 저장 성공 - authenticated 상태로 변경")
                 authState = .authenticated
-                print("회원가입 완료 및 토큰 업데이트 성공")
                 
             case .failure(let error):
-                print("토큰 업데이트 실패: \(error)")
+                print("❌ 토큰 저장 실패: \(error)")
                 authState = .needsSignUp
             }
         } else {
-            // 토큰 정보가 없어도 회원가입은 성공
+            print("✅ 토큰 없어도 회원가입 완료 - authenticated 상태로 변경")
             authState = .authenticated
-            print("회원가입 완료")
         }
+        
+        print("🔄 최종 authState: \(authState)")
     }
     
     private func handleRefreshTokenResponse(_ response: RefreshTokenResponse) {

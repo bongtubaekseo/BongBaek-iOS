@@ -36,28 +36,31 @@ class AppStateManager: ObservableObject {
     }
     
     private func handleAuthStateChange(_ authState: AuthManager.AuthState) {
+        print("📱 AppStateManager - Auth 상태 변경: \(authState)")
+        print("📱 현재 앱 상태: \(currentState)")
+        
         switch authState {
-        case .loading:
-            // 로딩 상태는 현재 상태 유지
-            break
-            
         case .authenticated:
+            print("인증 완료 - 메인 화면으로 이동")
             withAnimation {
                 currentState = .main
                 showSignUpSheet = false
             }
             
-        case .needsLogin:
+        case .needsSignUp:
+            print("📝 회원가입 필요 - 시트 표시")
+            withAnimation {
+                showSignUpSheet = true
+            }
+        case .loading:
+            print("로딩")
+        case .needsLogin:  //
+            print("🔑 로그인 필요 - 로그인 화면으로 이동")
             withAnimation {
                 currentState = .login
                 showSignUpSheet = false
             }
             
-        case .needsSignUp:
-            // 회원가입이 필요한 경우 시트 표시
-            withAnimation {
-                showSignUpSheet = true
-            }
         }
     }
     

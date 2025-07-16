@@ -86,9 +86,15 @@ class ProfileSettingViewModel: ObservableObject {
         isSigningUp = true
         
         let memberInfo = createMemberInfo()
-        print("회원가입 시작:", memberInfo)
+
         
         authManager.signUp(memberInfo: memberInfo)
+        
+        // 5초 후 상태 확인
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            print("🔍 5초 후 AuthManager 상태: \(self.authManager.authState)")
+            self.isSigningUp = false
+        }
     }
     
     func dismissError() {
