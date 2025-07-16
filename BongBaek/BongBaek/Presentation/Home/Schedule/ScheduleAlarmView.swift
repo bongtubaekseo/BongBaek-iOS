@@ -19,8 +19,8 @@ struct ScheduleAlarmView: View {
     @State private var scrollOffset: CGFloat = 0
     @State private var dragOffset: CGFloat = 0
 
-    private let cardSpacing: CGFloat = 16
-    private let cardWidth: CGFloat = UIScreen.main.bounds.width - 48
+    private let cardSpacing: CGFloat = 8
+    private let cardWidth: CGFloat = UIScreen.main.bounds.width - 40
     private let sidePadding: CGFloat = 16
 
 
