@@ -27,12 +27,21 @@ struct HomeView: View {
 
                         .frame(height: 276)
                         .padding(.top, 30)
+                    
+                    
+                    Button("로그아웃 테스트") {
+                        AuthManager.shared.logout()
+                        KeychainManager.shared.printTokenStatus()
+                    }
+                    .foregroundColor(.red)
+                    
                     RecommendsView()
                         .environmentObject(stepManager)
                         .environmentObject(router)
                         .padding(.top, 10)
                     ScheduleView(schedules: scheduleDummy)
                         .padding(.top, 32)
+                    
                 }
 //                CustomTabView(selectedTab: $selectedTab)
 //                    .background(Color.gray750)
