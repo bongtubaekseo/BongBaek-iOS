@@ -49,10 +49,9 @@ struct HomeView: View {
 //                }
 //                .foregroundColor(.red)
 //
-//
                 if homeViewModel.hasData {
                     RecommendsView(homeData: homeViewModel.homeData)
-                        .environmentObject(stepManager)
+                            .environmentObject(stepManager)
                         .environmentObject(router)
                         .padding(.top, 10)
                 } else {
