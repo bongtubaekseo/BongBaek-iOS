@@ -42,14 +42,13 @@ struct HomeView: View {
                         .frame(height: 276)
                         .padding(.top, 30)
                 }
-                
-//                Button("로그아웃 테스트") {
-//                    AuthManager.shared.logout()
-//                    KeychainManager.shared.printTokenStatus()
-//                }
-//                .foregroundColor(.red)
-//
-//
+
+                Button("로그아웃 테스트") {
+                    AuthManager.shared.logout()
+                    KeychainManager.shared.printTokenStatus()
+                }
+                .foregroundColor(.red)
+
                 if homeViewModel.hasData {
                     RecommendsView(homeData: homeViewModel.homeData)
                         .environmentObject(stepManager)

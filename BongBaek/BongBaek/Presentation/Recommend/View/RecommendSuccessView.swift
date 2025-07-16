@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RecommendSuccessView: View {
     @EnvironmentObject var router: NavigationRouter
+    @EnvironmentObject var eventManager: EventCreationManager
     
     var body: some View {
 //        NavigationStack {
@@ -41,6 +42,7 @@ struct RecommendSuccessView: View {
                         VStack(spacing: 10) {
                             Button(action: {
                                 print("홈으로 가기 버튼 클릭됨")
+                                eventManager.resetAllData()
                                    print("pathManager.path.count: \(router.path.count)")
                                 router.popToRootAndSelectTab(.home)
                                    print("popToRootAndSelectTab 호출 완료")
@@ -56,6 +58,7 @@ struct RecommendSuccessView: View {
                             
                             Button(action: {
                                 router.popToRootAndSelectTab(.record)
+                                eventManager.resetAllData()
                             }) {
                                 Text("내 기록 보기")
                                     .titleSemiBold18()

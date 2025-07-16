@@ -381,6 +381,7 @@ struct AllRecordsView: View {
         .alert("삭제 완료", isPresented: $viewModel.deleteSuccess) {
             Button("확인") {
                 dismiss()
+//                router.pop()
             }
         } message: {
             Text("경조사 기록이 성공적으로 삭제되었습니다.")
