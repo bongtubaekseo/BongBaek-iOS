@@ -17,6 +17,10 @@ class AllRecordsViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var memoText: String = ""
     
+    @Published var isDeleting: Bool = false
+    @Published var deleteSuccess: Bool = false
+    @Published var deleteError: String?
+    
     // MARK: - Dependencies
     private let eventService: EventServiceProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -61,6 +65,40 @@ class AllRecordsViewModel: ObservableObject {
         }
         
         isLoading = false
+    }
+    
+    /// 이벤트 삭제
+    func deleteEvent(eventId: String) async -> Bool {
+        guard !isDeleting else { return false }
+        
+        isDeleting = true
+        deleteError = nil
+        deleteSuccess = false
+        
+        do {
+            print("이벤트 삭제 시작 - eventId: \(eventId)")
+            
+            let response = try await eventService.deleteEvent(eventId: eventId)
+                .async()
+            
+            if response.isSuccess {
+                deleteSuccess = true
+                print("이벤트 삭제 성공!")
+                isDeleting = false
+                return true
+            } else {
+                deleteError = response.message
+                print("이벤트 삭제 실패: \(response.message)")
+                isDeleting = false
+                return false
+            }
+            
+        } catch {
+            deleteError = "이벤트 삭제에 실패했습니다: \(error.localizedDescription)"
+            print("이벤트 삭제 에러: \(error)")
+            isDeleting = false
+            return false
+        }
     }
     
     /// 메모 저장 (별도 API가 있다면)
