@@ -306,13 +306,13 @@ struct AllRecordsView: View {
                 Spacer()
                 
                 // 메모 저장 버튼
-                Button("저장") {
-                    Task {
-                        await viewModel.saveMemo()
-                    }
-                }
-                .foregroundColor(.primaryNormal)
-                .disabled(viewModel.isLoading)
+//                Button("저장") {
+//                    Task {
+//                        await viewModel.saveMemo()
+//                    }
+//                }
+//                .foregroundColor(.primaryNormal)
+//                .disabled(viewModel.isLoading)
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)

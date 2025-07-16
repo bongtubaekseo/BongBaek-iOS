@@ -216,7 +216,7 @@ class EventViewModel: ObservableObject {
 //            .store(in: &cancellables)
 //    }
     
-    func deleteEvent(eventId: Int) {
+    func deleteEvent(eventId: String) {
         isDeleting = true
         errorMessage = nil
         deleteSuccess = false
@@ -246,8 +246,8 @@ class EventViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func removeEventFromLists(eventId: Int) {
-        let eventIdString = String(eventId)
+    private func removeEventFromLists(eventId: String) {
+        let eventIdString = eventId
         
 
         homeEvents.removeAll { $0.eventId == eventIdString }
@@ -267,7 +267,7 @@ class EventViewModel: ObservableObject {
         errorMessage = nil
     }
     
-    func deleteMultipleEvents(eventIds: [Int]) {
+    func deleteMultipleEvents(eventIds: [String]) {
         isDeletingMultiple = true
         errorMessage = nil
         deleteMultipleSuccess = false

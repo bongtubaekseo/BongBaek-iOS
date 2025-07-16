@@ -36,7 +36,7 @@ class EventService: EventServiceProtocol {
         )
     }
     
-    func getEventDetail(eventId: String ) -> AnyPublisher<EventDetailResponse, Error> {
+    func getEventDetail(eventId: String) -> AnyPublisher<EventDetailResponse, Error> {
         return networkService.request(
             .getEventDetail(eventId: eventId),
             responseType: EventDetailResponse.self
@@ -57,14 +57,14 @@ class EventService: EventServiceProtocol {
         )
     }
     
-    func deleteEvent(eventId: Int) -> AnyPublisher<DeleteEventResponse, Error> {
+    func deleteEvent(eventId: String) -> AnyPublisher<DeleteEventResponse, Error> {
         return networkService.request(
             .deleteEvent(eventId: eventId),
             responseType: DeleteEventResponse.self
         )
     }
     
-    func deleteMultipleEvents(eventIds: [Int]) -> AnyPublisher<DeleteMultipleEventsResponse, Error> {
+    func deleteMultipleEvents(eventIds: [String]) -> AnyPublisher<DeleteMultipleEventsResponse, Error> {
         return networkService.request(
             .deleteMultipleEvents(eventIds: eventIds),
             responseType: DeleteMultipleEventsResponse.self
