@@ -14,10 +14,11 @@ struct RelationshipSliderView: View {
     var body: some View {
         VStack(spacing: 30) {
             SliderSection(
-                value: $eventManager.contactFrequency,  // 직접 바인딩
+                value: $eventManager.contactFrequency, 
                 range: range,
                 icon: "icon_message",
                 title: "얼마나 자주 연락하나요?",
+                knobImage: "Knob",
                 leftLabel: "가끔",
                 rightLabel: "매일"
             )
@@ -25,10 +26,11 @@ struct RelationshipSliderView: View {
             .padding(.top, 20)
             
             SliderSection(
-                value: $eventManager.meetFrequency,     // 직접 바인딩
+                value: $eventManager.meetFrequency,
                 range: range,
-                icon: "icon_family",
+                icon: "icon_handshake",
                 title: "얼마나 자주 만나나요?",
+                knobImage: "Knob 1",
                 leftLabel: "가끔",
                 rightLabel: "매일"
             )
@@ -47,6 +49,7 @@ struct SliderSection: View {
     let range: ClosedRange<Double>
     let icon: String
     let title: String
+    let knobImage: String
     let leftLabel: String
     let rightLabel: String
     
@@ -67,9 +70,9 @@ struct SliderSection: View {
                 step: nil,
                 barStyle: (6, 8),
                 fillBackground: .gray.opacity(0.3),
-                fillTrack: .blue,
+                fillTrack: .primaryNormal,
                 thumbView: {
-                    Image("Knob")
+                    Image(knobImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .fontWeight(.bold)

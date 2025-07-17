@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct RecommendStartView: View {
-    let onBackPressed: () -> Void
     @EnvironmentObject var stepManager: GlobalStepManager
     @EnvironmentObject var router: NavigationRouter
+    @EnvironmentObject var eventManager: EventCreationManager
     @State private var navigateToRecommend = false
     
     var body: some View {
         VStack {
-            CustomNavigationBar(title: "금액 추천") {
-                onBackPressed()
+            CustomNavigationBar(title: "금액 추천 가이드") {
+                router.pop()
             }
             
             RecommendGuideTextView(
@@ -26,8 +26,11 @@ struct RecommendStartView: View {
                 subtitle2: "지금 바로 알아보세요!"
             )
             .padding(.leading, 20)
+            .padding(.top, 40)
             
             Image("image_bong 1")
+                .padding(.top,20)
+                .frame(width: 365,height: 365)
             
             HStack {
                 Image("icon_protect")
@@ -35,6 +38,7 @@ struct RecommendStartView: View {
                     .bodyRegular14()
                     .foregroundStyle(.gray300)
             }
+            .padding(.top,20)
             
             Button {
                 router.push(to: .recommendView)
@@ -57,6 +61,7 @@ struct RecommendStartView: View {
         }
         .onAppear {
             print("🏠 RecommendStartView 나타남 - path.count: \(router.path.count)")
+            eventManager.resetAllData()
          }
 //        .navigationDestination(isPresented: $navigateToRecommend) {
 //            RecommendView()

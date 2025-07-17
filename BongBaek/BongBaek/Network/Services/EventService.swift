@@ -50,7 +50,7 @@ class EventService: EventServiceProtocol {
         
         // 인증 토큰 추가
         if let accessToken = KeychainManager.shared.accessToken {
-            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIzNDEzMjAsImV4cCI6MTc1MzU1MDkyMCwibWVtYmVySWQiOiI0Y2I2YTQzYi02MDdmLTRjYTgtYTc5NC1mOTQ2OWJkOTBhN2YifQ.1pLkdYMn5bwl6W7mnlWMvFd-5XOPpYjIPEiMTd3lllnXV18kUjBjlZ9S0iwiM0d-uaX0oC2Lk9t-fMlM9ui0NQ", forHTTPHeaderField: "Authorization")
         }
         
         print("📡 직접 생성된 URL: \(urlString)")
@@ -85,7 +85,7 @@ class EventService: EventServiceProtocol {
         
         // 인증 토큰 추가
         if let accessToken = KeychainManager.shared.accessToken {
-            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIzNDEzMjAsImV4cCI6MTc1MzU1MDkyMCwibWVtYmVySWQiOiI0Y2I2YTQzYi02MDdmLTRjYTgtYTc5NC1mOTQ2OWJkOTBhN2YifQ.1pLkdYMn5bwl6W7mnlWMvFd-5XOPpYjIPEiMTd3lllnXV18kUjBjlZ9S0iwiM0d-uaX0oC2Lk9t-fMlM9ui0NQ", forHTTPHeaderField: "Authorization")
         }
         
         print("📡 직접 생성된 URL: \(urlString)")

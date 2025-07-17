@@ -17,7 +17,7 @@ struct RecommendView: View {
     @EnvironmentObject var eventManager: EventCreationManager
     
     let relationships = [
-        ("icon_family", "가족/친구"),
+        ("icon_family", "가족/친척"),
         ("icon_friends", "친구"),
         ("icon_handshakes", "직장"),
         ("icon_colleague", "선후배"),
@@ -74,6 +74,7 @@ struct RecommendView: View {
                         relationshipGridSection
                         
                         detailRecommendSection
+                            .padding(.top, 16)
                         
                         if eventManager.detailSelected {
                             RelationshipSliderView()
@@ -81,8 +82,9 @@ struct RecommendView: View {
                         }
                         
                         submitButton
+                            .padding(.top, 60)
+                            .padding(.bottom,60)
                         
-                        Spacer(minLength: 0)
                     }
                 }
                 .onTapGesture {
@@ -117,7 +119,8 @@ struct RecommendView: View {
             HStack {
                 Image("icon_person_16")
                     .renderingMode(.template)
-                    .foregroundColor(.blue)
+                    .foregroundColor(.primaryNormal)
+                    .frame(width: 22,height: 22)
                 
                 Text("상대방의 이름과 별명을 알려주세요")
                     .titleSemiBold18()
@@ -129,12 +132,22 @@ struct RecommendView: View {
                 BorderTextField(
                     placeholder: "이름을 적어주세요",
                     text: $eventManager.hostName,
-                    validationRule: ValidationRule(minLength: 2, maxLength: 10)
+                    validationRule: ValidationRule(
+                        minLength: 2,
+                        maxLength: 10,
+                        regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                        customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                    )
                 )
                 BorderTextField(
                     placeholder: "별명을 적어주세요",
                     text: $eventManager.hostNickname,
-                    validationRule: ValidationRule(minLength: 2, maxLength: 10)
+                    validationRule: ValidationRule(
+                        minLength: 2,
+                        maxLength: 10,
+                        regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                        customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                    )
                 )
             }
         }
@@ -153,11 +166,14 @@ struct RecommendView: View {
         HStack {
             Image("icon_person_16")
                 .renderingMode(.template)
-                .foregroundColor(.blue)
+                .foregroundColor(.primaryNormal)
+                .frame(width: 22,height: 22)
             
             Text("관계를 선택해주세요.")
                 .titleSemiBold18()
                 .foregroundStyle(.white)
+            
+            Spacer()
         }
         .padding(.leading, 20)
         .padding(.top, 20)
@@ -175,7 +191,6 @@ struct RecommendView: View {
                     eventManager.relationship = relationship.1
                     print("🔗 관계 선택: \(relationship.1)")
                 }
-                .background(.gray750)
             }
         }
         .padding(.horizontal, 20)
@@ -196,15 +211,17 @@ struct RecommendView: View {
         Button {
             handleFormSubmission()
         } label: {
-            Text("금액 추천 시작하기")
+            Text("다음")
                 .titleSemiBold18()
-                .foregroundStyle(isNextButtonEnabled ? .white : .gray400)
+                .foregroundStyle(isNextButtonEnabled ? .white : .gray500)
+                .frame(maxWidth: .infinity)
+                .frame(height: 60)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
-        .frame(height: 60)
-        .background(isNextButtonEnabled ? .primaryNormal : .gray600)
+        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
+        .contentShape(Rectangle())
         .padding(.horizontal, 20)
         .padding(.top, 8)
         .padding(.bottom, 24)

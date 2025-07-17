@@ -55,7 +55,7 @@ extension CustomSlider where T == Never, S1 == Color, S2 == Color {
         self.step = step == nil ? nil : Double.Stride(step!)
         self.barStyle = barStyle
         self.fillBackground = .gray.opacity(0.3)
-        self.fillTrack = .blue
+        self.fillTrack = .primaryNormal
     }
 }
 

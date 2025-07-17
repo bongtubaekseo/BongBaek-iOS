@@ -31,7 +31,7 @@ struct RecommendsView: View {
             }
             
             Button {
-                router.push(to: .recommendView)
+                router.push(to: .recommendStartView)
             } label: {
                 Text("경조사비 추천 받기")
                     .font(.title_semibold_16)

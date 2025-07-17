@@ -51,7 +51,7 @@ struct HomeView: View {
 
                 if homeViewModel.hasData {
                     RecommendsView(homeData: homeViewModel.homeData)
-                        .environmentObject(stepManager)
+                            .environmentObject(stepManager)
                         .environmentObject(router)
                         .padding(.top, 10)
                 } else {
@@ -70,6 +70,7 @@ struct HomeView: View {
                         .padding(.top, 32)
                 }
             }
+            .padding(.bottom, 20)
         }
         .onAppear {
             print("HomeView 나타남 - 데이터 로드 시작")

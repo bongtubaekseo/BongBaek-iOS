@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "icon_calendar.png",
+      "filename" : "icon_handshake.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "icon_handshake@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "icon_handshake@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

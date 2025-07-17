@@ -20,15 +20,7 @@ struct MainTabView: View {
             VStack(spacing: 0) {
                 Group {
                     if isRecommendFlowActive {
-                        RecommendStartView(
-                            onBackPressed: {
-//                                withAnimation(.easeInOut(duration: 0.3)) {
-                                    isRecommendFlowActive = false
-                                    selectedTab = previousTab // 이전 탭으로 복원
-                                    router.popToRoot()
-//                                }
-                            }
-                        )
+                        RecommendStartView()
                         .environmentObject(stepManager)
                         .environmentObject(router)
                     } else {
@@ -57,8 +49,6 @@ struct MainTabView: View {
                                 topTrailingRadius: 10
                             )
                         )
-//                        .ignoresSafeArea(.all)
-//                        .transition(.move(edge: .bottom))
                 }
             }
             .ignoresSafeArea(.all, edges: .bottom)
@@ -67,20 +57,42 @@ struct MainTabView: View {
             .background(Color.black.ignoresSafeArea())
             .onChange(of: selectedTab) { oldValue, newValue in
                 if newValue == .recommend {
-                    previousTab = oldValue
-                //    withAnimation(.easeInOut(duration: 0.3)) {
-                        isRecommendFlowActive = true
-             //       }
+                    selectedTab = oldValue
+                    router.push(to: .recommendStartView)  
                 }
             }
+            .onChange(of: router.path) { oldPath, newPath in
+                        // 추천 플로우 중에 mainTab으로 돌아온 경우
+                        if !oldPath.isEmpty && newPath.isEmpty {
+                            print("🔄 mainTab으로 복귀 - EventCreationManager 리셋")
+                            eventManager.resetAllData()
+                        }
+                    }
+//            .onReceive(NotificationCenter.default.publisher(for: .selectTab)) { notification in
+//                print("📢 MainTabView에서 selectTab notification 받음")
+//                if let tab = notification.object as? Tab {
+//                    print("탭 변경: \(tab)")
+//                    isRecommendFlowActive = false
+//                    selectedTab = tab
+//                    router.popToRoot()
+//                }
+//            }
+            
             .onReceive(NotificationCenter.default.publisher(for: .selectTab)) { notification in
-                print("📢 MainTabView에서 selectTab notification 받음")
-                if let tab = notification.object as? Tab {
-                    print("탭 변경: \(tab)")
-                    isRecommendFlowActive = false
-                    selectedTab = tab
-                    router.popToRoot()
-                }
+               print("📢 MainTabView에서 selectTab notification 받음")
+               if let tab = notification.object as? Tab {
+                   print("탭 변경: \(tab)")
+                   
+                   // 추천 플로우 중에 탭 전환 시 데이터 리셋
+                   if !router.path.isEmpty {
+                       print("🔄 탭 전환으로 인한 EventCreationManager 리셋")
+                       eventManager.resetAllData()
+                   }
+                   
+                   isRecommendFlowActive = false
+                   selectedTab = tab
+                   router.popToRoot()
+               }
             }
             .navigationDestination(for: RecommendRoute.self) { route in
                 routeView(for: route)
@@ -147,6 +159,10 @@ struct MainTabView: View {
             AllRecordsView(eventId: eventId)
                 .environmentObject(router)
             
+        case .recommendStartView:
+            RecommendStartView()
+            .environmentObject(router)
+            .environmentObject(eventManager)
         }
     }
 }

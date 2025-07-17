@@ -26,12 +26,8 @@ class EventManager: ObservableObject {
     
     /// 홈 데이터 로드 (
     func loadHomeData(forceRefresh: Bool = false) {
-        // 캐싱 체크
-        if !forceRefresh && homeData != nil {
-            print("캐시된 홈 데이터 사용")
-            return
-        }
-        
+
+        print("🔄 새로운 홈 데이터 로드 시작")
         isLoadingHome = true
         homeError = nil
         

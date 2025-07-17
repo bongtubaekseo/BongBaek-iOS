@@ -47,11 +47,11 @@ struct CustomTextField: View {
         VStack(alignment: .leading, spacing: 8) {
   
             HStack(spacing: 8) {
-                Image("icon_person_16")
-                    .renderingMode(.template)
+                Image(icon)
+//                    .renderingMode(.template)
                     .resizable()
                     .frame(width: 16,height: 16)
-                    .foregroundStyle(.white)
+//                    .foregroundStyle(.white)
                 
                 HStack(spacing: 2) {  
                     Text(title)
@@ -115,11 +115,11 @@ struct CustomTextField: View {
                             .transition(.scale.combined(with: .opacity))
                         }
                         
-                        if isReadOnly {
-                            Image(systemName: "chevron.down")
-                                .font(.system(size: 12))
-                                .foregroundColor(.gray)
-                        }
+//                        if isReadOnly {
+//                            Image(systemName: "chevron.down")
+//                                .font(.system(size: 12))
+//                                .foregroundColor(.gray)
+//                        }
                         
                         if isSecure && !isReadOnly {
                             Button(action: {
@@ -197,11 +197,11 @@ enum ValidationState {
     var color: Color {
         switch self {
         case .normal:
-            return .gray
+            return .gray500
         case .valid:
-            return .blue
+            return .primaryNormal
         case .invalid:
-            return .red
+            return .secondaryRed
         }
     }
 }
@@ -210,15 +210,18 @@ enum ValidationState {
 struct ValidationRule {
     let minLength: Int?
     let maxLength: Int?
+    let regex: String?
     let customRule: ((String) -> Bool)?
     let customMessage: String?
     
     init(minLength: Int? = nil,
          maxLength: Int? = nil,
+         regex: String? = nil,
          customRule: ((String) -> Bool)? = nil,
          customMessage: String? = nil) {
         self.minLength = minLength
         self.maxLength = maxLength
+        self.regex = regex
         self.customRule = customRule
         self.customMessage = customMessage
     }
@@ -249,12 +252,19 @@ struct ValidationRule {
             return (false, "\(maxLength)자 이하로 입력해야 합니다")
         }
         
+        if let regex = regex {
+            let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+            if !predicate.evaluate(with: text) {
+                return (false, customMessage ?? "올바른 형식이 아닙니다")
+            }
+        }
+        
         if let customRule = customRule {
             let isValid = customRule(text)
             let message = customMessage ?? (isValid ? "올바른 형식입니다" : "형식이 올바르지 않습니다")
             return (isValid, message)
         }
         
-        return (true, "올바른 형식입니다")
+        return (true, "")
     }
 }

@@ -18,19 +18,23 @@ struct RelationshipButton: View {
             VStack(spacing: 8) {
                 Image(image)
                     .renderingMode(.template)
-                    .foregroundColor(isSelected ? .white : .gray)
+                    .foregroundColor(isSelected ? .white : .primaryNormal)
                 
                 Text(text)
                     .font(.caption)
-                    .foregroundColor(isSelected ? .white : .gray)
+                    .foregroundColor(isSelected ? .white : .gray200)
             }
             .padding()
             .frame(maxWidth: .infinity, minHeight: 83)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? .primaryNormal : .clear)
-                    .stroke(.gray, lineWidth: 1)
+                    .fill(isSelected ? .primaryNormal : .gray750)
             )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(.lineNormal, lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 12))
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())

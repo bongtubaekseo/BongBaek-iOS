@@ -186,7 +186,7 @@ struct EventDateFormView: View {
                 EventDatePickerView()
                 
                 if isPastDate {
-                    HStack(spacing: 8) {
+                    HStack(spacing: 2) {
                         Image("icon_caution")
                             .foregroundColor(.secondaryRed)
                         
@@ -194,6 +194,7 @@ struct EventDateFormView: View {
                             .captionRegular12()
                             .foregroundColor(.secondaryRed)
                     }
+                    .padding(.top, -8)
                 }
             }
             .padding(20)

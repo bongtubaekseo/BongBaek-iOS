@@ -20,73 +20,19 @@ enum EventsCategory: String, CaseIterable {
 }
 
 struct RecordView: View {
-    @State private var isDeleteMode = false
-    @State private var selectedSection: RecordSection = .attended
-    @State private var selectedCategory: EventsCategory = .all
-    @State private var selectedRecordIDs: Set<UUID> = []
-    @State private var selectedStates: [UUID: Bool] = [:]
-
-    var attendedRecords: [ScheduleModel] {
-
-        return Array(scheduleDummy.prefix(2))
-    }
-    
-    var notAttendedRecords: [ScheduleModel] {
-
-        return Array(scheduleDummy.suffix(1))
-    }
-    
-    var schedulesGrouped: [String: [String: [ScheduleModel]]] {
-            let grouped = Dictionary(grouping: scheduleDummy) { model in
-                let components = model.date.split(separator: ".")
-                let year = components.count > 0 ? String(components[0]).trimmingCharacters(in: .whitespaces) : "기타"
-                let month = components.count > 1 ? String(components[1]).trimmingCharacters(in: .whitespaces) : "기타"
-                return "\(year)/\(month)"
-            }
-            
-            return grouped.reduce(into: [String: [String: [ScheduleModel]]]()) { result, pair in
-                let parts = pair.key.split(separator: "/")
-                guard parts.count == 2 else { return }
-                let year = String(parts[0])
-                let month = String(parts[1])
-                result[year, default: [:]][month, default: []] += pair.value
-            }
-        }
-    
-    var filteredSchedulesGrouped: [String: [String: [ScheduleModel]]] {
-        if selectedCategory == .all {
-            return schedulesGrouped
-        } else {
-            return schedulesGrouped.mapValues { months in
-                months.mapValues { schedules in
-                    schedules.filter { schedule in
-                        schedule.type == selectedCategory.rawValue
-                    }
-                }
-                .filter{ !$0.value.isEmpty}
-            }
-            .filter{ !$0.value.isEmpty}
-        }
-    }
-
     @StateObject private var viewModel = RecordViewModel()
-
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-
                 RecordsHeaderView(
                     isDeleteMode: $viewModel.isDeleteMode,
                     onDeleteTapped: {
                         viewModel.deleteSelectedRecords()
-                    },
-                    onCancelTapped: {
-                        viewModel.cancelDeleteMode()
-                    },
-                    selectedRecordIDs: $selectedRecordIDs,
-                    selectedStates: $selectedStates
+                    }
                 )
+                .environmentObject(router)
                 
                 RecordSectionHeaderView(
                     selectedSection: $viewModel.selectedSection,
@@ -107,7 +53,6 @@ struct RecordView: View {
                 .padding(.leading, 20)
                 
                 RecordContentView(
-
                     viewModel: viewModel
                 )
             }
@@ -157,42 +102,28 @@ struct CategoryFilterView: View {
 struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
     let onDeleteTapped: () -> Void
-    let onCancelTapped: () -> Void
     @State private var showAlert = false
-    @Binding var selectedRecordIDs: Set<UUID>
-    @Binding var selectedStates: [UUID: Bool]
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         HStack {
-            if isDeleteMode {
-                Button(action: {
-                    onCancelTapped()
-                }) {
-                    Text("취소")
-                        .bodyMedium14()
-                        .foregroundColor(.white)
-                }
-                .frame(width: 60, alignment: .leading)
-            }
-            
-            Spacer()
-
             Text("경조사 전체 기록")
                 .titleSemiBold18()
                 .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, alignment: isDeleteMode ? .center : .leading)
-                .padding(.leading, isDeleteMode ? 0 : 20)
             
             Spacer()
             
             HStack(spacing: 0) {
-                NavigationLink(destination: ModifyEventView(mode: .create)) {
-                   Image(systemName: "plus")
-                       .foregroundColor(.white)
-               }
-               .frame(width: 44, height: 44)
-               .contentShape(Rectangle())
-            
+                Button(action: {
+                    router.push(to: .modifyEventView(mode: .create, eventDetailData: nil))
+                }) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(.white)
+                }
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+                
                 Button(action: {
                     if isDeleteMode {
                         showAlert = true
@@ -200,29 +131,16 @@ struct RecordsHeaderView: View {
                         isDeleteMode = true
                     }
                 }) {
-                    if isDeleteMode {
-                        Text("삭제")
-                            .titleSemiBold16()
-                            .foregroundColor(.secondaryRed)
-                            .frame(width: 44, height: 44)
-                    } else {
-                        Image(systemName: "trash")
-                            .foregroundColor(.white)
-                            .frame(width: 44, height: 44)
-                    }
+                    Image(systemName: isDeleteMode ? "checkmark" : "trash")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(isDeleteMode ? .blue : .white)
                 }
+                .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
                 .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
-                    Button("취소", role: .cancel) {
-                        selectedRecordIDs.removeAll()
-                    }
+                    Button("취소", role: .cancel) { }
                     Button("삭제", role: .destructive) {
                         onDeleteTapped()
-                        isDeleteMode = false
-                        selectedRecordIDs.removeAll()
-                        selectedStates.removeAll()
-                        print("삭제되었습니다")
-
                     }
                 } message: {
                     Text("이 기록의 모든 내용이 삭제됩니다.")
@@ -338,6 +256,7 @@ struct RecordContentView: View {
 
 struct RecordsEmptyView: View {
     let message: String
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         VStack(alignment: .center) {
@@ -359,7 +278,9 @@ struct RecordsEmptyView: View {
                 .foregroundColor(.gray)
                 .padding(.top, 16)
             
-            NavigationLink(destination: ModifyEventView(mode: .create)) {
+            Button(action: {
+                router.push(to: .modifyEventView(mode: .create, eventDetailData: nil))
+            }) {
                 Text("지금 기록하기")
                     .titleSemiBold16()
                     .foregroundColor(.white)
