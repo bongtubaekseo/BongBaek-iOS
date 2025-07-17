@@ -117,17 +117,17 @@ struct AllRecordsView: View {
         VStack(spacing: 12) {
             VStack {
                 Text("\(eventDetail.hostInfo.hostName)의 \(eventDetail.eventInfo.eventCategory)")
-                    .titleSemiBold16()
+                    .titleSemiBold18()
                     .foregroundStyle(.white)
                     
                 Text(eventDetail.eventInfo.eventDate)
                     .bodyRegular14()
-                    .foregroundStyle(.gray300)
+                    .foregroundStyle(.gray400)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(20)
             .background(.gray750)
-            .cornerRadius(12)
+            .cornerRadius(10)
             .padding(.horizontal, 20)
             .padding(.top, 12)
             
