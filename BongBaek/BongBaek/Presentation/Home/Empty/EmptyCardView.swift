@@ -28,11 +28,12 @@ struct EmptyCardView: View {
                     .frame(width: 34, height: 34)
                     .background(Circle().fill(Color(hex:"#6E7FFF")))
             }
+            .padding(.top, 14)
 
             Text("예정된 일정이 없습니다")
                 .titleSemiBold18()
                 .foregroundColor(.white)
-                //.padding(.top, 12)
+                .padding(.bottom, -12)
                
             NavigationLink(destination: AllRecordsView(eventId: "123").environmentObject(stepManager)) {
                 HStack(spacing: 4) {
@@ -45,6 +46,7 @@ struct EmptyCardView: View {
                 .background(.gray900)
                 .cornerRadius(6)
             }
+            .padding(.bottom, 14)
         }
         .frame(maxWidth: .infinity)
         .padding()
