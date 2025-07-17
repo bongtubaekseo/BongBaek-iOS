@@ -197,9 +197,9 @@ enum ValidationState {
     var color: Color {
         switch self {
         case .normal:
-            return .gray
+            return .gray500
         case .valid:
-            return .blue
+            return .primaryNormal
         case .invalid:
             return .secondaryRed
         }

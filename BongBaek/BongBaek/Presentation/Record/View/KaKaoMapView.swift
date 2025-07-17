@@ -120,7 +120,7 @@ final class KakaoMapCoordinator: NSObject, MapControllerDelegate {
         let layer = manager.addLabelLayer(option: layerOption)
         
         // 2. 그 다음 스타일 생성 및 등록
-        guard let originalImage = UIImage(named: "icon_flag"),
+        guard let originalImage = UIImage(named: "icon_location"),
               let pngData = originalImage.pngData(),
               let safeImage = UIImage(data: pngData) else {
             print("이미지 로드 실패")
