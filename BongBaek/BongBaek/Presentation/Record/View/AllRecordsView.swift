@@ -260,13 +260,13 @@ struct AllRecordsView: View {
         VStack(alignment: .leading, spacing: 24) {
             DetailRow(image: "icon_person_16", title: "이름", value: eventDetail.hostInfo.hostName)
             DetailRow(image: "icon_nickname_16", title: "별명", value: eventDetail.hostInfo.hostNickname)
-            DetailRow(image: "icon_event_16", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-            DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
+            DetailRow(image: "icon_event_16", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_event_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원")
-            DetailRow(image: "icon_event_16", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-            DetailRow(image: "icon_event_16", title: "날짜", value: eventDetail.eventInfo.eventDate, valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
+            DetailRow(image: "icon_event_16", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_event_16", title: "날짜", value: eventDetail.eventInfo.eventDate, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_location_16", title: "장소", value: eventDetail.locationInfo.location)
-            DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
+            //DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
         }
         .padding(20)
         .background(.gray750)
@@ -439,7 +439,7 @@ struct DetailRow: View {
             
             Text(value)
                 .bodyRegular14()
-                .foregroundColor(valueTextColor ?? .white)
+                .foregroundColor(valueTextColor ?? .gray100)
                 .padding(.horizontal, valueBackgroundColor != nil ? 4 : 0)
                 .padding(.vertical, valueBackgroundColor != nil ? 4 : 0)
                 .background(valueBackgroundColor ?? .clear)
