@@ -94,15 +94,25 @@ class AuthManager: ObservableObject {
     
     // MARK: - 자동 로그인
     func checkAuthStatus() {
+        print("🔍 AuthManager - 인증 상태 확인 시작")
+        
         guard let accessToken = keychainManager.accessToken else {
+            print("❌ Keychain에 저장된 accessToken 없음")
+            print("🔄 authState를 .needsLogin으로 변경")
             authState = .needsLogin
             return
         }
-        print("keyChain에 저장된 토큰 \(accessToken)")
+        
+        print("✅ Keychain에서 accessToken 발견:")
+        print("   - 토큰 길이: \(accessToken.count)자")
+        print("   - 토큰 앞 10자: \(String(accessToken.prefix(10)))...")
+        print("   - 전체 토큰: \(accessToken)")
+        
         // 저장된 토큰으로 자동 로그인 시도
-        // 여기서는 토큰이 있으면 일단 authenticated로 처리
+        print("🔄 authState를 .authenticated로 변경")
         authState = .authenticated
         
+        print("💡 TODO: 실제로는 토큰 유효성 검증 API 호출 필요")
         // TODO: 실제로는 토큰 유효성 검증 API 호출
         // validateToken(accessToken)
     }

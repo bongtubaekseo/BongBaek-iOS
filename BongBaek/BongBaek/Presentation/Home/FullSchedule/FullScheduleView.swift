@@ -25,15 +25,19 @@ struct FullScheduleView: View {
     @Environment(\.dismiss) private var dismiss
     
     var emptyMessage: String {
-            switch selectedCategory {
-            case .babyParty:
-                return "돌잔치가 없습니다"
-            case .wedding, .birthday, .funeral:
-                return "참석한 \(selectedCategory.displayName)이 없습니다"
-            case .all:
-                return "기록한 경조사가 없습니다. "
-            }
-        }
+          switch selectedCategory {
+          case .babyParty:
+              return "돌잔치가"
+          case .wedding:
+              return "결혼식이"
+          case .birthday:
+              return "생일이"
+          case .funeral:
+              return "장례식이"
+          case .all:
+              return "경조사가"
+          }
+      }
     
     var schedulesGrouped: [String: [String: [ScheduleModel]]] {
         let grouped = Dictionary(grouping: scheduleDummy) { model in
@@ -83,7 +87,7 @@ struct FullScheduleView: View {
                     } else if viewModel.hasData {
                         eventContentView
                     } else {
-                        emptyView
+                        FullScheduleEmptyView(message: emptyMessage)
                     }
                     
                     if viewModel.isLoadingMore {
@@ -143,6 +147,7 @@ struct FullScheduleView: View {
     
     private func categoryButton(for category: ScheduleCategory) -> some View {
         Button(action: {
+            selectedCategory = category
             viewModel.updateCategory(category)
         }) {
             Text(category.displayName)

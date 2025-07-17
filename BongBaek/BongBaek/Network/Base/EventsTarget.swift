@@ -118,7 +118,7 @@ extension EventsTarget: TargetType {
         
         // KeyChain에서 accessToken 가져오기
         if let accessToken = KeychainManager.shared.accessToken {
-            headers["Authorization"] = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3NTIzNDEzMjAsImV4cCI6MTc1MzU1MDkyMCwibWVtYmVySWQiOiI0Y2I2YTQzYi02MDdmLTRjYTgtYTc5NC1mOTQ2OWJkOTBhN2YifQ.1pLkdYMn5bwl6W7mnlWMvFd-5XOPpYjIPEiMTd3lllnXV18kUjBjlZ9S0iwiM0d-uaX0oC2Lk9t-fMlM9ui0NQ"
+            headers["Authorization"] = "Bearer \(accessToken)"
             print("Authorization 헤더 추가됨: Bearer \(accessToken.prefix(10))...")
         } else {
             print("AccessToken이 KeyChain에 없습니다")
