@@ -279,16 +279,16 @@ struct RecordsEmptyView: View {
                 .padding(.top, 16)
             
             Button(action: {
-                router.push(to: .modifyEventView(mode: .create, eventDetailData: nil))
+                router.push(to: .createEventView)
             }) {
                 Text("지금 기록하기")
                     .titleSemiBold16()
                     .foregroundColor(.white)
+                    .frame(width: 145)
+                    .frame(height: 40)
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 55)
             .background(.primaryNormal)
-            .cornerRadius(12)
+            .cornerRadius(6)
             .padding(.horizontal, 40)
             .padding(.top, 32)
         }

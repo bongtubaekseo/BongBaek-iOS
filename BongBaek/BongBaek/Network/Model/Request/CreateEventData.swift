@@ -20,6 +20,7 @@ struct CreateEventInfo: Codable {
     let cost: Int
     let isAttend: Bool
     let eventDate: String
+    let note: String?
 }
 
 struct HighAccuracyInfo: Codable {

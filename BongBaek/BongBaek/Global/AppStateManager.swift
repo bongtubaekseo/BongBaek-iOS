@@ -65,8 +65,13 @@ class AppStateManager: ObservableObject {
     }
     
     func checkAuthStatus() {
-        // 앱 시작 시 인증 상태 확인
-        authManager.checkAuthStatus()
+        print("🚀 ========== 앱 시작 - 인증 상태 확인 ==========")
+           
+           // KeychainManager를 통한 토큰 상태 확인
+           KeychainManager.shared.checkTokenStatusOnLaunch()
+           
+           // AuthManager를 통한 인증 상태 확인
+           authManager.checkAuthStatus()
     }
     
     

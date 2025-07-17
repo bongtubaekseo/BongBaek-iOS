@@ -163,6 +163,17 @@ struct MainTabView: View {
             RecommendStartView()
             .environmentObject(router)
             .environmentObject(eventManager)
+        case .emptyScheduleView:
+            EmptyScheduleView()
+                .environmentObject(router)
+            
+        case .emptyCardView:
+            EmptyCardView()
+                .environmentObject(router)
+        case .createEventView:
+            CreateEventView()
+                .environmentObject(router)
+            
         }
     }
 }

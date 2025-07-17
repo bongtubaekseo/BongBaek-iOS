@@ -16,6 +16,40 @@ final class KeychainManager {
     
     private init() {}
     
+    func checkTokenStatusOnLaunch() {
+         print("🔐 ========== Keychain 토큰 상태 확인 ==========")
+         
+         // Access Token 확인
+         switch getAccessToken() {
+         case .success(let token):
+             print("✅ Access Token 존재:")
+             print("   - 토큰 길이: \(token.count)자")
+             print("   - 토큰 앞 10자: \(String(token.prefix(10)))...")
+             print("   - 전체 토큰: \(token)")
+         case .failure(let error):
+             print("❌ Access Token 없음: \(error)")
+         }
+         
+         // Refresh Token 확인
+         switch getRefreshToken() {
+         case .success(let token):
+             print("✅ Refresh Token 존재:")
+             print("   - 토큰 길이: \(token.count)자")
+             print("   - 토큰 앞 10자: \(String(token.prefix(10)))...")
+         case .failure(let error):
+             print("❌ Refresh Token 없음: \(error)")
+         }
+         
+         // 전체 토큰 상태
+         let hasTokens = hasTokens()
+         print("🔍 토큰 상태 요약:")
+         print("   - 토큰 보유 여부: \(hasTokens)")
+         print("   - 편의 프로퍼티 accessToken: \(accessToken != nil ? "있음" : "없음")")
+         print("   - 편의 프로퍼티 refreshToken: \(refreshToken != nil ? "있음" : "없음")")
+         
+         print("🔐 ============================================")
+     }
+    
     
     /// 액세스 토큰과 리프레시 토큰을 동시에 저장
     func saveTokens(access: String, refresh: String) -> Result<Void, AuthError> {

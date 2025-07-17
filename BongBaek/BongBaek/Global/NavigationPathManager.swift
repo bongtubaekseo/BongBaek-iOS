@@ -20,6 +20,9 @@ enum RecommendRoute: Hashable {
     case fullScheduleView
     case allRecordView(eventId: String)
     case recommendStartView
+    case emptyScheduleView
+    case emptyCardView
+    case createEventView
     
     var displayName: String {
         switch self {
@@ -35,6 +38,10 @@ enum RecommendRoute: Hashable {
         case .fullScheduleView: return "fullScheduleView"
         case .allRecordView: return "allRecordView"
         case .recommendStartView: return "recommendStartView"
+        case .emptyScheduleView: return "emptyScheduleView"
+        case .emptyCardView: return "emptyCardView"
+            
+        case .createEventView: return "createEventView"
         }
     }
 }
