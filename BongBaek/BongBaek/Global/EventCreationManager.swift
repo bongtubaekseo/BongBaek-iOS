@@ -365,8 +365,8 @@ class EventCreationManager: ObservableObject {
         hostNickname = ""
         relationship = ""
         detailSelected = false
-        contactFrequency = 3
-        meetFrequency = 3
+        contactFrequency = 2.0
+        meetFrequency = 2.0
         
         // Step 2 데이터 초기화
         eventCategory = ""

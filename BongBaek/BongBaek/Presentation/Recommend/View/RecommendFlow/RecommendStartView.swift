@@ -10,6 +10,7 @@ import SwiftUI
 struct RecommendStartView: View {
     @EnvironmentObject var stepManager: GlobalStepManager
     @EnvironmentObject var router: NavigationRouter
+    @EnvironmentObject var eventManager: EventCreationManager
     @State private var navigateToRecommend = false
     
     var body: some View {
@@ -60,6 +61,7 @@ struct RecommendStartView: View {
         }
         .onAppear {
             print("🏠 RecommendStartView 나타남 - path.count: \(router.path.count)")
+            eventManager.resetAllData()
          }
 //        .navigationDestination(isPresented: $navigateToRecommend) {
 //            RecommendView()
