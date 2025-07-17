@@ -438,8 +438,8 @@ struct DetailRow: View {
             Spacer()
             
             Text(value)
-                .bodyRegular14()
-                .foregroundColor(valueTextColor ?? .gray100)
+                .bodyMedium16()
+                .foregroundColor(valueTextColor ?? .white)
                 .padding(.horizontal, valueBackgroundColor != nil ? 4 : 0)
                 .padding(.vertical, valueBackgroundColor != nil ? 4 : 0)
                 .background(valueBackgroundColor ?? .clear)
