@@ -27,6 +27,7 @@ struct CustomDropdown<T: DropdownItem>: View {
     let placeholder: String
     let items: [T]
     @Binding var selectedItem: T?
+    let isDisabled: Bool
     
     @State private var isExpanded = false
     
@@ -35,13 +36,15 @@ struct CustomDropdown<T: DropdownItem>: View {
         icon: String? = nil,
         placeholder: String = "선택해주세요",
         items: [T],
-        selectedItem: Binding<T?>
+        selectedItem: Binding<T?>,
+        isDisabled: Bool = false
     ) {
         self.title = title
         self.icon = icon
         self.placeholder = placeholder
         self.items = items
         self._selectedItem = selectedItem
+        self.isDisabled = isDisabled
     }
     
     var body: some View {
@@ -50,8 +53,8 @@ struct CustomDropdown<T: DropdownItem>: View {
                 HStack {
                     if let icon = icon {
                         Image(icon)
-                            .renderingMode(.template)
-                            .foregroundColor(.blue)
+//                            .renderingMode(.template)
+//                            .foregroundColor(.blue)
                     }
                     Text(title)
                         .bodyMedium14()
@@ -72,17 +75,19 @@ struct CustomDropdown<T: DropdownItem>: View {
 
     private func DropdownHeader() -> some View {
         Button(action: {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                isExpanded.toggle()
+            if !isDisabled {  // 비활성화 상태에서는 터치 무시
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    isExpanded.toggle()
+                }
             }
         }) {
             HStack {
                 if let selectedItem = selectedItem {
                     Text(selectedItem.displayText)
-                        .foregroundColor(.white)
+                        .foregroundColor(isDisabled ? .white : .white)
                 } else {
                     Text(placeholder)
-                        .foregroundColor(.gray)
+                        .foregroundColor(isDisabled ? .gray600 : .gray)
                 }
                 
                 Spacer()
@@ -101,6 +106,7 @@ struct CustomDropdown<T: DropdownItem>: View {
             )
             .cornerRadius(8)
         }
+        .disabled(isDisabled)
     }
 
     private func DropdownContent() -> some View {

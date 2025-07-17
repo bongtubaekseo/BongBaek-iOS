@@ -47,11 +47,11 @@ struct CustomTextField: View {
         VStack(alignment: .leading, spacing: 8) {
   
             HStack(spacing: 8) {
-                Image("icon_person_16")
-                    .renderingMode(.template)
+                Image(icon)
+//                    .renderingMode(.template)
                     .resizable()
                     .frame(width: 16,height: 16)
-                    .foregroundStyle(.white)
+//                    .foregroundStyle(.white)
                 
                 HStack(spacing: 2) {  
                     Text(title)
@@ -115,11 +115,11 @@ struct CustomTextField: View {
                             .transition(.scale.combined(with: .opacity))
                         }
                         
-                        if isReadOnly {
-                            Image(systemName: "chevron.down")
-                                .font(.system(size: 12))
-                                .foregroundColor(.gray)
-                        }
+//                        if isReadOnly {
+//                            Image(systemName: "chevron.down")
+//                                .font(.system(size: 12))
+//                                .foregroundColor(.gray)
+//                        }
                         
                         if isSecure && !isReadOnly {
                             Button(action: {
