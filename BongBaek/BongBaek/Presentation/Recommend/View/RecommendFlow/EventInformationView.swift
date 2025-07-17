@@ -184,7 +184,7 @@ struct EventTypeButton: View {
                 }
                 
                 Text(eventType.rawValue)
-                    .font(.system(size: 18, weight: .medium))
+                    .titleSemiBold16()
                     .foregroundColor(.white)
                 
                 Spacer()
@@ -193,11 +193,11 @@ struct EventTypeButton: View {
             .padding(.vertical, 18)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color("primary_normal") : Color(red: 0.196, green: 0.196, blue: 0.196))
+                    .fill(isSelected ? Color("primary_normal") : Color.gray750)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color("primary_normal") : Color.clear, lineWidth: 2)
+                    .stroke(isSelected ? Color("primary_normal") : Color.gray750, lineWidth: 2)
             )
         }
         .buttonStyle(PlainButtonStyle())
@@ -211,13 +211,13 @@ struct NextButton: View {
     var body: some View {
         Button(action: action) {
             Text("다음")
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(.white)
+                .titleSemiBold18()
+                .foregroundColor(isEnabled ? .white : .gray500 )
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
+                .frame(height: 55)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(isEnabled ? Color("primary_normal") : Color.gray.opacity(0.3))
+                        .fill(isEnabled ? .primaryNormal : .primaryBg)
                 )
         }
         .disabled(!isEnabled)
