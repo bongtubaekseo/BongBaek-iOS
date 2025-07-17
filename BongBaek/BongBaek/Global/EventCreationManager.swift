@@ -86,7 +86,14 @@ class EventCreationManager: ObservableObject {
             return true
         }
         
-        // 참석이면 장소 정보 필요
+        // 참석이어도 위치 정보는 선택적 (건너뛰기 가능)
+        return true  // 항상 true 반환하도록 변경
+    }
+    
+    var hasRequiredLocationData: Bool {
+        if selectedAttendance == .no {
+            return true  // 불참이면 위치 정보 불필요
+        }
         return hasLocationData && !locationName.isEmpty
     }
     

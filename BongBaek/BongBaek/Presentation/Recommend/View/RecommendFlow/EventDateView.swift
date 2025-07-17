@@ -60,7 +60,11 @@ struct EventDateView: View {
             .padding(.bottom, 50)
         }
         .onAppear {
-            stepManager.currentStep = 3
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeInOut(duration: 0.8)) {
+                    stepManager.currentStep = 3
+                }
+            }
             print("📅 EventDateView 나타남 - path.count: \(router.path.count)")
         }
         .onChange(of: eventManager.eventDate) { _, newDate in
