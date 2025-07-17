@@ -64,7 +64,7 @@ struct ScheduleIndicatorCellView: View {
                 endPoint: .bottomTrailing
             )
         )
-        .frame(width: 320, height: 260)
+        .frame(width: 340, height: 260)
         .cornerRadius(10)
     }
     
