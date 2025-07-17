@@ -82,16 +82,16 @@ struct EventLocationView: View {
         VStack(alignment: .leading) {
             Text("어디서 열리나요?")
                 .headBold24()
-                .foregroundStyle(.white)
+                .foregroundStyle(.gray100)
             
             Text("주소를 검색하면")
                 .bodyRegular14()
-                .foregroundStyle(.gray300)
+                .foregroundStyle(.gray400)
                 .padding(.top, 8)
             
             Text("더 적합한 경조사비를 추천받을 수 있어요!")
                 .bodyRegular14()
-                .foregroundStyle(.gray300)
+                .foregroundStyle(.gray400)
         }
         .padding(.horizontal, 20)
     }
@@ -102,16 +102,25 @@ struct EventLocationView: View {
                 .foregroundColor(.gray)
                 .font(.system(size: 20))
             
-            TextField("장소를 검색하세요", text: $searchText)
-                .font(.system(size: 16))
-                .foregroundColor(.white)
-                .focused($isSearchFieldFocused)
-                .onChange(of: searchText) { _, newValue in
-                    keywordSearch.query = newValue
-                    keywordSearch.searchResults.removeAll()
+            ZStack(alignment: .leading) {
+                TextField("", text: $searchText)
+                    .font(.body2_regular_16)
+                    .foregroundStyle(isSearchFieldFocused ? .primaryNormal : .white) // 입력 텍스트 색상
+                    .focused($isSearchFieldFocused)
+                    .onChange(of: searchText) { _, newValue in
+                        keywordSearch.query = newValue
+                        keywordSearch.searchResults.removeAll()
+                    }
+                
+                if searchText.isEmpty {
+                    Text("주소로 검색하면 더 빠르게 찾을 수 있어요")
+                        .font(.body2_regular_16)
+                        .foregroundColor(.gray500)
+                        .allowsHitTesting(false)
                 }
+            }
             
-            // Clear 버튼 추가
+            // Clear 버튼
             if !searchText.isEmpty {
                 Button(action: {
                     searchText = ""
@@ -127,7 +136,7 @@ struct EventLocationView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.gray.opacity(0.2))
+        .background(.gray750)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
@@ -135,7 +144,6 @@ struct EventLocationView: View {
         .cornerRadius(8)
         .padding(.horizontal, 20)
     }
-    
     private var mapSection: some View {
         Group {
             if let mapView = mapView {
@@ -170,18 +178,18 @@ struct EventLocationView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(document.placeName)
-                                    .font(.system(size: 16, weight: .medium))
+                                    .bodyRegular16()
                                     .foregroundColor(.white)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 Text(document.addressName)
-                                    .font(.system(size: 14))
+                                    .bodyMedium14()
                                     .foregroundColor(.gray)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 if !document.roadAddressName.isEmpty {
                                     Text(document.roadAddressName)
-                                        .font(.system(size: 12))
+                                        .captionRegular12()
                                         .foregroundColor(.blue)
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                 }
