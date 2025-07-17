@@ -412,7 +412,7 @@ struct RecommendLottie: View {
                     Text("장소")
                         .captionRegular12()
                         .foregroundColor(.gray400)
-                    Text("강남 웨딩홀")
+                    Text("더링크호텔 웨딩")
                         .bodyMedium16()
                         .foregroundColor(.white)
                 }
