@@ -126,17 +126,27 @@ class RecordViewModel: ObservableObject {
     func deleteSelectedRecords() {
         print("삭제할 기록 ID들: \(selectedRecordIDs)")
         
-        // TODO: 실제 삭제 API 호출
-        // await deleteEvents(eventIds: Array(selectedRecordIDs))
-        
-        // 현재는 로컬에서 제거
-        attendedEvents.removeAll { selectedRecordIDs.contains($0.eventId) }
-        notAttendedEvents.removeAll { selectedRecordIDs.contains($0.eventId) }
-        
-        selectedRecordIDs.removeAll()
-        isDeleteMode = false
-        
-        print("선택된 기록들이 삭제되었습니다")
+        Task {
+            for eventId in selectedRecordIDs {
+                do {
+                    let response = try await eventService.deleteEvent(eventId: eventId).async()
+                    if response.isSuccess {
+                        print("✅ 이벤트 삭제 성공: \(eventId)")
+                    } else {
+                        print("❌ 이벤트 삭제 실패: \(eventId) - \(response.message)")
+                    }
+                } catch {
+                    print("❌ 이벤트 삭제 에러: \(eventId) - \(error)")
+                }
+            }
+            
+            // 모든 작업을 메인 스레드에서 실행
+            selectedRecordIDs.removeAll()
+            isDeleteMode = false
+            await loadAllRecords()
+            
+            print("✅ 선택된 기록들이 삭제되었습니다")
+        }
     }
     
     /// 무한스크롤 트리거 확인

@@ -13,7 +13,7 @@ final class KakaoMapCoordinator: NSObject, MapControllerDelegate {
     var controller: KMController?
     var first: Bool = true
     
-    var userMapPoint: MapPoint? = MapPoint(longitude: 128.8784972, latitude:  37.74913611)
+    var userMapPoint: MapPoint? = MapPoint(longitude: 126.9784147, latitude: 37.5666805)
     
     override init() {
         super.init()
@@ -120,7 +120,7 @@ final class KakaoMapCoordinator: NSObject, MapControllerDelegate {
         let layer = manager.addLabelLayer(option: layerOption)
         
         // 2. 그 다음 스타일 생성 및 등록
-        guard let originalImage = UIImage(named: "icon_location"),
+        guard let originalImage = UIImage(named: "icon_location 3"),
               let pngData = originalImage.pngData(),
               let safeImage = UIImage(data: pngData) else {
             print("이미지 로드 실패")

@@ -35,11 +35,14 @@ struct EventLocationView: View {
                 
                 VStack(alignment: .leading) {
                     titleSection
+                        .padding(.bottom, 12)
                     
                     ZStack(alignment: .top) {
                         VStack(spacing: 8) {
                             searchSection
+                            
                             mapSection
+                                .padding(.top, 16)
                         }
                         
                         // 드롭다운 오버레이
@@ -80,21 +83,30 @@ struct EventLocationView: View {
     
     private var titleSection: some View {
         VStack(alignment: .leading) {
-            Text("어디서 열리나요?")
-                .headBold24()
-                .foregroundStyle(.white)
+            HStack(alignment: .firstTextBaseline) {  // baseline 맞춤
+                Text("어디서 열리나요?")
+                    .headBold24()
+                    .foregroundStyle(.white)
+                
+                Spacer()
+                
+                Button(action: {
+                    handleSkipLocation()
+                }) {
+                    Text("건너뛰기")
+                        .bodyRegular14()  // 폰트 크기 14
+                        .foregroundColor(.gray300)
+                }
+            }
             
-            Text("주소를 검색하면")
+            Text("주소를 검색하면 더 빨리 찾을 수 있어요!")
                 .bodyRegular14()
                 .foregroundStyle(.gray300)
                 .padding(.top, 8)
-            
-            Text("더 적합한 경조사비를 추천받을 수 있어요!")
-                .bodyRegular14()
-                .foregroundStyle(.gray300)
         }
         .padding(.horizontal, 20)
     }
+
     
     private var searchSection: some View {
         HStack(spacing: 12) {
@@ -281,6 +293,20 @@ struct EventLocationView: View {
         } else {
             print("❌ EventLocationView: EventCreationManager 이중 검증 실패")
         }
+    }
+    
+    private func handleSkipLocation() {
+        print("🔄 위치 입력 건너뛰기")
+        
+        // 위치 데이터 초기화 (선택사항)
+        eventManager.clearLocationData()
+        
+        // 현재 선택된 모든 데이터 출력
+        printCurrentSelections()
+        
+        // 검증 없이 바로 다음 화면으로 이동
+        print("✅ EventLocationView: 건너뛰기로 추천 로딩으로 이동")
+        router.push(to: .recommendLoadingView)
     }
     
     private func printLocationSelection(_ document: KLDocument) {
