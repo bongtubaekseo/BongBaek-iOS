@@ -28,7 +28,7 @@ struct RelationshipButton: View {
             .frame(maxWidth: .infinity, minHeight: 83)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? .primaryNormal : .clear)
+                    .fill(isSelected ? .primaryNormal : .gray750)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)

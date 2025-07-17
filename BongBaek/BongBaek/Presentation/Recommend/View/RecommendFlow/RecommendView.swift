@@ -137,8 +137,8 @@ struct RecommendView: View {
                     )
                 )
                 BorderTextField(
-                    placeholder: "이름을 적어주세요",
-                    text: $eventManager.hostName,
+                    placeholder: "별명을 적어주세요",
+                    text: $eventManager.hostNickname,
                     validationRule: ValidationRule(
                         minLength: 2,
                         maxLength: 10,
@@ -168,6 +168,8 @@ struct RecommendView: View {
             Text("관계를 선택해주세요.")
                 .titleSemiBold18()
                 .foregroundStyle(.white)
+            
+            Spacer()
         }
         .padding(.leading, 20)
         .padding(.top, 20)
@@ -185,7 +187,6 @@ struct RecommendView: View {
                     eventManager.relationship = relationship.1
                     print("🔗 관계 선택: \(relationship.1)")
                 }
-                .background(.gray750)
             }
         }
         .padding(.horizontal, 20)

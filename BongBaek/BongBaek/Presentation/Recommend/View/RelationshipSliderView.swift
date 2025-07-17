@@ -67,7 +67,7 @@ struct SliderSection: View {
                 step: nil,
                 barStyle: (6, 8),
                 fillBackground: .gray.opacity(0.3),
-                fillTrack: .blue,
+                fillTrack: .primaryNormal,
                 thumbView: {
                     Image("Knob")
                         .resizable()
