@@ -15,6 +15,8 @@ import KakaoSDKAuth
 struct BongBaekApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @State private var showLoginView = false
+    @StateObject private var router = NavigationRouter()
+    @StateObject private var eventManager = EventCreationManager()
 
     init() {
         let API_KEY = AppConfig.shared.kakaoAppKey
@@ -24,7 +26,9 @@ struct BongBaekApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RootView()
+            LargeMapView()
+                .environmentObject(router)
+                .environmentObject(eventManager)
                 .onOpenURL(perform:{ url in
                     if(AuthApi.isKakaoTalkLoginUrl(url)){
                         _ = AuthController.handleOpenUrl(url:url)
