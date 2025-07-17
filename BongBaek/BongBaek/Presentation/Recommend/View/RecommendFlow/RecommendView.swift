@@ -74,6 +74,7 @@ struct RecommendView: View {
                         relationshipGridSection
                         
                         detailRecommendSection
+                            .padding(.top, 16)
                         
                         if eventManager.detailSelected {
                             RelationshipSliderView()
@@ -81,8 +82,9 @@ struct RecommendView: View {
                         }
                         
                         submitButton
+                            .padding(.top, 60)
+                            .padding(.bottom,60)
                         
-                        Spacer(minLength: 0)
                     }
                 }
                 .onTapGesture {
@@ -117,7 +119,8 @@ struct RecommendView: View {
             HStack {
                 Image("icon_person_16")
                     .renderingMode(.template)
-                    .foregroundColor(.blue)
+                    .foregroundColor(.primaryNormal)
+                    .frame(width: 22,height: 22)
                 
                 Text("상대방의 이름과 별명을 알려주세요")
                     .titleSemiBold18()
@@ -163,7 +166,8 @@ struct RecommendView: View {
         HStack {
             Image("icon_person_16")
                 .renderingMode(.template)
-                .foregroundColor(.blue)
+                .foregroundColor(.primaryNormal)
+                .frame(width: 22,height: 22)
             
             Text("관계를 선택해주세요.")
                 .titleSemiBold18()
@@ -207,15 +211,17 @@ struct RecommendView: View {
         Button {
             handleFormSubmission()
         } label: {
-            Text("금액 추천 시작하기")
+            Text("다음")
                 .titleSemiBold18()
-                .foregroundStyle(isNextButtonEnabled ? .white : .gray400)
+                .foregroundStyle(isNextButtonEnabled ? .white : .gray500)
+                .frame(maxWidth: .infinity)
+                .frame(height: 60)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
-        .frame(height: 60)
-        .background(isNextButtonEnabled ? .primaryNormal : .gray600)
+        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
+        .contentShape(Rectangle())
         .padding(.horizontal, 20)
         .padding(.top, 8)
         .padding(.bottom, 24)

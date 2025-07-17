@@ -201,7 +201,7 @@ enum ValidationState {
         case .valid:
             return .blue
         case .invalid:
-            return .red
+            return .secondaryRed
         }
     }
 }
@@ -265,6 +265,6 @@ struct ValidationRule {
             return (isValid, message)
         }
         
-        return (true, "올바른 형식입니다")
+        return (true, "")
     }
 }

@@ -82,17 +82,17 @@ struct BorderTextField: View {
                                 .foregroundColor(.gray)
                         }
                     }
-                    if !text.isEmpty && validationRule != nil {
-                        Image(systemName: validationState == .valid ? "checkmark" : "exclamationmark")
-                            .foregroundStyle(validationState == .valid ? .green : .red)
-                            .font(.system(size: 16, weight: .semibold))
-                            .transition(.scale.combined(with: .opacity))
-                    }
+//                    if !text.isEmpty && validationRule != nil {
+//                        Image(systemName: validationState == .valid ? "checkmark" : "exclamationmark")
+//                            .foregroundStyle(validationState == .valid ? .green : .red)
+//                            .font(.system(size: 16, weight: .semibold))
+//                            .transition(.scale.combined(with: .opacity))
+//                    }
                 }
             }
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
-            .background(backgroundColor)
+            .background(.gray800)
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
@@ -104,7 +104,7 @@ struct BorderTextField: View {
             // 유효성 검사 메시지
             if !validationMessage.isEmpty {
                 Text(validationMessage)
-                    .font(.system(size: 12))
+                    .captionRegular12()
                     .foregroundColor(validationState.color)
                     .transition(.opacity.combined(with: .move(edge: .top)))
                     .animation(.easeInOut(duration: 0.2), value: validationMessage)
@@ -119,31 +119,31 @@ struct BorderTextField: View {
         if isFocused || !text.isEmpty {
             switch validationState {
             case .invalid:
-                return .red.opacity(0.1)
+                return .secondaryRed
             case .valid:
-                return .blue.opacity(0.1)
+                return .primaryNormal
             default:
-                return .blue.opacity(0.1)
+                return .gray800
             }
         }
-        return .clear.opacity(0.1)
+        return .gray800
     }
     
     private var borderColor: Color {
         if isFocused {
-            return validationState == .invalid ? .red : .blue
+            return validationState == .invalid ? .secondaryRed : .primaryNormal
         }
         if !text.isEmpty {
             switch validationState {
             case .valid:
-                return .blue
+                return .primaryNormal
             case .invalid:
-                return .red
+                return .secondaryRed
             default:
-                return .gray100
+                return .lineNormal
             }
         }
-        return .gray100
+        return .lineNormal
     }
     
     private var borderWidth: CGFloat {

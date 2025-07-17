@@ -66,19 +66,24 @@ struct RecommendGuideTextView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            title1Style.apply(to: Text(title1), color: titleColor)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                title1Style.apply(to: Text(title1), color: titleColor)
+                        
+                title2Style.apply(to: Text(title2), color: titleColor)
+            }
+            .padding(.bottom, spacing)
+            
+            VStack(alignment: .leading) {
+                Text(subtitle1)
+                    .foregroundStyle(subtitleColor)
+                    .bodyMedium14()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     
-            title2Style.apply(to: Text(title2), color: titleColor)
-                .padding(.bottom, spacing)
-                
-            Text(subtitle1)
-                .foregroundStyle(subtitleColor)
-                .bodyMedium14()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
-            Text(subtitle2)
-                .foregroundStyle(subtitleColor)
-                .bodyMedium14()
+                Text(subtitle2)
+                    .foregroundStyle(subtitleColor)
+                    .bodyMedium14()
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
