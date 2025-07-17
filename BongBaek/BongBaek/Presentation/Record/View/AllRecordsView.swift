@@ -115,7 +115,7 @@ struct AllRecordsView: View {
     
     private func eventContentView(eventDetail: EventDetailData) -> some View {
         VStack(spacing: 12) {
-            VStack {
+            VStack(alignment:.leading) {
                 Text("\(eventDetail.hostInfo.hostName)의 \(eventDetail.eventInfo.eventCategory)")
                     .titleSemiBold18()
                     .foregroundStyle(.white)
@@ -356,7 +356,7 @@ struct AllRecordsView: View {
             } else {
                 Text("기록 삭제하기")
                     .titleSemiBold18()
-                    .foregroundColor(.red)
+                    .foregroundColor(.secondaryRed)
             }
         }
         .frame(maxWidth: .infinity)
@@ -364,7 +364,7 @@ struct AllRecordsView: View {
         .background(.clear)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(.red, lineWidth: 1)
+                .stroke(.secondaryRed, lineWidth: 1)
         )
         .cornerRadius(12)
         .padding(.horizontal, 20)
