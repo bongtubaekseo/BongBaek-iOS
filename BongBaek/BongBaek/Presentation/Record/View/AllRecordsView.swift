@@ -310,27 +310,36 @@ struct AllRecordsView: View {
                 Spacer()
                 
                 // 메모 저장 버튼
-//                Button("저장") {
-//                    Task {
-//                        await viewModel.saveMemo()
-//                    }
-//                }
-//                .foregroundColor(.primaryNormal)
-//                .disabled(viewModel.isLoading)
+    //                Button("저장") {
+    //                    Task {
+    //                        await viewModel.saveMemo()
+    //                    }
+    //                }
+    //                .foregroundColor(.primaryNormal)
+    //                .disabled(viewModel.isLoading)
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
             
-            VStack(alignment: .leading) {
+            ZStack(alignment: .topLeading) {
                 TextEditor(text: $viewModel.memoText)
                     .font(.system(size: 16))
                     .foregroundColor(.white)
                     .scrollContentBackground(.hidden)
                     .background(Color.clear)
                     .frame(minHeight: 100, maxHeight: 200)
+                
+                if viewModel.memoText.isEmpty {
+                    Text("메모를 작성해주세요")
+                        .bodyRegular16()
+                        .foregroundColor(.gray500)
+                        .padding(.top, 8)
+                        .padding(.leading, 5)
+                        .allowsHitTesting(false)
+                }
             }
             .padding(16)
-            .background(Color.gray.opacity(0.2))
+            .background(.gray800)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.5), lineWidth: 1)
