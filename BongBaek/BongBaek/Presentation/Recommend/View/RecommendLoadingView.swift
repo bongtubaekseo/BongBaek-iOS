@@ -8,6 +8,7 @@ import SwiftUI
 
 struct RecommendLoadingView: View {
     @State private var showSuccessView = false
+    @State private var username: String = "없음"
     @EnvironmentObject var router: NavigationRouter
     @EnvironmentObject var eventManager: EventCreationManager
     
@@ -29,7 +30,7 @@ struct RecommendLoadingView: View {
                     LottieTest(animationFileName: "find_amount", loopMode: .loop)
                         .frame(width: 151, height: 140)
                     
-                    Text("봉백님을 위한\n금액을 찾고 있어요")
+                    Text("\(username)님을 위한\n금액을 찾고 있어요")
                         .titleSemiBold18()
                         .multilineTextAlignment(.center)
                         .foregroundColor(.gray100)
@@ -102,6 +103,7 @@ struct RecommendLoadingView: View {
             print("    🤝 만나는 빈도: \(Int(eventManager.meetFrequency)) (0=거의안만남, 4=매우자주)")
         }
         
+        username = eventManager.hostName
         print("")
         
         // Step 2: 이벤트 정보
