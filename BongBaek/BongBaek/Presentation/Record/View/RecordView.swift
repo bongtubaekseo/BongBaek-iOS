@@ -107,40 +107,88 @@ struct RecordsHeaderView: View {
     
     var body: some View {
         HStack {
-            Text("경조사 전체 기록")
-                .titleSemiBold18()
-                .foregroundStyle(.white)
-            
-            Spacer()
-            
-            HStack(spacing: 0) {
+            // 삭제 모드일 때 뒤로가기 버튼
+            if isDeleteMode {
                 Button(action: {
-                    router.push(to: .modifyEventView(mode: .create, eventDetailData: nil))
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isDeleteMode = false
+                    }
                 }) {
-                    Image(systemName: "plus")
-                        .font(.system(size: 18, weight: .medium))
+                    Text("취소")
+                        .bodyRegular16()
                         .foregroundColor(.white)
                 }
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
+                .transition(.move(edge: .leading).combined(with: .opacity))
+            } else {
+                // 일반 모드일 때 왼쪽 공백
+                Spacer()
+                    .frame(width: 44, height: 44)
+            }
+            
+            Spacer()
+            
+            // 중앙 텍스트
+            if !isDeleteMode {
+                Text("경조사 전체 기록")
+                    .titleSemiBold18()
+                    .foregroundStyle(.white)
+            } else {
+                Text("경조사 기록 삭제")
+                    .titleSemiBold18()
+                    .foregroundStyle(.white)
+            }
+            
+            Spacer()
+            
+            HStack(spacing: 0) {
+                // 삭제 모드가 아닐 때만 + 버튼 표시
+                if !isDeleteMode {
+                    Button(action: {
+                        router.push(to: .createEventView)
+                    }) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.white)
+                    }
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
+                }
                 
                 Button(action: {
                     if isDeleteMode {
                         showAlert = true
                     } else {
-                        isDeleteMode = true
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isDeleteMode = true
+                        }
                     }
                 }) {
-                    Image(systemName: isDeleteMode ? "checkmark" : "trash")
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(isDeleteMode ? .blue : .white)
+                    if isDeleteMode {
+                        Text("삭제")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.red)
+                    } else {
+                        Image(systemName: "trash")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.white)
+                    }
                 }
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
                 .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
-                    Button("취소", role: .cancel) { }
+                    Button("취소", role: .cancel) {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isDeleteMode = false
+                        }
+                    }
                     Button("삭제", role: .destructive) {
                         onDeleteTapped()
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isDeleteMode = false
+                        }
                     }
                 } message: {
                     Text("이 기록의 모든 내용이 삭제됩니다.")
@@ -151,6 +199,7 @@ struct RecordsHeaderView: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
+        .animation(.easeInOut(duration: 0.2), value: isDeleteMode)
     }
 }
 

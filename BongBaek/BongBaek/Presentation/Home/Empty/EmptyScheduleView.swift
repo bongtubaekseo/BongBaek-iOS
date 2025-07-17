@@ -26,7 +26,7 @@ struct EmptyScheduleView: View {
                 
                 HStack {
                     Spacer()
-                    Image("icon_BlackClock")
+                    Image("black_alarm_image")
                         .resizable()
                         .frame(width: 134, height: 134)
                         .offset(y: -10)
@@ -40,17 +40,18 @@ struct EmptyScheduleView: View {
                         .captionRegular12()
                         .foregroundColor(.gray300)
                 }
-                .padding(.vertical, 6)
+                .padding(.vertical, 10)
                 .padding(.horizontal, 10)
                 .background(.gray900)
                 .cornerRadius(6)
-                .offset(y: -65)
+                .offset(y: -55)
             }
             .padding(.top, 40)
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
+
             .background(.gray800)
-            .frame(width: 320, height: 260)
+            .frame(width: 375,height: 260)
             .cornerRadius(10)
         }
         .buttonStyle(PlainButtonStyle())  // 기본 버튼 스타일 제거

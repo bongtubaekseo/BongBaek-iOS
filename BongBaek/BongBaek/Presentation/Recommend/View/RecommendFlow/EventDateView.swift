@@ -60,7 +60,11 @@ struct EventDateView: View {
             .padding(.bottom, 50)
         }
         .onAppear {
-            stepManager.currentStep = 3
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeInOut(duration: 0.8)) {
+                    stepManager.currentStep = 3
+                }
+            }
             print("📅 EventDateView 나타남 - path.count: \(router.path.count)")
         }
         .onChange(of: eventManager.eventDate) { _, newDate in
@@ -200,7 +204,7 @@ struct EventDateFormView: View {
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(red: 0.25, green: 0.25, blue: 0.28))
+                    .fill(.gray750)
             )
             
             // 참석 여부 섹션
@@ -233,7 +237,7 @@ struct EventDateFormView: View {
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(red: 0.25, green: 0.25, blue: 0.28))
+                    .fill(.gray750)
             )
         }
         .onChange(of: eventManager.eventDate) { _, newDate in
@@ -271,11 +275,11 @@ struct EventDatePickerView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.black.opacity(0.4))
+                    .fill(.gray800)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isPastDate ? Color.secondaryRed : Color.clear, lineWidth: 2)
+                    .stroke(isPastDate ? Color.secondaryRed : Color.lineNormal, lineWidth: 1)
             )
             .contentShape(Rectangle())
         }

@@ -10,6 +10,9 @@ struct RecommendLottie: View {
     @StateObject private var lottieviewModel = RecommendCostViewModel()
     @State private var showRectangle = false
     @State private var progressWidth: CGFloat = 5
+    @State private var recommendedAmount: Int = 100000
+    @State private var minAmount: Int = 80000
+    @State private var maxAmount: Int = 120000
 
     @EnvironmentObject var router: NavigationRouter
     @EnvironmentObject var eventManager: EventCreationManager
@@ -52,8 +55,10 @@ struct RecommendLottie: View {
                         .padding(.horizontal, 20)
                         
                         noticeSection
+                            .padding(.horizontal, 20)
                         
                         participationSection
+                            .padding(.horizontal, 20)
                         
                         bottomButtons
                     }
@@ -64,6 +69,19 @@ struct RecommendLottie: View {
             Spacer()
         }
         .onAppear {
+            if let data = eventManager.recommendationResponse?.data {
+                print("✅ 추천 데이터 확인:")
+                print("  💰 추천 금액: \(data.cost)원")
+                print("  📊 범위: \(data.range.min)원 ~ \(data.range.max)원")
+                print("  🏷️ 카테고리: \(data.category)")
+                print("  📍 장소: \(data.location)")
+                
+                recommendedAmount = data.cost
+                 minAmount = data.range.min
+                 maxAmount = data.range.max
+            } else {
+                print("❌ 추천 데이터 없음")
+            }
             print("⏳ RecommendLottie 나타남 - path.count: \(router.path.count)")
         }
         .navigationBarHidden(true)
@@ -100,7 +118,7 @@ struct RecommendLottie: View {
                         )
 
                     HStack(alignment: .bottom, spacing: 4) {
-                        Text("100,000")
+                        Text("\(recommendedAmount)")
                             .font(.system(size: 46, weight: .bold))
                             .foregroundStyle(
                                 LinearGradient(
@@ -231,13 +249,13 @@ struct RecommendLottie: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 HStack {
-                    Text("\(lottieviewModel.formattedMinAmount)원")
+                    Text("\(minAmount)원")
                         .captionRegular12()
                         .foregroundColor(.gray400)
 
                     Spacer()
 
-                    Text("\(lottieviewModel.formattedMaxAmount)원")
+                    Text("\(maxAmount)원")
                         .captionRegular12()
                         .foregroundColor(.gray400)
                 }
