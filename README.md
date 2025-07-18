@@ -17,4 +17,35 @@
 ## ✍️ Coding Convention
 
 
+
+
+
+
 ## 📁 Foldering
+
+```swift
+📂 BongBaek
+├── 📂 Application
+│   └── 📄BongBaekApp
+├── 📂 Global
+│   ├── 📂 Component
+│   ├── 📂 Extension 
+│   └── 📂 Resource
+│  
+├── 📂 Network
+│   ├── 📂 Base
+│   └── 📂 Model
+│   └── 📂 Protocols
+│   └── 📂 Service  
+├── 📂 Presentation
+    └── 📂 Home
+    └── 📂 Login
+    └── 📂 Recommend
+    └── 📂 Record
+
+
+```
+
+
+
+
