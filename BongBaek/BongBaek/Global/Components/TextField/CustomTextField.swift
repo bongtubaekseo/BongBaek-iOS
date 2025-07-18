@@ -7,6 +7,194 @@
 
 import SwiftUI
 
+//struct CustomTextField: View {
+//    let title: String
+//    let icon: String
+//    let placeholder: String
+//    @Binding var text: String
+//    let validationRule: ValidationRule?
+//    let isSecure: Bool
+//    let isRequired: Bool
+//    let keyboardType: UIKeyboardType
+//    
+//    @State private var validationState: ValidationState = .normal
+//    @State private var validationMessage: String = ""
+//    @FocusState private var isFocused: Bool
+//    @State private var showPassword: Bool = false
+//    let isReadOnly: Bool
+//    let onTap: (() -> Void)?
+//    
+//    init(title: String,
+//         icon: String,
+//         placeholder: String,
+//         text: Binding<String>,
+//         validationRule: ValidationRule? = nil,
+//         isSecure: Bool = false,
+//         isReadOnly: Bool = false,
+//         isRequired: Bool = false,
+//         keyboardType: UIKeyboardType = .default,
+//         onTap: (() -> Void)? = nil
+//        ) {
+//        self.title = title
+//        self.icon = icon
+//        self.placeholder = placeholder
+//        self._text = text
+//        self.validationRule = validationRule
+//        self.isSecure = isSecure
+//        self.isReadOnly = isReadOnly
+//        self.isRequired = isRequired
+//        self.keyboardType = keyboardType
+//        self.onTap = onTap
+//    }
+//    
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 8) {
+//  
+//            HStack(spacing: 8) {
+//                Image(icon)
+////                    .renderingMode(.template)
+//                    .resizable()
+//                    .frame(width: 16,height: 16)
+////                    .foregroundStyle(.white)
+//                
+//                HStack(spacing: 2) {  
+//                    Text(title)
+//                        .bodyMedium16()
+//                        .foregroundColor(.white)
+//                    
+//                    if isRequired {
+//                        
+//                        VStack {
+//                            Text("*")
+//                                .bodyMedium16()
+//                                .foregroundColor(.blue)
+//                                .padding(.top, 2)
+//                                .padding(.leading, 1)
+//                            
+//                            Spacer()
+//                        }
+//                    }
+//                }
+//            }
+//            
+//            VStack(alignment: .leading, spacing: 2) {
+//                HStack {
+//                    if isSecure && !showPassword {
+//                        SecureField(placeholder, text: $text)
+//                            .font(.system(size: 16))
+//                            .textFieldStyle(PlainTextFieldStyle())
+//                            .focused($isFocused)
+//                            .disabled(isReadOnly)
+//                            .foregroundColor(.white)
+//                            .tint(.white)
+//                            .keyboardType(keyboardType)
+//                    } else {
+//                        ZStack(alignment: .leading) {
+//                            if text.isEmpty {
+//                                Text(placeholder)
+//                                    .font(.system(size: 16))
+//                                    .foregroundColor(.gray.opacity(0.6))
+//                            }
+//                            
+//                            TextField("", text: $text)
+//                                .font(.system(size: 16))
+//                                .textFieldStyle(PlainTextFieldStyle())
+//                                .focused($isFocused)
+//                                .disabled(isReadOnly)
+//                                .foregroundColor(.white)
+//                                .tint(.white)
+//                                .keyboardType(keyboardType)
+//                        }
+//                    }
+//                    
+//                    HStack(spacing: 8) {
+//                        if !text.isEmpty && !isReadOnly && isFocused {
+//                            Button(action: {
+//                                withAnimation(.easeInOut(duration: 0.2)) {
+//                                    text = ""
+//                                }
+//                            }) {
+//                                Image(systemName: "xmark.circle.fill")
+//                                    .font(.system(size: 16))
+//                                    .foregroundColor(.gray.opacity(0.7))
+//                            }
+//                            .transition(.scale.combined(with: .opacity))
+//                        }
+//                        
+////                        if isReadOnly {
+////                            Image(systemName: "chevron.down")
+////                                .font(.system(size: 12))
+////                                .foregroundColor(.gray)
+////                        }
+//                        
+//                        if isSecure && !isReadOnly {
+//                            Button(action: {
+//                                showPassword.toggle()
+//                            }) {
+//                                Image(systemName: showPassword ? "eye.slash" : "eye")
+//                                    .font(.system(size: 14))
+//                                    .foregroundColor(.gray)
+//                            }
+//                        }
+//                    }
+//                }
+//                .padding(.vertical, 12)
+//                .contentShape(Rectangle())
+//                .onTapGesture {
+//                    if isReadOnly {
+//                        onTap?()
+//                    }
+//                }
+//                Rectangle()
+//                    .frame(height: 1)
+//                    .foregroundColor(lineColor)
+//                    .animation(.easeInOut(duration: 0.2), value: validationState)
+//            }
+//            
+//            if !validationMessage.isEmpty {
+//                Text(validationMessage)
+//                    .font(.system(size: 12))
+//                    .foregroundColor(validationState.color)
+//                    .transition(.opacity.combined(with: .move(edge: .top)))
+//                    .animation(.easeInOut(duration: 0.2), value: validationMessage)
+//            }
+//        }
+//        .onChange(of: text) { _, newValue in
+//            if !isReadOnly { 
+//                validateInput(newValue)
+//            }
+//        }
+//    }
+//    
+//    private var lineColor: Color {
+//        if isFocused {
+//            return validationState == .invalid ? .red : .primaryNormal
+//        }
+//        return validationState.color
+//    }
+//    
+//    private func validateInput(_ input: String) {
+//        guard let rule = validationRule else {
+//            validationState = .normal
+//            validationMessage = ""
+//            return
+//        }
+//        
+//        let validation = rule.validate(input)
+//        
+//        withAnimation(.easeInOut(duration: 0.2)) {
+//            if input.isEmpty {
+//                validationState = .normal
+//                validationMessage = ""
+//            } else {
+//                validationState = validation.isValid ? .valid : .invalid
+//                validationMessage = validation.message
+//            }
+//           
+//        }
+//    }
+//}
+
 struct CustomTextField: View {
     let title: String
     let icon: String
@@ -15,6 +203,7 @@ struct CustomTextField: View {
     let validationRule: ValidationRule?
     let isSecure: Bool
     let isRequired: Bool
+    let keyboardType: UIKeyboardType 
     
     @State private var validationState: ValidationState = .normal
     @State private var validationMessage: String = ""
@@ -22,6 +211,9 @@ struct CustomTextField: View {
     @State private var showPassword: Bool = false
     let isReadOnly: Bool
     let onTap: (() -> Void)?
+    
+    // 숫자 포맷팅을 위한 상태
+    @State private var displayText: String = ""
     
     init(title: String,
          icon: String,
@@ -31,6 +223,7 @@ struct CustomTextField: View {
          isSecure: Bool = false,
          isReadOnly: Bool = false,
          isRequired: Bool = false,
+         keyboardType: UIKeyboardType = .default, // 새로 추가
          onTap: (() -> Void)? = nil) {
         self.title = title
         self.icon = icon
@@ -40,6 +233,7 @@ struct CustomTextField: View {
         self.isSecure = isSecure
         self.isReadOnly = isReadOnly
         self.isRequired = isRequired
+        self.keyboardType = keyboardType
         self.onTap = onTap
     }
     
@@ -53,7 +247,7 @@ struct CustomTextField: View {
                     .frame(width: 16,height: 16)
 //                    .foregroundStyle(.white)
                 
-                HStack(spacing: 2) {  
+                HStack(spacing: 2) {
                     Text(title)
                         .bodyMedium16()
                         .foregroundColor(.white)
@@ -83,28 +277,34 @@ struct CustomTextField: View {
                             .disabled(isReadOnly)
                             .foregroundColor(.white)
                             .tint(.white)
+                            .keyboardType(keyboardType) // 키보드 타입 적용
                     } else {
                         ZStack(alignment: .leading) {
-                            if text.isEmpty {
+                            if displayText.isEmpty {
                                 Text(placeholder)
                                     .font(.system(size: 16))
                                     .foregroundColor(.gray.opacity(0.6))
                             }
                             
-                            TextField("", text: $text)
+                            TextField("", text: $displayText)
                                 .font(.system(size: 16))
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .focused($isFocused)
                                 .disabled(isReadOnly)
                                 .foregroundColor(.white)
                                 .tint(.white)
+                                .keyboardType(keyboardType) // 키보드 타입 적용
+                                .onChange(of: displayText) { _, newValue in
+                                    handleTextChange(newValue)
+                                }
                         }
                     }
                     
                     HStack(spacing: 8) {
-                        if !text.isEmpty && !isReadOnly && isFocused {
+                        if !displayText.isEmpty && !isReadOnly && isFocused {
                             Button(action: {
                                 withAnimation(.easeInOut(duration: 0.2)) {
+                                    displayText = ""
                                     text = ""
                                 }
                             }) {
@@ -153,10 +353,67 @@ struct CustomTextField: View {
                     .animation(.easeInOut(duration: 0.2), value: validationMessage)
             }
         }
-        .onChange(of: text) { _, newValue in
-            if !isReadOnly { 
-                validateInput(newValue)
+        .onAppear {
+            // 초기값 설정
+            if !text.isEmpty && (keyboardType == .numberPad || keyboardType == .decimalPad) {
+                displayText = formatNumber(text)
+            } else {
+                displayText = text
             }
+        }
+        .onChange(of: text) { _, newValue in
+            // 읽기 전용이 아니고, 숫자 포맷팅이 필요한 경우
+            if !isReadOnly && (keyboardType == .numberPad || keyboardType == .decimalPad) {
+                displayText = formatNumber(newValue)
+            } else {
+                // 일반 텍스트나 읽기 전용인 경우 (날짜 선택 등)
+                displayText = newValue
+            }
+            validateInput(newValue)
+        }
+//        .onChange(of: text) { _, newValue in
+//            if !isReadOnly && !(keyboardType == .numberPad || keyboardType == .decimalPad) {
+//                displayText = newValue
+//                validateInput(newValue)
+//            }
+//        }
+    }
+    
+    // 숫자 포맷팅 함수
+    private func formatNumber(_ input: String) -> String {
+        // 숫자만 추출
+        let numbersOnly = input.filter { $0.isNumber }
+        
+        guard !numbersOnly.isEmpty else { return "" }
+        
+        // 숫자를 Int로 변환 후 천 단위 콤마 추가
+        if let number = Int(numbersOnly) {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            return formatter.string(from: NSNumber(value: number)) ?? numbersOnly
+        }
+        
+        return numbersOnly
+    }
+    
+    // 텍스트 변경 처리
+    private func handleTextChange(_ newValue: String) {
+        if keyboardType == .numberPad || keyboardType == .decimalPad {
+            // 숫자만 추출
+            let numbersOnly = newValue.filter { $0.isNumber }
+            
+            // 원본 text에는 숫자만 저장
+            text = numbersOnly
+            
+            // 화면에는 포맷된 텍스트 표시
+            displayText = formatNumber(numbersOnly)
+            
+            // 유효성 검사는 숫자만으로
+            validateInput(numbersOnly)
+        } else {
+            // 일반 텍스트는 그대로 처리
+            text = newValue
+            validateInput(newValue)
         }
     }
     
@@ -188,7 +445,6 @@ struct CustomTextField: View {
         }
     }
 }
-
 enum ValidationState {
     case normal
     case valid

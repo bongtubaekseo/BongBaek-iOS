@@ -154,7 +154,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                 }
             }
         }
-        .background(Color.gray.opacity(0.2))
+        .background(.gray750)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color("primary_normal"), lineWidth: 1)

@@ -13,6 +13,7 @@ struct RecommendLottie: View {
     @State private var recommendedAmount: Int = 100000
     @State private var minAmount: Int = 80000
     @State private var maxAmount: Int = 120000
+    @State private var category: String = "경조사"
     @State private var eventLocation: String = "없음"
     @State private var eventCategory: String = "해당없음"
 
@@ -81,8 +82,10 @@ struct RecommendLottie: View {
                 recommendedAmount = data.cost
                  minAmount = data.range.min
                  maxAmount = data.range.max
+                category = data.category
                 eventLocation = data.location
                 eventCategory = data.category
+
             } else {
                 print("❌ 추천 데이터 없음")
             }
@@ -98,6 +101,7 @@ struct RecommendLottie: View {
     var headerSection: some View {
         VStack {
             VStack(spacing: 20) {
+
 
                 Text(eventCategory)
                     .bodyMedium14()
@@ -335,47 +339,47 @@ struct RecommendLottie: View {
         )
     }
 
-    var bottomButtons: some View {
-        VStack(spacing: 12) {
-            Button("이 금액으로 결정하기") {
-                Task {
-                    // 추천받은 금액으로 이벤트 생성
-                    let success = await eventManager.submitEventWithRecommendedAmount()
-                    
-                    if success {
-                        // 성공하면 성공 화면으로 이동
-                        await MainActor.run {
-                            router.push(to: .recommendSuccessView)
+        var bottomButtons: some View {
+            VStack(spacing: 12) {
+                Button("이 금액으로 결정하기") {
+                    Task {
+                        // 추천받은 금액으로 이벤트 생성
+                        let success = await eventManager.submitEventWithRecommendedAmount()
+                        
+                        if success {
+                            // 성공하면 성공 화면으로 이동
+                            await MainActor.run {
+                                router.push(to: .recommendSuccessView)
+                            }
+                        } else {
+                            // 실패 시 에러 처리 (예: 알럿 표시)
+                            print("이벤트 생성 실패: \(eventManager.submitError ?? "알 수 없는 오류")")
+                            // TODO: 에러 알럿 표시 로직 추가
                         }
-                    } else {
-                        // 실패 시 에러 처리 (예: 알럿 표시)
-                        print("이벤트 생성 실패: \(eventManager.submitError ?? "알 수 없는 오류")")
-                        // TODO: 에러 알럿 표시 로직 추가
                     }
                 }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .background(Color("primary_normal"))
-            .foregroundColor(.white)
-            .font(.title_semibold_18)
-            .cornerRadius(10)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(Color("primary_normal"))
+                .foregroundColor(.white)
+                .font(.title_semibold_18)
+                .cornerRadius(10)
 
-            Button("추천받은 금액 수정하기") {
-                // EventCreationManager에서 추천 데이터 가져와서 전달
-                router.push(to: .modifyEventView(
-                    mode: .edit, eventDetailData: nil
-                ))
+                Button("추천받은 금액 수정하기") {
+                    // EventCreationManager에서 추천 데이터 가져와서 전달
+                    router.push(to: .modifyEventView(
+                        mode: .edit, eventDetailData: nil
+                    ))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(Color("gray700"))
+                .foregroundColor(.gray200)
+                .font(.title_semibold_18)
+                .cornerRadius(10)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .background(Color("gray700"))
-            .foregroundColor(.gray200)
-            .font(.title_semibold_18)
-            .cornerRadius(10)
+            .padding(.horizontal, 20)
         }
-        .padding(.horizontal, 20)
-    }
 
     var categorySection: some View {
         HStack(spacing: 12) {

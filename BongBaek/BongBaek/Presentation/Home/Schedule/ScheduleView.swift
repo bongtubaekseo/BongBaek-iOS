@@ -41,14 +41,11 @@ struct ScheduleView: View {
                 EmptyCardView()
             } else {
                 
+                
                 ForEach(sortedEvents, id: \.eventId) { event in
-                    Button(action: {
-                        router.push(to: .allRecordView(eventId: event.eventId))
-                    }) {
-                        ScheduleCellView(event: event)
-                    }
-                    .buttonStyle(PlainButtonStyle())
+                    ScheduleCellView(event: event)
                 }
+                
             }
         }
         .padding(.horizontal)

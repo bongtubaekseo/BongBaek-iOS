@@ -351,6 +351,7 @@ struct RecordCellView: View {
     let isDeleteMode: Bool
     let isSelected: Bool
     let onSelectionToggle: () -> Void
+    @EnvironmentObject var router: NavigationRouter
 
     var body: some View {
         HStack(spacing: 12) {
@@ -409,6 +410,12 @@ struct RecordCellView: View {
             .background(.gray750)
             .cornerRadius(10)
             .frame(maxWidth: .infinity)
+        }
+        .onTapGesture {
+            if !isDeleteMode { // 삭제 모드가 아닐 때만 네비게이션
+                router.push(to: .allRecordView2(eventId: event.eventId))
+
+            }
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 8)

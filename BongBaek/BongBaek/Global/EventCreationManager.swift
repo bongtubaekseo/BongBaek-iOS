@@ -113,8 +113,8 @@ class EventCreationManager: ObservableObject {
         hostNickname: String,
         relationship: String,
         detailSelected: Bool,
-        contactFrequency: Double = 2.0,
-        meetFrequency: Double = 2.0
+        contactFrequency: Double = 3.0,
+        meetFrequency: Double = 3.0
     ) {
         self.hostName = hostName
         self.hostNickname = hostNickname
@@ -373,8 +373,8 @@ class EventCreationManager: ObservableObject {
         hostNickname = ""
         relationship = ""
         detailSelected = false
-        contactFrequency = 2.0
-        meetFrequency = 2.0
+        contactFrequency = 3.0
+        meetFrequency = 3.0
         
         // Step 2 데이터 초기화
         eventCategory = ""
