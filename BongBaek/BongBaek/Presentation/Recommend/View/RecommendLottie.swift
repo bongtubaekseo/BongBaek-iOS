@@ -374,6 +374,7 @@ struct RecommendLottie: View {
             .font(.title_semibold_18)
             .cornerRadius(10)
         }
+        .padding(.horizontal, 20)
     }
 
     var categorySection: some View {
