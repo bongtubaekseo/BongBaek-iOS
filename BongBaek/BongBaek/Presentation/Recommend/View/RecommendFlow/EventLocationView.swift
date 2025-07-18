@@ -94,21 +94,17 @@ struct EventLocationView: View {
                .font(.system(size: 14))
                .foregroundColor(.gray300)
            
-           if !location.roadAddressName.isEmpty {
-               Text(location.roadAddressName)
-                   .font(.system(size: 12))
-                   .foregroundColor(.blue)
-           }
        }
+       .frame(maxWidth: .infinity, alignment: .leading)
        .padding(.horizontal, 16)
        .padding(.vertical, 12)
        .background(Color.black.opacity(0.8))
        .overlay(
            RoundedRectangle(cornerRadius: 12)
-               .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+            .stroke(.gray750, lineWidth: 1)
        )
        .cornerRadius(12)
-       .padding(.horizontal, 20)
+       .padding(.horizontal, 40)
        .padding(.bottom, 20)
        .zIndex(50)
        .transition(.asymmetric(
