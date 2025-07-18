@@ -29,7 +29,7 @@ final class KakaoMapCoordinator: NSObject, MapControllerDelegate {
             viewName: "mapview",
             viewInfoName: "map",
             defaultPosition: self.userMapPoint,
-            defaultLevel: 14
+            defaultLevel: 15
         )
         
         guard let controller else {

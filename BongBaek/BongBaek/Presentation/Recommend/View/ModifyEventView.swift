@@ -17,6 +17,9 @@ struct ModifyEventView: View {
     @EnvironmentObject var eventManager: EventCreationManager
     @EnvironmentObject var router: NavigationRouter
     let eventDetailData: EventDetailData?
+    @State private var mapView: KakaoMapView?
+    @State var longitude: Double = 0.0
+    @State var latitude: Double = 0.0
    
     @State var nickname: String = ""
     @State var alias: String = ""
@@ -25,6 +28,8 @@ struct ModifyEventView: View {
     @State private var selectedAttend: TextDropdownItem?
     @State private var selectedEvent: TextDropdownItem?
     @State private var selectedRelation: TextDropdownItem?
+    @State var locationName: String = ""
+    @State var locationAddress: String = ""
     @State private var showDatePicker = false
     @State var selectedDate: String = ""
     @Environment(\.dismiss) private var dismiss
@@ -33,6 +38,10 @@ struct ModifyEventView: View {
            return mode == .edit && eventDetailData == nil && eventManager.recommendationResponse != nil
        }
    
+    private var hasLocationData: Bool {
+        return !locationName.isEmpty && longitude != 0.0 && latitude != 0.0
+    }
+    
     let attendItems = [
         TextDropdownItem(title: "참석"),
         TextDropdownItem(title: "미참석"),
@@ -164,7 +173,43 @@ struct ModifyEventView: View {
                             }
                             .padding(.top, 16)
                         
-                        EventMapView()
+                        VStack(spacing: 16) {
+                            HStack {
+                                HStack {
+                                    Image("icon_location_16")
+                                    Text("행사장")
+                                        .bodyMedium14()
+                                        .foregroundStyle(.gray300)
+                                }
+                                
+                                Spacer()
+                                
+                                Button {
+                                    print("수정하기")
+                                } label: {
+                                    Text("수정하기")
+                                        .bodyRegular14()
+                                        .foregroundStyle(.gray300)
+                                }
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                mapSection
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 180)
+                                    .cornerRadius(12)
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(locationName)
+                                        .bodyMedium16()
+                                        .foregroundStyle(.white)
+                                    
+                                    Text(locationAddress)
+                                        .bodyMedium16()
+                                        .foregroundStyle(.gray300)
+                                }
+                            }
+                        }
                             .padding(.top, 16)
                         
 
@@ -223,6 +268,74 @@ struct ModifyEventView: View {
             setupInitialValues()
         }
     }
+    
+    private var mapSection: some View {
+          Group {
+              // 위치 정보가 있는 경우 지도 표시
+              if hasLocationData {
+                  if let mapView = mapView {
+                      mapView
+                          .frame(height: 180)
+                          .cornerRadius(12)
+                          .onAppear {
+                              updateMapLocation()
+                          }
+                  } else {
+                      Rectangle()
+                          .foregroundStyle(.gray750)
+                          .frame(maxWidth: .infinity)
+                          .frame(height: 180)
+                          .cornerRadius(12)
+                          .onAppear {
+                              mapView = KakaoMapView(draw: .constant(true))
+                              // 지도 생성 후 위치 업데이트
+                              DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                  updateMapLocation()
+                              }
+                          }
+                  }
+              } else {
+                  // 위치 정보가 없는 경우 빈 Rectangle 표시
+                  VStack {
+                      Image(systemName: "location.slash")
+                          .font(.system(size: 30))
+                          .foregroundColor(.gray500)
+                      
+                      Text("위치 정보가 없습니다")
+                          .bodyRegular14()
+                          .foregroundColor(.gray500)
+                          .padding(.top, 8)
+                  }
+                  .frame(maxWidth: .infinity)
+                  .frame(height: 180)
+                  .background(.gray750)
+                  .cornerRadius(12)
+              }
+          }
+      }
+    
+    private func updateMapLocation() {
+           guard hasLocationData else { return }
+           
+           mapView?.updateLocation(longitude: longitude, latitude: latitude)
+           print("🗺️ 지도 위치 업데이트: \(locationName)")
+           print("📍 좌표: \(longitude), \(latitude)")
+       }
+    
+    private func handleLocationSelection(_ document: KLDocument) {
+        // EventCreationManager에 위치 데이터 저장
+        eventManager.updateLocationData(selectedLocation: document)
+        
+        
+        // 지도 위치 업데이트
+        if let longitude = Double(document.x),
+           let latitude = Double(document.y) {
+            mapView?.updateLocation(longitude: longitude, latitude: latitude)
+            print("지도 위치 업데이트: \(document.placeName)")
+            print("좌표: \(longitude), \(latitude)")
+        }
+
+    }
    
     
     private var dropdownSection: some View {
@@ -268,6 +381,37 @@ struct ModifyEventView: View {
         print("  - 날짜: \(selectedDate)")
     }
     
+//    private func setupFromEventDetail(_ eventDetail: EventDetailData) {
+//        print("EventDetailData로부터 초기값 설정...")
+//        
+//        // 개인 정보
+//        nickname = eventDetail.hostInfo.hostName
+//        alias = eventDetail.hostInfo.hostNickname
+//        
+//        // 금액 (EventDetailData의 cost 사용)
+//        money = "\(eventDetail.eventInfo.cost)"
+//        print("기존 기록 금액 설정: \(eventDetail.eventInfo.cost)원")
+//        
+//        // 참석 여부
+//        let attendanceText = eventDetail.eventInfo.isAttend ? "참석" : "미참석"
+//        if let attendItem = attendItems.first(where: { $0.title == attendanceText }) {
+//            selectedAttend = attendItem
+//        }
+//        
+//        // 날짜 설정 (API 형식: "2025-01-18" → "2025년 1월 18일")
+//        selectedDate = formatDateForDisplay(eventDetail.eventInfo.eventDate)
+//        
+//        // 관계
+//        if let relationItem = relationItems.first(where: { $0.title == eventDetail.eventInfo.relationship }) {
+//            selectedRelation = relationItem
+//        }
+//        
+//        // 이벤트 카테고리
+//        if let eventItem = eventItems.first(where: { $0.title == eventDetail.eventInfo.eventCategory }) {
+//            selectedEvent = eventItem
+//        }
+//    }
+    
     private func setupFromEventDetail(_ eventDetail: EventDetailData) {
         print("EventDetailData로부터 초기값 설정...")
         
@@ -275,7 +419,7 @@ struct ModifyEventView: View {
         nickname = eventDetail.hostInfo.hostName
         alias = eventDetail.hostInfo.hostNickname
         
-        // 금액 (EventDetailData의 cost 사용)
+        // 금액
         money = "\(eventDetail.eventInfo.cost)"
         print("기존 기록 금액 설정: \(eventDetail.eventInfo.cost)원")
         
@@ -285,8 +429,22 @@ struct ModifyEventView: View {
             selectedAttend = attendItem
         }
         
-        // 날짜 설정 (API 형식: "2025-01-18" → "2025년 1월 18일")
+        // 날짜 설정
         selectedDate = formatDateForDisplay(eventDetail.eventInfo.eventDate)
+        
+        // 위치 정보 설정 (추가)
+        locationName = eventDetail.locationInfo.location
+        locationAddress = eventDetail.locationInfo.location // 또는 다른 주소 필드가 있다면 사용
+        
+//        if let lng = eventDetail.locationInfo.longitude,
+//           let lat = eventDetail.locationInfo.latitude {
+//            longitude = lng
+//            latitude = lat
+//        } else {
+//            longitude = 0.0
+//            latitude = 0.0
+//        }
+        
         
         // 관계
         if let relationItem = relationItems.first(where: { $0.title == eventDetail.eventInfo.relationship }) {
@@ -297,6 +455,10 @@ struct ModifyEventView: View {
         if let eventItem = eventItems.first(where: { $0.title == eventDetail.eventInfo.eventCategory }) {
             selectedEvent = eventItem
         }
+        
+        print("✅ 위치 정보 설정 완료")
+        print("  - 위치명: \(locationName)")
+        print("  - 위치 주소: \(locationAddress)")
     }
     
     private func setupFromRecommendation() {
@@ -329,6 +491,9 @@ struct ModifyEventView: View {
         if let relationItem = relationItems.first(where: { $0.title == eventManager.relationship }) {
             selectedRelation = relationItem
         }
+        
+        locationName = eventManager.locationName
+        locationAddress = eventManager.locationAddress
         
         // 이벤트 카테고리
         if let eventItem = eventItems.first(where: { $0.title == eventManager.eventCategory }) {
