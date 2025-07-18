@@ -7,10 +7,12 @@
 
 
 
+## 🧑🏻‍💻 iOS Developer
+
 
 | 임재현 | 강현우 | 김현우 |
 |--------|--------|--------|
-| <img src="https://github.com/user-attachments/assets/69802ec6-32ce-47f5-82d5-e4529debd656" width="350"><br><strong>임재현</strong><br><em>iOS developer</em> | <img src="https://github.com/user-attachments/assets/58f690b5-6de8-4188-97e0-5e6d5c2cf106" width="350"><br><strong>강현우</strong><br><em>iOS developer</em> | <img src="https://github.com/user-attachments/assets/944e3218-760f-453a-bd37-39914bf618b3" width="350"><br><strong>김현우</strong><br><em>iOS developer</em> |
+| <img src="https://github.com/user-attachments/assets/cbefddfe-0e11-4360-ae40-54cc4e3ea5d2" width="350"><br><strong>임재현</strong><br><em>iOS developer</em> | <img src="https://github.com/user-attachments/assets/5507921a-2b9c-437c-ac3a-41989c0f7a27" width="350"><br><strong>강현우</strong><br><em>iOS developer</em> |<img src="https://github.com/user-attachments/assets/000f5af7-08c0-4d19-883d-3312831c8c68" width="350"><br><strong>김현우</strong><br><em>iOS developer</em> |
 
 
 
@@ -24,7 +26,7 @@
 | **상태 관리 / 아키텍처** | MVI | 단방향 데이터 흐름을 통한 구조적 상태 관리 및 사용자 이벤트 반영<br/>직관적인 상태 흐름과 빠른 UI 구성에 적합 | — |
 | **네트워크 계층** | Moya | URLSession 위에 구축된 추상화 네트워크 레이어, 간편한 API 관리 및 테스트 지원<br/>API 요청의 타입 안정성과 테스트 편의성을 높임 | 15.0.3 |
 | **이미지 처리** | Kingfisher | 이미지 비동기 다운로드 및 캐싱 처리,<br/>스크롤 성능 최적화 이미지 로딩 성능과 UI 반응성 향상에 기여 | 8.3.3 |
-| **지도** | NMapsMap | 네이버 지도를 활용한 지도 기능을 구현하기 위함 | 3.22.0 |
+| **지도** | KaKaoMap | 카카오 지도를 활용한 지도 기능을 구현하기 위함 | 3.22.0 |
 | **카카오 SDK** | KakaoSDKAuth | 카카오 소셜 로그인을 구현하기 위함 | 2.24.4 |
 | **Lottie** | lottie-ios | 애니메이션 구현하기 위함 | 4.5.2 |
 
