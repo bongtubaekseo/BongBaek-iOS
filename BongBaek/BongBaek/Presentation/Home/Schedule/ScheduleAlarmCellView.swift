@@ -14,12 +14,21 @@ struct ScheduleIndicatorCellView: View {
         VStack(alignment: .leading, spacing: 0) {
 
             VStack(alignment: .leading) {
-                Text("\(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)이")
-                    .headBold26()
-                    .foregroundStyle(.white)
-                Text("\(event.eventInfo.dDay)일 남았어요!")
-                    .headBold26()
-                    .foregroundStyle(.white)
+                if event.eventInfo.dDay == 0 {
+                    Text("오늘은 \(event.hostInfo.hostName)님의")
+                        .headBold26()
+                        .foregroundStyle(.white)
+                    Text("\(event.eventInfo.eventCategory)입니다!")
+                        .headBold26()
+                        .foregroundStyle(.white)
+                } else {
+                    Text("\(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)이")
+                        .headBold26()
+                        .foregroundStyle(.white)
+                    Text("\(event.eventInfo.dDay)일 남았어요!")
+                        .headBold26()
+                        .foregroundStyle(.white)
+                }
             }
             .padding(.top,40)
             

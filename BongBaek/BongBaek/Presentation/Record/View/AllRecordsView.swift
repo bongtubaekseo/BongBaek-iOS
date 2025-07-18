@@ -115,19 +115,19 @@ struct AllRecordsView: View {
     
     private func eventContentView(eventDetail: EventDetailData) -> some View {
         VStack(spacing: 12) {
-            VStack {
+            VStack(alignment:.leading) {
                 Text("\(eventDetail.hostInfo.hostName)의 \(eventDetail.eventInfo.eventCategory)")
-                    .titleSemiBold16()
+                    .titleSemiBold18()
                     .foregroundStyle(.white)
                     
                 Text(eventDetail.eventInfo.eventDate)
                     .bodyRegular14()
-                    .foregroundStyle(.gray300)
+                    .foregroundStyle(.gray400)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(20)
             .background(.gray750)
-            .cornerRadius(12)
+            .cornerRadius(10)
             .padding(.horizontal, 20)
             .padding(.top, 12)
             
@@ -260,13 +260,13 @@ struct AllRecordsView: View {
         VStack(alignment: .leading, spacing: 24) {
             DetailRow(image: "icon_person_16", title: "이름", value: eventDetail.hostInfo.hostName)
             DetailRow(image: "icon_nickname_16", title: "별명", value: eventDetail.hostInfo.hostNickname)
-            DetailRow(image: "icon_event_16", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-            DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-            DetailRow(image: "icon_event_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원")
-            DetailRow(image: "icon_event_16", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-            DetailRow(image: "icon_event_16", title: "날짜", value: eventDetail.eventInfo.eventDate, valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
+            DetailRow(image: "icon_relation", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_coin_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원")
+            DetailRow(image: "icon_check 1", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_event_16", title: "날짜", value: eventDetail.eventInfo.eventDate, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_location_16", title: "장소", value: eventDetail.locationInfo.location)
-            DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
+            //DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
         }
         .padding(20)
         .background(.gray750)
@@ -310,27 +310,36 @@ struct AllRecordsView: View {
                 Spacer()
                 
                 // 메모 저장 버튼
-//                Button("저장") {
-//                    Task {
-//                        await viewModel.saveMemo()
-//                    }
-//                }
-//                .foregroundColor(.primaryNormal)
-//                .disabled(viewModel.isLoading)
+    //                Button("저장") {
+    //                    Task {
+    //                        await viewModel.saveMemo()
+    //                    }
+    //                }
+    //                .foregroundColor(.primaryNormal)
+    //                .disabled(viewModel.isLoading)
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
             
-            VStack(alignment: .leading) {
+            ZStack(alignment: .topLeading) {
                 TextEditor(text: $viewModel.memoText)
                     .font(.system(size: 16))
                     .foregroundColor(.white)
                     .scrollContentBackground(.hidden)
                     .background(Color.clear)
                     .frame(minHeight: 100, maxHeight: 200)
+                
+                if viewModel.memoText.isEmpty {
+                    Text("메모를 작성해주세요")
+                        .bodyRegular16()
+                        .foregroundColor(.gray500)
+                        .padding(.top, 8)
+                        .padding(.leading, 5)
+                        .allowsHitTesting(false)
+                }
             }
             .padding(16)
-            .background(Color.gray.opacity(0.2))
+            .background(.gray800)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.5), lineWidth: 1)
@@ -356,7 +365,7 @@ struct AllRecordsView: View {
             } else {
                 Text("기록 삭제하기")
                     .titleSemiBold18()
-                    .foregroundColor(.red)
+                    .foregroundColor(.secondaryRed)
             }
         }
         .frame(maxWidth: .infinity)
@@ -364,7 +373,7 @@ struct AllRecordsView: View {
         .background(.clear)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(.red, lineWidth: 1)
+                .stroke(.secondaryRed, lineWidth: 1)
         )
         .cornerRadius(12)
         .padding(.horizontal, 20)
@@ -431,14 +440,14 @@ struct DetailRow: View {
             HStack {
                 Image(image)
                 Text(title)
-                    .bodyRegular14()
-                    .foregroundColor(.gray)
+                    .bodyMedium14()
+                    .foregroundColor(.gray100)
             }
             
             Spacer()
             
             Text(value)
-                .bodyRegular14()
+                .bodyMedium16()
                 .foregroundColor(valueTextColor ?? .white)
                 .padding(.horizontal, valueBackgroundColor != nil ? 4 : 0)
                 .padding(.vertical, valueBackgroundColor != nil ? 4 : 0)
