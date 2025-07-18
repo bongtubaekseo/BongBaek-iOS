@@ -159,6 +159,10 @@ struct MainTabView: View {
             AllRecordsView(eventId: eventId)
                 .environmentObject(router)
             
+        case .allRecordView2(let eventId):
+            AllRecordsView2(eventId: eventId)
+                .environmentObject(router)
+            
         case .recommendStartView:
             RecommendStartView()
             .environmentObject(router)
@@ -176,6 +180,10 @@ struct MainTabView: View {
             
         case .largeMapView:
             LargeMapView()
+                .environmentObject(router)
+                .environmentObject(eventManager)
+        case .modifyEventView2(let mode, let eventDetailData):
+            ModifyEventView2(mode: mode, eventDetailData: eventDetailData)
                 .environmentObject(router)
                 .environmentObject(eventManager)
         }

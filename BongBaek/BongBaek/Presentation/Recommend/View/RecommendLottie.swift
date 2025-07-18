@@ -14,6 +14,8 @@ struct RecommendLottie: View {
     @State private var minAmount: Int = 80000
     @State private var maxAmount: Int = 120000
     @State private var category: String = "경조사"
+    @State private var eventLocation: String = "없음"
+    @State private var eventCategory: String = "해당없음"
 
     @EnvironmentObject var router: NavigationRouter
     @EnvironmentObject var eventManager: EventCreationManager
@@ -81,6 +83,9 @@ struct RecommendLottie: View {
                  minAmount = data.range.min
                  maxAmount = data.range.max
                 category = data.category
+                eventLocation = data.location
+                eventCategory = data.category
+
             } else {
                 print("❌ 추천 데이터 없음")
             }
@@ -97,7 +102,8 @@ struct RecommendLottie: View {
         VStack {
             VStack(spacing: 20) {
 
-                Text(category)
+
+                Text(eventCategory)
                     .bodyMedium14()
                     .foregroundColor(.white)
                     .padding(.horizontal, 16)
@@ -389,7 +395,7 @@ struct RecommendLottie: View {
                     Text("경조사 종류")
                         .captionRegular12()
                         .foregroundColor(.gray400)
-                    Text("결혼식")
+                    Text(eventCategory)
                         .bodyMedium16()
                         .foregroundColor(.white)
                 }
@@ -415,7 +421,7 @@ struct RecommendLottie: View {
                     Text("장소")
                         .captionRegular12()
                         .foregroundColor(.gray400)
-                    Text("강남 웨딩홀")
+                    Text(eventLocation)
                         .bodyMedium16()
                         .foregroundColor(.white)
                 }

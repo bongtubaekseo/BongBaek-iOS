@@ -362,11 +362,21 @@ struct CustomTextField: View {
             }
         }
         .onChange(of: text) { _, newValue in
-            if !isReadOnly && !(keyboardType == .numberPad || keyboardType == .decimalPad) {
+            // 읽기 전용이 아니고, 숫자 포맷팅이 필요한 경우
+            if !isReadOnly && (keyboardType == .numberPad || keyboardType == .decimalPad) {
+                displayText = formatNumber(newValue)
+            } else {
+                // 일반 텍스트나 읽기 전용인 경우 (날짜 선택 등)
                 displayText = newValue
-                validateInput(newValue)
             }
+            validateInput(newValue)
         }
+//        .onChange(of: text) { _, newValue in
+//            if !isReadOnly && !(keyboardType == .numberPad || keyboardType == .decimalPad) {
+//                displayText = newValue
+//                validateInput(newValue)
+//            }
+//        }
     }
     
     // 숫자 포맷팅 함수

@@ -413,7 +413,7 @@ struct RecordCellView: View {
         }
         .onTapGesture {
             if !isDeleteMode { // 삭제 모드가 아닐 때만 네비게이션
-                router.push(to: .allRecordView(eventId: event.eventId))
+                router.push(to: .allRecordView2(eventId: event.eventId))
 
             }
         }
