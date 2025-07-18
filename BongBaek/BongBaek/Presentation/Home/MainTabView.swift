@@ -174,6 +174,10 @@ struct MainTabView: View {
             CreateEventView()
                 .environmentObject(router)
             
+        case .largeMapView:
+            LargeMapView()
+                .environmentObject(router)
+                .environmentObject(eventManager)
         }
     }
 }
