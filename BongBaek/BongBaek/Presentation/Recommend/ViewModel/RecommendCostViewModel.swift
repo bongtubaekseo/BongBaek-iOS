@@ -3,8 +3,8 @@ import SwiftUI
 
 class RecommendCostViewModel: ObservableObject {
     @Published var selectedAmount: Int = 100000
-    @Published var minAmount: Int = 50000
-    @Published var maxAmount: Int = 200000
+    @Published var minAmount: Int = 0
+    @Published var maxAmount: Int = 1000000
     @Published var customAmount: String = ""
     
     let recommendedAmounts = [100000, 150000, 200000]
