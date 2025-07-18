@@ -26,9 +26,7 @@ struct BongBaekApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LargeMapView()
-                .environmentObject(router)
-                .environmentObject(eventManager)
+            RootView()
                 .onOpenURL(perform:{ url in
                     if(AuthApi.isKakaoTalkLoginUrl(url)){
                         _ = AuthController.handleOpenUrl(url:url)

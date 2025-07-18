@@ -17,10 +17,11 @@ struct LargeMapView: View {
     @EnvironmentObject var router: NavigationRouter
     @EnvironmentObject var eventManager: EventCreationManager
     @Environment(\.dismiss) private var dismiss
+    @State private var selectedLocation: KLDocument?
     
     // 버튼 활성화 조건
     private var isNextButtonEnabled: Bool {
-        return eventManager.hasLocationData && !eventManager.locationName.isEmpty
+        return selectedLocation?.placeName.isEmpty == false
     }
     
     var body: some View {
@@ -65,7 +66,7 @@ struct LargeMapView: View {
                             .padding(.top, 16)
                         
                         // 선택된 위치 정보를 지도 하단에 표시
-                        if let selectedLocation = eventManager.selectedLocation {
+                        if let selectedLocation = selectedLocation {
                             selectedLocationOverlay(selectedLocation)
                         }
                     }
@@ -269,7 +270,7 @@ struct LargeMapView: View {
     
     private func handleLocationSelection(_ document: KLDocument) {
         // EventCreationManager에 위치 데이터 저장
-        eventManager.updateLocationData(selectedLocation: document)
+        selectedLocation = document
         
         // UI 업데이트
         searchText = document.placeName
@@ -296,28 +297,28 @@ struct LargeMapView: View {
         
         // 현재 선택된 모든 데이터 출력
         printCurrentSelections()
-        
+        dismiss()
         // 다음 화면으로 이동
-        if eventManager.canCompleteLocationStep {
-            print("✅ EventLocationView: 폼 제출 성공, 추천 로딩으로 이동")
-            router.push(to: .recommendLoadingView)
-        } else {
-            print("❌ EventLocationView: EventCreationManager 이중 검증 실패")
-        }
+//        if eventManager.canCompleteLocationStep {
+//            print("✅ EventLocationView: 폼 제출 성공, 추천 로딩으로 이동")
+//            router.push(to: .recommendLoadingView)
+//        } else {
+//            print("❌ EventLocationView: EventCreationManager 이중 검증 실패")
+//        }
     }
     
     private func handleSkipLocation() {
         print("🔄 위치 입력 건너뛰기")
         
         // 위치 데이터 초기화 (선택사항)
-        eventManager.clearLocationData()
+//        eventManager.clearLocationData()
         
         // 현재 선택된 모든 데이터 출력
         printCurrentSelections()
         
         // 검증 없이 바로 다음 화면으로 이동
         print("✅ EventLocationView: 건너뛰기로 추천 로딩으로 이동")
-        router.push(to: .recommendLoadingView)
+//        router.push(to: .recommendLoadingView)
     }
     
     private func printLocationSelection(_ document: KLDocument) {
@@ -331,12 +332,12 @@ struct LargeMapView: View {
     
     private func printCurrentSelections() {
         print("📍 EventLocationView 현재 선택된 값들:")
-        print("  🏢 장소명: '\(eventManager.locationName)'")
-        print("  📍 주소: '\(eventManager.locationAddress)'")
-        print("  🛣️ 도로명 주소: '\(eventManager.locationRoadAddress)'")
-        print("  🌍 좌표: (\(eventManager.longitude), \(eventManager.latitude))")
-        print("  📍 위치 데이터 존재: \(eventManager.hasLocationData)")
-        print("  ✅ 다음 단계 진행 가능: \(eventManager.canCompleteLocationStep)")
+//        print("  🏢 장소명: '\(eventManager.locationName)'")
+//        print("  📍 주소: '\(eventManager.locationAddress)'")
+//        print("  🛣️ 도로명 주소: '\(eventManager.locationRoadAddress)'")
+//        print("  🌍 좌표: (\(eventManager.longitude), \(eventManager.latitude))")
+//        print("  📍 위치 데이터 존재: \(eventManager.hasLocationData)")
+//        print("  ✅ 다음 단계 진행 가능: \(eventManager.canCompleteLocationStep)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
     

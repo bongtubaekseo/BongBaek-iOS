@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CreateEventView: View {
     @EnvironmentObject var router: NavigationRouter
+    @State private var mapView: KakaoMapView?
+    @State private var selectedLocation: KLDocument?
     
     // 단순한 State 변수들
     @State private var nickname: String = ""
@@ -157,8 +159,37 @@ struct CreateEventView: View {
                         }
                         .padding(.top, 16)
                         
-                        EventMapView()
+                        HStack {
+                            HStack {
+                                Image("icon_location_16")
+                                Text("행사장")
+                                    .bodyMedium14()
+                                    .foregroundStyle(.gray300)
+                            }
+                            
+                            Spacer()
+                            
+                            Button {
+                                router.push(to: .largeMapView)
+                            } label: {
+                                Text("추가하기")
+                                    .bodyRegular14()
+                                    .foregroundStyle(.gray300)
+                            }
+                        }
+                        .padding(.top,16)
+                        
+                        if let location = selectedLocation {
+                            mapSection
+                                 .frame(height: 200)
+                                 .transition(.opacity.combined(with: .scale))
+                         }
+                        
+                        
+                        mapSection
                             .padding(.top, 16)
+//                        EventMapView()
+//                            .padding(.top, 16)
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
@@ -171,6 +202,7 @@ struct CreateEventView: View {
                 
                 EventMemoView(memo: $memo)
                     .padding(.top, 16)
+                    .padding(.horizontal,20)
                 
                 Button {
                     createEvent()
@@ -220,6 +252,29 @@ struct CreateEventView: View {
                 print("선택된 날짜: \(selectedDateString)")
             }
             .presentationDetents([.height(359)])
+        }
+    }
+    
+    private var mapSection: some View {
+        Group {
+            
+            
+            if let mapView = mapView {
+                mapView
+                    .frame(height: 492)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 20)
+            } else {
+                Rectangle()
+                    .foregroundStyle(.red)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 492)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 20)
+                    .onAppear {
+                        mapView = KakaoMapView(draw: .constant(true))
+                    }
+            }
         }
     }
     
