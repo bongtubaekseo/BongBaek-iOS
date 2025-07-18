@@ -14,7 +14,7 @@ enum EventsTarget {
     case getUpcomingEvents(page: Int, category: String?)
     case getEventDetail(eventId: String)
     case createEvent(eventData: CreateEventData)
-    case updateEvent(eventId: Int, eventData: UpdateEventData)
+    case updateEvent(eventId: String, eventData: UpdateEventData)
     case deleteEvent(eventId: String)
     case deleteMultipleEvents(eventIds: [String])
     case getAmountRecommendation(request: AmountRecommendationRequest)

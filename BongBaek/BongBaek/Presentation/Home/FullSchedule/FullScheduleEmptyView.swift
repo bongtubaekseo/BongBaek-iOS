@@ -32,7 +32,7 @@ struct FullScheduleEmptyView: View {
                 .padding(.top, 16)
             
             Button(action: {
-                router.push(to: .createEventView)
+                router.push(to: .createEventViewAfterEvent)
             }) {
                 Text("지금 기록하기")
                     .titleSemiBold16()
