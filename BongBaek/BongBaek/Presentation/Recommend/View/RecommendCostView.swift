@@ -56,14 +56,9 @@ struct RecommendCostView: View {
                 participationSection
                 
                 bottomButtons
+                    .padding(.horizontal,20)
             }
-//            .onAppear {
-//                print("⏳ RecommendCostView 나타남 - path.count: \(pathManager.path.count)")
-//            }
-//            .navigationDestination(isPresented: $showSuccessView) {
-//                 RecommendSuccessView()
-//                    .environmentObject(pathManager)
-//             }
+
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }

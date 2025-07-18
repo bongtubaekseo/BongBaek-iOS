@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RelationshipSliderView: View {
     @EnvironmentObject var eventManager: EventCreationManager
-    let range: ClosedRange<Double> = 0...4
+    let range: ClosedRange<Double> = 1...5
 
     var body: some View {
         VStack(spacing: 30) {

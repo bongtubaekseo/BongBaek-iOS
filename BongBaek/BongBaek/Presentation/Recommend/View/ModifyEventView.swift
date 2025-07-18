@@ -131,7 +131,7 @@ struct ModifyEventView: View {
                                 validationRule: ValidationRule(
                                     minLength: 1,
                                     maxLength: 10
-                                )
+                                ),keyboardType: .numberPad
                             )
                             
                             Text("원")

@@ -47,6 +47,7 @@ struct AllRecordsView: View {
                     .contentShape(Rectangle())
                     .padding(.trailing, 20)
                 }
+                .padding(.top, 20)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 4)
                 
@@ -308,15 +309,7 @@ struct AllRecordsView: View {
                     .foregroundStyle(.white)
                 
                 Spacer()
-                
-                // 메모 저장 버튼
-//                Button("저장") {
-//                    Task {
-//                        await viewModel.saveMemo()
-//                    }
-//                }
-//                .foregroundColor(.primaryNormal)
-//                .disabled(viewModel.isLoading)
+            
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
@@ -328,9 +321,10 @@ struct AllRecordsView: View {
                     .scrollContentBackground(.hidden)
                     .background(Color.clear)
                     .frame(minHeight: 100, maxHeight: 200)
+                    .disabled(true)
             }
             .padding(16)
-            .background(Color.gray.opacity(0.2))
+            .background(.gray750)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.5), lineWidth: 1)
