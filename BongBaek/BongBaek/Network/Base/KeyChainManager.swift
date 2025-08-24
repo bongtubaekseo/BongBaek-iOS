@@ -226,7 +226,7 @@ final class KeychainManager {
 }
 
 
-#if DEBUG
+//#if DEBUG
 extension KeychainManager {
     /// 디버깅용 토큰 정보 출력
     func printTokenStatus() {
@@ -237,4 +237,4 @@ extension KeychainManager {
         print("==================")
     }
 }
-#endif
+//#endif

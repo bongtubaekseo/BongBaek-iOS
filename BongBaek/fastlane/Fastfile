@@ -1,0 +1,115 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    begin
+      get_certificates
+      get_provisioning_profile
+      increment_build_number(
+          build_number: latest_testflight_build_number + 1
+      )
+      unlock_keychain(
+        path: '/Users/limjaehyeon/Library/Keychains/login.keychain-db',
+        password: '0000'
+      )
+      build_app(
+        scheme: "BongBaek",
+        export_method: "app-store",
+        export_options: {
+          provisioningProfiles: {
+            "JaeHyeonLim9298.bongbaek" => "JaeHyeonLim9298_BongBaek_AppStore.mobileprovision"
+          }
+        }
+      )
+      upload_to_testflight(
+         api_key_path: "fastlane/83D8966TA2.json"
+      )
+      send_discord(message: "🚀 베타 배포 성공! TestFlight 업로드 완료")
+    rescue => error
+      send_discord(message: "❌ 베타 배포 실패: #{error.message}")
+      raise error
+    end
+  end
+
+  # ===============================
+  # Discord Webhook 알림
+  # ===============================
+  private_lane :send_discord do |options|
+    require 'date'
+    message      = options[:message]
+    webhook_url  = ENV["DISCORD_WEBHOOK_URL"]
+    
+    # webhook_url이 없으면 Discord 알림 건너뛰기
+    if webhook_url.nil? || webhook_url.empty?
+      UI.message("Discord webhook URL이 설정되지 않아 알림을 건너뜁니다.")
+      return
+    end
+    
+    begin
+      # 빌드 정보 수집 (간소화)
+      version      = get_version_number(xcodeproj:"BongBaek.xcodeproj")
+      build_number = get_build_number(xcodeproj:"BongBaek.xcodeproj")
+      scheme       = "BongBaek"
+      target       = "JaeHyeonLim9298.BongBaek"
+      git_hash     = sh("git rev-parse --short HEAD").strip rescue "N/A"
+      branch       = sh("git rev-parse --abbrev-ref HEAD").strip rescue "N/A"
+      timestamp    = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
+    rescue => e
+
+      # 빌드 정보 수집 실패시 기본값 사용
+      UI.message("빌드 정보 수집 실패, 기본값 사용: #{e.message}")
+      version = "1.0"
+      build_number = "1"
+      scheme = "BongBaek"
+      target = "JaeHyeonLim9298.BongBaek"
+      git_hash = "N/A"
+      branch = "N/A"
+      timestamp = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
+    end
+    
+    begin
+      # 디스코드 메시지 포맷
+      payload = {
+        content: message,
+        embeds: [
+          {
+            title: "📦 배포 정보",
+            fields: [
+              { name: "Version", value: "#{version} (#{build_number})", inline: true },
+              { name: "Target", value: target, inline: true },
+              { name: "Scheme", value: scheme, inline: true },
+              { name: "Branch", value: branch, inline: true },
+              { name: "Git Commit", value: git_hash, inline: true },
+              { name: "Time", value: timestamp, inline: false }
+            ]
+          }
+        ]
+      }
+      
+      # JSON 문자열로 변환
+      require 'json'
+      json_payload = payload.to_json
+      escaped_payload = Shellwords.escape(json_payload)
+      escaped_hook    = Shellwords.escape(webhook_url)
+      sh "curl -H \"Content-Type: application/json\" -X POST -d #{escaped_payload} #{escaped_hook}"
+      UI.success("Discord 알림 전송 완료!")
+    rescue => e
+      UI.error("Discord 알림 전송 실패: #{e.message}")
+    end
+  end
+end
