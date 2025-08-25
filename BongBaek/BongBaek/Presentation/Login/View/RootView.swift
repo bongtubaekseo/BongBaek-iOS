@@ -22,7 +22,7 @@ struct RootView: View {
                         }
                     }
             case .login:
-                MainTabView()
+                LoginView()
                     .environmentObject(appStateManager)
                 
             case .main:
