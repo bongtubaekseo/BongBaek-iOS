@@ -60,7 +60,7 @@ class EventManager: ObservableObject {
     
     /// 홈 데이터 새로고침
     func refreshHomeData() {
-        print("🔄 홈 데이터 새로고침")
+        print("홈 데이터 새로고침")
         loadHomeData(forceRefresh: true)
     }
 

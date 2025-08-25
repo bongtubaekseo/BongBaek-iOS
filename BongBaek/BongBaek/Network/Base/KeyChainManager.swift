@@ -22,12 +22,12 @@ final class KeychainManager {
          // Access Token 확인
          switch getAccessToken() {
          case .success(let token):
-             print("✅ Access Token 존재:")
+             print("Access Token 존재:")
              print("   - 토큰 길이: \(token.count)자")
              print("   - 토큰 앞 10자: \(String(token.prefix(10)))...")
              print("   - 전체 토큰: \(token)")
          case .failure(let error):
-             print("❌ Access Token 없음: \(error)")
+             print("Access Token 없음: \(error)")
          }
          
          // Refresh Token 확인
@@ -37,7 +37,7 @@ final class KeychainManager {
              print("   - 토큰 길이: \(token.count)자")
              print("   - 토큰 앞 10자: \(String(token.prefix(10)))...")
          case .failure(let error):
-             print("❌ Refresh Token 없음: \(error)")
+             print("Refresh Token 없음: \(error)")
          }
          
          // 전체 토큰 상태
@@ -47,7 +47,7 @@ final class KeychainManager {
          print("   - 편의 프로퍼티 accessToken: \(accessToken != nil ? "있음" : "없음")")
          print("   - 편의 프로퍼티 refreshToken: \(refreshToken != nil ? "있음" : "없음")")
          
-         print("🔐 ============================================")
+         print("============================================")
      }
     
     

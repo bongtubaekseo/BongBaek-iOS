@@ -96,25 +96,25 @@ class AuthManager: ObservableObject {
     
     // MARK: - 자동 로그인
     func checkAuthStatus() {
-        print("🔍 AuthManager - 인증 상태 확인 시작")
+        print("AuthManager - 인증 상태 확인 시작")
         
         guard let accessToken = keychainManager.accessToken else {
-            print("❌ Keychain에 저장된 accessToken 없음")
-            print("🔄 authState를 .needsLogin으로 변경")
+            print("Keychain에 저장된 accessToken 없음")
+            print("authState를 .needsLogin으로 변경")
             authState = .needsLogin
             return
         }
         
-        print("✅ Keychain에서 accessToken 발견:")
+        print("Keychain에서 accessToken 발견:")
         print("   - 토큰 길이: \(accessToken.count)자")
         print("   - 토큰 앞 10자: \(String(accessToken.prefix(10)))...")
         print("   - 전체 토큰: \(accessToken)")
         
         // 저장된 토큰으로 자동 로그인 시도
-        print("🔄 authState를 .authenticated로 변경")
+        print("authState를 .authenticated로 변경")
         authState = .authenticated
         
-        print("💡 TODO: 실제로는 토큰 유효성 검증 API 호출 필요")
+        print("TODO: 실제로는 토큰 유효성 검증 API 호출 필요")
         // TODO: 실제로는 토큰 유효성 검증 API 호출
         // validateToken(accessToken)
     }
@@ -220,28 +220,28 @@ class AuthManager: ObservableObject {
     }
     
     private func handleSignUpResponse(_ response: SignUpResponse) {
-           print("📤 회원가입 응답 받음:")
+           print("회원가입 응답 받음:")
            print("  - isSuccess: \(response.isSuccess)")
            print("  - message: \(response.message)")
            print("  - data: \(response.data)")
            
            guard response.isSuccess else {
-               print("❌ 회원가입 API 실패: \(response.message)")
+               print("회원가입 API 실패: \(response.message)")
                // 실패 시 에러 메시지 설정 (authState는 변경하지 않음)
                signUpError = response.message.isEmpty ? "회원가입에 실패했습니다. 다시 시도해주세요." : response.message
                return
            }
            
            guard let authData = response.data else {
-               print("❌ 회원가입 응답 데이터가 없습니다")
+               print("회원가입 응답 데이터가 없습니다")
                signUpError = "서버 응답 오류가 발생했습니다. 다시 시도해주세요."
                return
            }
            
-           print("✅ 회원가입 응답 데이터 있음")
+           print("회원가입 응답 데이터 있음")
            
            if let tokenInfo = authData.token {
-               print("🔑 토큰 정보 있음, 키체인에 저장 시도")
+               print("토큰 정보 있음, 키체인에 저장 시도")
                let saveResult = keychainManager.saveTokens(
                    access: tokenInfo.accessToken,
                    refresh: tokenInfo.refreshToken
@@ -249,19 +249,19 @@ class AuthManager: ObservableObject {
                
                switch saveResult {
                case .success:
-                   print("✅ 토큰 저장 성공 - authenticated 상태로 변경")
+                   print("토큰 저장 성공 - authenticated 상태로 변경")
                    authState = .authenticated
                    
                case .failure(let error):
-                   print("❌ 토큰 저장 실패: \(error)")
+                   print("토큰 저장 실패: \(error)")
                    signUpError = "토큰 저장에 실패했습니다. 다시 시도해주세요."
                }
            } else {
-               print("✅ 토큰 없어도 회원가입 완료 - authenticated 상태로 변경")
+               print("토큰 없어도 회원가입 완료 - authenticated 상태로 변경")
                authState = .authenticated
            }
            
-           print("🔄 최종 authState: \(authState)")
+           print("최종 authState: \(authState)")
        }
     
     private func handleRefreshTokenResponse(_ response: RefreshTokenResponse) {

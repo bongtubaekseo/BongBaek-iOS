@@ -9,11 +9,6 @@ import SwiftUI
 import Foundation
 import Combine
 
-struct NetworkError {
-
-}
-
-
 enum EventError: Error, LocalizedError {
     case apiError(String)
     case networkError
