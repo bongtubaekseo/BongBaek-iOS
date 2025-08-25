@@ -121,7 +121,7 @@ class AuthManager: ObservableObject {
     
     // MARK: - 토큰 갱신
     func refreshTokens() {
-        guard let refreshToken = keychainManager.refreshToken else {
+        guard keychainManager.refreshToken != nil else {
             logout()
             return
         }
@@ -223,7 +223,6 @@ class AuthManager: ObservableObject {
            print("회원가입 응답 받음:")
            print("  - isSuccess: \(response.isSuccess)")
            print("  - message: \(response.message)")
-           print("  - data: \(response.data)")
            
            guard response.isSuccess else {
                print("회원가입 API 실패: \(response.message)")

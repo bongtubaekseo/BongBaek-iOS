@@ -394,7 +394,7 @@ class EventCreationManager: ObservableObject {
         submitSuccess = false
         apiResponse = nil
         
-        print("🔄 EventCreationManager: 모든 데이터 초기화 완료")
+        print("EventCreationManager: 모든 데이터 초기화 완료")
     }
     
     /// 특정 단계 데이터만 초기화
@@ -431,12 +431,12 @@ class EventCreationManager: ObservableObject {
     /// 현재 폼 상태 출력
     func printCurrentStatus() {
         print("📊 EventCreationManager 현재 상태:")
-        print("  - Step 1 (추천): \(canCompleteRecommendStep ? "✅" : "❌")")
-        print("  - Step 2 (이벤트): \(canCompleteEventInfoStep ? "✅" : "❌")")
-        print("  - Step 3 (날짜): \(canCompleteDateStep ? "✅" : "❌")")
-        print("  - Step 4 (위치): \(canCompleteLocationStep ? "✅" : "❌")")
-        print("  - 전체 완성: \(isFormComplete ? "✅" : "❌")")
-        print("  - 참석 여부: \(selectedAttendance?.rawValue)")
+        print("  - Step 1 (추천): \(canCompleteRecommendStep ? "완성" : "미완성")")
+        print("  - Step 2 (이벤트): \(canCompleteEventInfoStep ? "완성" : "미완성")")
+        print("  - Step 3 (날짜): \(canCompleteDateStep ? "완성" : "미완성")")
+        print("  - Step 4 (위치): \(canCompleteLocationStep ? "완성" : "미완성")")
+        print("  - 전체 완성: \(isFormComplete ? "완성" : "미완성")")
+        print("  - 참석 여부: \(String(describing: selectedAttendance?.rawValue))")
         print("  - 위치 데이터: \(hasLocationData ? "있음" : "없음")")
     }
     
@@ -465,7 +465,7 @@ class EventCreationManager: ObservableObject {
             "eventCategory": eventCategory,
             "selectedEventType": selectedEventType,
             "eventDate": eventDate.timeIntervalSince1970,
-            "selectedAttendance": selectedAttendance?.rawValue,
+            "selectedAttendance": selectedAttendance?.rawValue ?? "selectedAttendance 없음",
             "locationName": locationName,
             "locationAddress": locationAddress,
             "latitude": latitude,
@@ -512,7 +512,7 @@ class EventCreationManager: ObservableObject {
         guard let recommendationResponse = recommendationResponse,
               let recommendedData = recommendationResponse.data else {
             submitError = "추천 금액 정보가 없습니다."
-            print("❌ 추천 응답 데이터 없음")
+            print("추천 응답 데이터 없음")
             return false
         }
         
@@ -601,7 +601,7 @@ class EventCreationManager: ObservableObject {
             highAccuracy: highAccuracy
         )
         
-        print("💰 추천받은 금액(\(recommendedAmount)원)으로 API 요청 데이터 생성 완료")
+        print("추천받은 금액(\(recommendedAmount)원)으로 API 요청 데이터 생성 완료")
         return requestData
     }
     

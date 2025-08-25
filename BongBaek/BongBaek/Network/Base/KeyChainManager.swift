@@ -60,7 +60,6 @@ final class KeychainManager {
                 return .success(())
             case .failure(let error):
                 // 액세스 토큰 저장 성공했지만 리프레시 토큰 실패시 롤백
-                delete(key: accessTokenKey)
                 return .failure(error)
             }
         case .failure(let error):
@@ -127,7 +126,6 @@ final class KeychainManager {
             if let token = newValue {
                 updateAccessToken(token)
             } else {
-                delete(key: accessTokenKey)
             }
         }
     }
@@ -144,7 +142,6 @@ final class KeychainManager {
             if let token = newValue {
                 updateRefreshToken(token)
             } else {
-                delete(key: refreshTokenKey)
             }
         }
     }

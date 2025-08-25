@@ -23,11 +23,10 @@ class EventManager: ObservableObject {
         self.eventService = DIContainer.shared.eventService
     }
     
-    
     /// 홈 데이터 로드 (
     func loadHomeData(forceRefresh: Bool = false) {
 
-        print("🔄 새로운 홈 데이터 로드 시작")
+        print("새로운 홈 데이터 로드 시작")
         isLoadingHome = true
         homeError = nil
         
@@ -42,7 +41,7 @@ class EventManager: ObservableObject {
                     }
                 },
                 receiveValue: { [weak self] response in
-                    print("🔄 서버 응답 받음: \(response)")
+                    print("서버 응답 받음: \(response)")
                     
                     if response.isSuccess, let data = response.data {
                         self?.homeData = data
@@ -57,14 +56,12 @@ class EventManager: ObservableObject {
             .store(in: &cancellables)
     }
 
-    
     /// 홈 데이터 새로고침
     func refreshHomeData() {
         print("홈 데이터 새로고침")
         loadHomeData(forceRefresh: true)
     }
 
-    
     /// 에러 초기화
     func clearHomeError() {
         homeError = nil

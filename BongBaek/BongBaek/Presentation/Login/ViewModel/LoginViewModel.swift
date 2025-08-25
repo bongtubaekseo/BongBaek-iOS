@@ -9,7 +9,7 @@ import Combine
 import KakaoSDKAuth
 import KakaoSDKUser
 
-
+@MainActor
 class LoginViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var isLoginSuccess = false
