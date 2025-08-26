@@ -16,7 +16,7 @@ struct LoginView: View {
    var body: some View {
   
        NavigationStack {
-           GeometryReader { geometry in
+           ZStack {
                Image("onboarding_ios")
                    .resizable()
                    .scaledToFill()
@@ -24,11 +24,11 @@ struct LoginView: View {
                
                VStack {
                    WelcomeTextView()
-                       .ignoresSafeArea()
-                       .padding(.top,144)
+                       .padding(.top, 144.adjustedH)
                        .padding(.leading, 20)
                    
                    Spacer()
+                       .frame(height: 355.adjustedH)
                    
                    VStack(spacing: 16) {
 
@@ -38,9 +38,9 @@ struct LoginView: View {
                        }) {
                            Image("btn_kakao")
                                .resizable()
-                               .scaledToFit()
-                               .frame(maxWidth: .infinity)
-                               .frame(height: 52)
+                               .scaledToFill()
+                               .frame(height: 55.adjustedH)
+
                        }
                        .buttonStyle(PlainButtonStyle())
                        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
@@ -49,7 +49,7 @@ struct LoginView: View {
                            loginViewModel.isLoading ?
                            ProgressView().tint(.white) : nil
                        )
-
+                       .padding(.horizontal, 20)
 
                      
                        VStack(alignment: .leading,spacing: 8) {
@@ -72,8 +72,8 @@ struct LoginView: View {
                            .padding(.leading, 50)
 
                        }
+                       .padding(.horizontal, 20)
                    }
-                   .padding(.horizontal, 20)
                    .padding(.bottom, 30)
                }
                
