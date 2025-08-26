@@ -12,7 +12,6 @@ struct RecommendSuccessView: View {
     @EnvironmentObject var eventManager: EventCreationManager
     
     var body: some View {
-//        NavigationStack {
             ZStack {
                 Color.gray900
                     .ignoresSafeArea(.all)
@@ -79,7 +78,6 @@ struct RecommendSuccessView: View {
             .onAppear {
                 print("⏳ RecommendSuccessView 나타남 - path.count: \(router.path.count)")
             }
-//        }
         .navigationBarHidden(true)
     }
 }

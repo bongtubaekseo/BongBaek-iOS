@@ -68,16 +68,6 @@ struct MainTabView: View {
                             eventManager.resetAllData()
                         }
                     }
-//            .onReceive(NotificationCenter.default.publisher(for: .selectTab)) { notification in
-//                print("📢 MainTabView에서 selectTab notification 받음")
-//                if let tab = notification.object as? Tab {
-//                    print("탭 변경: \(tab)")
-//                    isRecommendFlowActive = false
-//                    selectedTab = tab
-//                    router.popToRoot()
-//                }
-//            }
-            
             .onReceive(NotificationCenter.default.publisher(for: .selectTab)) { notification in
                print("📢 MainTabView에서 selectTab notification 받음")
                if let tab = notification.object as? Tab {
@@ -97,8 +87,6 @@ struct MainTabView: View {
             .navigationDestination(for: RecommendRoute.self) { route in
                 routeView(for: route)
             }
-            
-            
         }
     }
     
@@ -180,20 +168,11 @@ struct MainTabView: View {
         case .createEventViewAfterEvent:
             CreateEventViewAfterEvent()
                 .environmentObject(router)
-            
-//        case .largeMapView:
-//            LargeMapView()
-//                .environmentObject(router)
-//                .environmentObject(eventManager)
+
         case .modifyEventView2(let mode, let eventDetailData):
             ModifyEventView2(mode: mode, eventDetailData: eventDetailData)
                 .environmentObject(router)
                 .environmentObject(eventManager)
         }
     }
-}
-//}
-
-#Preview {
-    MainTabView()
 }

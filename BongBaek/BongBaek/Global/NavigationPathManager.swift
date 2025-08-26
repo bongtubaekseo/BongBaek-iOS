@@ -26,7 +26,6 @@ enum RecommendRoute: Hashable {
     case emptyCardView
     case createEventView
     case createEventViewAfterEvent
-//    case largeMapView
     
     var displayName: String {
         switch self {

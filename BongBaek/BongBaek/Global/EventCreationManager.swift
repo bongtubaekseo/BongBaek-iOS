@@ -394,7 +394,7 @@ class EventCreationManager: ObservableObject {
         submitSuccess = false
         apiResponse = nil
         
-        print("🔄 EventCreationManager: 모든 데이터 초기화 완료")
+        print("EventCreationManager: 모든 데이터 초기화 완료")
     }
     
     /// 특정 단계 데이터만 초기화
@@ -431,18 +431,18 @@ class EventCreationManager: ObservableObject {
     /// 현재 폼 상태 출력
     func printCurrentStatus() {
         print("📊 EventCreationManager 현재 상태:")
-        print("  - Step 1 (추천): \(canCompleteRecommendStep ? "✅" : "❌")")
-        print("  - Step 2 (이벤트): \(canCompleteEventInfoStep ? "✅" : "❌")")
-        print("  - Step 3 (날짜): \(canCompleteDateStep ? "✅" : "❌")")
-        print("  - Step 4 (위치): \(canCompleteLocationStep ? "✅" : "❌")")
-        print("  - 전체 완성: \(isFormComplete ? "✅" : "❌")")
-        print("  - 참석 여부: \(selectedAttendance?.rawValue)")
+        print("  - Step 1 (추천): \(canCompleteRecommendStep ? "완성" : "미완성")")
+        print("  - Step 2 (이벤트): \(canCompleteEventInfoStep ? "완성" : "미완성")")
+        print("  - Step 3 (날짜): \(canCompleteDateStep ? "완성" : "미완성")")
+        print("  - Step 4 (위치): \(canCompleteLocationStep ? "완성" : "미완성")")
+        print("  - 전체 완성: \(isFormComplete ? "완성" : "미완성")")
+        print("  - 참석 여부: \(String(describing: selectedAttendance?.rawValue))")
         print("  - 위치 데이터: \(hasLocationData ? "있음" : "없음")")
     }
     
     /// API 요청 데이터 로깅
     private func logAPIRequestData(_ data: CreateEventData) {
-        print("📤 API 요청 데이터:")
+        print("API 요청 데이터:")
         print("  - 호스트: \(data.hostInfo.hostName) (\(data.hostInfo.hostNickname))")
         print("  - 관계: \(data.eventInfo.relationship)")
         print("  - 이벤트: \(data.eventInfo.eventCategory)")
@@ -465,7 +465,7 @@ class EventCreationManager: ObservableObject {
             "eventCategory": eventCategory,
             "selectedEventType": selectedEventType,
             "eventDate": eventDate.timeIntervalSince1970,
-            "selectedAttendance": selectedAttendance?.rawValue,
+            "selectedAttendance": selectedAttendance?.rawValue ?? "selectedAttendance 없음",
             "locationName": locationName,
             "locationAddress": locationAddress,
             "latitude": latitude,
@@ -512,7 +512,7 @@ class EventCreationManager: ObservableObject {
         guard let recommendationResponse = recommendationResponse,
               let recommendedData = recommendationResponse.data else {
             submitError = "추천 금액 정보가 없습니다."
-            print("❌ 추천 응답 데이터 없음")
+            print("추천 응답 데이터 없음")
             return false
         }
         
@@ -526,7 +526,7 @@ class EventCreationManager: ObservableObject {
         submitError = nil
         
         do {
-            print("🚀 추천받은 금액(\(recommendedData.cost)원)으로 이벤트 생성 시작...")
+            print("추천받은 금액(\(recommendedData.cost)원)으로 이벤트 생성 시작...")
             
             let response = try await eventService.createEvent(eventData: requestData)
                 .async()
@@ -534,20 +534,20 @@ class EventCreationManager: ObservableObject {
             if response.isSuccess {
                 apiResponse = response
                 submitSuccess = true
-                print("✅ 이벤트 생성 성공!")
+                print("이벤트 생성 성공!")
                 logAPIRequestData(requestData)
                 isSubmitting = false
                 return true
             } else {
                 submitError = response.message
-                print("❌ 이벤트 생성 실패: \(response.message)")
+                print("이벤트 생성 실패: \(response.message)")
                 isSubmitting = false
                 return false
             }
             
         } catch {
             submitError = "이벤트 생성에 실패했습니다: \(error.localizedDescription)"
-            print("❌ 이벤트 생성 에러: \(error)")
+            print("이벤트 생성 에러: \(error)")
             isSubmitting = false
             return false
         }
@@ -574,7 +574,7 @@ class EventCreationManager: ObservableObject {
         let eventInfo = CreateEventInfo(
             eventCategory: eventCategory,
             relationship: relationship,
-            cost: recommendedAmount, // 🎯 추천받은 금액 사용
+            cost: recommendedAmount,
             isAttend: isAttend,
             eventDate: eventDateString,
             note: "노트노트"
@@ -601,7 +601,7 @@ class EventCreationManager: ObservableObject {
             highAccuracy: highAccuracy
         )
         
-        print("💰 추천받은 금액(\(recommendedAmount)원)으로 API 요청 데이터 생성 완료")
+        print("추천받은 금액(\(recommendedAmount)원)으로 API 요청 데이터 생성 완료")
         return requestData
     }
     
@@ -611,7 +611,7 @@ class EventCreationManager: ObservableObject {
     func submitEventWithModifiedAmount(modifiedAmount: Int) async -> Bool {
         guard isFormComplete else {
             submitError = "입력 정보가 완전하지 않습니다."
-            print("❌ 폼이 완성되지 않음")
+            print("폼이 완성되지 않음")
             return false
         }
         
@@ -625,7 +625,7 @@ class EventCreationManager: ObservableObject {
         submitError = nil
         
         do {
-            print("🚀 수정된 금액(\(modifiedAmount)원)으로 이벤트 생성 시작...")
+            print("수정된 금액(\(modifiedAmount)원)으로 이벤트 생성 시작...")
             
             let response = try await eventService.createEvent(eventData: requestData)
                 .async()
@@ -633,20 +633,20 @@ class EventCreationManager: ObservableObject {
             if response.isSuccess {
                 apiResponse = response
                 submitSuccess = true
-                print("✅ 수정된 금액으로 이벤트 생성 성공!")
+                print("수정된 금액으로 이벤트 생성 성공!")
                 logAPIRequestData(requestData)
                 isSubmitting = false
                 return true
             } else {
                 submitError = response.message
-                print("❌ 이벤트 생성 실패: \(response.message)")
+                print("이벤트 생성 실패: \(response.message)")
                 isSubmitting = false
                 return false
             }
             
         } catch {
             submitError = "이벤트 생성에 실패했습니다: \(error.localizedDescription)"
-            print("❌ 이벤트 생성 에러: \(error)")
+            print("이벤트 생성 에러: \(error)")
             isSubmitting = false
             return false
         }
@@ -673,7 +673,7 @@ class EventCreationManager: ObservableObject {
         let eventInfo = CreateEventInfo(
             eventCategory: eventCategory,
             relationship: relationship,
-            cost: modifiedAmount, // 🎯 수정된 금액 사용
+            cost: modifiedAmount, // 수정된 금액 사용
             isAttend: isAttend,
             eventDate: eventDateString,
             note: "노트노트"
@@ -700,11 +700,11 @@ class EventCreationManager: ObservableObject {
             highAccuracy: highAccuracy
         )
         
-        print("✏️ 수정된 금액(\(modifiedAmount)원)으로 API 요청 데이터 생성 완료")
+        print("수정된 금액(\(modifiedAmount)원)으로 API 요청 데이터 생성 완료")
         if let originalAmount = recommendationResponse?.data?.cost {
-            print("  📊 원래 추천 금액: \(originalAmount)원")
-            print("  📝 수정된 금액: \(modifiedAmount)원")
-            print("  📈 차이: \(modifiedAmount - originalAmount)원")
+            print(" 원래 추천 금액: \(originalAmount)원")
+            print(" 수정된 금액: \(modifiedAmount)원")
+            print(" 차이: \(modifiedAmount - originalAmount)원")
         }
         
         return requestData
