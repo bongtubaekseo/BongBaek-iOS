@@ -45,8 +45,6 @@ struct RecommendCostView: View {
             VStack(spacing: 24) {
                 headerSection
                 
-                //emptyRecommendationBox
-                
                 amountRangeSection
                 
                 categorySection
@@ -160,22 +158,6 @@ struct RecommendCostView: View {
            .transition(.opacity.combined(with: .scale))
        }
     }
-    
-    // MARK: - Empty Recommendation Box
-//    private var emptyRecommendationBox: some View {
-//        VStack(spacing: 16) {
-//            
-//            RoundedRectangle(cornerRadius: 16)
-//                .fill(Color.gray.opacity(0.2))
-//                .frame(height: 120)
-//            
-//        }
-//        .padding(20)
-//        .background(
-//            RoundedRectangle(cornerRadius: 20)
-//                .fill(Color.white.opacity(0.1))
-//        )
-//    }
     
     // MARK: - Amount Range Section
     var amountRangeSection: some View {

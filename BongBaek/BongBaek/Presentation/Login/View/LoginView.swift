@@ -33,10 +33,7 @@ struct LoginView: View {
                    VStack(spacing: 16) {
 
                        Button(action: {
-//                           isPresented = true
-//                           handleKakaoLogin()
                            appStateManager.loginWithKakao()
-//                           KeychainManager.shared.clearTokens()
                            // ToDo - viewModel.kakaoLogin 시작하는 로직
                        }) {
                            Image("btn_kakao")
@@ -94,7 +91,6 @@ struct LoginView: View {
            SignUpBottomSheetView(
                onComplete: {
                    print("SignUpBottomSheet Clicked()")
-//                   isPresented = false
                    appStateManager.showSignUpSheet = false
                    showProfileSetting = true
                }

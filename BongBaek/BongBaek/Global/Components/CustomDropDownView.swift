@@ -52,8 +52,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                 HStack {
                     if let icon = icon {
                         Image(icon)
-                        //                            .renderingMode(.template)
-                        //                            .foregroundColor(.blue)
+                        
                     }
                     Text(title)
                         .bodyMedium14()

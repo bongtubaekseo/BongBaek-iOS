@@ -388,13 +388,13 @@ struct CreateEventView: View {
             do {
                 let eventData = createEventData()
                 
-                print("📝 전송할 메모: '\(memo)'")
-                 print("📋 API 데이터의 note: '\(eventData.eventInfo.note)'")
+                print("전송할 메모: '\(memo)'")
+                print("API 데이터의 note: '\(String(describing: eventData.eventInfo.note))'")
                 let response = try await DIContainer.shared.eventService.createEvent(eventData: eventData).async()
                 
                 if response.isSuccess {
                     await MainActor.run {
-                        print("✅ 경조사 기록 성공!")
+                        print("경조사 기록 성공!")
                         router.popToRoot() // 홈으로 이동
                     }
                 } else {
@@ -464,7 +464,7 @@ struct CreateEventView: View {
     
     // 날짜 포맷 변환 (UI → API)
     private func formatDateForAPI(_ uiDateString: String) -> String {
-        print("🔄 날짜 변환 시도: \(uiDateString)")
+        print("날짜 변환 시도: \(uiDateString)")
         
         // "2025년 7월 17일" → "2025-07-17"
         let inputFormatter = DateFormatter()
@@ -476,20 +476,20 @@ struct CreateEventView: View {
         
         if let date = inputFormatter.date(from: uiDateString) {
             let result = outputFormatter.string(from: date)
-            print("✅ 날짜 변환 성공: \(uiDateString) → \(result)")
+            print("날짜 변환 성공: \(uiDateString) → \(result)")
             return result
         } else {
             // 변환 실패 시 다른 형식으로 시도
-            print("❌ 첫 번째 변환 실패, 다른 형식 시도...")
+            print("첫 번째 변환 실패, 다른 형식 시도...")
             
             // "2025.07.17" 형식 처리
             if uiDateString.contains(".") {
                 let result = uiDateString.replacingOccurrences(of: ".", with: "-")
-                print("✅ 점(.) 형식 변환: \(uiDateString) → \(result)")
+                print("형식 변환: \(uiDateString) → \(result)")
                 return result
             }
             
-            print("❌ 모든 변환 실패, 원본 반환: \(uiDateString)")
+            print("모든 변환 실패, 원본 반환: \(uiDateString)")
             return uiDateString
         }
     }
@@ -852,8 +852,8 @@ struct CreateEventViewAfterEvent: View {
               let latitude = Double(location.y) else { return }
         
         mapView?.updateLocation(longitude: longitude, latitude: latitude)
-        print("✅ 지도 위치 업데이트: \(location.placeName)")
-        print("📍 좌표: \(longitude), \(latitude)")
+        print("지도 위치 업데이트: \(location.placeName)")
+        print("좌표: \(longitude), \(latitude)")
     }
     
     // 폼 유효성 검사
@@ -881,13 +881,13 @@ struct CreateEventViewAfterEvent: View {
             do {
                 let eventData = createEventData()
                 
-                print("📝 전송할 메모: '\(memo)'")
-                 print("📋 API 데이터의 note: '\(eventData.eventInfo.note)'")
+                print("전송할 메모: '\(memo)'")
+                print("API 데이터의 note: '\(String(describing: eventData.eventInfo.note))'")
                 let response = try await DIContainer.shared.eventService.createEvent(eventData: eventData).async()
                 
                 if response.isSuccess {
                     await MainActor.run {
-                        print("✅ 경조사 기록 성공!")
+                        print("경조사 기록 성공!")
                         router.popToRoot() // 홈으로 이동
                     }
                 } else {
@@ -957,7 +957,7 @@ struct CreateEventViewAfterEvent: View {
     
     // 날짜 포맷 변환 (UI → API)
     private func formatDateForAPI(_ uiDateString: String) -> String {
-        print("🔄 날짜 변환 시도: \(uiDateString)")
+        print("날짜 변환 시도: \(uiDateString)")
         
         // "2025년 7월 17일" → "2025-07-17"
         let inputFormatter = DateFormatter()
@@ -969,20 +969,20 @@ struct CreateEventViewAfterEvent: View {
         
         if let date = inputFormatter.date(from: uiDateString) {
             let result = outputFormatter.string(from: date)
-            print("✅ 날짜 변환 성공: \(uiDateString) → \(result)")
+            print("날짜 변환 성공: \(uiDateString) → \(result)")
             return result
         } else {
             // 변환 실패 시 다른 형식으로 시도
-            print("❌ 첫 번째 변환 실패, 다른 형식 시도...")
+            print("첫 번째 변환 실패, 다른 형식 시도")
             
             // "2025.07.17" 형식 처리
             if uiDateString.contains(".") {
                 let result = uiDateString.replacingOccurrences(of: ".", with: "-")
-                print("✅ 점(.) 형식 변환: \(uiDateString) → \(result)")
+                print("형식 변환: \(uiDateString) → \(result)")
                 return result
             }
             
-            print("❌ 모든 변환 실패, 원본 반환: \(uiDateString)")
+            print("모든 변환 실패, 원본 반환: \(uiDateString)")
             return uiDateString
         }
     }

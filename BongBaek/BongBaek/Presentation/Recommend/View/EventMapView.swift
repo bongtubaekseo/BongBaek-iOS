@@ -47,13 +47,6 @@ struct EventMapView: View {
                 }
             }
         }
-       /* .padding(16)*/           // 카드 내부 패딩
-        .background(.gray800)  // 카드 배경색
-/*        .cornerRadius(12)   */   // 카드 모서리 둥글게
-        /*.padding(.horizontal, 20)*/  // 화면 양쪽 여백
+        .background(.gray800)
     }
-}
-
-#Preview {
-    EventMapView()
 }

@@ -174,7 +174,7 @@ class ProfileSettingViewModel: ObservableObject {
         if hasIncome {
             incomeValue = currentSelection.apiValue
         } else {
-            incomeValue = "없음"  // 빈 문자열 대신 "수입없음"으로 변경
+            incomeValue = "없음"  // 빈 문자열 대신 "없음"으로 변경
         }
         let formattedBirthday = convertDateFormat(selectedDate)
         return MemberInfo(

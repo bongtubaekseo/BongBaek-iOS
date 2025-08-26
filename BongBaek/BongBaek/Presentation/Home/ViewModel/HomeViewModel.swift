@@ -103,26 +103,3 @@ extension HomeViewModel {
         return isLoading || (!hasData && !hasError)
     }
 }
-
-// MARK: - HomeData 편의 접근 프로퍼티들
-//extension HomeViewModel {
-//    /// 최근 이벤트 목록
-//    var recentEvents: [EventItem] {
-//        return homeData?.recentEvents ?? []
-//    }
-//    
-//    /// 다가오는 이벤트 수
-//    var upcomingEventsCount: Int {
-//        return homeData?.upcomingCount ?? 0
-//    }
-//    
-//    /// 총 지출 금액
-//    var totalSpentAmount: Int {
-//        return homeData?.totalAmount ?? 0
-//    }
-//    
-//    /// 이번 달 이벤트 수
-//    var thisMonthEventsCount: Int {
-//        return homeData?.thisMonthCount ?? 0
-//    }
-//}

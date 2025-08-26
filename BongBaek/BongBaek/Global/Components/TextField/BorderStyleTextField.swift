@@ -82,12 +82,6 @@ struct BorderTextField: View {
                                 .foregroundColor(.gray)
                         }
                     }
-//                    if !text.isEmpty && validationRule != nil {
-//                        Image(systemName: validationState == .valid ? "checkmark" : "exclamationmark")
-//                            .foregroundStyle(validationState == .valid ? .green : .red)
-//                            .font(.system(size: 16, weight: .semibold))
-//                            .transition(.scale.combined(with: .opacity))
-//                    }
                 }
             }
             .padding(.vertical, 16)
