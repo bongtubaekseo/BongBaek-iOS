@@ -11,7 +11,7 @@ struct EmptyScheduleView: View {
     
     var body: some View {
         Button(action: {
-            router.push(to: .createEventView)
+            router.push(to: .createEventViewAfterEvent)
         }) {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading) {

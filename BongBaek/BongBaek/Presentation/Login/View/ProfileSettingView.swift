@@ -77,8 +77,8 @@ struct ProfileSettingView: View {
         VStack(spacing: 16) {
             CustomTextField(
                 title: "이름",
-                icon: "person.circle",
-                placeholder: "닉네임을 입력하세요",
+                icon: "icon_person_16",
+                placeholder: "이름을 입력하세요",
                 text: $viewModel.nickname,
                 validationRule: ValidationRule(
                     minLength: 2,

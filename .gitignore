@@ -99,6 +99,14 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+fastlane/*.json
+fastlane/README.md
+
+# 코드사이닝 관련
+*.mobileprovision
+*.cer
+*.p12
+*.certSigningRequest
 
 # Code Injection
 # After new code Injection tools there's a generated folder /iOSInjectionProject
@@ -111,11 +119,15 @@ Packages
 xcuserdata
 # *.xcodeproj
 
+# Ruby
+Gemfile.lock
+
 
 ### SwiftPM ###
 
 
 ### Xcode ###
+*.xcarchive
 
 ## Xcode 8 and earlier
 

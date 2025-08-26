@@ -27,6 +27,11 @@ class ProfileSettingViewModel: ObservableObject {
     private let authManager = AuthManager.shared
     private var cancellables = Set<AnyCancellable>()
     
+    init() {
+          setupAuthStateObserver()
+          setupSignUpErrorObserver()  // 에러 관찰 추가
+      }
+    
     // MARK: - Enums
     enum IncomeSelection: Equatable {
         case under200
@@ -35,7 +40,7 @@ class ProfileSettingViewModel: ObservableObject {
         
         var displayText: String {
             switch self {
-            case .under200: return "월 200 이하"
+            case .under200: return "200만원 미만"
             case .over200: return "월 200 이상"
             case .none: return ""
             }
@@ -43,7 +48,7 @@ class ProfileSettingViewModel: ObservableObject {
         
         var apiValue: String {
             switch self {
-            case .under200: return "200만원 이하"
+            case .under200: return "200만원 미만"
             case .over200: return "200만원 이상"
             case .none: return ""
             }
@@ -51,6 +56,40 @@ class ProfileSettingViewModel: ObservableObject {
     }
     
     // MARK: - Computed Properties
+    
+    private func setupAuthStateObserver() {
+         authManager.$authState
+             .receive(on: DispatchQueue.main)
+             .sink { [weak self] authState in
+                 self?.handleAuthStateChange(authState)
+             }
+             .store(in: &cancellables)
+     }
+    
+    private func setupSignUpErrorObserver() {
+        authManager.$signUpError
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] error in
+                self?.handleSignUpError(error)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func handleSignUpError(_ error: String?) {
+            if let error = error {
+                print("📱 회원가입 에러 수신: \(error)")
+                isSigningUp = false
+                errorMessage = error
+                showErrorAlert = true
+                
+                // 에러 처리 후 AuthManager의 에러 초기화
+                authManager.clearSignUpError()
+            }
+        }
+    
+
+    
+    
     var isStartButtonEnabled: Bool {
         let basicFieldsValid = nickname.count >= 2 &&
                               nickname.count <= 10 &&
@@ -64,9 +103,7 @@ class ProfileSettingViewModel: ObservableObject {
     }
     
     // MARK: - Initialization
-    init() {
-        setupAuthStateObserver()
-    }
+
     
     // MARK: - Public Methods
     func selectIncome(_ selection: IncomeSelection) {
@@ -86,15 +123,9 @@ class ProfileSettingViewModel: ObservableObject {
         isSigningUp = true
         
         let memberInfo = createMemberInfo()
-
-        
         authManager.signUp(memberInfo: memberInfo)
         
-        // 5초 후 상태 확인
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-            print("🔍 5초 후 AuthManager 상태: \(self.authManager.authState)")
-            self.isSigningUp = false
-        }
+       
     }
     
     func dismissError() {
@@ -103,43 +134,32 @@ class ProfileSettingViewModel: ObservableObject {
     }
     
     // MARK: - Private Methods
-    private func setupAuthStateObserver() {
-        authManager.$authState
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] authState in
-                self?.handleAuthStateChange(authState)
-            }
-            .store(in: &cancellables)
-    }
+    
     
     private func handleAuthStateChange(_ authState: AuthManager.AuthState) {
-        switch authState {
-        case .authenticated:
-            // 회원가입 성공
-            isSigningUp = false
-            navigateToMain = true
-            print("회원가입 성공 - 메인으로 이동")
-            
-        case .needsSignUp:
-            // 회원가입 실패 ]
-            if isSigningUp { // 회원가입 진행 중이었다면 실패로 간주
+            switch authState {
+            case .authenticated:
+                // 회원가입 성공
                 isSigningUp = false
-                errorMessage = "회원가입에 실패했습니다. 다시 시도해주세요."
-                showErrorAlert = true
-                print("회원가입 실패")
+                navigateToMain = true
+                print("회원가입 성공 - 메인으로 이동")
+                
+            case .needsSignUp:
+                // 초기 회원가입 필요 상태 (실패로 인한 것이 아님)
+                break
+                
+            case .loading:
+                // 로딩 상태 유지
+                break
+                
+            case .needsLogin:
+                // 로그인이 필요한 상태로 변경됨 (예상치 못한 상황)
+                if !isSigningUp {
+                    errorMessage = "인증이 만료되었습니다. 다시 로그인해주세요."
+                    showErrorAlert = true
+                }
             }
-            
-        case .loading:
-            // 로딩 상태 유지
-            break
-            
-        case .needsLogin:
-            // 로그인이 필요한 상태로 변경됨 (예상치 못한 상황)
-            isSigningUp = false
-            errorMessage = "인증이 만료되었습니다. 다시 로그인해주세요."
-            showErrorAlert = true
         }
-    }
     
     private func convertDateFormat(_ dateString: String) -> String {
            let converted = dateString.replacingOccurrences(of: ".", with: "-")
@@ -154,13 +174,13 @@ class ProfileSettingViewModel: ObservableObject {
         if hasIncome {
             incomeValue = currentSelection.apiValue
         } else {
-            incomeValue = ""
+            incomeValue = "없음"  // 빈 문자열 대신 "없음"으로 변경
         }
         let formattedBirthday = convertDateFormat(selectedDate)
         return MemberInfo(
             kakaoId: Int(kakaoId) ?? 0,
             appleId: nil,
-            memberName: nickname,            
+            memberName: nickname,
             memberBirthday: formattedBirthday,
             memberIncome: incomeValue
         )
@@ -182,13 +202,17 @@ extension ProfileSettingViewModel {
     }
     
     func logCurrentSelection() {
-        switch currentSelection {
-        case .under200:
-            print("선택된 수입: 월 200 이하")
-        case .over200:
-            print("선택된 수입: 월 200 이상")
-        case .none:
-            print("수입이 선택되지 않음")
+        if hasIncome {
+            switch currentSelection {
+            case .under200:
+                print("선택된 수입: 월 200 이하")
+            case .over200:
+                print("선택된 수입: 월 200 이상")
+            case .none:
+                print("수입이 선택되지 않음")
+            }
+        } else {
+            print("선택된 수입: 수입없음")
         }
     }
 }

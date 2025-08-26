@@ -123,7 +123,7 @@ class EventService: EventServiceProtocol {
         )
     }
     
-    func updateEvent(eventId: Int, eventData: UpdateEventData) -> AnyPublisher<UpdateEventResponse, Error> {
+    func updateEvent(eventId: String, eventData: UpdateEventData) -> AnyPublisher<UpdateEventResponse, Error> {
         return networkService.request(
             .updateEvent(eventId: eventId, eventData: eventData),
             responseType: UpdateEventResponse.self
