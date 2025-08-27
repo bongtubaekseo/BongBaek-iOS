@@ -14,7 +14,7 @@ struct RecommendStartView: View {
     @State private var navigateToRecommend = false
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             CustomNavigationBar(title: "금액 추천 가이드") {
                 router.pop()
             }
@@ -26,11 +26,11 @@ struct RecommendStartView: View {
                 subtitle2: "지금 바로 알아보세요!"
             )
             .padding(.leading, 20)
-            .padding(.top, 40)
-            
+            .padding(.top, 40.adjustedH)
+
             Image("image_bong 1")
-                .padding(.top,20)
-                .frame(width: 365,height: 365)
+                .frame(width: 335.adjusted,height: 335.adjustedH)
+                .padding(.top,20.adjustedH)
             
             HStack {
                 Image("icon_protect")
@@ -38,7 +38,7 @@ struct RecommendStartView: View {
                     .bodyRegular14()
                     .foregroundStyle(.gray300)
             }
-            .padding(.top,20)
+            .padding(.top,20.adjustedH)
             
             Button {
                 router.push(to: .recommendView)
@@ -50,12 +50,12 @@ struct RecommendStartView: View {
                         .foregroundStyle(.white)
                     Spacer()
                 }
-                .frame(height: 60)
+                .frame(height: 55)
                 .background(.primaryNormal)
                 .cornerRadius(12)
             }
             .padding(.horizontal, 20)
-            .padding(.top, 20)
+            .padding(.top, 20.adjustedH)
 
             Spacer()
         }
@@ -63,11 +63,6 @@ struct RecommendStartView: View {
             print("🏠 RecommendStartView 나타남 - path.count: \(router.path.count)")
             eventManager.resetAllData()
          }
-//        .navigationDestination(isPresented: $navigateToRecommend) {
-//            RecommendView()
-//                .environmentObject(stepManager)
-//                .environmentObject(router)
-//        }
         .background(Color.background)
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
