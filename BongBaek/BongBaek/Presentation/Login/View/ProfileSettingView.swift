@@ -34,11 +34,12 @@ struct ProfileSettingView: View {
                     }
                     
                     startButton
-                        .padding(.top, 20)
+                        .padding(.top, 20.adjustedH)
                     
                     Spacer()
                 }
             }
+            .scrollIndicators(.hidden)
             .scrollDismissesKeyboard(.interactively)
             .padding(.horizontal, 20)
             .contentShape(Rectangle())

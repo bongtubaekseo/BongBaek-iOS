@@ -102,6 +102,9 @@ struct LoginView: View {
                    .scaledToFill()
                    .ignoresSafeArea()
            )
+           .navigationDestination(isPresented: $showProfileSetting) {
+               ProfileSettingView()
+           }
        }
        .sheet(isPresented: $isPresented) {
            SignUpBottomSheetView(
