@@ -47,8 +47,7 @@ struct LoginView: View {
                        )
                        
                        Button(action: {
-//                           appStateManager.loginWithKakao()
-                           isPresented.toggle()
+                           appStateManager.loginWithKakao()
                            
                        }) {
                            Image("btn_kakao")
@@ -106,7 +105,7 @@ struct LoginView: View {
                ProfileSettingView()
            }
        }
-       .sheet(isPresented: $isPresented) {
+       .sheet(isPresented: $appStateManager.showSignUpSheet) {
            SignUpBottomSheetView(
                onComplete: {
                    print("SignUpBottomSheet Clicked()")
