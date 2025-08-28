@@ -28,6 +28,7 @@ struct AccountDeletionView: View {
         VStack(spacing: 0) {
             CustomNavigationBar(title: "서비스 탈퇴") {
                 print("123")
+                router.pop()
             }
             
             VStack(alignment: .leading,spacing: 12.adjustedH) {
