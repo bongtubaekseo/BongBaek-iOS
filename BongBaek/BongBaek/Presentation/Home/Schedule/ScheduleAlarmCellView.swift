@@ -68,56 +68,19 @@ struct ScheduleIndicatorCellView: View {
         .padding(.bottom, 30)
         .background(
             LinearGradient(
-                colors: gradientColors(for: event.eventInfo.eventCategory),
+                stops: [
+                    .init(color: Color(hex: "150857"), location: 0.15),
+                    .init(color: Color(hex: "5F57FF"), location: 0.35),
+                    .init(color: Color(hex: "7384FF"), location: 0.55),
+                    .init(color: Color(hex: "9EA5FF"), location: 0.70),
+                    .init(color: Color(hex: "CDCBFF"), location: 0.75)
+                ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
         )
         .frame(height: 260)
         .cornerRadius(10)
-    }
-    
-    // 카테고리별 그라데이션 색상
-    private func gradientColors(for category: String) -> [Color] {
-        switch category {
-        case "결혼식":
-            return [
-                Color(hex: "150857"),
-                Color(hex: "5F57FF"),
-                Color(hex: "7384FF"),
-                Color(hex: "9EA5FF"),
-                Color(hex: "CDCBFF"),
-                Color(hex: "FFFFFF").opacity(0.8),
-            ]
-        case "생일":
-            return [
-                Color(hex: "150857"),
-                Color(hex: "5F57FF"),
-                Color(hex: "7384FF"),
-                Color(hex: "9EA5FF"),
-                Color(hex: "CDCBFF"),
-                Color(hex: "FFFFFF").opacity(0.8),
-            ]
-        case "돌잔치":
-            return [
-                Color(hex: "150857"),
-                Color(hex: "5F57FF"),
-                Color(hex: "7384FF"),
-                Color(hex: "9EA5FF"),
-                Color(hex: "CDCBFF"),
-                Color(hex: "FFFFFF").opacity(0.8),
-            ]
-        default:
-            // 기본 (기존 보라 계열)
-            return [
-                Color(hex: "150857"),
-                Color(hex: "5F57FF"),
-                Color(hex: "7384FF"),
-                Color(hex: "9EA5FF"),
-                Color(hex: "CDCBFF"),
-                Color(hex: "FFFFFF").opacity(0.8),
-            ]
-        }
     }
 }
 
