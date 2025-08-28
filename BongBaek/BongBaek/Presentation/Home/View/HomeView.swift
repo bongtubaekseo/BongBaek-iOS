@@ -26,6 +26,7 @@ struct HomeView: View {
                         .padding(.trailing, 20)
                         
                 }
+                .padding(.top, 30)
                 .padding(.leading, 20)
 
                 
