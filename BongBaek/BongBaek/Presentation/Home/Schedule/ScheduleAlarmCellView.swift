@@ -35,7 +35,7 @@ struct ScheduleIndicatorCellView: View {
             Text("마음을 담은 봉투, 준비되셨나요?")
                 .captionRegular12()
                 .foregroundStyle(.gray100)
-                .padding(.top, 8)
+                .padding(.top, 10)
             
             HStack {
                 Spacer()
@@ -55,12 +55,12 @@ struct ScheduleIndicatorCellView: View {
                 
                 Text(event.eventInfo.eventDate)
                     .captionRegular12()
-                    .foregroundColor(.white)
+                    .foregroundColor(.gray100)
             }
             .padding(.vertical, 4)
             .padding(.horizontal, 4)
             .background(.gray750)
-            .cornerRadius(6)
+            .cornerRadius(4)
             .offset(y: -65)
         }
         .padding(.top, 40)
