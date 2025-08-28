@@ -10,6 +10,8 @@ import SwiftUI
 struct AccountDeletionView: View {
     
     @State private var selectedReason: String? = nil
+    @State private var otherReasonText: String = ""
+    @FocusState private var isTextFieldFocused: Bool
     
     let deletionReasons = [
         "사용이 불편했어요",
@@ -44,10 +46,11 @@ struct AccountDeletionView: View {
                     DeletionReasonButton(
                         title: reason,
                         isSelected: selectedReason == reason,
-                        hasAnySelection: selectedReason != nil
-                    ) {
-                        selectReason(reason: reason)
-                    }
+                        hasAnySelection: selectedReason != nil,
+                        action: { selectReason(reason: reason) },
+                        otherReasonText: $otherReasonText,
+                        isTextFieldFocused: $isTextFieldFocused
+                    )
                 }
             }
             .padding(20)
@@ -71,7 +74,7 @@ struct AccountDeletionView: View {
                             .fill(selectedReason != nil ? .primaryNormal : .primaryBg)
                     )
             }
-            .disabled(selectedReason == nil)
+            .disabled(!isDeleteButtonEnabled)
             .buttonStyle(PlainButtonStyle())
             .animation(.easeInOut(duration: 0.2), value: selectedReason != nil)
             .padding(.horizontal, 20)
@@ -80,19 +83,53 @@ struct AccountDeletionView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
+        .onTapGesture {
+            isTextFieldFocused = false
+        }
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
 
     }
 
     private func selectReason(reason: String) {
-        selectedReason = selectedReason == reason ? nil : reason
+        if selectedReason == reason {
+            selectedReason = nil
+            // 기타 선택 해제 시 텍스트도 초기화
+            if reason == "기타" {
+                otherReasonText = ""
+            }
+        } else {
+            selectedReason = reason
+            // 기타 선택 시 TextField에 포커스
+            if reason == "기타" {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isTextFieldFocused = true
+                }
+            } else {
+                // 다른 항목 선택 시 기타 텍스트 초기화
+                otherReasonText = ""
+            }
+        }
     }
     
     private func handleAccountDeletion() {
         guard let reason = selectedReason else { return }
         
-        print("선택된 탈퇴 이유: \(reason)")
+        if reason == "기타" {
+            print("선택된 탈퇴 이유: \(reason) - \(otherReasonText)")
+        } else {
+            print("선택된 탈퇴 이유: \(reason)")
+        }
+    }
+    
+    private var isDeleteButtonEnabled: Bool {
+        guard let reason = selectedReason else { return false }
+        
+        if reason == "기타" {
+            return !otherReasonText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        } else {
+            return true
+        }
     }
 }
 
@@ -102,38 +139,68 @@ struct DeletionReasonButton: View {
     let isSelected: Bool
     let hasAnySelection: Bool
     let action: () -> Void
+    @Binding var otherReasonText: String
+    @FocusState.Binding var isTextFieldFocused: Bool
     
     var body: some View {
-        Button(action: action) {
+        if title == "기타" && isSelected {
+
             HStack(spacing: 12) {
   
                 Image(getImageName())
                     .resizable()
                     .scaledToFit()
-                    .foregroundColor(isSelected ? .blue : .gray400)
-                    .frame(width: 24,height: 24)
+                    .frame(width: 24, height: 24)
                 
-                Text(title)
+                TextField("기타 사유를 입력해주세요",
+                          text: $otherReasonText,
+                          prompt: Text("기타 사유를 입력해주세요")
+                    .foregroundColor(.gray500))
+                      
                     .font(.body1_medium_16)
-                    .foregroundColor(.gray100)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(.white)
+                    .focused($isTextFieldFocused)
                 
                 Spacer()
             }
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
             .background(.gray750)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.primaryNormal, lineWidth: 1)
+            )
+            .cornerRadius(8)
+        } else {
+            Button(action: action) {
+                HStack(spacing: 12) {
+                    Image(getImageName())
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                    
+                    Text(title)
+                        .font(.body1_medium_16)
+                        .foregroundColor(.gray100)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Spacer()
+                }
+                .padding(.vertical, 16)
+                .padding(.horizontal, 16)
+                .background(.gray750)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(
+                            isSelected ? Color.primaryNormal : Color.gray600,
+                            lineWidth: 1
+                        )
+                )
+                .cornerRadius(8)
+            }
+            .buttonStyle(PlainButtonStyle())
+            .animation(.easeInOut(duration: 0.2), value: isSelected)
         }
-        .overlay(
-             RoundedRectangle(cornerRadius: 8)
-                 .stroke(
-                     isSelected ? .primaryNormal : .gray600,
-                     lineWidth: 2
-                 )
-         )
-         .cornerRadius(8)
-        .buttonStyle(PlainButtonStyle())
-        .animation(.easeInOut(duration: 0.2), value: isSelected)
     }
     
     private func getImageName() -> String {
