@@ -35,8 +35,7 @@ struct EventDateView: View {
             CustomNavigationBar(title: "날짜 정보") {
                 dismiss()
             }
-            .padding(.top, 40)
-            
+
             StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 10)
@@ -65,7 +64,7 @@ struct EventDateView: View {
                     stepManager.currentStep = 3
                 }
             }
-            print("📅 EventDateView 나타남 - path.count: \(router.path.count)")
+            print("EventDateView 나타남 - path.count: \(router.path.count)")
         }
         .onChange(of: eventManager.eventDate) { _, newDate in
             checkDateAndUpdateUI(newDate)
@@ -75,7 +74,6 @@ struct EventDateView: View {
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("background"))
-        .ignoresSafeArea()
         .sheet(isPresented: $isDatePickerVisible) {
             DatePickerBottomSheet(
                 selectedDate: $eventManager.eventDate,
@@ -88,7 +86,7 @@ struct EventDateView: View {
     
     private func handleFormSubmission() {
         guard isNextButtonEnabled else {
-            print("⚠️ EventDateView: UI 검증 실패")
+            print("EventDateView: UI 검증 실패")
             return
         }
         
@@ -126,21 +124,21 @@ struct EventDateView: View {
         isPastDate = selectedDay < today
         
         if isPastDate {
-            print("⚠️ 과거 날짜 선택됨: \(date)")
+            print("과거 날짜 선택됨: \(date)")
         }
     }
     
     private func printCurrentSelections() {
-        print("📋 EventDateView 현재 선택된 값들:")
+        print("EventDateView 현재 선택된 값들:")
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy년 M월 d일"
         formatter.locale = Locale(identifier: "ko_KR")
         
-        print("  📅 선택된 날짜: \(formatter.string(from: eventManager.eventDate))")
-        print("  🎯 참석 여부: \(eventManager.selectedAttendance?.rawValue ?? "미선택")")
-        print("  ⚠️ 과거 날짜 여부: \(isPastDate)")
-        print("  ✅ 다음 단계 진행 가능: \(eventManager.canCompleteDateStep)")
+        print("선택된 날짜: \(formatter.string(from: eventManager.eventDate))")
+        print("참석 여부: \(eventManager.selectedAttendance?.rawValue ?? "미선택")")
+        print("과거 날짜 여부: \(isPastDate)")
+        print("다음 단계 진행 가능: \(eventManager.canCompleteDateStep)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
 }

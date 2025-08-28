@@ -34,7 +34,6 @@ struct EventInformationView: View {
             CustomNavigationBar(title: "관계정보") {
                 dismiss()
             }
-            .padding(.top, 40)
             
             StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                 .padding(.horizontal, 20)
@@ -56,10 +55,10 @@ struct EventInformationView: View {
                 }
             )
             .padding(.horizontal, 24)
-            .padding(.bottom, 50)
+            .padding(.bottom, 50.adjustedH)
         }
         .onAppear {
-            print("📋 EventInformationView 나타남 - path.count: \(router.path.count)")
+            print("EventInformationView 나타남 - path.count: \(router.path.count)")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation(.easeInOut(duration: 0.8)) {
                     stepManager.currentStep = 2
@@ -68,7 +67,6 @@ struct EventInformationView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("background"))
-        .ignoresSafeArea()
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
@@ -78,7 +76,7 @@ struct EventInformationView: View {
     
     private func handleFormSubmission() {
         guard isNextButtonEnabled else {
-            print("⚠️ EventInformationView: UI 검증 실패")
+            print("EventInformationView: UI 검증 실패")
             return
         }
         
@@ -87,18 +85,18 @@ struct EventInformationView: View {
         
         // 다음 화면으로 이동
         if eventManager.canCompleteEventInfoStep {
-            print("✅ EventInformationView: 폼 제출 성공, 다음 화면으로 이동")
+            print("EventInformationView: 폼 제출 성공, 다음 화면으로 이동")
             router.push(to: .eventDateView)
         } else {
-            print("❌ EventInformationView: EventCreationManager 이중 검증 실패")
+            print("EventInformationView: EventCreationManager 이중 검증 실패")
         }
     }
     
     private func printCurrentSelections() {
-        print("📋 EventInformationView 현재 선택된 값들:")
-        print("  🎉 이벤트 카테고리: '\(eventManager.eventCategory)'")
-        print("  📝 선택된 이벤트 타입: '\(eventManager.selectedEventType)'")
-        print("  ✅ 다음 단계 진행 가능: \(eventManager.canCompleteEventInfoStep)")
+        print("EventInformationView 현재 선택된 값들:")
+        print("이벤트 카테고리: '\(eventManager.eventCategory)'")
+        print("선택된 이벤트 타입: '\(eventManager.selectedEventType)'")
+        print("다음 단계 진행 가능: \(eventManager.canCompleteEventInfoStep)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
 }
@@ -138,7 +136,7 @@ struct EventTypeOptionsView: View {
                         // EventCreationManager에 직접 할당
                         eventManager.eventCategory = eventType.rawValue
                         eventManager.selectedEventType = eventType.rawValue
-                        print("🎉 이벤트 선택: \(eventType.rawValue)")
+                        print("이벤트 선택: \(eventType.rawValue)")
                     }
                 )
             }
@@ -190,7 +188,8 @@ struct EventTypeButton: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 18)
+            .frame(height: 70.adjustedH)
+//            .padding(.vertical, 18)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(isSelected ? Color("primary_normal") : Color.gray750)
