@@ -22,6 +22,7 @@ struct HomeView: View {
                         .padding(.leading, 20)
                     Spacer()
                 }
+                .padding(.leading, 20)
 
                 
                 if homeViewModel.hasData {
@@ -87,6 +88,3 @@ struct HomeView: View {
     }
 }
 
-#Preview {
-    HomeView()
-}
