@@ -27,7 +27,6 @@ struct HomeView: View {
                         
                 }
                 .padding(.top, 30)
-                .padding(.leading, 20)
 
                 
                 if homeViewModel.hasData {
