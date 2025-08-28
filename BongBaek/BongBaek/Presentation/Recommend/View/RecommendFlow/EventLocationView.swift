@@ -60,13 +60,14 @@ struct EventLocationView: View {
                     }
                     
                     submitButton
+                        .padding(.top,20)
                 }
                 .padding(.top, 20)
             }
             .onAppear {
                 stepManager.currentStep = 4
-                print("📍 EventLocationView 나타남 - step: 4/4")
-                print("⏳ path.count: \(router.path.count)")
+                print("EventLocationView 나타남 - step: 4/4")
+                print("path.count: \(router.path.count)")
             }
             .offset(y: isSearchFieldFocused ? -140 : 0)
         }
@@ -306,7 +307,7 @@ struct EventLocationView: View {
     
     private func handleFormSubmission() {
         guard isNextButtonEnabled else {
-            print("⚠️ EventLocationView: UI 검증 실패")
+            print("EventLocationView: UI 검증 실패")
             return
         }
         
@@ -315,15 +316,15 @@ struct EventLocationView: View {
         
         // 다음 화면으로 이동
         if eventManager.canCompleteLocationStep {
-            print("✅ EventLocationView: 폼 제출 성공, 추천 로딩으로 이동")
+            print("EventLocationView: 폼 제출 성공, 추천 로딩으로 이동")
             router.push(to: .recommendLoadingView)
         } else {
-            print("❌ EventLocationView: EventCreationManager 이중 검증 실패")
+            print("EventLocationView: EventCreationManager 이중 검증 실패")
         }
     }
     
     private func handleSkipLocation() {
-        print("🔄 위치 입력 건너뛰기")
+        print("위치 입력 건너뛰기")
         
         // 위치 데이터 초기화 (선택사항)
         eventManager.clearLocationData()
@@ -332,27 +333,27 @@ struct EventLocationView: View {
         printCurrentSelections()
         
         // 검증 없이 바로 다음 화면으로 이동
-        print("✅ EventLocationView: 건너뛰기로 추천 로딩으로 이동")
+        print("EventLocationView: 건너뛰기로 추천 로딩으로 이동")
         router.push(to: .recommendLoadingView)
     }
     
     private func printLocationSelection(_ document: KLDocument) {
-        print("📍 EventLocationView 위치 선택:")
-        print("  🏢 장소명: \(document.placeName)")
-        print("  📍 주소: \(document.addressName)")
-        print("  🛣️ 도로명: \(document.roadAddressName)")
-        print("  🌍 좌표: \(document.x), \(document.y)")
+        print("EventLocationView 위치 선택:")
+        print("장소명: \(document.placeName)")
+        print("주소: \(document.addressName)")
+        print("도로명: \(document.roadAddressName)")
+        print("좌표: \(document.x), \(document.y)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
     
     private func printCurrentSelections() {
-        print("📍 EventLocationView 현재 선택된 값들:")
-        print("  🏢 장소명: '\(eventManager.locationName)'")
-        print("  📍 주소: '\(eventManager.locationAddress)'")
-        print("  🛣️ 도로명 주소: '\(eventManager.locationRoadAddress)'")
-        print("  🌍 좌표: (\(eventManager.longitude), \(eventManager.latitude))")
-        print("  📍 위치 데이터 존재: \(eventManager.hasLocationData)")
-        print("  ✅ 다음 단계 진행 가능: \(eventManager.canCompleteLocationStep)")
+        print("EventLocationView 현재 선택된 값들:")
+        print("장소명: '\(eventManager.locationName)'")
+        print("주소: '\(eventManager.locationAddress)'")
+        print("도로명 주소: '\(eventManager.locationRoadAddress)'")
+        print("좌표: (\(eventManager.longitude), \(eventManager.latitude))")
+        print("위치 데이터 존재: \(eventManager.hasLocationData)")
+        print("다음 단계 진행 가능: \(eventManager.canCompleteLocationStep)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
 }
