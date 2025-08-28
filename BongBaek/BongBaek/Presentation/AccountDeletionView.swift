@@ -12,6 +12,8 @@ struct AccountDeletionView: View {
     @State private var selectedReason: String? = nil
     @State private var otherReasonText: String = ""
     @FocusState private var isTextFieldFocused: Bool
+
+    @EnvironmentObject var router: NavigationRouter
     
     let deletionReasons = [
         "사용이 불편했어요",
@@ -28,7 +30,7 @@ struct AccountDeletionView: View {
                 print("123")
             }
             
-            VStack(alignment: .leading,spacing: 12) {
+            VStack(alignment: .leading,spacing: 12.adjustedH) {
                 Text("탈퇴를 도와드릴게요")
                     .font(.head_bold_24)
                     .foregroundStyle(.gray100)
@@ -38,10 +40,10 @@ struct AccountDeletionView: View {
                     .foregroundStyle(.gray400)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 10)
+            .padding(.top, 10.adjustedH)
             .padding(.leading, 20)
             
-            VStack(spacing: 12) {
+            VStack(spacing: 12.adjustedH) {
                 ForEach(deletionReasons, id: \.self) { reason in
                     DeletionReasonButton(
                         title: reason,
@@ -57,7 +59,7 @@ struct AccountDeletionView: View {
             .background(.gray800)
             .cornerRadius(12)
             .padding(.horizontal, 20)
-            .padding(.top, 30)
+            .padding(.top, 20.adjustedH)
             
             Spacer()
             
@@ -78,7 +80,7 @@ struct AccountDeletionView: View {
             .buttonStyle(PlainButtonStyle())
             .animation(.easeInOut(duration: 0.2), value: selectedReason != nil)
             .padding(.horizontal, 20)
-            .padding(.bottom, 50)
+            .padding(.bottom, 40.adjustedH)
              
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -120,6 +122,9 @@ struct AccountDeletionView: View {
         } else {
             print("선택된 탈퇴 이유: \(reason)")
         }
+        
+        router.push(to: .accountDeletionConfirmView)
+        
     }
     
     private var isDeleteButtonEnabled: Bool {

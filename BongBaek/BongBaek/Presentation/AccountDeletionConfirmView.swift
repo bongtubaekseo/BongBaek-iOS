@@ -52,6 +52,9 @@ struct AccountDeletionConfirmView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 

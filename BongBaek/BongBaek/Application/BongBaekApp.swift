@@ -26,14 +26,12 @@ struct BongBaekApp: App {
     
     var body: some Scene {
         WindowGroup {
-            
-            AccountDeletionView()
-//            RootView()
-//                .onOpenURL(perform:{ url in
-//                    if(AuthApi.isKakaoTalkLoginUrl(url)){
-//                        _ = AuthController.handleOpenUrl(url:url)
-//                    }
-//                })
+            RootView()
+                .onOpenURL(perform:{ url in
+                    if(AuthApi.isKakaoTalkLoginUrl(url)){
+                        _ = AuthController.handleOpenUrl(url:url)
+                    }
+                })
         }
     }
 }

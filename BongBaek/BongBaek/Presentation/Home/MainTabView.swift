@@ -64,18 +64,18 @@ struct MainTabView: View {
             .onChange(of: router.path) { oldPath, newPath in
                         // 추천 플로우 중에 mainTab으로 돌아온 경우
                         if !oldPath.isEmpty && newPath.isEmpty {
-                            print("🔄 mainTab으로 복귀 - EventCreationManager 리셋")
+                            print("mainTab으로 복귀 - EventCreationManager 리셋")
                             eventManager.resetAllData()
                         }
                     }
             .onReceive(NotificationCenter.default.publisher(for: .selectTab)) { notification in
-               print("📢 MainTabView에서 selectTab notification 받음")
+               print("MainTabView에서 selectTab notification 받음")
                if let tab = notification.object as? Tab {
                    print("탭 변경: \(tab)")
                    
                    // 추천 플로우 중에 탭 전환 시 데이터 리셋
                    if !router.path.isEmpty {
-                       print("🔄 탭 전환으로 인한 EventCreationManager 리셋")
+                       print("탭 전환으로 인한 EventCreationManager 리셋")
                        eventManager.resetAllData()
                    }
                    
@@ -173,6 +173,12 @@ struct MainTabView: View {
             ModifyEventView2(mode: mode, eventDetailData: eventDetailData)
                 .environmentObject(router)
                 .environmentObject(eventManager)
+        case .accountDeletionConfirmView:
+            AccountDeletionConfirmView()
+                .environmentObject(router)
+        case .accountDeletionView:
+            AccountDeletionView()
+                .environmentObject(router)
         }
     }
 }

@@ -44,8 +44,10 @@ struct HomeView: View {
                 }
 
                 Button("로그아웃 테스트") {
-                    AuthManager.shared.logout()
-                    KeychainManager.shared.printTokenStatus()
+//                    AuthManager.shared.logout()
+//                    KeychainManager.shared.printTokenStatus()
+                    
+                    router.push(to: .accountDeletionView)
                 }
                 .foregroundColor(.red)
 
