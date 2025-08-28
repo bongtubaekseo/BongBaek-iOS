@@ -26,6 +26,8 @@ enum RecommendRoute: Hashable {
     case emptyCardView
     case createEventView
     case createEventViewAfterEvent
+    case accountDeletionView
+    case accountDeletionConfirmView
     
     var displayName: String {
         switch self {
@@ -50,6 +52,9 @@ enum RecommendRoute: Hashable {
         case .allRecordView2: return "allRecordView2"
         case .modifyEventView2: return "modifyEventView2"
         case .createEventViewAfterEvent: return "createEventViewAfterEvent"
+        case .accountDeletionConfirmView: return "acountDeletionConfirmView"
+        case .accountDeletionView: return "accountDeletionView"
+            
         }
     }
 }
@@ -59,7 +64,7 @@ final class NavigationRouter: ObservableObject {
     
     @Published var path = NavigationPath() {
         didSet {
-            print("🔄 NavigationPath 변경됨: \(path.count)개 화면")
+            print("NavigationPath 변경됨: \(path.count)개 화면")
         }
     }
     
