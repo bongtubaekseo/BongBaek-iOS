@@ -29,6 +29,39 @@ struct ModifyView: View {
                     .cornerRadius(20)
             }
         }
-        .background(Color.black)
+        
+        HStack{
+            VStack(alignment: .leading, spacing: 20) {
+                Text("생년월일")
+                    .font(.body1_medium_14)
+                    .foregroundStyle(.gray200)
+                Text("수입")
+                    .font(.body1_medium_14)
+                    .foregroundStyle(.gray200)
+            }
+            Spacer()
+            
+            VStack(alignment: .trailing, spacing: 20) {
+                Text("2000년 01월 05일")
+                    .font(.body1_medium_14)
+                    .foregroundStyle(.gray100)
+                Text("없음")
+                    .font(.body1_medium_14)
+                    .foregroundStyle(.gray100)
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 14)
+        .background(.gray750)
+        .cornerRadius(20)
+        
+        VStack(alignment: .leading, spacing: 20){
+            Text("서비스")
+                .font(.title_semibold_18)
+                .foregroundStyle(.black)
+                .padding(.leading, 20)
+                .padding(.top, 14)
+                .padding(.bottom, 4)
+        }
     }
 }
