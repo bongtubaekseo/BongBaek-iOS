@@ -51,7 +51,7 @@ struct ScheduleIndicatorCellView: View {
             HStack(spacing: 4) {
                 Image(.iconCalendar)
                     .resizable()
-                    .frame(width: 14, height: 16)
+                    .frame(width: 14, height: 14)
                 
                 Text(event.eventInfo.eventDate)
                     .captionRegular12()
@@ -65,7 +65,7 @@ struct ScheduleIndicatorCellView: View {
         }
         .padding(.top, 40)
         .padding(.horizontal, 20)
-        .padding(.bottom, 20)
+        .padding(.bottom, 30)
         .background(
             LinearGradient(
                 colors: gradientColors(for: event.eventInfo.eventCategory),
@@ -73,7 +73,7 @@ struct ScheduleIndicatorCellView: View {
                 endPoint: .bottomTrailing
             )
         )
-        .frame(width: 340, height: 260)
+        .frame(height: 260)
         .cornerRadius(10)
     }
     
