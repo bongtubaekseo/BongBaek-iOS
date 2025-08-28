@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "btn_kakao.png",
+      "filename" : "appleid_button@1x (1).png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "btn_kakao@2x.png",
+      "filename" : "appleid_button@2x (1).png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "btn_kakao@3x.png",
+      "filename" : "appleid_button@3x (1).png",
       "idiom" : "universal",
       "scale" : "3x"
     }
