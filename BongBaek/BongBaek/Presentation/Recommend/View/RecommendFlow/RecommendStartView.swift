@@ -60,7 +60,7 @@ struct RecommendStartView: View {
             Spacer()
         }
         .onAppear {
-            print("🏠 RecommendStartView 나타남 - path.count: \(router.path.count)")
+            print("RecommendStartView 나타남 - path.count: \(router.path.count)")
             eventManager.resetAllData()
          }
         .background(Color.background)
