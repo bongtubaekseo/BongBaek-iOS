@@ -165,10 +165,6 @@ struct MainTabView: View {
             CreateEventViewAfterEvent()
                 .environmentObject(router)
 
-        case .modifyEventView2(let mode, let eventDetailData):
-            ModifyEventView2(mode: mode, eventDetailData: eventDetailData)
-                .environmentObject(router)
-                .environmentObject(eventManager)
         case .accountDeletionConfirmView:
             AccountDeletionConfirmView()
                 .environmentObject(router)
