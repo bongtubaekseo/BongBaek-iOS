@@ -94,7 +94,7 @@ struct ModifyEventView: View {
     init(mode: ModifyMode, eventDetailData: EventDetailData? = nil) {
         self.mode = mode
         self.eventDetailData = eventDetailData
-        print("🔧 ModifyEventView init - mode: \(mode)")
+        print("ModifyEventView init - mode: \(mode)")
     }
     
     var body: some View {
@@ -272,7 +272,7 @@ struct ModifyEventView: View {
                 hideKeyboard()
             }
             .sheet(isPresented: $showDatePicker) {
-                DatePickerBottomSheetView2(
+                DatePickerBottomSheetView.unlimited(
                     onComplete: { selectedDateString in
                         selectedDate = selectedDateString
                         print("선택된 날짜: \(selectedDateString)")
@@ -1067,7 +1067,7 @@ struct ModifyEventView2: View {
                 hideKeyboard()
             }
             .sheet(isPresented: $showDatePicker) {
-                DatePickerBottomSheetView3(
+                DatePickerBottomSheetView.unlimited(
                     onComplete: { selectedDateString in
                         selectedDate = selectedDateString
                         print("선택된 날짜: \(selectedDateString)")
