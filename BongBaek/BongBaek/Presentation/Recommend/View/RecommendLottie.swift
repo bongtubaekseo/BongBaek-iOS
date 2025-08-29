@@ -131,7 +131,7 @@ struct RecommendLottie: View {
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [
-                                        Color(hex: "#4E62FF"),
+                                        Color(hex: "#4E62FF"), //TODO: location확인
                                         Color(hex: "#502EFF"),
                                     ],
                                     startPoint: .leading,
@@ -358,7 +358,7 @@ struct RecommendLottie: View {
                         }
                     }
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity) //TODO: 크기조절
                 .padding(.vertical, 14)
                 .background(Color("primary_normal"))
                 .foregroundColor(.white)
