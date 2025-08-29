@@ -226,7 +226,8 @@ struct CreateEventView: View {
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showDatePicker) {
-            DatePickerBottomSheetView3 { selectedDateString in
+            
+            DatePickerBottomSheetView.unlimited { selectedDateString in
                 selectedDate = selectedDateString
                 print("선택된 날짜: \(selectedDateString)")
             }
@@ -719,7 +720,7 @@ struct CreateEventViewAfterEvent: View {
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showDatePicker) {
-            DatePickerBottomSheetView2 { selectedDateString in
+            DatePickerBottomSheetView.unlimited { selectedDateString in
                 selectedDate = selectedDateString
                 print("선택된 날짜: \(selectedDateString)")
             }

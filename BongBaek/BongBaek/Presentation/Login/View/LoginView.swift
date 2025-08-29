@@ -12,6 +12,8 @@ struct LoginView: View {
     @State private var showProfileSetting = false
     @EnvironmentObject var appStateManager: AppStateManager
     @StateObject private var loginViewModel = LoginViewModel()
+    @State private var test = false
+    
     
    var body: some View {
        
@@ -47,7 +49,8 @@ struct LoginView: View {
                        )
                        
                        Button(action: {
-                           appStateManager.loginWithKakao()
+//                           appStateManager.loginWithKakao()
+                           test.toggle()
                            
                        }) {
                            Image("btn_kakao")
@@ -105,7 +108,7 @@ struct LoginView: View {
                ProfileSettingView()
            }
        }
-       .sheet(isPresented: $appStateManager.showSignUpSheet) {
+       .sheet(isPresented: $test) {
            SignUpBottomSheetView(
                onComplete: {
                    print("SignUpBottomSheet Clicked()")
