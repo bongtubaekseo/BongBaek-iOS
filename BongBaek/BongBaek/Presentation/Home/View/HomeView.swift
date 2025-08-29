@@ -21,7 +21,12 @@ struct HomeView: View {
                         .foregroundColor(.white)
                         .padding(.leading, 20)
                     Spacer()
+                    Image(.homeLogo)
+                        .frame(width: 40, height: 40)
+                        .padding(.trailing, 20)
+                        
                 }
+                .padding(.top, 30)
 
                 
                 if homeViewModel.hasData {
@@ -89,6 +94,3 @@ struct HomeView: View {
     }
 }
 
-#Preview {
-    HomeView()
-}
