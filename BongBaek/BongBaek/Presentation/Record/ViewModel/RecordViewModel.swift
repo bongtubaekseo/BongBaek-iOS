@@ -88,6 +88,8 @@ class RecordViewModel: ObservableObject {
                 return "참석한 장례식이 없습니다"
             case .all:
                 return "참석한 경조사가 없습니다"
+            default:
+                return "참석한 경조사가 없습니다"
             }
         case .notAttended:
             switch selectedCategory {
@@ -100,6 +102,8 @@ class RecordViewModel: ObservableObject {
             case .funeral:
                 return "불참한 장례식이 없습니다"
             case .all:
+                return "불참한 경조사가 없습니다"
+            default:
                 return "불참한 경조사가 없습니다"
             }
         }
