@@ -207,6 +207,8 @@ struct ModifyEventView: View {
                             text: $selectedDate,
                             isReadOnly: true,
                             isRequired: true) {
+                                
+                                guard !isRecommendationEdit else { return }
                                 print("생년월일 필드 터치됨")
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
