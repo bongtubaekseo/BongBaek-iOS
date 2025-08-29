@@ -8,6 +8,15 @@
 import SwiftUI
 import Combine
 
+enum Category: String, CaseIterable {
+    case all = "전체"
+    case wedding = "결혼식"
+    case babyParty = "돌잔치"
+    case birthday = "생일"
+    case funeral = "장례식"
+    
+}
+
 @MainActor
 class RecordViewModel: ObservableObject {
     
@@ -68,11 +77,38 @@ class RecordViewModel: ObservableObject {
     var emptyMessage: String {
         switch selectedSection {
         case .attended:
-            return "참석한 경조사가 없습니다"
+            switch selectedCategory {
+            case .babyParty:
+                return "참석한 돌잔치가 없습니다"
+            case .wedding:
+                return "참석한 결혼식이 없습니다"
+            case .birthday:
+                return "참석한 생일이 없습니다"
+            case .funeral:
+                return "참석한 장례식이 없습니다"
+            case .all:
+                return "참석한 경조사가 없습니다"
+            default:
+                return "참석한 경조사가 없습니다"
+            }
         case .notAttended:
-            return "불참한 경조사가 없습니다"
+            switch selectedCategory {
+            case .babyParty:
+                return "불참한 돌잔치가 없습니다"
+            case .wedding:
+                return "불참한 결혼식이 없습니다"
+            case .birthday:
+                return "불참한 생일이 없습니다"
+            case .funeral:
+                return "불참한 장례식이 없습니다"
+            case .all:
+                return "불참한 경조사가 없습니다"
+            default:
+                return "불참한 경조사가 없습니다"
+            }
         }
     }
+    
     
     init() {
         self.eventService = DIContainer.shared.eventService
