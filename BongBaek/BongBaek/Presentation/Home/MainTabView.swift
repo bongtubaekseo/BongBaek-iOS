@@ -147,10 +147,6 @@ struct MainTabView: View {
             AllRecordsView(eventId: eventId)
                 .environmentObject(router)
             
-        case .allRecordView2(let eventId):
-            AllRecordsView2(eventId: eventId)
-                .environmentObject(router)
-            
         case .recommendStartView:
             RecommendStartView()
             .environmentObject(router)

@@ -20,7 +20,6 @@ enum RecommendRoute: Hashable {
     case modifyEventView2(mode: ModifyMode, eventDetailData: EventDetailData?)
     case fullScheduleView
     case allRecordView(eventId: String)
-    case allRecordView2(eventId: String)
     case recommendStartView
     case emptyScheduleView
     case emptyCardView
@@ -49,7 +48,6 @@ enum RecommendRoute: Hashable {
         case .createEventView: return "createEventView"
 //        case .largeMapView:  return "largeMapView"
             
-        case .allRecordView2: return "allRecordView2"
         case .modifyEventView2: return "modifyEventView2"
         case .createEventViewAfterEvent: return "createEventViewAfterEvent"
         case .accountDeletionConfirmView: return "acountDeletionConfirmView"
