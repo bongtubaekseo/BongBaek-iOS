@@ -228,7 +228,7 @@ struct ModifyEventView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 16)
                 
-                EventMemoView(memo: $memo)
+                EventMemoView(memo: $memo, isDisabled: isRecommendationEdit)
                     .padding(.top, 16)
                     .padding(.horizontal, 20)
                 
