@@ -328,9 +328,11 @@ struct ModifyEventView: View {
                 } label: {
                     Text("수정하기")
                         .bodyRegular14()
-                        .foregroundStyle(isAttending ? .gray300 : .gray600)
+                        .foregroundStyle(
+                            (isAttending && !isRecommendationEdit) ? .gray300 : .gray600
+                        )
                 }
-                .disabled(!isAttending) // 참석시에만 클릭 가능
+                .disabled(!isAttending || isRecommendationEdit)
             }
             
             // 참석할 때만 지도 섹션 표시
