@@ -235,7 +235,7 @@ class EventCreationManager: ObservableObject {
             cost: 0, // 서버에서 계산
             isAttend: isAttend,
             eventDate: eventDateString,
-            note: "노트노트"
+            note: ""
         )
         
         // LocationDetailInfo 생성
@@ -577,7 +577,7 @@ class EventCreationManager: ObservableObject {
             cost: recommendedAmount,
             isAttend: isAttend,
             eventDate: eventDateString,
-            note: "노트노트"
+            note: ""
         )
         
         // LocationDetailInfo 생성
@@ -676,7 +676,7 @@ class EventCreationManager: ObservableObject {
             cost: modifiedAmount, // 수정된 금액 사용
             isAttend: isAttend,
             eventDate: eventDateString,
-            note: "노트노트"
+            note: ""
         )
         
         // LocationDetailInfo 생성
