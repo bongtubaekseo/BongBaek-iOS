@@ -283,7 +283,7 @@ struct ModifyEventView: View {
                 .presentationDetents([.height(359)])
             }
             .fullScreenCover(isPresented: $showLargeMapView) {
-                LargeMapView(selectedL  ocation: $selectedLocation)
+                LargeMapView(selectedLocation: $selectedLocation)
             }
         }
         .background(.gray900)
