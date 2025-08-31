@@ -136,8 +136,8 @@ struct ModifyView: View {
                                 }
                             }
                             .padding(.horizontal, 20)
-                            .padding(.top, 40)
-                            .padding(.bottom, 40)
+                            .padding(.top, 12)
+                            .padding(.bottom, 40) //TODO: padding값 조정
                         }
                     }
                 }
