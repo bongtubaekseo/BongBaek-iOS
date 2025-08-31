@@ -123,6 +123,7 @@ struct ModifyView: View {
                                     Text("로그아웃")
                                         .foregroundColor(.gray400)
                                         .bodyRegular14()
+                                        .padding(.leading, 65)
                                 }
                                 
                                 Spacer()
@@ -131,6 +132,7 @@ struct ModifyView: View {
                                     Text("서비스 탈퇴")
                                         .foregroundColor(.gray400)
                                         .bodyRegular14()
+                                        .padding(.trailing, 50)
                                 }
                             }
                             .padding(.horizontal, 20)
