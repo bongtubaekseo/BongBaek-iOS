@@ -92,26 +92,26 @@ struct ModifyView: View {
                                 
                                 VStack(spacing: 0) {
                                     ServiceRow(
-                                        icon: "square.stack.3d.up",
+                                        icon: "icon_intersect",
                                         title: "앱 버전",
                                         subtitle: "v 1.0.0",
                                         showChevron: false
                                     )
                                     
                                     ServiceRow(
-                                        icon: "message",
+                                        icon: "icon_information",
                                         title: "문의하기",
                                         showChevron: true
                                     )
                                     
                                     ServiceRow(
-                                        icon: "doc.text",
+                                        icon: "icon_book",
                                         title: "서비스 이용약관",
                                         showChevron: true
                                     )
 
                                     ServiceRow(
-                                        icon: "magnifyingglass",
+                                        icon: "icon_key",
                                         title: "개인정보 처리방침",
                                         showChevron: true
                                     )
@@ -162,27 +162,24 @@ struct ServiceRow: View {
         Button(action: {
         }) {
             HStack(spacing: 16) {
-                Image(systemName: icon)
-                    .foregroundColor(.gray)
-                    .font(.system(size: 16))
-                    .frame(width: 20)
+                Image(icon)
+                    .frame(width: 24, height: 24)
                 
                 Text(title)
-                    .foregroundColor(.white)
-                    .font(.system(size: 16))
+                    .foregroundColor(.gray400)
+                    .font(.body1_medium_16)
                 
                 Spacer()
                 
                 if let subtitle = subtitle {
                     Text(subtitle)
-                        .foregroundColor(.gray)
-                        .font(.system(size: 14))
+                        .foregroundColor(.gray400)
+                        .font(.body1_medium_16)
                 }
                 
                 if showChevron {
                     Image(systemName: "chevron.right")
-                        .foregroundColor(.gray)
-                        .font(.system(size: 12))
+                        .foregroundColor(.gray400)
                 }
             }
             .padding(.horizontal, 20)
