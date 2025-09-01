@@ -21,10 +21,13 @@ struct HomeView: View {
                         .foregroundColor(.white)
                         .padding(.leading, 20)
                     Spacer()
+                    
                     Image(.homeLogo)
                         .frame(width: 40, height: 40)
                         .padding(.trailing, 20)
-                        
+                        .onTapGesture {
+                            router.push(to : .ModifyView)
+                        }
                 }
                 .padding(.top, 30)
 
@@ -47,11 +50,7 @@ struct HomeView: View {
                         .frame(height: 276)
                         .padding(.top, 30)
                 }
-                Button("마이페이지 이동 테스트"){
-                    router.push(to: .ModifyView)
-                }
-                .foregroundColor(.red)
-
+            
                 Button("로그아웃 테스트") {
 //                    AuthManager.shared.logout()
 //                    KeychainManager.shared.printTokenStatus()

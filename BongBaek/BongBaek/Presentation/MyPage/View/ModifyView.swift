@@ -48,7 +48,7 @@ struct ModifyView: View {
                                     .foregroundStyle(.gray100)
                                 
                                 Button(action: {
-                                    router.push(to: .MyPageView)
+                                    //router.push(to: .MyPageView)
                                 }) {
                                     Text("내 정보 수정")
                                         .captionRegular12()
