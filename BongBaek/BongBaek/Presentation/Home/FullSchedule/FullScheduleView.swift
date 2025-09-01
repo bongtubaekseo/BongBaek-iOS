@@ -123,7 +123,7 @@ struct FullScheduleView: View {
             }
             .contentShape(Rectangle())
             
-            Text("봉백님의 전체 일정")
+            Text("다가올 경조사 일정")
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.leading, 12)
