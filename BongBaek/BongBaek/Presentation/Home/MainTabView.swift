@@ -179,6 +179,14 @@ struct MainTabView: View {
         case .accountDeletionView:
             AccountDeletionView()
                 .environmentObject(router)
+        case .MyPageView:
+            MyPageView()
+                .environmentObject(router)
+                .environmentObject(eventManager)
+        case .ModifyView:
+            ModifyView()
+                .environmentObject(router)
+                .environmentObject(eventManager)
         }
     }
 }

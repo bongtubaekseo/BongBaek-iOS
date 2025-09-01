@@ -7,6 +7,9 @@
 import SwiftUI
 
 struct ModifyView: View {
+    @StateObject private var stepManager = GlobalStepManager()
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         NavigationView {
@@ -16,7 +19,9 @@ struct ModifyView: View {
                 ScrollView {
                     VStack(spacing: 0) {
                         HStack {
-                            Button(action: {}) {
+                            Button(action: {
+                                dismiss()
+                            }) {
                                 Image(systemName: "chevron.left")
                                     .foregroundColor(.white)
                             }
@@ -42,7 +47,9 @@ struct ModifyView: View {
                                     .headBold24()
                                     .foregroundStyle(.gray100)
                                 
-                                Button(action: {}) {
+                                Button(action: {
+                                    router.push(to: .MyPageView)
+                                }) {
                                     Text("내 정보 수정")
                                         .captionRegular12()
                                         .foregroundColor(.white)
