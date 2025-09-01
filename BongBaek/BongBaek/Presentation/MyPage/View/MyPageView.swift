@@ -11,8 +11,10 @@ struct MyPageView: View {
     @StateObject private var viewModel = ProfileSettingViewModel()
     @State private var showDatePicker = false
     @FocusState private var focusedField: FocusField?
-    @Environment(\.dismiss) private var dismiss
+    //@Environment(\.dismiss) private var dismiss
     @State private var previousFocusedField: FocusField? = nil
+    @EnvironmentObject var router: NavigationRouter
+    @StateObject private var stepManager = GlobalStepManager()
     
     enum FocusField {
         case nickname
@@ -21,7 +23,7 @@ struct MyPageView: View {
     var body: some View {
         VStack(spacing: 0) {
             CustomNavigationBar(title: "프로필 설정") {
-                dismiss()
+                router.pop()
             }
             
             ScrollView {
