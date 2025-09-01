@@ -638,20 +638,32 @@ struct ModifyEventView: View {
     }
     
     private func formatDateForAPI(_ uiDateString: String) -> String {
-        // "2025년 7월 17일" → "2025-07-17"
-        let inputFormatter = DateFormatter()
-        inputFormatter.dateFormat = "yyyy년 M월 d일"
-        inputFormatter.locale = Locale(identifier: "ko_KR")
+        print("입력된 날짜: \(uiDateString)")
         
         let outputFormatter = DateFormatter()
         outputFormatter.dateFormat = "yyyy-MM-dd"
         
-        if let date = inputFormatter.date(from: uiDateString) {
+        // 1. "yyyy년 M월 d일" 형식 시도
+        let koreanFormatter = DateFormatter()
+        koreanFormatter.dateFormat = "yyyy년 M월 d일"
+        koreanFormatter.locale = Locale(identifier: "ko_KR")
+        
+        if let date = koreanFormatter.date(from: uiDateString) {
             return outputFormatter.string(from: date)
-        } else {
-            // 이미 API 형식인 경우 그대로 반환
-            return uiDateString
         }
+        
+        // 2. "yyyy.MM.dd" 형식 시도 (DatePicker에서 오는 형식)
+        let dotFormatter = DateFormatter()
+        dotFormatter.dateFormat = "yyyy.MM.dd"
+        
+        if let date = dotFormatter.date(from: uiDateString) {
+            let result = outputFormatter.string(from: date)
+            print("변환 결과: \(result)")
+            return result
+        }
+        
+        // 변환 실패시 원본 반환
+        return uiDateString
     }
     
     // MARK: - 이벤트 처리
