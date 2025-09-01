@@ -107,41 +107,42 @@ struct RecordsHeaderView: View {
     
     var body: some View {
         HStack {
-            // 삭제 모드일 때 뒤로가기 버튼
-            if isDeleteMode {
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isDeleteMode = false
+            HStack {
+                if isDeleteMode {
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isDeleteMode = false
+                        }
+                    }) {
+                        Text("취소")
+                            .bodyRegular16()
+                            .foregroundColor(.white)
                     }
-                }) {
-                    Text("취소")
-                        .bodyRegular16()
-                        .foregroundColor(.white)
-                }
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
-                .transition(.move(edge: .leading).combined(with: .opacity))
-            } else {
-                // 일반 모드일 때 왼쪽 공백
-                Spacer()
                     .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+                    .transition(.move(edge: .leading).combined(with: .opacity))
+                } else {
+                    Text("경조사 전체 기록")
+                        .titleSemiBold18()
+                        .foregroundStyle(.white)
+                        .transition(.move(edge: .leading).combined(with: .opacity))
+                    
+                    Spacer()
+                }
             }
             
-            Spacer()
-            
-            // 중앙 텍스트
-            if !isDeleteMode {
-                Text("경조사 전체 기록")
-                    .titleSemiBold18()
-                    .foregroundStyle(.white)
-            } else {
+            if isDeleteMode {
+                Spacer()
+                
                 Text("경조사 기록 삭제")
                     .titleSemiBold18()
                     .foregroundStyle(.white)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                
+                Spacer()
             }
             
-            Spacer()
-            
+      
             HStack(spacing: 0) {
                 // 삭제 모드가 아닐 때만 + 버튼 표시
                 if !isDeleteMode {
