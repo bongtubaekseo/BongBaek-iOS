@@ -49,9 +49,6 @@ struct MyPageView: View {
                 hideKeyboard()
             }
         }
-        .navigationDestination(isPresented: $viewModel.navigateToMain) {
-            MainTabView()
-        }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
