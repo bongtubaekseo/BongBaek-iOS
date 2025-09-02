@@ -26,7 +26,7 @@ struct HomeView: View {
                         .frame(width: 40, height: 40)
                         .padding(.trailing, 20)
                         .onTapGesture {
-                            router.push(to : .ModifyView)
+                            router.push(to : .MyPageView)
                         }
                 }
                 .padding(.top, 30)

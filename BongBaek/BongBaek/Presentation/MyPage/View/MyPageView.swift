@@ -1,222 +1,202 @@
 //
-//  MyPageView.swift
+//  ModifyView.swift
 //  BongBaek
 //
 //  Created by hyunwoo on 8/28/25.
 //
-
 import SwiftUI
 
-struct MyPageView: View {
-    @StateObject private var viewModel = ProfileSettingViewModel()
-    @State private var showDatePicker = false
-    @FocusState private var focusedField: FocusField?
-    //@Environment(\.dismiss) private var dismiss
-    @State private var previousFocusedField: FocusField? = nil
-    @EnvironmentObject var router: NavigationRouter
-    @StateObject private var stepManager = GlobalStepManager()
+struct ServiceItem: Identifiable {
+    let id = UUID()
+    let icon: String
+    let title: String
+    let subtitle: String?
+    let showChevron: Bool
     
-    enum FocusField {
-        case nickname
+    init(icon: String, title: String, subtitle: String? = nil, showChevron: Bool = false) {
+        self.icon = icon
+        self.title = title
+        self.subtitle = subtitle
+        self.showChevron = showChevron
+    }
+}
+
+struct MyPageView: View {
+    @StateObject private var stepManager = GlobalStepManager()
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var router: NavigationRouter
+    
+    private let serviceItems: [ServiceItem] = [
+        ServiceItem(icon: "icon_intersect", title: "앱 버전", subtitle: "v 1.0.0", showChevron: false),
+        ServiceItem(icon: "icon_information", title: "문의하기", showChevron: true),
+        ServiceItem(icon: "icon_book", title: "서비스 이용약관", showChevron: true),
+        ServiceItem(icon: "icon_key", title: "개인정보 처리방침", showChevron: true)
+    ]
+    
+    var body: some View {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            
+            ScrollView {
+                VStack(spacing: 0) {
+                    HStack {
+                        Button(action: {
+                            router.pop()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.white)
+                        }
+                        
+                        Spacer()
+                        
+                        Text("마이페이지")
+                            .titleSemiBold18()
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 10)
+                    
+                    VStack(spacing: 32) {
+                        VStack(spacing: 16) {
+                            Image(.myPageLogo)
+                                .frame(width: 110, height: 110)
+                                .padding(.top, 40)
+                            
+                            Text("봉투백서의겸손한야수")
+                                .headBold24()
+                                .foregroundStyle(.gray100)
+                            
+                            Button(action: {
+                                router.push(to: .ModifyView)
+                            }) {
+                                Text("내 정보 수정")
+                                    .captionRegular12()
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(.primaryNormal)
+                                    .cornerRadius(20)
+                            }
+                        }
+                        
+                        HStack {
+                            VStack(alignment: .leading, spacing: 20) {
+                                Text("생년월일")
+                                    .bodyMedium14()
+                                    .foregroundStyle(.gray200)
+                                Text("수입")
+                                    .bodyMedium14()
+                                    .foregroundStyle(.gray200)
+                            }
+                            
+                            Spacer()
+                            
+                            VStack(alignment: .trailing, spacing: 20) {
+                                Text("2000년 01월 05일")
+                                    .bodyMedium14()
+                                    .foregroundStyle(.gray100)
+                                Text("없음")
+                                    .bodyMedium14()
+                                    .foregroundStyle(.gray100)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 20)
+                        .background(.gray750)
+                        .cornerRadius(20)
+                        .padding(.horizontal, 20)
+
+                        VStack(alignment: .leading, spacing: 0) {
+                            HStack {
+                                Text("서비스")
+                                    .titleSemiBold18()
+                                    .foregroundStyle(.white)
+                                Spacer()
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.bottom, 16)
+                            
+                            VStack(spacing: 0) {
+                                ForEach(serviceItems) { item in
+                                    ServiceRow(
+                                        icon: item.icon,
+                                        title: item.title,
+                                        subtitle: item.subtitle,
+                                        showChevron: item.showChevron
+                                    )
+                                }
+                            }
+                        }
+
+                        HStack {
+                            Button(action: {}) {
+                                Text("로그아웃")
+                                    .foregroundColor(.gray400)
+                                    .bodyRegular14()
+                                    .padding(.leading, 68)
+                            }
+                            
+                            Spacer()
+                            
+                            Button(action: {}) {
+                                Text("서비스 탈퇴")
+                                    .foregroundColor(.gray400)
+                                    .bodyRegular14()
+                                    .padding(.trailing, 68)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 12)
+                        .padding(.bottom, 40)
+                    }
+                }
+            }
+        }
+        .navigationBarHidden(true)
+    }
+}
+
+struct ServiceRow: View {
+    let icon: String
+    let title: String
+    let subtitle: String?
+    let showChevron: Bool
+    
+    init(icon: String, title: String, subtitle: String? = nil, showChevron: Bool = false) {
+        self.icon = icon
+        self.title = title
+        self.subtitle = subtitle
+        self.showChevron = showChevron
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            CustomNavigationBar(title: "프로필 설정") {
-                router.pop()
-            }
-            
-            ScrollView {
-                VStack {
-                    textFieldSection
-                    incomeToggleSection
-                    
-                    if viewModel.hasIncome {
-                        incomeSelectionSection
-                    }
-                    
-                    startButton
-                        .padding(.top, 20.adjustedH)
-                    
-                    Spacer()
-                }
-            }
-            .scrollIndicators(.hidden)
-            .scrollDismissesKeyboard(.interactively)
-            .padding(.horizontal, 20)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                hideKeyboard()
-            }
-        }
-        .toolbar(.hidden, for: .navigationBar)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray900)
-        .ignoresSafeArea(.container, edges: .bottom)
-        .sheet(isPresented: $showDatePicker, onDismiss: {
-            focusedField = nil
-            previousFocusedField = nil
-        }) {
-            DatePickerBottomSheetView { selectedDateString in
-                viewModel.selectedDate = selectedDateString
-                print("선택된 날짜: \(selectedDateString)")
-                focusedField = nil
-            }
-            .presentationDetents([.height(359)])
-        }
-        .alert("회원가입 실패", isPresented: $viewModel.showErrorAlert) {
-            Button("확인") {
-                viewModel.dismissError()
-            }
-        } message: {
-            Text(viewModel.errorMessage)
-        }
-    }
-    
-    private var textFieldSection: some View {
-        VStack(spacing: 16) {
-            CustomTextField(
-                title: "이름",
-                icon: "icon_person_16",
-                placeholder: "이름을 입력하세요",
-                text: $viewModel.nickname,
-                validationRule: ValidationRule(
-                    minLength: 2,
-                    maxLength: 10,
-                    regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
-                ),
-                isRequired: true
-            )
-            .focused($focusedField, equals: .nickname)
-            
-            CustomTextField(
-                title: "생년월일",
-                icon: "icon_calendar_16",
-                placeholder: "생년월일을 입력하세요",
-                text: $viewModel.selectedDate,
-                isReadOnly: true,
-                isRequired: true) {
-                    print("생년월일 필드 터치됨")
-                    previousFocusedField = focusedField
-                    focusedField = nil
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        showDatePicker = true
-                    }
-                }
-        }
-        .padding(.top, 30)
-    }
-    
-    private var incomeToggleSection: some View {
-        HStack {
-            Text("현재 수입 있음")
-                .bodyMedium16()
-                .foregroundColor(.white)
-            
-            Spacer()
-            
-            Toggle("", isOn: $viewModel.hasIncome)
-                .labelsHidden()
-                .tint(.primaryNormal)
-                .onChange(of: viewModel.hasIncome) { _, newValue in
-                    if !newValue {
-                        viewModel.selectIncome(.none)
-                        focusedField = nil
-                    }
-                }
-        }
-        .frame(maxWidth: .infinity, minHeight: 62)
-        .padding(.horizontal, 20)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
-        )
-        .padding(.top, 20)
-    }
-    
-    private var incomeSelectionSection: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("현재 수입은 어느 정도인가요?")
-                .titleSemiBold16()
-                .foregroundStyle(.white)
-                .padding(.bottom, 20)
-            
-            VStack(spacing: 12) {
-                incomeButton(for: .under200)
-                incomeButton(for: .over200)
-            }
-        }
-        .frame(maxWidth: .infinity, minHeight: 183)
-        .padding(.horizontal, 20)
-        .padding(.top, 12)
-        .padding(.bottom, 20)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
-        )
-        .transition(.asymmetric(
-            insertion: .move(edge: .top).combined(with: .opacity),
-            removal: .move(edge: .top).combined(with: .opacity)
-        ))
-        .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
-    }
-    
-    private func incomeButton(for selection: ProfileSettingViewModel.IncomeSelection) -> some View {
-        Button {
-            viewModel.selectIncome(selection)
-            focusedField = nil
-            print("\(selection.displayText) 선택됨")
-        } label: {
-            HStack {
-                Text(selection.displayText)
-                    .foregroundStyle(.white)
+        Button(action: {}) {
+            HStack(spacing: 16) {
+                Image(icon)
+                    .frame(width: 24, height: 24)
+                
+                Text(title)
+                    .foregroundColor(.gray400)
+                    .font(.body1_medium_16)
                 
                 Spacer()
                 
-                if viewModel.isSelected(selection) {
-                    Image(systemName: "checkmark")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 16, weight: .semibold))
-                        .transition(.scale.combined(with: .opacity))
+                if let subtitle = subtitle {
+                    Text(subtitle)
+                        .foregroundColor(.gray400)
+                        .font(.body1_medium_16)
+                }
+                
+                if showChevron {
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.gray400)
                 }
             }
+            .padding(.horizontal, 20)
             .padding(.vertical, 16)
-            .padding(.horizontal, 16)
-            .background(
-                viewModel.isSelected(selection) ?
-                    .primaryNormal.opacity(0.3) : .clear.opacity(0.1)
-            )
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(
-                        viewModel.isSelected(selection) ? .primaryNormal : .gray100,
-                        lineWidth: viewModel.isSelected(selection) ? 2 : 1
-                    )
-            )
         }
-        .animation(.easeInOut(duration: 0.2), value: viewModel.currentSelection)
-    }
-
-    private var startButton: some View {
-        Button("수정하기") {
-            viewModel.logCurrentSelection()
-            viewModel.performSignUp()
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(viewModel.isStartButtonEnabled ? .primaryNormal : Color.gray.opacity(0.3))
-        .foregroundColor(.white)
-        .cornerRadius(12)
-        .padding(.top, 20)
-        .disabled(!viewModel.isStartButtonEnabled)
-        .animation(.easeInOut(duration: 0.2), value: viewModel.isStartButtonEnabled)
-        .overlay(
-            viewModel.isSigningUp ?
-            ProgressView()
-                .tint(.white)
-                .scaleEffect(0.8) : nil
-        )
+        .buttonStyle(PlainButtonStyle())
     }
 }
