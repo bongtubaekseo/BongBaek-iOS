@@ -10,6 +10,7 @@ import Moya
 import KakaoMapsSDK
 import KakaoSDKCommon
 import KakaoSDKAuth
+import Firebase
 
 @main
 struct BongBaekApp: App {
@@ -21,7 +22,8 @@ struct BongBaekApp: App {
     init() {
         let API_KEY = AppConfig.shared.kakaoAppKey
         KakaoSDK.initSDK(appKey: API_KEY)
-        }
+        FirebaseApp.configure()
+    }
     
     
     var body: some Scene {
