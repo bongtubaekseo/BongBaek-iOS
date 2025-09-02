@@ -32,10 +32,14 @@ class RemoteConfigManager {
             
             // 2. 버전 기반 업데이트 체크
             let minVersion = remoteConfig["minimum_version_iOS"].stringValue
-            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-            let isVersionUpdateRequired = compareVersions(current: currentVersion, minimum: minVersion)
+            let rawCurrentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
             
-            print("최소 설치 되어야 하는 버전\(minVersion)")
+            let currentVersion = normalizeVersion(rawCurrentVersion)
+            let normalizedMinVersion = normalizeVersion(minVersion)
+            
+            let isVersionUpdateRequired = compareVersions(current: currentVersion, minimum: normalizedMinVersion)
+            
+            print("최소 설치 되어야 하는 버전\(normalizedMinVersion)")
             print("현재 기기에 설치되어있는 앱 버전\(currentVersion)")
            
             let updateMessage: String
@@ -66,6 +70,18 @@ class RemoteConfigManager {
             print("RemoteConfig Error: \(error)")
             return (false, "", .none)
         }
+    }
+    
+    private func normalizeVersion(_ version: String) -> String {
+        let components = version.split(separator: ".").map(String.init)
+        
+        //major.minor.patch
+        var normalizedComponents = components
+        while normalizedComponents.count < 3 {
+            normalizedComponents.append("0")
+        }
+        
+        return normalizedComponents.prefix(3).joined(separator: ".")
     }
 
     enum UpdateType {
