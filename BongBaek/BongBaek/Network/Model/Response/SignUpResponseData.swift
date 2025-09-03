@@ -8,7 +8,7 @@
 import Foundation
 
 typealias SignUpResponse = BaseResponse<AuthData>
-typealias LoginResponse = BaseResponse<AuthData>
+typealias KaKaoLoginResponse = BaseResponse<AuthData>
 typealias RefreshTokenResponse = BaseResponse<TokenInfo>
 
 struct AuthData: Codable {

@@ -57,7 +57,7 @@ class LoginViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        authService.login(accessToken: accessToken)
+        authService.kakaoLogin(accessToken: accessToken)
             .sink(
                 receiveCompletion: { [weak self] completion in
                     self?.isLoading = false

@@ -56,7 +56,7 @@ class AuthManager: ObservableObject {
     
     private func loginWithKakaoToken(_ kakaoToken: String) async {
         
-        authService.login(accessToken: kakaoToken)
+        authService.kakaoLogin(accessToken: kakaoToken)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
@@ -154,7 +154,7 @@ class AuthManager: ObservableObject {
     
     // MARK: - Private Response Handlers
     
-    private func handleLoginResponse(_ response: LoginResponse) {
+    private func handleLoginResponse(_ response: KaKaoLoginResponse) {
         // BaseResponse 성공 여부 확인
         guard response.isSuccess else {
             print("로그인 API 실패: \(response.message)")
