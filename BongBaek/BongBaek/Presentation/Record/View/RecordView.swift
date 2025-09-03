@@ -107,41 +107,42 @@ struct RecordsHeaderView: View {
     
     var body: some View {
         HStack {
-            // 삭제 모드일 때 뒤로가기 버튼
-            if isDeleteMode {
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isDeleteMode = false
+            HStack {
+                if isDeleteMode {
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isDeleteMode = false
+                        }
+                    }) {
+                        Text("취소")
+                            .bodyRegular16()
+                            .foregroundColor(.white)
                     }
-                }) {
-                    Text("취소")
-                        .bodyRegular16()
-                        .foregroundColor(.white)
-                }
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
-                .transition(.move(edge: .leading).combined(with: .opacity))
-            } else {
-                // 일반 모드일 때 왼쪽 공백
-                Spacer()
                     .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+                    .transition(.move(edge: .leading).combined(with: .opacity))
+                } else {
+                    Text("경조사 전체 기록")
+                        .titleSemiBold18()
+                        .foregroundStyle(.white)
+                        .transition(.move(edge: .leading).combined(with: .opacity))
+                    
+                    Spacer()
+                }
             }
             
-            Spacer()
-            
-            // 중앙 텍스트
-            if !isDeleteMode {
-                Text("경조사 전체 기록")
-                    .titleSemiBold18()
-                    .foregroundStyle(.white)
-            } else {
+            if isDeleteMode {
+                Spacer()
+                
                 Text("경조사 기록 삭제")
                     .titleSemiBold18()
                     .foregroundStyle(.white)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                
+                Spacer()
             }
             
-            Spacer()
-            
+      
             HStack(spacing: 0) {
                 // 삭제 모드가 아닐 때만 + 버튼 표시
                 if !isDeleteMode {
@@ -263,24 +264,8 @@ struct RecordContentView: View {
             } else if viewModel.isCurrentSectionEmpty {
                 RecordsEmptyView(message: viewModel.emptyMessage)
             } else {
-                ForEach(viewModel.currentEvents, id: \.eventId) { event in  
-                    RecordCellView(
-                        event: event,
-                        isDeleteMode: viewModel.isDeleteMode,
-                        isSelected: viewModel.selectedRecordIDs.contains(event.eventId),
-                        onSelectionToggle: {
-                            viewModel.toggleRecordSelection(event.eventId)
-                        }
-                    )
-                    .onAppear {
-                        // 무한스크롤
-                        if viewModel.shouldLoadMore(for: event) {
-                            Task {
-                                await viewModel.loadMoreEvents()
-                            }
-                        }
-                    }
-                }
+                // 🆕 년도/월별 그루핑 표시
+                eventContentView
                 
                 // 🆕 추가 로딩 인디케이터
                 if viewModel.isLoadingMore {
@@ -300,6 +285,70 @@ struct RecordContentView: View {
         }
         .padding(.top, 20)
         .animation(.easeInOut(duration: 0.2), value: viewModel.selectedSection)
+    }
+    
+    private var eventContentView: some View {
+        ForEach(viewModel.sortedYears, id: \.self) { year in
+            yearSectionView(for: year)
+        }
+    }
+    
+    private func yearSectionView(for year: String) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("\(year)년")
+                .headBold24()
+                .foregroundColor(.white)
+                .padding(.horizontal, 20)
+            
+            monthsView(for: year)
+        }
+    }
+    
+    private func monthsView(for year: String) -> some View {
+        let months = viewModel.monthsForYear(year)
+        let sortedMonths = viewModel.sortedMonthsForYear(year)
+        
+        return ForEach(sortedMonths, id: \.self) { month in
+            if let events = months[month], !events.isEmpty {
+                monthSectionView(month: month, events: events)
+            }
+        }
+    }
+    
+    private func monthSectionView(month: String, events: [AttendedEvent]) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 12) {
+                Text("\(Int(month) ?? 0)월")
+                    .titleSemiBold16()
+                    .foregroundColor(.white)
+                
+                Rectangle()
+                    .foregroundColor(.gray750)
+                    .frame(height: 2)
+            }
+            .padding(.horizontal, 20)
+            .padding(.trailing, 20)
+            
+            ForEach(events, id: \.eventId) { event in
+                RecordCellView(
+                    event: event,
+                    isDeleteMode: viewModel.isDeleteMode,
+                    isSelected: viewModel.selectedRecordIDs.contains(event.eventId),
+                    onSelectionToggle: {
+                        viewModel.toggleRecordSelection(event.eventId)
+                    }
+                )
+                .onAppear {
+                    // 무한스크롤
+                    if viewModel.shouldLoadMore(for: event) {
+                        Task {
+                            await viewModel.loadMoreEvents()
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.bottom, 20)
     }
 }
 

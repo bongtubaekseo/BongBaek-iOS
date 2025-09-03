@@ -62,6 +62,40 @@ class RecordViewModel: ObservableObject {
         }
     }
     
+    var currentEventsGrouped: [String: [String: [AttendedEvent]]] {
+         let events = currentEvents
+         
+         let grouped = Dictionary(grouping: events) { event in
+             // eventDate: "2025-01-18" → "2025/01"
+             let dateComponents = event.eventInfo.eventDate.split(separator: "-")
+             let year = dateComponents.count > 0 ? String(dateComponents[0]) : "기타"
+             let month = dateComponents.count > 1 ? String(dateComponents[1]) : "기타"
+             return "\(year)/\(month)"
+         }
+         
+         return grouped.reduce(into: [String: [String: [AttendedEvent]]]()) { result, pair in
+             let parts = pair.key.split(separator: "/")
+             guard parts.count == 2 else { return }
+             let year = String(parts[0])
+             let month = String(parts[1])
+             result[year, default: [:]][month, default: []] += pair.value
+         }
+     }
+    
+    var sortedYears: [String] {
+        currentEventsGrouped.keys.sorted(by: <)
+    }
+    
+    func monthsForYear(_ year: String) -> [String: [AttendedEvent]] {
+        return currentEventsGrouped[year] ?? [:]
+    }
+    
+    /// 특정 년도의 정렬된 월 목록
+    func sortedMonthsForYear(_ year: String) -> [String] {
+        let months = currentEventsGrouped[year] ?? [:]
+        return months.keys.sorted()
+    }
+    
     /// 현재 섹션이 비어있는지 확인
     var isCurrentSectionEmpty: Bool {
         currentEvents.isEmpty
@@ -167,12 +201,12 @@ class RecordViewModel: ObservableObject {
                 do {
                     let response = try await eventService.deleteEvent(eventId: eventId).async()
                     if response.isSuccess {
-                        print("✅ 이벤트 삭제 성공: \(eventId)")
+                        print("이벤트 삭제 성공: \(eventId)")
                     } else {
-                        print("❌ 이벤트 삭제 실패: \(eventId) - \(response.message)")
+                        print("이벤트 삭제 실패: \(eventId) - \(response.message)")
                     }
                 } catch {
-                    print("❌ 이벤트 삭제 에러: \(eventId) - \(error)")
+                    print("이벤트 삭제 에러: \(eventId) - \(error)")
                 }
             }
             
@@ -181,7 +215,7 @@ class RecordViewModel: ObservableObject {
             isDeleteMode = false
             await loadAllRecords()
             
-            print("✅ 선택된 기록들이 삭제되었습니다")
+            print("선택된 기록들이 삭제되었습니다")
         }
     }
     
@@ -298,7 +332,7 @@ class RecordViewModel: ObservableObject {
         do {
             let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
             
-            print("📡 불참 이벤트 로드 - 페이지: \(notAttendedCurrentPage), 카테고리: \(categoryParam ?? "전체")")
+            print("불참 이벤트 로드 - 페이지: \(notAttendedCurrentPage), 카테고리: \(categoryParam ?? "전체")")
             
             let response = try await eventService.getAttendedEvents(
                 page: notAttendedCurrentPage,
