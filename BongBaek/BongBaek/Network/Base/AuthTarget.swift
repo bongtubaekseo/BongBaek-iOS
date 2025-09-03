@@ -18,6 +18,7 @@ enum AuthTarget {
     case appleLogin(idToken: String)
     case signUp(memberInfo: MemberInfo)
     case retryToken
+    case logout
 }
 
 extension AuthTarget: TargetType {
@@ -38,12 +39,14 @@ extension AuthTarget: TargetType {
             "/api/v1/member/reissue"
         case .appleLogin:
             "/api/v1/oauth/apple"
+        case .logout:
+            "/api/v1/member/logout"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .kakaoLogin, .signUp,. retryToken, .appleLogin: .post
+        case .kakaoLogin, .signUp,. retryToken, .appleLogin, .logout: .post
         }
     }
     
@@ -56,7 +59,7 @@ extension AuthTarget: TargetType {
         case .signUp(let memberInfo):
             return .requestJSONEncodable(memberInfo)
             
-        case .retryToken:
+        case .retryToken, .logout:
             return .requestPlain
             
         case .appleLogin(let idToken):
@@ -67,7 +70,7 @@ extension AuthTarget: TargetType {
     
     var headers: [String : String]? {
         switch self {
-        case .kakaoLogin, .appleLogin:
+        case .kakaoLogin, .appleLogin, .logout:
             return [
                 "Content-Type": "application/json"
             ]
