@@ -9,7 +9,7 @@ import Moya
 
 enum MyPageTarget: TargetType {
     case getProfile
-    case updateProfile
+    case updateProfile(profileData : UpdateProfileData)
 }
 
 extension MyPageTarget {
@@ -44,7 +44,7 @@ extension MyPageTarget {
         case .getProfile:
             return .requestPlain
         
-        case .updateProfile:
+        case .updateProfile(let profileData):
             return .requestJSONEncodable(profileData)
         }
     }
