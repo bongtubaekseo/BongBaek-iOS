@@ -9,6 +9,7 @@ import Foundation
 
 typealias SignUpResponse = BaseResponse<AuthData>
 typealias KaKaoLoginResponse = BaseResponse<AuthData>
+typealias AppleLoginResponse = BaseResponse<AppleAuthData>
 typealias RefreshTokenResponse = BaseResponse<TokenInfo>
 
 struct AuthData: Codable {
@@ -16,6 +17,13 @@ struct AuthData: Codable {
     let isCompletedSignUp: Bool
     let kakaoId: Int
     let kakaoAccessToken: String?
+}
+
+struct AppleAuthData: Codable {
+    let name: String
+    let token: TokenInfo?
+    let isCompletedSignUp: Bool
+    let appleId: String
 }
 
 struct TokenInfo: Codable {
