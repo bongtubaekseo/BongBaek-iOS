@@ -22,6 +22,13 @@ class AuthService: AuthServiceProtocol {
         )
     }
     
+    func appleLogin(idToken: String) -> AnyPublisher<AppleLoginResponse, any Error> {
+        return networkService.request(
+            .appleLogin(idToken: idToken),
+            responseType: AppleLoginResponse.self
+        )
+    }
+    
     func signUp(memberInfo: MemberInfo) -> AnyPublisher<SignUpResponse, Error> {
         return networkService.request(
             .signUp(memberInfo: memberInfo),
