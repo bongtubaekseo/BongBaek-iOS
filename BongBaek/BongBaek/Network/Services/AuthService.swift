@@ -17,7 +17,7 @@ class AuthService: AuthServiceProtocol {
     
     func kakaoLogin(accessToken: String) -> AnyPublisher<KaKaoLoginResponse, Error> {
         return networkService.request(
-            .login(accessToken: accessToken),
+            .kakaoLogin(accessToken: accessToken),
             responseType: KaKaoLoginResponse.self
         )
     }
