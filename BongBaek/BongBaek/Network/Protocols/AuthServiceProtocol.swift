@@ -10,6 +10,7 @@ import Combine
 
 protocol AuthServiceProtocol {
     func kakaoLogin(accessToken: String) -> AnyPublisher<KaKaoLoginResponse, Error>
+    func appleLogin(idToken: String) -> AnyPublisher<AppleLoginResponse, Error>
     func signUp(memberInfo: MemberInfo) -> AnyPublisher<SignUpResponse, Error>
     func retryToken() -> AnyPublisher<RefreshTokenResponse, Error>
 }
