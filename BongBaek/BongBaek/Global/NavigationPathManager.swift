@@ -26,6 +26,8 @@ enum RecommendRoute: Hashable {
     case createEventViewAfterEvent
     case accountDeletionView
     case accountDeletionConfirmView
+    case MyPageView
+    case ModifyView
     
     var displayName: String {
         switch self {
@@ -50,6 +52,8 @@ enum RecommendRoute: Hashable {
         case .createEventViewAfterEvent: return "createEventViewAfterEvent"
         case .accountDeletionConfirmView: return "acountDeletionConfirmView"
         case .accountDeletionView: return "accountDeletionView"
+        case .ModifyView : return "ModifyView"
+        case .MyPageView : return "MyPageView"
             
         }
     }
