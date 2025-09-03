@@ -72,7 +72,34 @@ class AuthManager: ObservableObject {
             )
             .store(in: &cancellables)
     }
+    // MARK: -  애플 로그인 후 처리
     
+    func loginWithApple(idToken: String) async {
+        authState = .loading
+        keychainManager.clearTokens()
+        
+        print("애플 로그인 시작, idToken VM 에서 전달받은 값 : \(idToken)")
+        await loginWithAppleToken(idToken)
+    }
+    
+    func loginWithAppleToken(_ idToken: String) async {
+        authService.appleLogin(idToken: idToken)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    if case .failure(let error) = completion {
+                        print("애플 서버 로그인 실패: \(error)")
+                        self?.authState = .needsLogin
+                    }
+                },
+                receiveValue: { response in
+                    print("애플 로그인 응답: \(response)")
+
+                }
+            )
+            .store(in: &cancellables)
+    }
+
     // MARK: - 회원가입
     func signUp(memberInfo: MemberInfo) {
         authState = .loading

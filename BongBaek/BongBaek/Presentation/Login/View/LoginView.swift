@@ -32,7 +32,7 @@ struct LoginView: View {
                    
                    VStack(spacing: 20) {
                        Button(action: {
-                           appStateManager.loginWithKakao()
+
                        }) {
                            Image("appleid_button")
                                .resizable()
