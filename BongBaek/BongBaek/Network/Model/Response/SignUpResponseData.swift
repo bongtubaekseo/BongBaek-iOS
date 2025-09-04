@@ -20,7 +20,7 @@ struct AuthData: Codable {
 }
 
 struct AppleAuthData: Codable {
-    let name: String
+    let name: String?
     let token: TokenInfo?
     let isCompletedSignUp: Bool
     let appleId: String
