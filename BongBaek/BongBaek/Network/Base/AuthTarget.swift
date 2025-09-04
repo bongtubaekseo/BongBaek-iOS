@@ -25,7 +25,10 @@ extension AuthTarget: TargetType {
         guard let url = URL(string: AppConfig.shared.baseURL) else {
             fatalError("Invalid base URL")
         }
-        return url
+        return URL(string:"http://13.124.42.111")!
+        
+        
+     //   url
     }
     
     var path: String {
