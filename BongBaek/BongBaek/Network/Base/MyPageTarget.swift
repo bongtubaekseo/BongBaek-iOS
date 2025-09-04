@@ -50,12 +50,10 @@ extension MyPageTarget {
     }
     
     var headers: [String : String]?{
-        // 기본 헤더
         var headers = [
             "Content-Type": "application/json"
         ]
         
-        // KeyChain에서 accessToken 가져오기
         if let accessToken = KeychainManager.shared.accessToken {
             headers["Authorization"] = "Bearer \(accessToken)"
             print("Authorization 헤더 추가됨: Bearer \(accessToken.prefix(10))...")
