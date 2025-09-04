@@ -23,8 +23,13 @@ class DIContainer {
             plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))]
         )
     }()
-
     
+    lazy var userProvider: MoyaProvider<MyPageTarget> = {
+        return MoyaProvider<MyPageTarget>(
+            plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))]
+        )
+    }()
+
     lazy var authNetworkService: NetworkService<AuthTarget> = NetworkService(
         provider: authProvider
     )
@@ -33,11 +38,19 @@ class DIContainer {
         provider: eventProvider
     )
     
+    lazy var userNetworkService: NetworkService<MyPageTarget> = NetworkService(
+        provider: userProvider
+    )
+    
     lazy var authService: AuthServiceProtocol = AuthService(
         networkService: authNetworkService
     )
     
     lazy var eventService: EventServiceProtocol = EventService(
         networkService: eventNetworkService
+    )
+    
+    lazy var userService: MyPageServiceProtocol = UserService(
+        networkService: userNetworkService
     )
 }
