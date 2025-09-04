@@ -47,6 +47,13 @@ struct LoginView: View {
                            loginViewModel.isLoading ?
                            ProgressView().tint(.white) : nil
                        )
+                       .overlay {
+                           loginViewModel.requestAppleOauth()
+                               .frame(maxWidth: 375)
+                               .frame(height: 44)
+                               .blendMode(.overlay)
+                       }
+                       
                        
                        Button(action: {
 //                           appStateManager.loginWithKakao()

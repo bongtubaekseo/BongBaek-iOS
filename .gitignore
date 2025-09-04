@@ -7,6 +7,9 @@
 **/._.DS_Store
 *.xcconfig
 
+GoogleService-Info.plist
+**/GoogleService-Info.plist
+
 ### Carthage ###
 # Carthage
 #
