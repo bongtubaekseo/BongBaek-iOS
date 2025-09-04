@@ -69,21 +69,19 @@ extension AuthTarget: TargetType {
     }
     
     var headers: [String : String]? {
-        switch self {
-        case .kakaoLogin, .appleLogin, .logout:
-            return [
-                "Content-Type": "application/json"
-            ]
-        case .signUp(let memberInfo):
-            return [
-                "Content-Type": "application/json"
-            ]
-        case .retryToken:
-            let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
-            return [
-                "Content-Type": "application/json",
-                "Authorization": "Bearer \(refreshToken)"
-            ]
+        // 기본 헤더
+        var headers = [
+            "Content-Type": "application/json"
+        ]
+        
+        // KeyChain에서 accessToken 가져오기
+        if let accessToken = KeychainManager.shared.accessToken {
+            headers["Authorization"] = "Bearer \(accessToken)"
+            print("Authorization 헤더 추가됨: Bearer \(accessToken.prefix(10))...")
+        } else {
+            print("AccessToken이 KeyChain에 없습니다")
         }
+        
+        return headers
     }
 }
