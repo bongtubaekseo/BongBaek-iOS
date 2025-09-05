@@ -168,7 +168,48 @@ class ProfileSettingViewModel: ObservableObject {
        }
     
     private func createMemberInfo() -> MemberInfo {
-        let kakaoId = getCurrentKakaoId()
+        let incomeValue: String
+        if hasIncome {
+            incomeValue = currentSelection.apiValue
+        } else {
+            incomeValue = "없음"
+        }
+        
+        let formattedBirthday = convertDateFormat(selectedDate)
+        
+        switch authManager.loginType {
+        case .kakao:
+            return MemberInfo(
+                kakaoId: authManager.currentKakaoId,
+                appleId: nil,
+                memberName: nickname,
+                memberBirthday: formattedBirthday,
+                memberIncome: incomeValue
+            )
+            
+        case .apple:
+            return MemberInfo(
+                kakaoId: nil,
+                appleId: authManager.currentAppleId,
+                memberName: nickname,
+                memberBirthday: formattedBirthday,
+                memberIncome: incomeValue
+            )
+            
+        case .none:
+            print("로그인 타입이 설정되지 않았습니다")
+            return MemberInfo(
+                kakaoId: nil,
+                appleId: nil,
+                memberName: nickname,
+                memberBirthday: formattedBirthday,
+                memberIncome: incomeValue
+            )
+        }
+    }
+    
+    private func createAppleMemberInfo() -> MemberInfo {
+        let apple = getCurrentAppleId()
         
         let incomeValue: String
         if hasIncome {
@@ -178,8 +219,8 @@ class ProfileSettingViewModel: ObservableObject {
         }
         let formattedBirthday = convertDateFormat(selectedDate)
         return MemberInfo(
-            kakaoId: Int(kakaoId) ?? 0,
-            appleId: nil,
+            kakaoId: nil,
+            appleId: apple,
             memberName: nickname,
             memberBirthday: formattedBirthday,
             memberIncome: incomeValue
@@ -189,6 +230,11 @@ class ProfileSettingViewModel: ObservableObject {
     private func getCurrentKakaoId() -> String {
         // AuthManager에서 현재 로그인된 사용자의 kakaoId 가져오기
         return authManager.getCurrentKakaoId()
+    }
+    
+    private func getCurrentAppleId() -> String {
+        // AuthManager에서 현재 로그인된 사용자의 AppleId 가져오기
+        return authManager.getCurrentAppleId()
     }
 }
 

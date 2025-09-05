@@ -15,10 +15,17 @@ class AuthService: AuthServiceProtocol {
         self.networkService = networkService
     }
     
-    func login(accessToken: String) -> AnyPublisher<LoginResponse, Error> {
+    func kakaoLogin(accessToken: String) -> AnyPublisher<KaKaoLoginResponse, Error> {
         return networkService.request(
-            .login(accessToken: accessToken),
-            responseType: LoginResponse.self
+            .kakaoLogin(accessToken: accessToken),
+            responseType: KaKaoLoginResponse.self
+        )
+    }
+    
+    func appleLogin(idToken: String) -> AnyPublisher<AppleLoginResponse, any Error> {
+        return networkService.request(
+            .appleLogin(idToken: idToken),
+            responseType: AppleLoginResponse.self
         )
     }
     

@@ -57,7 +57,7 @@ class LoginViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        authService.login(accessToken: accessToken)
+        authService.kakaoLogin(accessToken: accessToken)
             .sink(
                 receiveCompletion: { [weak self] completion in
                     self?.isLoading = false
@@ -156,7 +156,13 @@ extension LoginViewModel {
                         let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8) ?? ""
                         let authorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) ?? ""
                         
-                        print("애플 인증 성공 - id_token: \(identityToken), auth_code: \(authorizationCode)")
+
+                        print("애플 인증 성공 - idToken: \(identityToken), authCode: \(authorizationCode)")
+                        
+                        Task {
+                            await self.authManager.loginWithApple(idToken: identityToken)
+                        }
+
                 
                          
                         self.authCode = authorizationCode

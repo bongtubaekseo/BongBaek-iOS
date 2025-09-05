@@ -9,7 +9,8 @@ import Moya
 import Combine
 
 protocol AuthServiceProtocol {
-    func login(accessToken: String) -> AnyPublisher<LoginResponse, Error>
+    func kakaoLogin(accessToken: String) -> AnyPublisher<KaKaoLoginResponse, Error>
+    func appleLogin(idToken: String) -> AnyPublisher<AppleLoginResponse, Error>
     func signUp(memberInfo: MemberInfo) -> AnyPublisher<SignUpResponse, Error>
     func retryToken() -> AnyPublisher<RefreshTokenResponse, Error>
 }

@@ -14,7 +14,8 @@ struct LoginRequest: Codable {
 }
 
 enum AuthTarget {
-    case login(accessToken: String)
+    case kakaoLogin(accessToken: String)
+    case appleLogin(idToken: String)
     case signUp(memberInfo: MemberInfo)
     case retryToken
 }
@@ -29,24 +30,26 @@ extension AuthTarget: TargetType {
     
     var path: String {
         switch self {
-        case .login:
+        case .kakaoLogin:
             "/api/v1/oauth/kakao"
         case .signUp:
             "/api/v1/member/profile"
         case .retryToken:
             "/api/v1/member/reissue"
+        case .appleLogin:
+            "/api/v1/oauth/apple"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .login, .signUp,. retryToken: .post
+        case .kakaoLogin, .signUp,. retryToken, .appleLogin: .post
         }
     }
     
     var task: Moya.Task {
         switch self {
-        case .login(let accessToken):
+        case .kakaoLogin(let accessToken):
             let loginRequest = LoginRequest(accessToken: accessToken)
             return .requestJSONEncodable(loginRequest)
             
@@ -55,12 +58,16 @@ extension AuthTarget: TargetType {
             
         case .retryToken:
             return .requestPlain
+            
+        case .appleLogin(let idToken):
+            let loginRequest = LoginRequest(accessToken: idToken)
+            return .requestJSONEncodable(loginRequest)
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case .login(let accessToken):
+        case .kakaoLogin, .appleLogin:
             return [
                 "Content-Type": "application/json"
             ]
