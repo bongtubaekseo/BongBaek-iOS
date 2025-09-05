@@ -13,11 +13,18 @@ struct AppConfig {
     private init() {}
     
      var baseURL: String = {
-        guard let url = Bundle.main.infoDictionary?["BASE_URL"] as? String else {
+        guard let url = Bundle.main.infoDictionary?["BASE_URL_RELEASE"] as? String else {
             fatalError("API_BASE_URL is missing in Info.plist")
         }
         return url
     }()
+    
+    var baseURLForTest: String = {
+       guard let url = Bundle.main.infoDictionary?["BASE_URL_TEST"] as? String else {
+           fatalError("API_BASE_URL is missing in Info.plist")
+       }
+       return url
+   }()
     
      var apiVersion: String = "/v1"
     
