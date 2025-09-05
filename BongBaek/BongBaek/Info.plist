@@ -2,8 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>BASE_URL</key>
-	<string>$(BASE_URL)</string>
+	<key>BASE_URL_TEST</key>
+	<string>$(BASE_URL_TEST)</string>
+	<key>BASE_URL_RELEASE</key>
+	<string>$(BASE_URL_RELEASE)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

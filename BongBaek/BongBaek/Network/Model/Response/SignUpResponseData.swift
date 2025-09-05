@@ -16,18 +16,25 @@ typealias LogoutResponse = BaseResponse<EmptyData>
 struct AuthData: Codable {
     let token: TokenInfo?
     let isCompletedSignUp: Bool
-    let kakaoId: Int
+    let kakaoId: String
     let kakaoAccessToken: String?
 }
 
 struct AppleAuthData: Codable {
-    let name: String
+    let name: String?
     let token: TokenInfo?
     let isCompletedSignUp: Bool
     let appleId: String
 }
 
 struct TokenInfo: Codable {
-    let accessToken: String
-    let refreshToken: String
+    let accessToken: TokenDetails
+    let refreshToken: TokenDetails
 }
+
+struct TokenDetails: Codable {
+    let token: String
+    let expiredAt: Int
+    let calculatedExpiredAt: Int
+}
+

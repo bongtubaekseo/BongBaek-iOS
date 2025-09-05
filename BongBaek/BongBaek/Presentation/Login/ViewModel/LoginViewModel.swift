@@ -85,7 +85,7 @@ class LoginViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func navigateToSignUp(kakaoId: Int, kakaoAccessToken: String?) {
+    private func navigateToSignUp(kakaoId: String, kakaoAccessToken: String?) {
         // ToDo:- 회원가입 화면으로 이동 로직
         // kakaoId와 kakaoAccessToken을 전달
     }
@@ -156,11 +156,13 @@ extension LoginViewModel {
                         let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8) ?? ""
                         let authorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) ?? ""
                         
+
                         print("애플 인증 성공 - idToken: \(identityToken), authCode: \(authorizationCode)")
                         
                         Task {
                             await self.authManager.loginWithApple(idToken: identityToken)
                         }
+
                 
                          
                         self.authCode = authorizationCode
