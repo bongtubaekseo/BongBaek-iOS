@@ -11,6 +11,7 @@ typealias SignUpResponse = BaseResponse<AuthData>
 typealias KaKaoLoginResponse = BaseResponse<AuthData>
 typealias AppleLoginResponse = BaseResponse<AppleAuthData>
 typealias RefreshTokenResponse = BaseResponse<TokenInfo>
+typealias LogoutResponse = BaseResponse<EmptyData>
 
 struct AuthData: Codable {
     let token: TokenInfo?

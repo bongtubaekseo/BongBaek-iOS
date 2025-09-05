@@ -18,6 +18,7 @@ enum AuthTarget {
     case appleLogin(idToken: String)
     case signUp(memberInfo: MemberInfo)
     case retryToken
+    case logout
 }
 
 extension AuthTarget: TargetType {
@@ -38,12 +39,14 @@ extension AuthTarget: TargetType {
             "/api/v1/member/reissue"
         case .appleLogin:
             "/api/v1/oauth/apple"
+        case .logout:
+            "/api/v1/member/logout"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .kakaoLogin, .signUp,. retryToken, .appleLogin: .post
+        case .kakaoLogin, .signUp,. retryToken, .appleLogin, .logout: .post
         }
     }
     
@@ -56,7 +59,7 @@ extension AuthTarget: TargetType {
         case .signUp(let memberInfo):
             return .requestJSONEncodable(memberInfo)
             
-        case .retryToken:
+        case .retryToken, .logout:
             return .requestPlain
             
         case .appleLogin(let idToken):
@@ -66,21 +69,19 @@ extension AuthTarget: TargetType {
     }
     
     var headers: [String : String]? {
-        switch self {
-        case .kakaoLogin, .appleLogin:
-            return [
-                "Content-Type": "application/json"
-            ]
-        case .signUp(let memberInfo):
-            return [
-                "Content-Type": "application/json"
-            ]
-        case .retryToken:
-            let refreshToken = UserDefaults.standard.string(forKey: "refreshToken") ?? ""
-            return [
-                "Content-Type": "application/json",
-                "Authorization": "Bearer \(refreshToken)"
-            ]
+        // 기본 헤더
+        var headers = [
+            "Content-Type": "application/json"
+        ]
+        
+        // KeyChain에서 accessToken 가져오기
+        if let accessToken = KeychainManager.shared.accessToken {
+            headers["Authorization"] = "Bearer \(accessToken)"
+            print("Authorization 헤더 추가됨: Bearer \(accessToken.prefix(10))...")
+        } else {
+            print("AccessToken이 KeyChain에 없습니다")
         }
+        
+        return headers
     }
 }

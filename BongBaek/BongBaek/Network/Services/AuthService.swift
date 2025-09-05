@@ -42,5 +42,12 @@ class AuthService: AuthServiceProtocol {
             responseType: RefreshTokenResponse.self
         )
     }
+    
+    func logout() -> AnyPublisher<LogoutResponse, any Error> {
+        return networkService.request(
+            .logout,
+            responseType: LogoutResponse.self
+        )
+    }
 }
 

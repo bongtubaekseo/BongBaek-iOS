@@ -247,6 +247,23 @@ class AuthManager: ObservableObject {
     
     // MARK: - 로그아웃
     func logout() {
+        
+        authService.logout()
+            .sink(
+                receiveCompletion: { completion in
+                    if case .failure(let error) = completion {
+                        print("로그아웃 API 호출 실패: \(error)")
+                    } else {
+                        print("로그아웃 API 호출 성공")
+                    }
+                },
+                receiveValue: { response in
+                    print("로그아웃 응답: \(response)")
+                }
+            )
+            .store(in: &cancellables)
+        
+        // 로컬 토큰 정리
         let result = keychainManager.clearTokens()
         if case .failure(let error) = result {
             print("토큰 삭제 실패: \(error)")
@@ -317,6 +334,8 @@ class AuthManager: ObservableObject {
                     access: tokenInfo.accessToken.token,
                     refresh: tokenInfo.refreshToken.token
                 )
+                
+                print("token keyChain에 저장 성공!")
                 
                 if case .failure(let error) = saveResult {
                     print("임시 토큰 저장 실패: \(error)")

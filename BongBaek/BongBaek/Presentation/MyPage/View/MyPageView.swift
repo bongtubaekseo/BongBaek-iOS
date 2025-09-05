@@ -131,7 +131,10 @@ struct MyPageView: View {
                         }
 
                         HStack {
-                            Button(action: {}) {
+                            Button(action: {
+                                AuthManager.shared.logout()
+//                                print("로그아웃 버튼 눌림")
+                            }) {
                                 Text("로그아웃")
                                     .foregroundColor(.gray400)
                                     .bodyRegular14()

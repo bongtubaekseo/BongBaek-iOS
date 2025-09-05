@@ -13,4 +13,5 @@ protocol AuthServiceProtocol {
     func appleLogin(idToken: String) -> AnyPublisher<AppleLoginResponse, Error>
     func signUp(memberInfo: MemberInfo) -> AnyPublisher<SignUpResponse, Error>
     func retryToken() -> AnyPublisher<RefreshTokenResponse, Error>
+    func logout() -> AnyPublisher<LogoutResponse, Error>
 }
