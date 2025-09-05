@@ -15,6 +15,9 @@ struct AccountDeletionView: View {
 
     @EnvironmentObject var router: NavigationRouter
     
+    @State private var showDeleteAlert = false
+    @State private var showCompletionAlert = false
+    
     let deletionReasons = [
         "사용이 불편했어요",
         "개인정보가 걱정돼요",
@@ -65,7 +68,7 @@ struct AccountDeletionView: View {
             Spacer()
             
             Button(action: {
-                handleAccountDeletion()
+                showDeleteAlert = true
             }) {
                 Text("탈퇴하기")
                     .font(.title_semibold_18)
@@ -86,6 +89,16 @@ struct AccountDeletionView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
+        .alert("정말 탈퇴하시겠습니까?", isPresented: $showDeleteAlert) {
+            Button("취소", role: .cancel) {
+                
+            }
+            Button("탈퇴", role: .destructive) {
+                handleAccountDeletion()
+            }
+        } message: {
+            Text("탈퇴시 데이터 복구가 어렵습니다.")
+        }
         .onTapGesture {
             isTextFieldFocused = false
         }
@@ -118,23 +131,55 @@ struct AccountDeletionView: View {
     private func handleAccountDeletion() {
         guard let reason = selectedReason else { return }
         
-        if reason == "기타" {
-            print("선택된 탈퇴 이유: \(reason) - \(otherReasonText)")
-        } else {
-            print("선택된 탈퇴 이유: \(reason)")
+        let withdrawalReasonCode = mapReasonToCode(reason: reason)
+        
+        let detailText: String? = (reason == "기타") ? otherReasonText.trimmingCharacters(in: .whitespacesAndNewlines) : nil
+        
+        let withdrawRequest = WithdrawRequestData(
+            withdrawalReason: withdrawalReasonCode,
+            detail: detailText
+        )
+        
+        print("전송할 데이터: \(withdrawRequest)")
+        
+        AuthManager.shared.withdraw(reason: withdrawRequest) { success in
+            DispatchQueue.main.async {
+                if success {
+                    router.push(to: .accountDeletionConfirmView)
+                } else {
+                    print("탈퇴 처리 실패")
+                }
+            }
         }
-        
-        router.push(to: .accountDeletionConfirmView)
-        
     }
     
     private var isDeleteButtonEnabled: Bool {
         guard let reason = selectedReason else { return false }
         
         if reason == "기타" {
-            return !otherReasonText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            let trimmedText = otherReasonText.trimmingCharacters(in: .whitespacesAndNewlines)
+                return !trimmedText.isEmpty && trimmedText.count >= 1 && trimmedText.count <= 50
         } else {
             return true
+        }
+    }
+    
+    private func mapReasonToCode(reason: String) -> String {
+        switch reason {
+        case "사용이 불편했어요":
+            return "INCONVENIENT"
+        case "개인정보가 걱정돼요":
+            return "PRIVACY_CONCERN"
+        case "앱을 자주 사용하지 않아요":
+            return "RARELY_USED"
+        case "오류나 문제가 있었어요":
+            return "BUG_OR_ERROR"
+        case "새로운 계정으로 사용하고 싶어요":
+            return "NEW_ACCOUNT"
+        case "기타":
+            return "OTHER"
+        default:
+            return "OTHER"
         }
     }
 }
@@ -166,6 +211,11 @@ struct DeletionReasonButton: View {
                     .font(.body1_medium_16)
                     .foregroundColor(.white)
                     .focused($isTextFieldFocused)
+                    .onChange(of: otherReasonText) { oldValue, newValue in
+                         if newValue.count > 50 {
+                             otherReasonText = String(newValue.prefix(50))
+                         }
+                     }
                 
                 Spacer()
             }

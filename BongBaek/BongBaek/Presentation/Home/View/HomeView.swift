@@ -51,13 +51,13 @@ struct HomeView: View {
                         .padding(.top, 30)
                 }
             
-                Button("로그아웃 테스트") {
+//                Button("로그아웃 테스트") {
 //                    AuthManager.shared.logout()
 //                    KeychainManager.shared.printTokenStatus()
                     
-                    router.push(to: .accountDeletionView)
-                }
-                .foregroundColor(.red)
+//                    router.push(to: .accountDeletionView)
+//                }
+//                .foregroundColor(.red)
 
                 if homeViewModel.hasData {
                     RecommendsView(homeData: homeViewModel.homeData)

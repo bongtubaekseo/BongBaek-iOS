@@ -274,14 +274,16 @@ class AuthManager: ObservableObject {
         authState = .needsLogin
     }
     
-    func withdraw(reason: WithdrawRequestData) {
+    func withdraw(reason: WithdrawRequestData, completion: @escaping (Bool) -> Void) {
         authService.withdraw(reason: reason)
             .sink(
-                receiveCompletion: { completion in
-                    if case .failure(let error) = completion {
-                        print("로그아웃 API 호출 실패: \(error)")
+                receiveCompletion: { completionResult in
+                    if case .failure(let error) = completionResult {
+                        print("회원탈퇴 API 호출 실패: \(error)")
+                        completion(false) // 실패
                     } else {
-                        print("로그아웃 API 호출 성공")
+                        print("회원탈퇴 API 호출 성공")
+                        completion(true) // 성공
                     }
                 },
                 receiveValue: { response in
@@ -289,7 +291,9 @@ class AuthManager: ObservableObject {
                 }
             )
             .store(in: &cancellables)
-        
+    }
+    
+    func completeWithdrawal() {
         // 로컬 토큰 정리
         let result = keychainManager.clearTokens()
         if case .failure(let error) = result {
@@ -300,6 +304,7 @@ class AuthManager: ObservableObject {
         loginType = nil
         authState = .needsLogin
     }
+
     
     // MARK: - Private Response Handlers
     

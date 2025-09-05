@@ -10,16 +10,9 @@ import SwiftUI
 struct AccountDeletionConfirmView: View {
     
     @EnvironmentObject var router: NavigationRouter
-    @State private var showDeleteAlert = false
-    @State private var showCompletionAlert = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
-            CustomNavigationBar(title: "서비스 탈퇴") {
-                print("123")
-                router.pop()
-            }
-            
             VStack(alignment: .leading,spacing: 12) {
                 Text("소중한 의견 감사합니다")
                     .font(.head_bold_24)
@@ -30,16 +23,15 @@ struct AccountDeletionConfirmView: View {
                     .foregroundStyle(.gray400)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 10.adjustedH)
+            .padding(.top, 20.adjustedH)
             .padding(.leading, 20)
             
             Image("image_gift")
                 .frame(width: 335.adjusted,height: 335.adjustedH)
-                .padding(.top,20.adjustedH)
+                .padding(.top,80.adjustedH)
             
             Button {
-//                router.push(to: .recommendView)
-                showDeleteAlert = true
+                AuthManager.shared.completeWithdrawal()
             } label: {
                 HStack {
                     Spacer()
@@ -53,7 +45,7 @@ struct AccountDeletionConfirmView: View {
                 .cornerRadius(12)
             }
             .padding(.horizontal, 20)
-            .padding(.top, 20.adjustedH)
+            .padding(.top, 40.adjustedH)
 
             Spacer()
         }
@@ -62,27 +54,8 @@ struct AccountDeletionConfirmView: View {
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .alert("정말 탈퇴하시겠습니까?", isPresented: $showDeleteAlert) {
-            Button("취소", role: .cancel) {
-                
-            }
-            Button("탈퇴", role: .destructive) {
-                showCompletionAlert = true
-            }
-        } message: {
-            Text("탈퇴시 데이터 복구가 어렵습니다.")
-        }
-        .alert("탈퇴가 완료되었습니다!", isPresented: $showCompletionAlert) {
-             Button("확인") {
-                 // TODO: 회원 탈퇴 진행 및 로그인 화면으로 이동 로직 추가
-                 print("탈퇴 완료")
-             }
-         } message: {
-             Text("그동안 봉투백서를 이용해주셔서 감사했습니다.")
-         }
+
     }
 }
 
-#Preview {
-    AccountDeletionConfirmView()
-}
+
