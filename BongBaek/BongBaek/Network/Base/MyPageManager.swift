@@ -54,4 +54,6 @@ class MyPageManager: ObservableObject {
             .store(in: &cancellables)
     }
     
+    
+    
 }
