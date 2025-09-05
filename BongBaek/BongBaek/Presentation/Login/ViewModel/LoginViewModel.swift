@@ -156,11 +156,13 @@ extension LoginViewModel {
                         let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8) ?? ""
                         let authorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) ?? ""
                         
+
                         print("애플 인증 성공 - idToken: \(identityToken), authCode: \(authorizationCode)")
                         
                         Task {
                             await self.authManager.loginWithApple(idToken: identityToken)
                         }
+
                 
                          
                         self.authCode = authorizationCode
