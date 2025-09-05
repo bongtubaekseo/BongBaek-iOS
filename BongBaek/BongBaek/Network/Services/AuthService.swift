@@ -49,5 +49,11 @@ class AuthService: AuthServiceProtocol {
             responseType: LogoutResponse.self
         )
     }
+    
+    func withdraw(reason: WithdrawRequestData) -> AnyPublisher<WithdrawResponse, any Error> {
+        return networkService.request(
+            .withdraw(reason: reason),
+            responseType: WithdrawResponse.self)
+    }
 }
 
