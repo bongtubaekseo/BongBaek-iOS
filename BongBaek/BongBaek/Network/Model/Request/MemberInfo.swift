@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MemberInfo: Codable {
-    let kakaoId: Int?
+    let kakaoId: String?
     let appleId: String?
     let memberName: String
     let memberBirthday: String
@@ -22,7 +22,7 @@ struct MemberInfo: Codable {
         case memberIncome
     }
     
-    init(kakaoId: Int?, appleId: String? = nil, memberName: String, memberBirthday: String, memberIncome: String) {
+    init(kakaoId: String?, appleId: String? = nil, memberName: String, memberBirthday: String, memberIncome: String) {
         self.kakaoId = kakaoId
         self.appleId = appleId
         self.memberName = memberName
