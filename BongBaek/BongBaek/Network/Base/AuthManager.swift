@@ -13,7 +13,7 @@ class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
     @Published var authState: AuthState = .loading
-    @Published var currentKakaoId: Int? = nil
+    @Published var currentKakaoId: String? = nil
     @Published var currentAppleId: String? = nil
     @Published var loginType: LoginType? = nil
     @Published var signUpError: String? = nil
@@ -140,8 +140,8 @@ class AuthManager: ObservableObject {
             
             // 키체인에 토큰 저장
             let saveResult = keychainManager.saveTokens(
-                access: tokenInfo.accessToken,
-                refresh: tokenInfo.refreshToken
+                access: tokenInfo.accessToken.token,
+                refresh: tokenInfo.refreshToken.token
             )
             
             switch saveResult {
@@ -165,8 +165,8 @@ class AuthManager: ObservableObject {
             // 만약 토큰이 있다면 임시로 저장 (회원가입 과정에서 사용할 수 있음)
             if let tokenInfo = authData.token {
                 let saveResult = keychainManager.saveTokens(
-                    access: tokenInfo.accessToken,
-                    refresh: tokenInfo.refreshToken
+                    access: tokenInfo.accessToken.token,
+                    refresh: tokenInfo.refreshToken.token
                 )
                 
                 if case .failure(let error) = saveResult {
@@ -275,7 +275,7 @@ class AuthManager: ObservableObject {
         }
         
         currentKakaoId = authData.kakaoId
-        print("저장된 kakaoId: \(currentKakaoId ?? 0)")
+        print("저장된 kakaoId: \(currentKakaoId ?? "0")")
         loginType = .kakao
         
         // 회원가입 완료 여부 먼저 확인
@@ -289,8 +289,8 @@ class AuthManager: ObservableObject {
             
             // 키체인에 토큰 저장
             let saveResult = keychainManager.saveTokens(
-                access: tokenInfo.accessToken,
-                refresh: tokenInfo.refreshToken
+                access: tokenInfo.accessToken.token,
+                refresh: tokenInfo.refreshToken.token
             )
             
             switch saveResult {
@@ -314,8 +314,8 @@ class AuthManager: ObservableObject {
             // 만약 토큰이 있다면 임시로 저장 (회원가입 과정에서 사용할 수 있음)
             if let tokenInfo = authData.token {
                 let saveResult = keychainManager.saveTokens(
-                    access: tokenInfo.accessToken,
-                    refresh: tokenInfo.refreshToken
+                    access: tokenInfo.accessToken.token,
+                    refresh: tokenInfo.refreshToken.token
                 )
                 
                 if case .failure(let error) = saveResult {
@@ -348,8 +348,8 @@ class AuthManager: ObservableObject {
            if let tokenInfo = authData.token {
                print("토큰 정보 있음, 키체인에 저장 시도")
                let saveResult = keychainManager.saveTokens(
-                   access: tokenInfo.accessToken,
-                   refresh: tokenInfo.refreshToken
+                access: tokenInfo.accessToken.token,
+                refresh: tokenInfo.refreshToken.token
                )
                
                switch saveResult {
@@ -385,7 +385,7 @@ class AuthManager: ObservableObject {
         }
         
         // 새로운 액세스 토큰 저장
-        let updateResult = keychainManager.updateAccessToken(tokenInfo.accessToken)
+        let updateResult = keychainManager.updateAccessToken(tokenInfo.accessToken.token)
         
         switch updateResult {
         case .success:
