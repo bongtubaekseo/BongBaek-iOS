@@ -27,8 +27,13 @@ struct AppleAuthData: Codable {
 }
 
 struct TokenInfo: Codable {
-    let accessToken: String
-    let refreshToken: String
+    let accessToken: TokenDetails
+    let refreshToken: TokenDetails
 }
 
+struct TokenDetails: Codable {
+    let token: String
+    let expiredAt: Int
+    let calculatedExpiredAt: Int
+}
 
