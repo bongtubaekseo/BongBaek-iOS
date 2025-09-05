@@ -15,7 +15,7 @@ typealias RefreshTokenResponse = BaseResponse<TokenInfo>
 struct AuthData: Codable {
     let token: TokenInfo?
     let isCompletedSignUp: Bool
-    let kakaoId: Int
+    let kakaoId: String
     let kakaoAccessToken: String?
 }
 
@@ -31,4 +31,4 @@ struct TokenInfo: Codable {
     let refreshToken: String
 }
 
-print("123")
+

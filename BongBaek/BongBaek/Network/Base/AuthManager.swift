@@ -13,7 +13,7 @@ class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
     @Published var authState: AuthState = .loading
-    @Published var currentKakaoId: Int? = nil
+    @Published var currentKakaoId: String? = nil
     @Published var currentAppleId: String? = nil
     @Published var loginType: LoginType? = nil
     @Published var signUpError: String? = nil
@@ -275,7 +275,7 @@ class AuthManager: ObservableObject {
         }
         
         currentKakaoId = authData.kakaoId
-        print("저장된 kakaoId: \(currentKakaoId ?? 0)")
+        print("저장된 kakaoId: \(currentKakaoId ?? "0")")
         loginType = .kakao
         
         // 회원가입 완료 여부 먼저 확인

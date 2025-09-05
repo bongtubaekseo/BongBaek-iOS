@@ -85,7 +85,7 @@ class LoginViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func navigateToSignUp(kakaoId: Int, kakaoAccessToken: String?) {
+    private func navigateToSignUp(kakaoId: String, kakaoAccessToken: String?) {
         // ToDo:- 회원가입 화면으로 이동 로직
         // kakaoId와 kakaoAccessToken을 전달
     }
