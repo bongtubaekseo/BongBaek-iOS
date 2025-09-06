@@ -274,6 +274,38 @@ class AuthManager: ObservableObject {
         authState = .needsLogin
     }
     
+    func withdraw(reason: WithdrawRequestData, completion: @escaping (Bool) -> Void) {
+        authService.withdraw(reason: reason)
+            .sink(
+                receiveCompletion: { completionResult in
+                    if case .failure(let error) = completionResult {
+                        print("회원탈퇴 API 호출 실패: \(error)")
+                        completion(false) // 실패
+                    } else {
+                        print("회원탈퇴 API 호출 성공")
+                        completion(true) // 성공
+                    }
+                },
+                receiveValue: { response in
+                    print("회원탈퇴 응답: \(response)")
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+    func completeWithdrawal() {
+        // 로컬 토큰 정리
+        let result = keychainManager.clearTokens()
+        if case .failure(let error) = result {
+            print("토큰 삭제 실패: \(error)")
+        }
+        currentKakaoId = nil
+        currentAppleId = nil
+        loginType = nil
+        authState = .needsLogin
+    }
+
+    
     // MARK: - Private Response Handlers
     
     private func handleKaKaoLoginResponse(_ response: KaKaoLoginResponse) {

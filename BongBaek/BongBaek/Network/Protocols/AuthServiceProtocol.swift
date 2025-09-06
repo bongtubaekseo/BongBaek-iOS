@@ -14,4 +14,5 @@ protocol AuthServiceProtocol {
     func signUp(memberInfo: MemberInfo) -> AnyPublisher<SignUpResponse, Error>
     func retryToken() -> AnyPublisher<RefreshTokenResponse, Error>
     func logout() -> AnyPublisher<LogoutResponse, Error>
+    func withdraw(reason: WithdrawRequestData) -> AnyPublisher<WithdrawResponse, Error>
 }

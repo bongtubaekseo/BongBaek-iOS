@@ -19,6 +19,7 @@ enum AuthTarget {
     case signUp(memberInfo: MemberInfo)
     case retryToken
     case logout
+    case withdraw(reason:WithdrawRequestData)
 }
 
 extension AuthTarget: TargetType {
@@ -41,12 +42,14 @@ extension AuthTarget: TargetType {
             "/api/v1/oauth/apple"
         case .logout:
             "/api/v1/member/logout"
+        case .withdraw:
+            "/api/v1/member/withdraw"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .kakaoLogin, .signUp,. retryToken, .appleLogin, .logout: .post
+        case .kakaoLogin, .signUp,. retryToken, .appleLogin, .logout, .withdraw: .post
         }
     }
     
@@ -65,6 +68,8 @@ extension AuthTarget: TargetType {
         case .appleLogin(let idToken):
             let loginRequest = LoginRequest(accessToken: idToken)
             return .requestJSONEncodable(loginRequest)
+        case .withdraw(let reason):
+            return .requestJSONEncodable(reason)
         }
     }
     

@@ -143,7 +143,9 @@ struct MyPageView: View {
                             
                             Spacer()
                             
-                            Button(action: {}) {
+                            Button(action: {
+                                router.push(to: .accountDeletionView)
+                            }) {
                                 Text("서비스 탈퇴")
                                     .foregroundColor(.gray400)
                                     .bodyRegular14()
