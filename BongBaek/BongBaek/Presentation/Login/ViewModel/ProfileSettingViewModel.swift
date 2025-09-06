@@ -162,10 +162,24 @@ class ProfileSettingViewModel: ObservableObject {
         }
     
     private func convertDateFormat(_ dateString: String) -> String {
-           let converted = dateString.replacingOccurrences(of: ".", with: "-")
-           print("날짜 형식 변환: \(dateString) → \(converted)")
-           return converted
-       }
+        if dateString.contains("년") {
+            let components = dateString.components(separatedBy: CharacterSet.decimalDigits.inverted)
+            let numbers = components.filter { !$0.isEmpty }
+            
+            if numbers.count >= 3 {
+                let year = numbers[0]
+                let month = String(format: "%02d", Int(numbers[1]) ?? 0)
+                let day = String(format: "%02d", Int(numbers[2]) ?? 0)
+                let converted = "\(year)-\(month)-\(day)"
+                print("날짜 형식 변환: \(dateString) → \(converted)")
+                return converted
+            }
+        }
+
+        let converted = dateString.replacingOccurrences(of: ".", with: "-")
+        print("날짜 형식 변환: \(dateString) → \(converted)")
+        return converted
+    }
     
     private func createMemberInfo() -> MemberInfo {
         let incomeValue: String
