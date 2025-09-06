@@ -34,7 +34,7 @@ class EventService: EventServiceProtocol {
     private func getAttendedEventsDirectly(page: Int, attended: Bool, category: String?) -> AnyPublisher<AttendedEventsResponse, Error> {
         
         // URL 직접 생성 (인코딩 없이)
-        var urlString = "\(AppConfig.shared.baseURL)/api/v1/events/history/\(page)?attended=\(attended)"
+        var urlString = "\(EnvironmentSetting.baseURL)/api/v1/events/history/\(page)?attended=\(attended)"
         if let category = category, !category.isEmpty {
             urlString += "&category=\(category)"
         }
@@ -53,7 +53,7 @@ class EventService: EventServiceProtocol {
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
         
-        print("📡 직접 생성된 URL: \(urlString)")
+        print("직접 생성된 URL: \(urlString)")
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
@@ -69,7 +69,7 @@ class EventService: EventServiceProtocol {
     private func getUpcomingEventsDirectly(page: Int, category: String?) -> AnyPublisher<UpcomingEventsResponse, Error> {
         
 
-        var urlString = "\(AppConfig.shared.baseURL)/api/v1/events/upcoming/\(page)"
+        var urlString = "\(EnvironmentSetting.baseURL)/api/v1/events/upcoming/\(page)"
         if let category = category, !category.isEmpty {
             urlString += "?category=\(category)"
         }
@@ -88,18 +88,18 @@ class EventService: EventServiceProtocol {
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
         
-        print("📡 직접 생성된 URL: \(urlString)")
+        print("직접 생성된 URL: \(urlString)")
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map { output in
-                // 🆕 응답 데이터 프린트 (필요시)
+
                 if let jsonString = String(data: output.data, encoding: .utf8) {
-                    print("📄 서버 응답:")
+                    print("서버 응답:")
                     print(jsonString)
                 }
                 
                 if let httpResponse = output.response as? HTTPURLResponse {
-                    print("📊 상태 코드: \(httpResponse.statusCode)")
+                    print("상태 코드: \(httpResponse.statusCode)")
                 }
                 
                 return output.data

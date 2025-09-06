@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias SignUpResponse = BaseResponse<AuthData>
+typealias SignUpResponse = BaseResponse<AuthResponseData>
 typealias KaKaoLoginResponse = BaseResponse<AuthData>
 typealias AppleLoginResponse = BaseResponse<AppleAuthData>
 typealias RefreshTokenResponse = BaseResponse<TokenInfo>
@@ -39,3 +39,13 @@ struct TokenDetails: Codable {
     let calculatedExpiredAt: Int
 }
 
+
+struct AuthResponseData: Codable {
+    let token: TokenInfo?
+    let isCompletedSignUp: Bool
+    
+    let kakaoId: String?
+    let kakaoAccessToken: String?
+    let appleId: String?
+    let name: String?
+}
