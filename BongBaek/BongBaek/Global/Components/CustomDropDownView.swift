@@ -65,6 +65,7 @@ struct CustomDropdown<T: DropdownItem>: View {
 
                 if isExpanded {
                     DropdownContent()
+                        .padding(.top, 12)
                 }
             }
             .padding(.top, 8)
@@ -147,10 +148,6 @@ struct CustomDropdown<T: DropdownItem>: View {
                 }
                 .buttonStyle(PlainButtonStyle())
 
-                if item.id != items.last?.id {
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                }
             }
         }
         .background(.gray750)
