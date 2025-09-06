@@ -51,7 +51,7 @@ struct EmptyScheduleView: View {
             .padding(.bottom, 20)
 
             .background(.gray800)
-            .frame(width: 375,height: 260)
+            .frame(maxWidth: .infinity, maxHeight: 260)
             .cornerRadius(10)
         }
         .buttonStyle(PlainButtonStyle())  // 기본 버튼 스타일 제거
