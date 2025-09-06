@@ -55,8 +55,18 @@ struct CustomDropdown<T: DropdownItem>: View {
                         
                     }
                     Text(title)
-                        .bodyMedium14()
+                        .bodyMedium16()
                         .foregroundColor(.white)
+                    
+                    VStack {
+                        Text("*")
+                            .bodyMedium16()
+                            .foregroundColor(.blue)
+                            .padding(.top, 2)
+                            .padding(.leading, 1)
+                        
+                        Spacer()
+                    }
                 }
             }
 
