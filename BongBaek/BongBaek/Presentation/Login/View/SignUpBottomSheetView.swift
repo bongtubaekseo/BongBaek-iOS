@@ -16,6 +16,8 @@ struct SignUpBottomSheetView: View {
     @Environment(\.dismiss) private var dismiss
     @State var isChecked = false
     
+    @Environment(\.openURL) var openURL
+    
     private var canProceed: Bool {
         ageAgree && serviceAgree && privacyAgree
     }
@@ -76,6 +78,7 @@ struct SignUpBottomSheetView: View {
                         },
                         onDetailTap: {
                             print("서비스 약관 상세보기 클릭됨")
+                            openURL(URL(string: "https://www.notion.so/264f06bb0d3480aa8badeba07a68b944")!)
                         }
                     )
                     
@@ -91,6 +94,7 @@ struct SignUpBottomSheetView: View {
                         },
                         onDetailTap: {
                             print("개인정보 약관 상세보기 클릭됨")
+                            openURL(URL(string: "https://www.notion.so/264f06bb0d3480d0b1eafa217b306105")!)
                         }
                     )
                 }
