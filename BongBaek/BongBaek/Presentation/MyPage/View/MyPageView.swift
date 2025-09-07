@@ -65,7 +65,7 @@ struct MyPageView: View {
                                 .frame(width: 110, height: 110)
                                 .padding(.top, 40)
                             
-                            Text("봉투백서의겸손한야수")
+                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서의겸손한야수")
                                 .headBold24()
                                 .foregroundStyle(.gray100)
                             
@@ -95,10 +95,10 @@ struct MyPageView: View {
                             Spacer()
                             
                             VStack(alignment: .trailing, spacing: 20) {
-                                Text("2000년 01월 05일")
+                                Text(formatBirthday(mypageViewModel.profileData?.memberBirthday) ?? "2000년 01월 05일")
                                     .bodyMedium14()
                                     .foregroundStyle(.gray100)
-                                Text("없음")
+                                Text(formatIncome(mypageViewModel.profileData?.memberIncome) ?? "없음")
                                     .bodyMedium14()
                                     .foregroundStyle(.gray100)
                             }
@@ -165,6 +165,26 @@ struct MyPageView: View {
             mypageViewModel.loadprofile()
         }
         .navigationBarHidden(true)
+    }
+    
+    private func formatBirthday(_ birthday: String?) -> String? {
+        guard let birthday = birthday else { return nil }
+        // "2011-09-06" → "2011년 09월 06일"
+        let components = birthday.split(separator: "-")
+        if components.count == 3 {
+            return "\(components[0])년 \(components[1])월 \(components[2])일"
+        }
+        return birthday
+    }
+
+    private func formatIncome(_ income: String?) -> String? {
+        guard let income = income else { return nil }
+        switch income {
+        case "NONE": return "없음"
+        case "200만원 미만": return "200만원 미만"
+        case "200만원 이상": return "200만원 이상"
+        default: return income
+        }
     }
 }
 

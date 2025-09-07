@@ -20,6 +20,7 @@ class MyPageViewModel: ObservableObject {
     
     func loadprofile(forceRefresh: Bool = false){
         print("MyPageViewModel: 데이터 로드 시작")
+        setupBind()
         mypageManager.loadProfileData(forceRefresh: forceRefresh)
     }
     
