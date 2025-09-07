@@ -31,7 +31,6 @@ struct HomeView: View {
                 }
                 .padding(.top, 30)
 
-                
                 if homeViewModel.hasData {
                     ScheduleAlarmView(homeData: $homeViewModel.homeData)
                         .frame(height: 276)
@@ -51,9 +50,7 @@ struct HomeView: View {
                         .frame(height: 276)
                         .padding(.top, 30)
                 }
-            
-
-
+        
                 if homeViewModel.hasData {
                     RecommendsView(homeData: homeViewModel.homeData)
                             .environmentObject(stepManager)

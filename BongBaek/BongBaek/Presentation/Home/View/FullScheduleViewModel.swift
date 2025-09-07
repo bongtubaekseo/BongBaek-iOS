@@ -116,7 +116,7 @@ class FullScheduleViewModel: ObservableObject {
         do {
             let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
             
-            print("📡 이벤트 로드 - 페이지: \(currentPage), 카테고리: \(categoryParam ?? "전체")")
+            print("이벤트 로드 - 페이지: \(currentPage), 카테고리: \(categoryParam ?? "전체")")
             
             let response = try await eventService.getUpcomingEvents(page: currentPage, category: categoryParam)
                 .async()

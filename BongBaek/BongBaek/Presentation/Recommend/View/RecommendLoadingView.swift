@@ -167,7 +167,3 @@ struct RecommendLoadingView: View {
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
 }
-
-#Preview {
-    RecommendLoadingView()
-}

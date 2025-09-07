@@ -77,7 +77,7 @@ class ProfileSettingViewModel: ObservableObject {
     
     private func handleSignUpError(_ error: String?) {
             if let error = error {
-                print("📱 회원가입 에러 수신: \(error)")
+                print("회원가입 에러 수신: \(error)")
                 isSigningUp = false
                 errorMessage = error
                 showErrorAlert = true
@@ -102,9 +102,6 @@ class ProfileSettingViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Initialization
-
-    
     // MARK: - Public Methods
     func selectIncome(_ selection: IncomeSelection) {
         currentSelection = selection
@@ -124,8 +121,6 @@ class ProfileSettingViewModel: ObservableObject {
         
         let memberInfo = createMemberInfo()
         authManager.signUp(memberInfo: memberInfo)
-        
-       
     }
     
     func dismissError() {
@@ -134,7 +129,6 @@ class ProfileSettingViewModel: ObservableObject {
     }
     
     // MARK: - Private Methods
-    
     
     private func handleAuthStateChange(_ authState: AuthManager.AuthState) {
             switch authState {

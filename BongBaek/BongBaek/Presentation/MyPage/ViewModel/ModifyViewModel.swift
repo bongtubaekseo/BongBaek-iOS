@@ -107,7 +107,7 @@ class ModifyViewModel: ObservableObject {
     
     private func handleSignUpError(_ error: String?) {
             if let error = error {
-                print("📱 회원가입 에러 수신: \(error)")
+                print("회원가입 에러 수신: \(error)")
                 isSigningUp = false
                 errorMessage = error
                 showErrorAlert = true
