@@ -25,6 +25,7 @@ struct MyPageView: View {
     @StateObject private var stepManager = GlobalStepManager()
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var router: NavigationRouter
+    @StateObject private var mypageViewModel = MyPageViewModel()
     
     private let serviceItems: [ServiceItem] = [
         ServiceItem(icon: "icon_intersect", title: "앱 버전", subtitle: "v 1.0.0", showChevron: false),
@@ -158,6 +159,10 @@ struct MyPageView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            print("MyPageView 나타남 - 데이터 로드 시작")
+            mypageViewModel.loadprofile()
         }
         .navigationBarHidden(true)
     }
