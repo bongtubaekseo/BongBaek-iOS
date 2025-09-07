@@ -14,7 +14,7 @@ enum MyPageTarget: TargetType {
 
 extension MyPageTarget {
     var baseURL: URL {
-        guard let url = URL(string: AppConfig.shared.baseURL) else {
+        guard let url = URL(string: EnvironmentSetting.baseURL) else {
             fatalError("Invalid base URL")
         }
         return url
