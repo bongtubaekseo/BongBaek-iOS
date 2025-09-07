@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ModifyView: View {
     @StateObject private var viewModel = ModifyViewModel()
+    @State private var cancellables = Set<AnyCancellable>()
     @State private var showDatePicker = false
     @FocusState private var focusedField: FocusField?
     //@Environment(\.dismiss) private var dismiss
@@ -57,6 +59,16 @@ struct ModifyView: View {
         }
         .onAppear {
             setupInitialValues()
+            NotificationCenter.default.publisher(for: .profileUpdateSuccess)
+                  .receive(on: DispatchQueue.main)
+                  .sink { _ in
+                      print("프로필 업데이트 성공! 이전 화면으로 이동")
+                      
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                          router.pop()
+                      }
+                  }
+                  .store(in: &cancellables)
         }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -249,10 +261,10 @@ struct ModifyView: View {
         case "NONE":
             viewModel.hasIncome = false
             viewModel.currentSelection = .none
-        case "200만원 미만":
+        case "UNDER200":
             viewModel.hasIncome = true
             viewModel.currentSelection = .under200
-        case "200만원 이상":
+        case "OVER200":
             viewModel.hasIncome = true
             viewModel.currentSelection = .over200
         default:

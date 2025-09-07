@@ -25,12 +25,14 @@ class ModifyViewModel: ObservableObject {
     
     // MARK: - Private Properties
     private let authManager = AuthManager.shared
+    let myPageManager = MyPageManager.shared
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-          setupAuthStateObserver()
-          setupSignUpErrorObserver()
-      }
+        setupAuthStateObserver()
+        setupSignUpErrorObserver()
+        setupProfileUpdateObserver()
+    }
     
     // MARK: - Enums
     enum IncomeSelection: Equatable {
@@ -71,6 +73,34 @@ class ModifyViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] error in
                 self?.handleSignUpError(error)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func setupProfileUpdateObserver() {
+        myPageManager.$isLoadingProfile
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] loading in
+                self?.isSigningUp = loading
+            }
+            .store(in: &cancellables)
+        
+        myPageManager.$profileError
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] error in
+                if let error = error {
+                    self?.isSigningUp = false
+                    self?.errorMessage = error
+                    self?.showErrorAlert = true
+                }
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .profileUpdateSuccess)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.isSigningUp = false
+                print("프로필 업데이트 성공!")
             }
             .store(in: &cancellables)
     }
@@ -122,8 +152,25 @@ class ModifyViewModel: ObservableObject {
         
         isSigningUp = true
         
-//        let updateData = createUpdateProfileData()
-//        updateProfile(updateData: updateData)
+        let updateData = createUpdateProfileData()
+        myPageManager.updateProfile(updateData: updateData)
+    }
+    
+    private func createUpdateProfileData() -> UpdateProfileData {
+        let incomeValue: String
+        if hasIncome {
+            incomeValue = currentSelection.apiValue
+        } else {
+            incomeValue = "없음"
+        }
+        
+        let formattedBirthday = convertDateFormat(selectedDate)
+        
+        return UpdateProfileData(
+            memberName: nickname,
+            memberBirthday: formattedBirthday,
+            memberIncome: incomeValue
+        )
     }
     
     func dismissError() {

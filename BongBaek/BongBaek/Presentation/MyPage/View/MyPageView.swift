@@ -181,8 +181,8 @@ struct MyPageView: View {
         guard let income = income else { return nil }
         switch income {
         case "NONE": return "없음"
-        case "200만원 미만": return "200만원 미만"
-        case "200만원 이상": return "200만원 이상"
+        case "UNDER200": return "200만원 미만"
+        case "OVER200": return "200만원 이상"
         default: return income
         }
     }

@@ -54,6 +54,42 @@ class MyPageManager: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func updateProfile(updateData: UpdateProfileData) {
+        print("프로필 업데이트 시작: \(updateData)")
+        isLoadingProfile = true
+        profileError = nil
+        
+        userService.updateProfile(profileData: updateData)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    self?.isLoadingProfile = false
+                    if case .failure(let error) = completion {
+                        self?.profileError = error.localizedDescription
+                        print("프로필 업데이트 실패: \(error)")
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    print("프로필 업데이트 응답: \(response)")
+                    
+                    if response.isSuccess {
+                        // 성공 시 로컬 데이터도 업데이트
+                        self?.profileData = updateData
+                        self?.profileError = nil
+                        print("프로필 업데이트 성공")
+                        NotificationCenter.default.post(name: .profileUpdateSuccess, object: nil)
+                    } else {
+                        self?.profileError = response.message
+                        print("프로필 업데이트 API 실패: \(response.message)")
+                    }
+                }
+            )
+            .store(in: &cancellables)
+    }
     
     
+    
+}
+extension Notification.Name {
+    static let profileUpdateSuccess = Notification.Name("profileUpdateSuccess")
 }
