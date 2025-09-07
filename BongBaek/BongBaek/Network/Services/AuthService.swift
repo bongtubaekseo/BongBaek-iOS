@@ -15,10 +15,17 @@ class AuthService: AuthServiceProtocol {
         self.networkService = networkService
     }
     
-    func login(accessToken: String) -> AnyPublisher<LoginResponse, Error> {
+    func kakaoLogin(accessToken: String) -> AnyPublisher<KaKaoLoginResponse, Error> {
         return networkService.request(
-            .login(accessToken: accessToken),
-            responseType: LoginResponse.self
+            .kakaoLogin(accessToken: accessToken),
+            responseType: KaKaoLoginResponse.self
+        )
+    }
+    
+    func appleLogin(idToken: String) -> AnyPublisher<AppleLoginResponse, any Error> {
+        return networkService.request(
+            .appleLogin(idToken: idToken),
+            responseType: AppleLoginResponse.self
         )
     }
     
@@ -34,6 +41,19 @@ class AuthService: AuthServiceProtocol {
             .retryToken,
             responseType: RefreshTokenResponse.self
         )
+    }
+    
+    func logout() -> AnyPublisher<LogoutResponse, any Error> {
+        return networkService.request(
+            .logout,
+            responseType: LogoutResponse.self
+        )
+    }
+    
+    func withdraw(reason: WithdrawRequestData) -> AnyPublisher<WithdrawResponse, any Error> {
+        return networkService.request(
+            .withdraw(reason: reason),
+            responseType: WithdrawResponse.self)
     }
 }
 

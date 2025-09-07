@@ -17,15 +17,17 @@ enum RecommendRoute: Hashable {
     case recommendCostView
     case recommendSuccessView
     case modifyEventView(mode: ModifyMode, eventDetailData: EventDetailData?)
-    case modifyEventView2(mode: ModifyMode, eventDetailData: EventDetailData?)
     case fullScheduleView
     case allRecordView(eventId: String)
-    case allRecordView2(eventId: String)
     case recommendStartView
     case emptyScheduleView
     case emptyCardView
     case createEventView
     case createEventViewAfterEvent
+    case accountDeletionView
+    case accountDeletionConfirmView
+    case MyPageView
+    case ModifyView(profileData: UpdateProfileData?)
     
     var displayName: String {
         switch self {
@@ -47,9 +49,12 @@ enum RecommendRoute: Hashable {
         case .createEventView: return "createEventView"
 //        case .largeMapView:  return "largeMapView"
             
-        case .allRecordView2: return "allRecordView2"
-        case .modifyEventView2: return "modifyEventView2"
         case .createEventViewAfterEvent: return "createEventViewAfterEvent"
+        case .accountDeletionConfirmView: return "acountDeletionConfirmView"
+        case .accountDeletionView: return "accountDeletionView"
+        case .ModifyView : return "ModifyView"
+        case .MyPageView : return "MyPageView"
+            
         }
     }
 }
@@ -59,7 +64,7 @@ final class NavigationRouter: ObservableObject {
     
     @Published var path = NavigationPath() {
         didSet {
-            print("🔄 NavigationPath 변경됨: \(path.count)개 화면")
+            print("NavigationPath 변경됨: \(path.count)개 화면")
         }
     }
     

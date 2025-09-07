@@ -55,8 +55,18 @@ struct CustomDropdown<T: DropdownItem>: View {
                         
                     }
                     Text(title)
-                        .bodyMedium14()
+                        .bodyMedium16()
                         .foregroundColor(.white)
+                    
+                    VStack {
+                        Text("*")
+                            .bodyMedium16()
+                            .foregroundColor(.blue)
+                            .padding(.top, 2)
+                            .padding(.leading, 1)
+                        
+                        Spacer()
+                    }
                 }
             }
 
@@ -65,6 +75,7 @@ struct CustomDropdown<T: DropdownItem>: View {
 
                 if isExpanded {
                     DropdownContent()
+                        .padding(.top, 12)
                 }
             }
             .padding(.top, 8)
@@ -147,10 +158,6 @@ struct CustomDropdown<T: DropdownItem>: View {
                 }
                 .buttonStyle(PlainButtonStyle())
 
-                if item.id != items.last?.id {
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                }
             }
         }
         .background(.gray750)

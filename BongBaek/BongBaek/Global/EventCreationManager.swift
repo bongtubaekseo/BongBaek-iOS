@@ -206,7 +206,7 @@ class EventCreationManager: ObservableObject {
         self.longitude = 0.0
         self.hasLocationData = false
         
-        print("📝 EventCreationManager: 위치 데이터 초기화")
+        print("EventCreationManager: 위치 데이터 초기화")
     }
     
     // MARK: - API 관련 메서드
@@ -235,7 +235,7 @@ class EventCreationManager: ObservableObject {
             cost: 0, // 서버에서 계산
             isAttend: isAttend,
             eventDate: eventDateString,
-            note: "노트노트"
+            note: ""
         )
         
         // LocationDetailInfo 생성
@@ -430,7 +430,7 @@ class EventCreationManager: ObservableObject {
     
     /// 현재 폼 상태 출력
     func printCurrentStatus() {
-        print("📊 EventCreationManager 현재 상태:")
+        print("EventCreationManager 현재 상태:")
         print("  - Step 1 (추천): \(canCompleteRecommendStep ? "완성" : "미완성")")
         print("  - Step 2 (이벤트): \(canCompleteEventInfoStep ? "완성" : "미완성")")
         print("  - Step 3 (날짜): \(canCompleteDateStep ? "완성" : "미완성")")
@@ -577,7 +577,7 @@ class EventCreationManager: ObservableObject {
             cost: recommendedAmount,
             isAttend: isAttend,
             eventDate: eventDateString,
-            note: "노트노트"
+            note: ""
         )
         
         // LocationDetailInfo 생성
@@ -676,7 +676,7 @@ class EventCreationManager: ObservableObject {
             cost: modifiedAmount, // 수정된 금액 사용
             isAttend: isAttend,
             eventDate: eventDateString,
-            note: "노트노트"
+            note: ""
         )
         
         // LocationDetailInfo 생성

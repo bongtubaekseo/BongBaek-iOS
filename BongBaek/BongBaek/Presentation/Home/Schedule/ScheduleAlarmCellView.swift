@@ -35,7 +35,7 @@ struct ScheduleIndicatorCellView: View {
             Text("마음을 담은 봉투, 준비되셨나요?")
                 .captionRegular12()
                 .foregroundStyle(.gray100)
-                .padding(.top, 8)
+                .padding(.top, 10)
             
             HStack {
                 Spacer()
@@ -51,87 +51,35 @@ struct ScheduleIndicatorCellView: View {
             HStack(spacing: 4) {
                 Image(.iconCalendar)
                     .resizable()
-                    .frame(width: 14, height: 16)
+                    .frame(width: 14, height: 14)
                 
                 Text(event.eventInfo.eventDate)
-                    .captionRegular12()
-                    .foregroundColor(.white)
+                    .font(.caption_regular_12)
+                    .foregroundColor(.gray100)
             }
             .padding(.vertical, 4)
             .padding(.horizontal, 4)
             .background(.gray750)
-            .cornerRadius(6)
+            .cornerRadius(4)
             .offset(y: -65)
         }
         .padding(.top, 40)
         .padding(.horizontal, 20)
-        .padding(.bottom, 20)
+        .padding(.bottom, 30)
         .background(
             LinearGradient(
-                colors: gradientColors(for: event.eventInfo.eventCategory),
+                stops: [
+                    .init(color: Color(hex: "150857"), location: 0.15),
+                    .init(color: Color(hex: "5F57FF"), location: 0.35),
+                    .init(color: Color(hex: "7384FF"), location: 0.55),
+                    .init(color: Color(hex: "9EA5FF"), location: 0.70),
+                    .init(color: Color(hex: "CDCBFF"), location: 0.75)
+                ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
         )
-        .frame(width: 340, height: 260)
+        .frame(height: 260)
         .cornerRadius(10)
-    }
-    
-    // 카테고리별 그라데이션 색상
-    private func gradientColors(for category: String) -> [Color] {
-        switch category {
-        case "결혼식":
-            return [
-                Color(hex: "150857"),
-                Color(hex: "5F57FF"),
-                Color(hex: "7384FF"),
-                Color(hex: "9EA5FF"),
-                Color(hex: "CDCBFF"),
-                Color(hex: "FFFFFF").opacity(0.8),
-            ]
-        case "생일":
-            return [
-                Color(hex: "150857"),
-                Color(hex: "5F57FF"),
-                Color(hex: "7384FF"),
-                Color(hex: "9EA5FF"),
-                Color(hex: "CDCBFF"),
-                Color(hex: "FFFFFF").opacity(0.8),
-            ]
-        case "돌잔치":
-            return [
-                Color(hex: "150857"),
-                Color(hex: "5F57FF"),
-                Color(hex: "7384FF"),
-                Color(hex: "9EA5FF"),
-                Color(hex: "CDCBFF"),
-                Color(hex: "FFFFFF").opacity(0.8),
-            ]
-        default:
-            // 기본 (기존 보라 계열)
-            return [
-                Color(hex: "150857"),
-                Color(hex: "5F57FF"),
-                Color(hex: "7384FF"),
-                Color(hex: "9EA5FF"),
-                Color(hex: "CDCBFF"),
-                Color(hex: "FFFFFF").opacity(0.8),
-            ]
-        }
-    }
-}
-
-extension Color {
-    init(hex: String) {
-        let hexSanitized = hex.replacingOccurrences(of: "#", with: "")
-        let scanner = Scanner(string: hexSanitized)
-        var rgb: UInt64 = 0
-        scanner.scanHexInt64(&rgb)
-
-        let r = Double((rgb & 0xFF0000) >> 16) / 255.0
-        let g = Double((rgb & 0x00FF00) >> 8) / 255.0
-        let b = Double(rgb & 0x0000FF) / 255.0
-
-        self.init(red: r, green: g, blue: b)
     }
 }

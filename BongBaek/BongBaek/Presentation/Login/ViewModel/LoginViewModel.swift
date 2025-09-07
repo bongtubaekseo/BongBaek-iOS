@@ -8,6 +8,7 @@
 import Combine
 import KakaoSDKAuth
 import KakaoSDKUser
+import _AuthenticationServices_SwiftUI
 
 @MainActor
 class LoginViewModel: ObservableObject {
@@ -20,6 +21,9 @@ class LoginViewModel: ObservableObject {
     private let authService: AuthServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     private let authManager = AuthManager.shared
+    
+    private var authCode: String = ""
+    private var idToken: String = ""
     
     init(authService: AuthServiceProtocol = DIContainer.shared.authService) {
         self.authService = authService
@@ -53,7 +57,7 @@ class LoginViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        authService.login(accessToken: accessToken)
+        authService.kakaoLogin(accessToken: accessToken)
             .sink(
                 receiveCompletion: { [weak self] completion in
                     self?.isLoading = false
@@ -81,7 +85,7 @@ class LoginViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    private func navigateToSignUp(kakaoId: Int, kakaoAccessToken: String?) {
+    private func navigateToSignUp(kakaoId: String, kakaoAccessToken: String?) {
         // ToDo:- 회원가입 화면으로 이동 로직
         // kakaoId와 kakaoAccessToken을 전달
     }
@@ -128,5 +132,50 @@ class LoginViewModel: ObservableObject {
     private func handleRefreshTokenExpired() {
         // 리프레시 토큰도 만료된 경우 로그아웃 처리
         // 로그인 화면으로 이동 로직
+    }
+}
+
+extension LoginViewModel {
+    // MARK: - apple oauth
+    func requestAppleOauth() -> SignInWithAppleButton {
+        return SignInWithAppleButton(
+            onRequest: { request in
+                request.requestedScopes = [.fullName, .email]
+            },
+            onCompletion: { [weak self] result in
+                
+                guard let self = self else {
+                    print("self가 nil입니다.")
+                    return
+                }
+                
+                switch result {
+                case .success(let authResults):
+                    switch authResults.credential {
+                    case let appleIDCredential as ASAuthorizationAppleIDCredential:
+                        let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8) ?? ""
+                        let authorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) ?? ""
+                        
+
+                        print("애플 인증 성공 - idToken: \(identityToken), authCode: \(authorizationCode)")
+                        
+                        Task {
+                            await self.authManager.loginWithApple(idToken: identityToken)
+                        }
+
+                
+                         
+                        self.authCode = authorizationCode
+                        self.idToken = identityToken
+                        
+                    default:
+                        break
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    print("애플 인증 에러 - \(error)")
+                }
+            }
+        )
     }
 }

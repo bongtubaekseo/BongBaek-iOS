@@ -40,5 +40,3 @@ struct RelationshipButton: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
-
-

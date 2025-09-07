@@ -41,14 +41,6 @@ struct EmptyHomeView: View {
                         .environmentObject(stepManager)
                         .padding(.top, 20)
                 }
-//                CustomTabView(selectedTab: $selectedTab)
-//                    .background(Color.gray750)
-//                    .clipShape(
-//                        .rect(
-//                            topLeadingRadius: 10,
-//                            topTrailingRadius: 10
-//                        )
-//                    )
             }
             .navigationBarHidden(true)
             .toolbar(.hidden, for: .navigationBar)
@@ -56,9 +48,5 @@ struct EmptyHomeView: View {
             .background(Color.black.ignoresSafeArea())
         }
     }
-}
-
-#Preview {
-    EmptyHomeView()
 }
 

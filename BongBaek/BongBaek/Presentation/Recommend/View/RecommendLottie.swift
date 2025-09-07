@@ -73,11 +73,11 @@ struct RecommendLottie: View {
         }
         .onAppear {
             if let data = eventManager.recommendationResponse?.data {
-                print("✅ 추천 데이터 확인:")
-                print("  💰 추천 금액: \(data.cost)원")
-                print("  📊 범위: \(data.range.min)원 ~ \(data.range.max)원")
-                print("  🏷️ 카테고리: \(data.category)")
-                print("  📍 장소: \(data.location)")
+                print("추천 데이터 확인:")
+                print("추천 금액: \(data.cost)원")
+                print("범위: \(data.range.min)원 ~ \(data.range.max)원")
+                print("카테고리: \(data.category)")
+                print("장소: \(data.location)")
                 
                 recommendedAmount = data.cost
                  minAmount = data.range.min
@@ -87,9 +87,9 @@ struct RecommendLottie: View {
                 eventCategory = data.category
 
             } else {
-                print("❌ 추천 데이터 없음")
+                print("추천 데이터 없음")
             }
-            print("⏳ RecommendLottie 나타남 - path.count: \(router.path.count)")
+            print("RecommendLottie 나타남 - path.count: \(router.path.count)")
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
@@ -131,7 +131,7 @@ struct RecommendLottie: View {
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [
-                                        Color(hex: "#4E62FF"),
+                                        Color(hex: "#4E62FF"), //TODO: location확인
                                         Color(hex: "#502EFF"),
                                     ],
                                     startPoint: .leading,
@@ -358,7 +358,7 @@ struct RecommendLottie: View {
                         }
                     }
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity) //TODO: 크기조절
                 .padding(.vertical, 14)
                 .background(Color("primary_normal"))
                 .foregroundColor(.white)

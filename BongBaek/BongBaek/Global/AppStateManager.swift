@@ -49,10 +49,10 @@ class AppStateManager: ObservableObject {
             }
             
         case .needsSignUp:
-            print("📝 회원가입 필요")
+            print("회원가입 필요")
             // 회원가입 시트가 이미 열려있지 않을 때만 시트를 표시
             if !showSignUpSheet {
-                print("📝 회원가입 시트 표시")
+                print("회원가입 시트 표시")
                 withAnimation {
                     showSignUpSheet = true
                 }
@@ -66,7 +66,7 @@ class AppStateManager: ObservableObject {
             print("로딩 중...")
             
         case .needsLogin:
-            print("🔑 로그인 필요 - 로그인 화면으로 이동")
+            print("로그인 필요 - 로그인 화면으로 이동")
             withAnimation {
                 currentState = .login
                 showSignUpSheet = false

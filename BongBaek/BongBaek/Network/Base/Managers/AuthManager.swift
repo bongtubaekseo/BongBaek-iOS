@@ -13,8 +13,15 @@ class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
     @Published var authState: AuthState = .loading
-    @Published var currentKakaoId: Int? = nil
+    @Published var currentKakaoId: String? = nil
+    @Published var currentAppleId: String? = nil
+    @Published var loginType: LoginType? = nil
     @Published var signUpError: String? = nil
+    
+    enum LoginType {
+        case kakao
+        case apple
+    }
     
     private let authService: AuthServiceProtocol
     private let keychainManager = KeychainManager.shared
@@ -56,7 +63,7 @@ class AuthManager: ObservableObject {
     
     private func loginWithKakaoToken(_ kakaoToken: String) async {
         
-        authService.login(accessToken: kakaoToken)
+        authService.kakaoLogin(accessToken: kakaoToken)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
@@ -67,12 +74,108 @@ class AuthManager: ObservableObject {
                 },
                 receiveValue: { [weak self] response in
                     print("response:123 \(response)")
-                    self?.handleLoginResponse(response)
+                    self?.handleKaKaoLoginResponse(response)
+                }
+            )
+            .store(in: &cancellables)
+    }
+    // MARK: -  애플 로그인 후 처리
+    
+    func loginWithApple(idToken: String) async {
+        authState = .loading
+        keychainManager.clearTokens()
+        
+        print("애플 로그인 시작, idToken VM 에서 전달받은 값 : \(idToken)")
+        await loginWithAppleToken(idToken)
+    }
+    
+    func loginWithAppleToken(_ idToken: String) async {
+        authService.appleLogin(idToken: idToken)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    if case .failure(let error) = completion {
+                        print("애플 서버 로그인 실패: \(error)")
+                        self?.authState = .needsLogin
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    print("애플 로그인 응답: \(response)")
+                    self?.handleAppleLoginResponse(response)
+
                 }
             )
             .store(in: &cancellables)
     }
     
+    private func handleAppleLoginResponse(_ response: AppleLoginResponse) {
+        // BaseResponse 성공 여부 확인
+        guard response.isSuccess else {
+            print("애플 로그인 API 실패: \(response.message)")
+            authState = .needsLogin
+            return
+        }
+        
+        // AuthData 확인
+        guard let authData = response.data else {
+            print("애플 로그인 응답 데이터가 없습니다")
+            authState = .needsLogin
+            return
+        }
+        
+        // appleId 저장
+        currentAppleId = authData.appleId
+        print("저장된 appleId: \(authData.appleId)")
+        loginType = .apple
+        
+        // 회원가입 완료 여부 먼저 확인
+        if authData.isCompletedSignUp {
+            // 기존 회원 - 토큰이 있어야 함
+            guard let tokenInfo = authData.token else {
+                print("기존 회원인데 토큰 정보가 없습니다")
+                authState = .needsLogin
+                return
+            }
+            
+            
+            // 키체인에 토큰 저장
+            let saveResult = keychainManager.saveTokens(
+                access: tokenInfo.accessToken.token,
+                refresh: tokenInfo.refreshToken.token
+            )
+            
+            switch saveResult {
+            case .success:
+                authState = .authenticated
+                print("애플 기존 회원 로그인 성공")
+                
+            case .failure(let error):
+                print("토큰 저장 실패: \(error)")
+                authState = .needsLogin
+            }
+            
+        } else {
+            // 신규 회원 - 토큰이 없을 수 있음, 회원가입 필요
+            print("애플 신규 회원 - 회원가입 필요")
+            print("appleId: \(authData.appleId)")
+            
+            // 회원가입이 필요한 상태로 설정
+            authState = .needsSignUp
+            
+            // 만약 토큰이 있다면 임시로 저장 (회원가입 과정에서 사용할 수 있음)
+            if let tokenInfo = authData.token {
+                let saveResult = keychainManager.saveTokens(
+                    access: tokenInfo.accessToken.token,
+                    refresh: tokenInfo.refreshToken.token
+                )
+                
+                if case .failure(let error) = saveResult {
+                    print("임시 토큰 저장 실패: \(error)")
+                }
+            }
+        }
+    }
+
     // MARK: - 회원가입
     func signUp(memberInfo: MemberInfo) {
         authState = .loading
@@ -144,17 +247,68 @@ class AuthManager: ObservableObject {
     
     // MARK: - 로그아웃
     func logout() {
+        
+        authService.logout()
+            .sink(
+                receiveCompletion: { completion in
+                    if case .failure(let error) = completion {
+                        print("로그아웃 API 호출 실패: \(error)")
+                    } else {
+                        print("로그아웃 API 호출 성공")
+                    }
+                },
+                receiveValue: { response in
+                    print("로그아웃 응답: \(response)")
+                }
+            )
+            .store(in: &cancellables)
+        
+        // 로컬 토큰 정리
         let result = keychainManager.clearTokens()
         if case .failure(let error) = result {
             print("토큰 삭제 실패: \(error)")
         }
         currentKakaoId = nil
+        currentAppleId = nil
+        loginType = nil  
         authState = .needsLogin
     }
     
+    func withdraw(reason: WithdrawRequestData, completion: @escaping (Bool) -> Void) {
+        authService.withdraw(reason: reason)
+            .sink(
+                receiveCompletion: { completionResult in
+                    if case .failure(let error) = completionResult {
+                        print("회원탈퇴 API 호출 실패: \(error)")
+                        completion(false) // 실패
+                    } else {
+                        print("회원탈퇴 API 호출 성공")
+                        completion(true) // 성공
+                    }
+                },
+                receiveValue: { response in
+                    print("회원탈퇴 응답: \(response)")
+                }
+            )
+            .store(in: &cancellables)
+    }
+    
+    func completeWithdrawal() {
+        // 로컬 토큰 정리
+        let result = keychainManager.clearTokens()
+        if case .failure(let error) = result {
+            print("토큰 삭제 실패: \(error)")
+        }
+        currentKakaoId = nil
+        currentAppleId = nil
+        loginType = nil
+        authState = .needsLogin
+    }
+
+    
     // MARK: - Private Response Handlers
     
-    private func handleLoginResponse(_ response: LoginResponse) {
+    private func handleKaKaoLoginResponse(_ response: KaKaoLoginResponse) {
         // BaseResponse 성공 여부 확인
         guard response.isSuccess else {
             print("로그인 API 실패: \(response.message)")
@@ -170,7 +324,8 @@ class AuthManager: ObservableObject {
         }
         
         currentKakaoId = authData.kakaoId
-        print("저장된 kakaoId: \(currentKakaoId ?? 0)")
+        print("저장된 kakaoId: \(currentKakaoId ?? "0")")
+        loginType = .kakao
         
         // 회원가입 완료 여부 먼저 확인
         if authData.isCompletedSignUp {
@@ -183,8 +338,8 @@ class AuthManager: ObservableObject {
             
             // 키체인에 토큰 저장
             let saveResult = keychainManager.saveTokens(
-                access: tokenInfo.accessToken,
-                refresh: tokenInfo.refreshToken
+                access: tokenInfo.accessToken.token,
+                refresh: tokenInfo.refreshToken.token
             )
             
             switch saveResult {
@@ -208,9 +363,11 @@ class AuthManager: ObservableObject {
             // 만약 토큰이 있다면 임시로 저장 (회원가입 과정에서 사용할 수 있음)
             if let tokenInfo = authData.token {
                 let saveResult = keychainManager.saveTokens(
-                    access: tokenInfo.accessToken,
-                    refresh: tokenInfo.refreshToken
+                    access: tokenInfo.accessToken.token,
+                    refresh: tokenInfo.refreshToken.token
                 )
+                
+                print("token keyChain에 저장 성공!")
                 
                 if case .failure(let error) = saveResult {
                     print("임시 토큰 저장 실패: \(error)")
@@ -242,8 +399,8 @@ class AuthManager: ObservableObject {
            if let tokenInfo = authData.token {
                print("토큰 정보 있음, 키체인에 저장 시도")
                let saveResult = keychainManager.saveTokens(
-                   access: tokenInfo.accessToken,
-                   refresh: tokenInfo.refreshToken
+                access: tokenInfo.accessToken.token,
+                refresh: tokenInfo.refreshToken.token
                )
                
                switch saveResult {
@@ -279,7 +436,7 @@ class AuthManager: ObservableObject {
         }
         
         // 새로운 액세스 토큰 저장
-        let updateResult = keychainManager.updateAccessToken(tokenInfo.accessToken)
+        let updateResult = keychainManager.updateAccessToken(tokenInfo.accessToken.token)
         
         switch updateResult {
         case .success:
@@ -298,6 +455,14 @@ class AuthManager: ObservableObject {
             return "0"
         }
         return String(kakaoId)
+    }
+    
+    func getCurrentAppleId() -> String {
+        guard let appleId = currentAppleId else {
+            print("Apple가 없습니다. 로그인이 필요할 수 있습니다.")
+            return "0"
+        }
+        return appleId
     }
     
     func clearSignUpError() {

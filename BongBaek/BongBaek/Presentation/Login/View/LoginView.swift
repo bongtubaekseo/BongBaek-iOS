@@ -12,35 +12,33 @@ struct LoginView: View {
     @State private var showProfileSetting = false
     @EnvironmentObject var appStateManager: AppStateManager
     @StateObject private var loginViewModel = LoginViewModel()
+    @State private var test = false
+    
     
    var body: some View {
-  
+       
        NavigationStack {
-           GeometryReader { geometry in
-               Image("onboarding_ios")
-                   .resizable()
-                   .scaledToFill()
-                   .ignoresSafeArea()
+           VStack(spacing: 0) {
                
                VStack {
                    WelcomeTextView()
-                       .ignoresSafeArea()
-                       .padding(.top,144)
+                       .padding(.top, 144.adjustedH)
                        .padding(.leading, 20)
+               }
+               
+               Spacer()
+               
+               VStack(spacing: 0) {
                    
-                   Spacer()
-                   
-                   VStack(spacing: 16) {
-
+                   VStack(spacing: 20) {
                        Button(action: {
-                           appStateManager.loginWithKakao()
-                           // ToDo - viewModel.kakaoLogin 시작하는 로직
+
                        }) {
-                           Image("btn_kakao")
+                           Image("appleid_button")
                                .resizable()
-                               .scaledToFit()
-                               .frame(maxWidth: .infinity)
-                               .frame(height: 52)
+                               .scaledToFill()
+                               .frame(height: 55.adjustedH)
+
                        }
                        .buttonStyle(PlainButtonStyle())
                        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
@@ -49,42 +47,71 @@ struct LoginView: View {
                            loginViewModel.isLoading ?
                            ProgressView().tint(.white) : nil
                        )
-
-
-                     
-                       VStack(alignment: .leading,spacing: 8) {
-                           Text("로그인하시면 아래 내용에 동의하는 것으로 간주됩니다.")
-                               .captionRegular12()
-                               .foregroundStyle(.white)
-
-                           HStack {
-                               Text("개인정보 처리방침")
-                                   .captionRegular12()
-                                   .foregroundStyle(.white)
-                                   .underline()
-
-                               Text("이용약관")
-                                   .captionRegular12()
-                                   .foregroundStyle(.white)
-                                   .underline()
-                                   .padding(.leading, 12)
-                           }
-                           .padding(.leading, 50)
+                       .overlay {
+                           loginViewModel.requestAppleOauth()
+                               .frame(maxWidth: 375)
+                               .frame(height: 44)
+                               .blendMode(.overlay)
+                       }
+                       
+                       
+                       Button(action: {
+                           appStateManager.loginWithKakao()
+                           
+                       }) {
+                           Image("btn_kakao")
+                               .resizable()
+                               .scaledToFill()
+                               .frame(height: 55.adjustedH)
 
                        }
+                       .buttonStyle(PlainButtonStyle())
+                       .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                       .disabled(loginViewModel.isLoading)
+                       .overlay(
+                           loginViewModel.isLoading ?
+                           ProgressView().tint(.white) : nil
+                       )
+                   }
+                   .padding(.horizontal,20)
+
+                   VStack(alignment: .leading,spacing: 0) {
+                       Text("로그인하시면 아래 내용에 동의하는 것으로 간주됩니다.")
+                           .captionRegular12()
+                           .foregroundStyle(.white)
+
+                       HStack {
+                           Text("개인정보 처리방침")
+                               .captionRegular12()
+                               .foregroundStyle(.white)
+                               .underline()
+
+                           Text("이용약관")
+                               .captionRegular12()
+                               .foregroundStyle(.white)
+                               .underline()
+                               .padding(.leading, 12)
+                       }
+                       .padding(.leading, 50)
+                       .padding(.top,12)
                    }
                    .padding(.horizontal, 20)
-                   .padding(.bottom, 30)
+                   .padding(.top,12.adjustedH)
                }
                
+               Rectangle()
+                   .frame(height: 60.adjustedH)
+                   .foregroundStyle(.clear)
+
            }
+           .background(
+               Image("onboarding_ios")
+                   .resizable()
+                   .scaledToFill()
+                   .ignoresSafeArea()
+           )
            .navigationDestination(isPresented: $showProfileSetting) {
                ProfileSettingView()
-           }
-           .alert("로그인 실패", isPresented: $loginViewModel.showError) {
-               Button("확인") { }
-           } message: {
-               Text(loginViewModel.errorMessage ?? "알수 없는 에러가 발생했습니다.")
            }
        }
        .sheet(isPresented: $appStateManager.showSignUpSheet) {
@@ -95,7 +122,7 @@ struct LoginView: View {
                    showProfileSetting = true
                }
            )
-           .presentationDetents([.medium])
+           .presentationDetents([.height(439.adjustedH)])
            .presentationDragIndicator(.visible)
        }
    }

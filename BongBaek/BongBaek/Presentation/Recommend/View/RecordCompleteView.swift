@@ -72,7 +72,3 @@ struct RecordCompleteView: View {
 
     }
 }
-
-#Preview {
-    RecordCompleteView()
-}

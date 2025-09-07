@@ -49,7 +49,6 @@ struct RecommendView: View {
             CustomNavigationBar(title: "관계정보") {
                 dismiss()
             }
-            .padding(.top, 40)
             
             StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                 .padding(.horizontal, 20)
@@ -103,10 +102,13 @@ struct RecommendView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.background)
-        .ignoresSafeArea()
         .onAppear {
-            stepManager.currentStep = 1
-            print("👤 RecommendView 나타남 - path.count: \(router.path.count)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                withAnimation(.easeInOut(duration: 0.8)) {
+                    stepManager.currentStep = 1
+                }
+            }
+            print("RecommendView 나타남 - path.count: \(router.path.count)")
         }
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
@@ -189,7 +191,7 @@ struct RecommendView: View {
                 ) {
                     // EventCreationManager의 relationship에 직접 할당
                     eventManager.relationship = relationship.1
-                    print("🔗 관계 선택: \(relationship.1)")
+                    print("관계 선택: \(relationship.1)")
                 }
             }
         }
@@ -232,7 +234,7 @@ struct RecommendView: View {
     
     private func handleFormSubmission() {
         guard isNextButtonEnabled else {
-            print("⚠️ UI 검증 실패")
+            print("UI 검증 실패")
             return
         }
         
@@ -241,26 +243,26 @@ struct RecommendView: View {
         
         // 다음 화면으로 이동
         if eventManager.canCompleteRecommendStep {
-            print("✅ RecommendView: 폼 제출 성공, 다음 화면으로 이동")
+            print("RecommendView: 폼 제출 성공, 다음 화면으로 이동")
             router.push(to: .eventInformationView)
         } else {
-            print("❌ RecommendView: EventCreationManager 이중 검증 실패")
+            print("RecommendView: EventCreationManager 이중 검증 실패")
         }
     }
     
     private func printCurrentSelections() {
-        print("📋 RecommendView 현재 선택된 값들:")
-        print("  🏷️  이름: '\(eventManager.hostName)'")
-        print("  🏷️  별명: '\(eventManager.hostNickname)'")
-        print("  🤝 관계: '\(eventManager.relationship)'")
-        print("  🔍 상세 선택: \(eventManager.detailSelected)")
+        print("RecommendView 현재 선택된 값들:")
+        print("이름: '\(eventManager.hostName)'")
+        print("별명: '\(eventManager.hostNickname)'")
+        print("관계: '\(eventManager.relationship)'")
+        print("상세 선택: \(eventManager.detailSelected)")
         
         if eventManager.detailSelected {
-            print("  📞 연락 빈도: \(eventManager.contactFrequency) (0=거의안함, 4=매우자주)")
-            print("  🤝 만나는 빈도: \(eventManager.meetFrequency) (0=거의안함, 4=매우자주)")
+            print("연락 빈도: \(eventManager.contactFrequency) (0=거의안함, 4=매우자주)")
+            print("만나는 빈도: \(eventManager.meetFrequency) (0=거의안함, 4=매우자주)")
         }
         
-        print("  ✅ 다음 단계 진행 가능: \(eventManager.canCompleteRecommendStep)")
+        print("음 단계 진행 가능: \(eventManager.canCompleteRecommendStep)")
         print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
 }

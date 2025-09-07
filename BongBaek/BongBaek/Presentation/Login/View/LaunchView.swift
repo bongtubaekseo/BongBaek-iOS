@@ -19,7 +19,3 @@ struct LaunchView: View {
         .ignoresSafeArea(.all)
     }
 }
-
-#Preview {
-    LaunchView()
-}

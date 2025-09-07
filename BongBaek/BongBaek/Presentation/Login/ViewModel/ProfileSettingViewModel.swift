@@ -77,7 +77,7 @@ class ProfileSettingViewModel: ObservableObject {
     
     private func handleSignUpError(_ error: String?) {
             if let error = error {
-                print("📱 회원가입 에러 수신: \(error)")
+                print("회원가입 에러 수신: \(error)")
                 isSigningUp = false
                 errorMessage = error
                 showErrorAlert = true
@@ -102,9 +102,6 @@ class ProfileSettingViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Initialization
-
-    
     // MARK: - Public Methods
     func selectIncome(_ selection: IncomeSelection) {
         currentSelection = selection
@@ -124,8 +121,6 @@ class ProfileSettingViewModel: ObservableObject {
         
         let memberInfo = createMemberInfo()
         authManager.signUp(memberInfo: memberInfo)
-        
-       
     }
     
     func dismissError() {
@@ -134,7 +129,6 @@ class ProfileSettingViewModel: ObservableObject {
     }
     
     // MARK: - Private Methods
-    
     
     private func handleAuthStateChange(_ authState: AuthManager.AuthState) {
             switch authState {
@@ -162,13 +156,68 @@ class ProfileSettingViewModel: ObservableObject {
         }
     
     private func convertDateFormat(_ dateString: String) -> String {
-           let converted = dateString.replacingOccurrences(of: ".", with: "-")
-           print("날짜 형식 변환: \(dateString) → \(converted)")
-           return converted
-       }
+        if dateString.contains("년") {
+            let components = dateString.components(separatedBy: CharacterSet.decimalDigits.inverted)
+            let numbers = components.filter { !$0.isEmpty }
+            
+            if numbers.count >= 3 {
+                let year = numbers[0]
+                let month = String(format: "%02d", Int(numbers[1]) ?? 0)
+                let day = String(format: "%02d", Int(numbers[2]) ?? 0)
+                let converted = "\(year)-\(month)-\(day)"
+                print("날짜 형식 변환: \(dateString) → \(converted)")
+                return converted
+            }
+        }
+
+        let converted = dateString.replacingOccurrences(of: ".", with: "-")
+        print("날짜 형식 변환: \(dateString) → \(converted)")
+        return converted
+    }
     
     private func createMemberInfo() -> MemberInfo {
-        let kakaoId = getCurrentKakaoId()
+        let incomeValue: String
+        if hasIncome {
+            incomeValue = currentSelection.apiValue
+        } else {
+            incomeValue = "없음"
+        }
+        
+        let formattedBirthday = convertDateFormat(selectedDate)
+        
+        switch authManager.loginType {
+        case .kakao:
+            return MemberInfo(
+                kakaoId: authManager.currentKakaoId,
+                appleId: nil,
+                memberName: nickname,
+                memberBirthday: formattedBirthday,
+                memberIncome: incomeValue
+            )
+            
+        case .apple:
+            return MemberInfo(
+                kakaoId: nil,
+                appleId: authManager.currentAppleId,
+                memberName: nickname,
+                memberBirthday: formattedBirthday,
+                memberIncome: incomeValue
+            )
+            
+        case .none:
+            print("로그인 타입이 설정되지 않았습니다")
+            return MemberInfo(
+                kakaoId: nil,
+                appleId: nil,
+                memberName: nickname,
+                memberBirthday: formattedBirthday,
+                memberIncome: incomeValue
+            )
+        }
+    }
+    
+    private func createAppleMemberInfo() -> MemberInfo {
+        let apple = getCurrentAppleId()
         
         let incomeValue: String
         if hasIncome {
@@ -178,8 +227,8 @@ class ProfileSettingViewModel: ObservableObject {
         }
         let formattedBirthday = convertDateFormat(selectedDate)
         return MemberInfo(
-            kakaoId: Int(kakaoId) ?? 0,
-            appleId: nil,
+            kakaoId: nil,
+            appleId: apple,
             memberName: nickname,
             memberBirthday: formattedBirthday,
             memberIncome: incomeValue
@@ -189,6 +238,11 @@ class ProfileSettingViewModel: ObservableObject {
     private func getCurrentKakaoId() -> String {
         // AuthManager에서 현재 로그인된 사용자의 kakaoId 가져오기
         return authManager.getCurrentKakaoId()
+    }
+    
+    private func getCurrentAppleId() -> String {
+        // AuthManager에서 현재 로그인된 사용자의 AppleId 가져오기
+        return authManager.getCurrentAppleId()
     }
 }
 

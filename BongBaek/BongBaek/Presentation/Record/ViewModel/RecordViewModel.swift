@@ -8,6 +8,15 @@
 import SwiftUI
 import Combine
 
+enum Category: String, CaseIterable {
+    case all = "전체"
+    case wedding = "결혼식"
+    case babyParty = "돌잔치"
+    case birthday = "생일"
+    case funeral = "장례식"
+    
+}
+
 @MainActor
 class RecordViewModel: ObservableObject {
     
@@ -53,6 +62,40 @@ class RecordViewModel: ObservableObject {
         }
     }
     
+    var currentEventsGrouped: [String: [String: [AttendedEvent]]] {
+         let events = currentEvents
+         
+         let grouped = Dictionary(grouping: events) { event in
+             // eventDate: "2025-01-18" → "2025/01"
+             let dateComponents = event.eventInfo.eventDate.split(separator: "-")
+             let year = dateComponents.count > 0 ? String(dateComponents[0]) : "기타"
+             let month = dateComponents.count > 1 ? String(dateComponents[1]) : "기타"
+             return "\(year)/\(month)"
+         }
+         
+         return grouped.reduce(into: [String: [String: [AttendedEvent]]]()) { result, pair in
+             let parts = pair.key.split(separator: "/")
+             guard parts.count == 2 else { return }
+             let year = String(parts[0])
+             let month = String(parts[1])
+             result[year, default: [:]][month, default: []] += pair.value
+         }
+     }
+    
+    var sortedYears: [String] {
+        currentEventsGrouped.keys.sorted(by: <)
+    }
+    
+    func monthsForYear(_ year: String) -> [String: [AttendedEvent]] {
+        return currentEventsGrouped[year] ?? [:]
+    }
+    
+    /// 특정 년도의 정렬된 월 목록
+    func sortedMonthsForYear(_ year: String) -> [String] {
+        let months = currentEventsGrouped[year] ?? [:]
+        return months.keys.sorted()
+    }
+    
     /// 현재 섹션이 비어있는지 확인
     var isCurrentSectionEmpty: Bool {
         currentEvents.isEmpty
@@ -68,11 +111,38 @@ class RecordViewModel: ObservableObject {
     var emptyMessage: String {
         switch selectedSection {
         case .attended:
-            return "참석한 경조사가 없습니다"
+            switch selectedCategory {
+            case .babyParty:
+                return "참석한 돌잔치가 없습니다"
+            case .wedding:
+                return "참석한 결혼식이 없습니다"
+            case .birthday:
+                return "참석한 생일이 없습니다"
+            case .funeral:
+                return "참석한 장례식이 없습니다"
+            case .all:
+                return "참석한 경조사가 없습니다"
+            default:
+                return "참석한 경조사가 없습니다"
+            }
         case .notAttended:
-            return "불참한 경조사가 없습니다"
+            switch selectedCategory {
+            case .babyParty:
+                return "불참한 돌잔치가 없습니다"
+            case .wedding:
+                return "불참한 결혼식이 없습니다"
+            case .birthday:
+                return "불참한 생일이 없습니다"
+            case .funeral:
+                return "불참한 장례식이 없습니다"
+            case .all:
+                return "불참한 경조사가 없습니다"
+            default:
+                return "불참한 경조사가 없습니다"
+            }
         }
     }
+    
     
     init() {
         self.eventService = DIContainer.shared.eventService
@@ -131,12 +201,12 @@ class RecordViewModel: ObservableObject {
                 do {
                     let response = try await eventService.deleteEvent(eventId: eventId).async()
                     if response.isSuccess {
-                        print("✅ 이벤트 삭제 성공: \(eventId)")
+                        print("이벤트 삭제 성공: \(eventId)")
                     } else {
-                        print("❌ 이벤트 삭제 실패: \(eventId) - \(response.message)")
+                        print("이벤트 삭제 실패: \(eventId) - \(response.message)")
                     }
                 } catch {
-                    print("❌ 이벤트 삭제 에러: \(eventId) - \(error)")
+                    print("이벤트 삭제 에러: \(eventId) - \(error)")
                 }
             }
             
@@ -145,7 +215,7 @@ class RecordViewModel: ObservableObject {
             isDeleteMode = false
             await loadAllRecords()
             
-            print("✅ 선택된 기록들이 삭제되었습니다")
+            print("선택된 기록들이 삭제되었습니다")
         }
     }
     
@@ -262,7 +332,7 @@ class RecordViewModel: ObservableObject {
         do {
             let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
             
-            print("📡 불참 이벤트 로드 - 페이지: \(notAttendedCurrentPage), 카테고리: \(categoryParam ?? "전체")")
+            print("불참 이벤트 로드 - 페이지: \(notAttendedCurrentPage), 카테고리: \(categoryParam ?? "전체")")
             
             let response = try await eventService.getAttendedEvents(
                 page: notAttendedCurrentPage,

@@ -19,6 +19,7 @@
 		2C5D73512E2150320042F76E /* KakaoSDKTalk in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5D73502E2150320042F76E /* KakaoSDKTalk */; };
 		2C5D73532E2150320042F76E /* KakaoSDKTemplate in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5D73522E2150320042F76E /* KakaoSDKTemplate */; };
 		2C5D73552E2150320042F76E /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5D73542E2150320042F76E /* KakaoSDKUser */; };
+		469F3E402E6AC9980006A144 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 469F3E3F2E6AC9980006A144 /* FirebaseRemoteConfig */; };
 		46A237DA2E1CFFBF00CC2E90 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 46A237D92E1CFFBF00CC2E90 /* Lottie */; };
 		46C6943B2E1F712300FD6255 /* KakaoMapsSDK-SPM in Frameworks */ = {isa = PBXBuildFile; productRef = 46C6943A2E1F712300FD6255 /* KakaoMapsSDK-SPM */; };
 		46C6943E2E1F712E00FD6255 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 46C6943D2E1F712E00FD6255 /* CombineMoya */; };
@@ -88,6 +89,7 @@
 				2C5D73512E2150320042F76E /* KakaoSDKTalk in Frameworks */,
 				46A237DA2E1CFFBF00CC2E90 /* Lottie in Frameworks */,
 				2C5D733F2E2150320042F76E /* KakaoSDK in Frameworks */,
+				469F3E402E6AC9980006A144 /* FirebaseRemoteConfig in Frameworks */,
 				2C5D73552E2150320042F76E /* KakaoSDKUser in Frameworks */,
 				2C5D734D2E2150320042F76E /* KakaoSDKNavi in Frameworks */,
 				2C5D73532E2150320042F76E /* KakaoSDKTemplate in Frameworks */,
@@ -176,6 +178,7 @@
 				2C5D73502E2150320042F76E /* KakaoSDKTalk */,
 				2C5D73522E2150320042F76E /* KakaoSDKTemplate */,
 				2C5D73542E2150320042F76E /* KakaoSDKUser */,
+				469F3E3F2E6AC9980006A144 /* FirebaseRemoteConfig */,
 			);
 			productName = BongBaek;
 			productReference = 46C48B5D2E1019DF008C1C90 /* BongBaek.app */;
@@ -264,6 +267,7 @@
 				46C694392E1F712300FD6255 /* XCRemoteSwiftPackageReference "KakaoMapsSDK-SPM" */,
 				46C6943C2E1F712E00FD6255 /* XCRemoteSwiftPackageReference "Moya" */,
 				2C5D733D2E2150320042F76E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				469F3E3E2E6AC9980006A144 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 46C48B5E2E1019DF008C1C90 /* Products */;
@@ -473,7 +477,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7K76RWRQBL;
 				ENABLE_PREVIEWS = YES;
@@ -493,7 +497,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = JaeHyeonLim9298.BongBaek;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = JaeHyeonLim9298_BongBaek_AppStore;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "JaeHyeonLim9298.BongBaek AppStore 1757219903";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -509,7 +513,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 7K76RWRQBL;
 				ENABLE_PREVIEWS = YES;
@@ -529,7 +533,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = JaeHyeonLim9298.BongBaek;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = JaeHyeonLim9298_BongBaek_AppStore;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "JaeHyeonLim9298.BongBaek AppStore 1757219903";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -541,7 +545,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
@@ -560,7 +564,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
@@ -578,7 +582,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -595,7 +599,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 7K76RWRQBL;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -656,6 +660,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.24.5;
+			};
+		};
+		469F3E3E2E6AC9980006A144 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.2.0;
 			};
 		};
 		46A237D82E1CFFBF00CC2E90 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
@@ -744,6 +756,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2C5D733D2E2150320042F76E /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
 			productName = KakaoSDKUser;
+		};
+		469F3E3F2E6AC9980006A144 /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 469F3E3E2E6AC9980006A144 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
 		};
 		46A237D92E1CFFBF00CC2E90 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
