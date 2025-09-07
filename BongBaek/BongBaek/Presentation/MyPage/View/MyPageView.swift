@@ -70,7 +70,7 @@ struct MyPageView: View {
                                 .foregroundStyle(.gray100)
                             
                             Button(action: {
-                                router.push(to: .ModifyView)
+                                router.push(to: .ModifyView(profileData: mypageViewModel.profileData))
                             }) {
                                 Text("내 정보 수정")
                                     .captionRegular12()

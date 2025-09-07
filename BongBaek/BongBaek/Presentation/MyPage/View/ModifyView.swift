@@ -16,6 +16,12 @@ struct ModifyView: View {
     @EnvironmentObject var router: NavigationRouter
     @StateObject private var stepManager = GlobalStepManager()
     
+    let initialProfileData: UpdateProfileData?
+    
+    init(initialProfileData: UpdateProfileData? = nil) {
+        self.initialProfileData = initialProfileData
+    }
+    
     enum FocusField {
         case nickname
     }
@@ -48,6 +54,9 @@ struct ModifyView: View {
             .onTapGesture {
                 hideKeyboard()
             }
+        }
+        .onAppear {
+            setupInitialValues()
         }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -218,5 +227,37 @@ struct ModifyView: View {
                 .tint(.white)
                 .scaleEffect(0.8) : nil
         )
+    }
+    
+    private func setupInitialValues() {
+        guard let profileData = initialProfileData else { return }
+        
+        viewModel.nickname = profileData.memberName
+        viewModel.selectedDate = formatBirthdayForInput(profileData.memberBirthday)
+        setupIncomeData(profileData.memberIncome)
+        
+        print("초기값 설정 완료: \(profileData)")
+    }
+    
+    private func formatBirthdayForInput(_ birthday: String) -> String {
+        // "2011-09-06" → "2011.09.06"
+        return birthday.replacingOccurrences(of: "-", with: ".")
+    }
+    
+    private func setupIncomeData(_ income: String) {
+        switch income {
+        case "NONE":
+            viewModel.hasIncome = false
+            viewModel.currentSelection = .none
+        case "200만원 미만":
+            viewModel.hasIncome = true
+            viewModel.currentSelection = .under200
+        case "200만원 이상":
+            viewModel.hasIncome = true
+            viewModel.currentSelection = .over200
+        default:
+            viewModel.hasIncome = false
+            viewModel.currentSelection = .none
+        }
     }
 }
