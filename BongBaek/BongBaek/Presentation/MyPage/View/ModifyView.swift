@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ModifyView: View {
-    @StateObject private var viewModel = ProfileSettingViewModel()
+    @StateObject private var viewModel = ModifyViewModel()
     @State private var showDatePicker = false
     @FocusState private var focusedField: FocusField?
     //@Environment(\.dismiss) private var dismiss
@@ -171,7 +171,7 @@ struct ModifyView: View {
         .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
     }
     
-    private func incomeButton(for selection: ProfileSettingViewModel.IncomeSelection) -> some View {
+    private func incomeButton(for selection: ModifyViewModel.IncomeSelection) -> some View {
         Button {
             viewModel.selectIncome(selection)
             focusedField = nil
@@ -211,7 +211,7 @@ struct ModifyView: View {
     private var startButton: some View {
         Button("수정하기") {
             viewModel.logCurrentSelection()
-            viewModel.performSignUp()
+            viewModel.performProfileUpdate()
         }
         .frame(maxWidth: .infinity)
         .padding()
