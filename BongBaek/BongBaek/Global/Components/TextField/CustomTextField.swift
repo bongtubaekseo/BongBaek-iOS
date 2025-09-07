@@ -167,12 +167,14 @@ struct CustomTextField: View {
             }
         }
         .onChange(of: text) { _, newValue in
-            // 읽기 전용이 아니고, 숫자 포맷팅이 필요한 경우
             if !isReadOnly && (keyboardType == .numberPad || keyboardType == .decimalPad) {
                 displayText = formatNumber(newValue)
             } else {
-                // 일반 텍스트나 읽기 전용인 경우 (날짜 선택 등)
-                displayText = newValue
+                if isReadOnly && newValue.contains(".") {
+                    displayText = formatDate(newValue)
+                } else {
+                    displayText = newValue
+                }
             }
             validateInput(newValue)
         }
@@ -193,6 +195,22 @@ struct CustomTextField: View {
         }
         
         return numbersOnly
+    }
+    
+    private func formatDate(_ input: String) -> String {
+        if input.contains(".") {
+            let components = input.split(separator: ".")
+            
+            guard components.count == 3 else { return input }
+            
+            let year = String(components[0])
+            let month = String(components[1])
+            let day = String(components[2])
+            
+            return "\(year)년 \(month)월 \(day)일"
+        }
+        
+        return input
     }
     
     // 텍스트 변경 처리

@@ -25,6 +25,7 @@ struct MyPageView: View {
     @StateObject private var stepManager = GlobalStepManager()
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var router: NavigationRouter
+    @StateObject private var mypageViewModel = MyPageViewModel()
     
     private let serviceItems: [ServiceItem] = [
         ServiceItem(icon: "icon_intersect", title: "앱 버전", subtitle: "v 1.0.0", showChevron: false),
@@ -64,12 +65,12 @@ struct MyPageView: View {
                                 .frame(width: 110, height: 110)
                                 .padding(.top, 40)
                             
-                            Text("봉투백서의겸손한야수")
+                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서의겸손한야수")
                                 .headBold24()
                                 .foregroundStyle(.gray100)
                             
                             Button(action: {
-                                router.push(to: .ModifyView)
+                                router.push(to: .ModifyView(profileData: mypageViewModel.profileData))
                             }) {
                                 Text("내 정보 수정")
                                     .captionRegular12()
@@ -94,10 +95,10 @@ struct MyPageView: View {
                             Spacer()
                             
                             VStack(alignment: .trailing, spacing: 20) {
-                                Text("2000년 01월 05일")
+                                Text(formatBirthday(mypageViewModel.profileData?.memberBirthday) ?? "2000년 01월 05일")
                                     .bodyMedium14()
                                     .foregroundStyle(.gray100)
-                                Text("없음")
+                                Text(formatIncome(mypageViewModel.profileData?.memberIncome) ?? "없음")
                                     .bodyMedium14()
                                     .foregroundStyle(.gray100)
                             }
@@ -159,7 +160,31 @@ struct MyPageView: View {
                 }
             }
         }
+        .onAppear {
+            print("MyPageView 나타남 - 데이터 로드 시작")
+            mypageViewModel.loadprofile()
+        }
         .navigationBarHidden(true)
+    }
+    
+    private func formatBirthday(_ birthday: String?) -> String? {
+        guard let birthday = birthday else { return nil }
+        // "2011-09-06" → "2011년 09월 06일"
+        let components = birthday.split(separator: "-")
+        if components.count == 3 {
+            return "\(components[0])년 \(components[1])월 \(components[2])일"
+        }
+        return birthday
+    }
+
+    private func formatIncome(_ income: String?) -> String? {
+        guard let income = income else { return nil }
+        switch income {
+        case "NONE": return "없음"
+        case "UNDER200": return "200만원 미만"
+        case "OVER200": return "200만원 이상"
+        default: return income
+        }
     }
 }
 

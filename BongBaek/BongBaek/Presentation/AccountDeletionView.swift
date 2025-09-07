@@ -267,4 +267,3 @@ struct DeletionReasonButton: View {
         }
     }
 }
-

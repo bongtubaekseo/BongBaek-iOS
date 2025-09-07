@@ -264,10 +264,10 @@ struct RecordContentView: View {
             } else if viewModel.isCurrentSectionEmpty {
                 RecordsEmptyView(message: viewModel.emptyMessage)
             } else {
-                // 🆕 년도/월별 그루핑 표시
+                //년도/월별 그루핑 표시
                 eventContentView
                 
-                // 🆕 추가 로딩 인디케이터
+                //추가 로딩 인디케이터
                 if viewModel.isLoadingMore {
                     HStack(spacing: 12) {
                         ProgressView()

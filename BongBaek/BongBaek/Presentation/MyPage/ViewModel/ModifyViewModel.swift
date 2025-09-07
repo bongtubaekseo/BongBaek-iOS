@@ -1,16 +1,16 @@
 //
-//  ProfileSettingViewModel.swift
+//  ModifyViewModel.swift
 //  BongBaek
 //
-//  Created by 임재현 on 7/14/25.
+//  Created by hyunwoo on 9/5/25.
 //
 
+import SwiftUI
 import Foundation
 import Combine
-import SwiftUI
 
 @MainActor
-class ProfileSettingViewModel: ObservableObject {
+class ModifyViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var nickname: String = ""
     @Published var selectedDate: String = ""
@@ -25,12 +25,14 @@ class ProfileSettingViewModel: ObservableObject {
     
     // MARK: - Private Properties
     private let authManager = AuthManager.shared
+    let myPageManager = MyPageManager.shared
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-          setupAuthStateObserver()
-          setupSignUpErrorObserver()  // 에러 관찰 추가
-      }
+        setupAuthStateObserver()
+        setupSignUpErrorObserver()
+        setupProfileUpdateObserver()
+    }
     
     // MARK: - Enums
     enum IncomeSelection: Equatable {
@@ -75,6 +77,34 @@ class ProfileSettingViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    private func setupProfileUpdateObserver() {
+        myPageManager.$isLoadingProfile
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] loading in
+                self?.isSigningUp = loading
+            }
+            .store(in: &cancellables)
+        
+        myPageManager.$profileError
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] error in
+                if let error = error {
+                    self?.isSigningUp = false
+                    self?.errorMessage = error
+                    self?.showErrorAlert = true
+                }
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .profileUpdateSuccess)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.isSigningUp = false
+                print("프로필 업데이트 성공!")
+            }
+            .store(in: &cancellables)
+    }
+    
     private func handleSignUpError(_ error: String?) {
             if let error = error {
                 print("회원가입 에러 수신: \(error)")
@@ -102,6 +132,9 @@ class ProfileSettingViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Initialization
+
+    
     // MARK: - Public Methods
     func selectIncome(_ selection: IncomeSelection) {
         currentSelection = selection
@@ -114,13 +147,30 @@ class ProfileSettingViewModel: ObservableObject {
         }
     }
     
-    func performSignUp() {
+    func performProfileUpdate() {
         guard isStartButtonEnabled else { return }
         
         isSigningUp = true
         
-        let memberInfo = createMemberInfo()
-        authManager.signUp(memberInfo: memberInfo)
+        let updateData = createUpdateProfileData()
+        myPageManager.updateProfile(updateData: updateData)
+    }
+    
+    private func createUpdateProfileData() -> UpdateProfileData {
+        let incomeValue: String
+        if hasIncome {
+            incomeValue = currentSelection.apiValue
+        } else {
+            incomeValue = "없음"
+        }
+        
+        let formattedBirthday = convertDateFormat(selectedDate)
+        
+        return UpdateProfileData(
+            memberName: nickname,
+            memberBirthday: formattedBirthday,
+            memberIncome: incomeValue
+        )
     }
     
     func dismissError() {
@@ -129,6 +179,7 @@ class ProfileSettingViewModel: ObservableObject {
     }
     
     // MARK: - Private Methods
+    
     
     private func handleAuthStateChange(_ authState: AuthManager.AuthState) {
             switch authState {
@@ -246,7 +297,7 @@ class ProfileSettingViewModel: ObservableObject {
     }
 }
 
-extension ProfileSettingViewModel {
+extension ModifyViewModel {
     func isSelected(_ selection: IncomeSelection) -> Bool {
         return currentSelection == selection
     }

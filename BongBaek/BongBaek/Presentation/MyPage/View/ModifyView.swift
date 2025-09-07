@@ -6,15 +6,23 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ModifyView: View {
-    @StateObject private var viewModel = ProfileSettingViewModel()
+    @StateObject private var viewModel = ModifyViewModel()
+    @State private var cancellables = Set<AnyCancellable>()
     @State private var showDatePicker = false
     @FocusState private var focusedField: FocusField?
     //@Environment(\.dismiss) private var dismiss
     @State private var previousFocusedField: FocusField? = nil
     @EnvironmentObject var router: NavigationRouter
     @StateObject private var stepManager = GlobalStepManager()
+    
+    let initialProfileData: UpdateProfileData?
+    
+    init(initialProfileData: UpdateProfileData? = nil) {
+        self.initialProfileData = initialProfileData
+    }
     
     enum FocusField {
         case nickname
@@ -48,6 +56,19 @@ struct ModifyView: View {
             .onTapGesture {
                 hideKeyboard()
             }
+        }
+        .onAppear {
+            setupInitialValues()
+            NotificationCenter.default.publisher(for: .profileUpdateSuccess)
+                  .receive(on: DispatchQueue.main)
+                  .sink { _ in
+                      print("프로필 업데이트 성공! 이전 화면으로 이동")
+                      
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                          router.pop()
+                      }
+                  }
+                  .store(in: &cancellables)
         }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -162,7 +183,7 @@ struct ModifyView: View {
         .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
     }
     
-    private func incomeButton(for selection: ProfileSettingViewModel.IncomeSelection) -> some View {
+    private func incomeButton(for selection: ModifyViewModel.IncomeSelection) -> some View {
         Button {
             viewModel.selectIncome(selection)
             focusedField = nil
@@ -202,7 +223,7 @@ struct ModifyView: View {
     private var startButton: some View {
         Button("수정하기") {
             viewModel.logCurrentSelection()
-            viewModel.performSignUp()
+            viewModel.performProfileUpdate()
         }
         .frame(maxWidth: .infinity)
         .padding()
@@ -218,5 +239,37 @@ struct ModifyView: View {
                 .tint(.white)
                 .scaleEffect(0.8) : nil
         )
+    }
+    
+    private func setupInitialValues() {
+        guard let profileData = initialProfileData else { return }
+        
+        viewModel.nickname = profileData.memberName
+        viewModel.selectedDate = formatBirthdayForInput(profileData.memberBirthday)
+        setupIncomeData(profileData.memberIncome)
+        
+        print("초기값 설정 완료: \(profileData)")
+    }
+    
+    private func formatBirthdayForInput(_ birthday: String) -> String {
+        // "2011-09-06" → "2011.09.06"
+        return birthday.replacingOccurrences(of: "-", with: ".")
+    }
+    
+    private func setupIncomeData(_ income: String) {
+        switch income {
+        case "NONE":
+            viewModel.hasIncome = false
+            viewModel.currentSelection = .none
+        case "UNDER200":
+            viewModel.hasIncome = true
+            viewModel.currentSelection = .under200
+        case "OVER200":
+            viewModel.hasIncome = true
+            viewModel.currentSelection = .over200
+        default:
+            viewModel.hasIncome = false
+            viewModel.currentSelection = .none
+        }
     }
 }

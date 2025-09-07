@@ -409,7 +409,3 @@ struct DatePickerBottomSheet: View {
         .presentationDragIndicator(.visible)
     }
 }
-
-#Preview {
-    EventDateView()
-}

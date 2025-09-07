@@ -29,7 +29,7 @@ class HomeViewModel: ObservableObject {
     
     /// 홈 데이터 로드 (
     func loadData(forceRefresh: Bool = false) {
-        print("📱 HomeViewModel: 데이터 로드 시작 (Combine)")
+        print("HomeViewModel: 데이터 로드 시작 (Combine)")
         eventManager.loadHomeData(forceRefresh: forceRefresh)
     }
 

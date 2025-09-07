@@ -26,6 +26,7 @@ struct ScheduleAlarmView: View {
         VStack(spacing: 0) {
             if sortedEvents.isEmpty {
                 EmptyScheduleView()
+                    .padding(.horizontal, 20)
             } else {
                 GeometryReader { geometry in
                     ScrollView(.horizontal, showsIndicators: false) {

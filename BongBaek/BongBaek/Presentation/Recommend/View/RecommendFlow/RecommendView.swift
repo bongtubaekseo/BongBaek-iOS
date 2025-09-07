@@ -103,7 +103,11 @@ struct RecommendView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.background)
         .onAppear {
-            stepManager.currentStep = 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                withAnimation(.easeInOut(duration: 0.8)) {
+                    stepManager.currentStep = 1
+                }
+            }
             print("RecommendView 나타남 - path.count: \(router.path.count)")
         }
         .toolbar(.hidden, for: .navigationBar)

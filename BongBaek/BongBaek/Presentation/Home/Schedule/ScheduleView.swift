@@ -45,7 +45,6 @@ struct ScheduleView: View {
                 ForEach(sortedEvents, id: \.eventId) { event in
                     ScheduleCellView(event: event)
                 }
-                
             }
         }
         .padding(.horizontal)

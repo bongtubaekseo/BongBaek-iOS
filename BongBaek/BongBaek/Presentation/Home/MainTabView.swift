@@ -175,8 +175,8 @@ struct MainTabView: View {
             MyPageView()
                 .environmentObject(router)
                 .environmentObject(eventManager)
-        case .ModifyView:
-            ModifyView()
+        case .ModifyView(let profileData):
+            ModifyView(initialProfileData: profileData)
                 .environmentObject(router)
                 .environmentObject(eventManager)
         }

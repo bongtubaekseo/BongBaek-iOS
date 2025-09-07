@@ -6,7 +6,7 @@
 //
 
 //MARK: - 회원정보 수정하기
-struct UpdateProfileData: Codable {
+struct UpdateProfileData: Codable,Hashable {
     let memberName: String
     let memberBirthday: String
     let memberIncome: String

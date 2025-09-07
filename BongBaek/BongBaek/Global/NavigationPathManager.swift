@@ -27,7 +27,7 @@ enum RecommendRoute: Hashable {
     case accountDeletionView
     case accountDeletionConfirmView
     case MyPageView
-    case ModifyView
+    case ModifyView(profileData: UpdateProfileData?)
     
     var displayName: String {
         switch self {

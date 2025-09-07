@@ -65,7 +65,11 @@ struct EventLocationView: View {
                 .padding(.top, 20)
             }
             .onAppear {
-                stepManager.currentStep = 4
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    withAnimation(.easeInOut(duration: 0.8)) {
+                        stepManager.currentStep = 4
+                    }
+                }
                 print("EventLocationView 나타남 - step: 4/4")
                 print("path.count: \(router.path.count)")
             }

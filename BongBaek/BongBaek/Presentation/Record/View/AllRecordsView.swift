@@ -401,7 +401,7 @@ struct AllRecordsView: View {
     
     // MARK: - Actions
     private func deleteEvent() {
-        print("🗑️ 삭제 버튼 클릭 - eventId: \(eventId)")
+        print("삭제 버튼 클릭 - eventId: \(eventId)")
         
         Task {
             let success = await viewModel.deleteEvent(eventId: eventId)

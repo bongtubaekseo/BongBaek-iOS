@@ -31,7 +31,6 @@ struct HomeView: View {
                 }
                 .padding(.top, 30)
 
-                
                 if homeViewModel.hasData {
                     ScheduleAlarmView(homeData: $homeViewModel.homeData)
                         .frame(height: 276)
@@ -47,18 +46,11 @@ struct HomeView: View {
                 } else {
                     // 데이터가 없거나 에러일 때 더미 데이터 또는 빈 뷰
                     ScheduleAlarmView(homeData: .constant(nil))
+                        .padding(.horizontal, 20)
                         .frame(height: 276)
                         .padding(.top, 30)
                 }
-            
-//                Button("로그아웃 테스트") {
-//                    AuthManager.shared.logout()
-//                    KeychainManager.shared.printTokenStatus()
-                    
-//                    router.push(to: .accountDeletionView)
-//                }
-//                .foregroundColor(.red)
-
+        
                 if homeViewModel.hasData {
                     RecommendsView(homeData: homeViewModel.homeData)
                             .environmentObject(stepManager)
