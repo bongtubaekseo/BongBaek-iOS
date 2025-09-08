@@ -81,6 +81,7 @@ struct ProfileSettingView: View {
                 icon: "icon_person_16",
                 placeholder: "이름을 입력해주세요",
                 text: $viewModel.nickname,
+                isValid: $viewModel.isNicknameValid,
                 validationRule: ValidationRule(
                     minLength: 2,
                     maxLength: 10,

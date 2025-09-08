@@ -16,7 +16,9 @@ struct CustomTextField: View {
     let validationRule: ValidationRule?
     let isSecure: Bool
     let isRequired: Bool
-    let keyboardType: UIKeyboardType 
+    let keyboardType: UIKeyboardType
+    
+    @Binding var isValid: Bool
     
     @State private var validationState: ValidationState = .normal
     @State private var validationMessage: String = ""
@@ -32,6 +34,7 @@ struct CustomTextField: View {
          icon: String,
          placeholder: String,
          text: Binding<String>,
+         isValid: Binding<Bool> = .constant(true),
          validationRule: ValidationRule? = nil,
          isSecure: Bool = false,
          isReadOnly: Bool = false,
@@ -48,6 +51,7 @@ struct CustomTextField: View {
         self.isRequired = isRequired
         self.keyboardType = keyboardType
         self.onTap = onTap
+        self._isValid = isValid
     }
     
     var body: some View {
@@ -249,6 +253,8 @@ struct CustomTextField: View {
     
     private func validateInput(_ input: String) {
         guard let rule = validationRule else {
+            isValid = !input.isEmpty
+            
             if isFocused {
                 validationState = .focused
             } else {
@@ -260,12 +266,14 @@ struct CustomTextField: View {
         
         withAnimation(.easeInOut(duration: 0.2)) {
             if input.isEmpty {
+                isValid = false
                 validationState = isFocused ? .focused : .normal
                 validationMessage = ""
             } else {
                 if let regex = rule.regex {
                     let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
                     if !predicate.evaluate(with: input) {
+                        isValid = false
                         validationState = .invalid
                         validationMessage = rule.customMessage ?? "특수문자는 기입할 수 없어요"
                         return
@@ -273,6 +281,7 @@ struct CustomTextField: View {
                 }
                 
                 let validation = rule.validate(input)
+                isValid = validation.isValid
                 
                 if validation.isValid {
                     validationState = isFocused ? .valid : .completed

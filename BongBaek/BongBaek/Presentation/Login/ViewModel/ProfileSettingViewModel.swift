@@ -22,6 +22,7 @@ class ProfileSettingViewModel: ObservableObject {
     @Published var showErrorAlert: Bool = false
     @Published var errorMessage: String = ""
     @Published var navigateToMain: Bool = false
+    @Published var isNicknameValid: Bool = false
     
     // MARK: - Private Properties
     private let authManager = AuthManager.shared
@@ -40,7 +41,7 @@ class ProfileSettingViewModel: ObservableObject {
         
         var displayText: String {
             switch self {
-            case .under200: return "200만원 미만"
+            case .under200: return "월 200만원 미만"
             case .over200: return "월 200만원 이상"
             case .none: return ""
             }
@@ -91,8 +92,7 @@ class ProfileSettingViewModel: ObservableObject {
     
     
     var isStartButtonEnabled: Bool {
-        let basicFieldsValid = nickname.count >= 2 &&
-                              nickname.count <= 10 &&
+        let basicFieldsValid = isNicknameValid && 
                               !selectedDate.isEmpty
         
         if hasIncome {
