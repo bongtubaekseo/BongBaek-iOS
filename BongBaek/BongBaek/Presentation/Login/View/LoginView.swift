@@ -13,6 +13,7 @@ struct LoginView: View {
     @EnvironmentObject var appStateManager: AppStateManager
     @StateObject private var loginViewModel = LoginViewModel()
     @State private var test = false
+    @Environment(\.openURL) private var openURL
     
     
    var body: some View {
@@ -85,12 +86,22 @@ struct LoginView: View {
                                .captionRegular12()
                                .foregroundStyle(.white)
                                .underline()
+                               .onTapGesture {
+                                   if let url = URL(string: "https://www.notion.so/264f06bb0d3480d0b1eafa217b306105") {
+                                       openURL(url)
+                                   }
+                               }
 
                            Text("이용약관")
                                .captionRegular12()
                                .foregroundStyle(.white)
                                .underline()
                                .padding(.leading, 12)
+                               .onTapGesture {
+                                   if let url = URL(string: "https://www.notion.so/bongtubaekseo/264f06bb0d348036b260f175a236ec7c") {
+                                       openURL(url)
+                                   }
+                               }
                        }
                        .padding(.leading, 50)
                        .padding(.top,12)
