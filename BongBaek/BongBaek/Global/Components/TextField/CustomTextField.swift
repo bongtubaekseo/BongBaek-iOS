@@ -68,7 +68,7 @@ struct CustomTextField: View {
                         VStack {
                             Text("*")
                                 .bodyMedium16()
-                                .foregroundColor(.blue)
+                                .foregroundColor(.primaryNormal)
                                 .padding(.top, 2)
                                 .padding(.leading, 1)
                             
@@ -102,7 +102,7 @@ struct CustomTextField: View {
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .focused($isFocused)
                                 .disabled(isReadOnly)
-                                .foregroundColor(.white)
+                                .foregroundColor(.gray100)
                                 .tint(.white)
                                 .keyboardType(keyboardType) // 키보드 타입 적용
                                 .onChange(of: displayText) { _, newValue in
@@ -151,11 +151,17 @@ struct CustomTextField: View {
             }
             
             if !validationMessage.isEmpty {
-                Text(validationMessage)
-                    .font(.system(size: 12))
-                    .foregroundColor(validationState.color)
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-                    .animation(.easeInOut(duration: 0.2), value: validationMessage)
+                HStack(spacing: 4) {
+                    Image(validationState == .invalid ? "icon_caution" : "")
+                        .font(.system(size: 12))
+                        .foregroundColor(validationState.color)
+                    
+                    Text(validationMessage)
+                        .font(.system(size: 12))
+                        .foregroundColor(validationState.color)
+                }
+                .transition(.opacity.combined(with: .move(edge: .top)))
+                .animation(.easeInOut(duration: 0.2), value: validationMessage)
             }
         }
         .onAppear {
@@ -177,6 +183,9 @@ struct CustomTextField: View {
                 }
             }
             validateInput(newValue)
+        }
+        .onChange(of: isFocused) { _, newValue in
+            validateInput(text)
         }
     }
     
@@ -235,30 +244,43 @@ struct CustomTextField: View {
     }
     
     private var lineColor: Color {
-        if isFocused {
-            return validationState == .invalid ? .red : .blue
-        }
         return validationState.color
     }
     
     private func validateInput(_ input: String) {
         guard let rule = validationRule else {
-            validationState = .normal
+            if isFocused {
+                validationState = .focused
+            } else {
+                validationState = input.isEmpty ? .normal : .completed
+            }
             validationMessage = ""
             return
         }
         
-        let validation = rule.validate(input)
-        
         withAnimation(.easeInOut(duration: 0.2)) {
             if input.isEmpty {
-                validationState = .normal
+                validationState = isFocused ? .focused : .normal
                 validationMessage = ""
             } else {
-                validationState = validation.isValid ? .valid : .invalid
+                if let regex = rule.regex {
+                    let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+                    if !predicate.evaluate(with: input) {
+                        validationState = .invalid
+                        validationMessage = rule.customMessage ?? "특수문자는 기입할 수 없어요"
+                        return
+                    }
+                }
+                
+                let validation = rule.validate(input)
+                
+                if validation.isValid {
+                    validationState = isFocused ? .valid : .completed
+                } else {
+                    validationState = .invalid
+                }
                 validationMessage = validation.message
             }
-           
         }
     }
 }
@@ -266,6 +288,8 @@ enum ValidationState {
     case normal
     case valid
     case invalid
+    case focused
+    case completed
     
     var color: Color {
         switch self {
@@ -275,6 +299,10 @@ enum ValidationState {
             return .primaryNormal
         case .invalid:
             return .secondaryRed
+        case .focused:
+            return .primaryNormal
+        case .completed:
+            return .white
         }
     }
 }

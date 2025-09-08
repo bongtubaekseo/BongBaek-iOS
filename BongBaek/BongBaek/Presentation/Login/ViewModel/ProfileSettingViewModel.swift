@@ -14,7 +14,7 @@ class ProfileSettingViewModel: ObservableObject {
     // MARK: - Published Properties
     @Published var nickname: String = ""
     @Published var selectedDate: String = ""
-    @Published var hasIncome: Bool = true
+    @Published var hasIncome: Bool = false
     @Published var currentSelection: IncomeSelection = .none
     
     // UI State
