@@ -44,6 +44,7 @@ struct SignUpBottomSheetView: View {
                     isRequired: nil,
                     isChecked: $allAgree,
                     manualToggle: true,
+                    isHighlighted: true,
                     onTap: {
                         print("전체 동의 버튼 클릭됨")
                         print("전체 동의 클릭 전 상태: allAgree=\(allAgree)")
@@ -54,7 +55,7 @@ struct SignUpBottomSheetView: View {
                 Divider()
                     .background(Color.gray.opacity(0.3))
                 
-                VStack(alignment: .leading, spacing: 12.adjustedH) {
+                VStack(alignment: .leading, spacing: 16.adjustedH) {
                     CheckButton(
                         title: "만 14세 이상",
                         isRequired: true,
@@ -102,6 +103,8 @@ struct SignUpBottomSheetView: View {
             .padding(.top,30.adjustedH)
             .padding(.horizontal,20)
             
+            Spacer()
+            
             Button(action: {
                 print("허용하고 계속하기 버튼 클릭됨")
                 print("canProceed: \(canProceed)")
@@ -110,20 +113,18 @@ struct SignUpBottomSheetView: View {
                 HStack {
                     Spacer()
                     Text("다음")
-                        .foregroundColor(.white)
+                        .titleSemiBold18()
+                        .foregroundColor(canProceed ? .white : .gray500)
                     Spacer()
                 }
                 .frame(height: 55.adjustedH)
-                .background(canProceed ? .primaryNormal : Color.gray.opacity(0.3))
+                .background(canProceed ? .primaryNormal : Color.primaryBg)
                 .cornerRadius(12)
             }
             .disabled(!canProceed)
             .buttonStyle(PlainButtonStyle())
-            .padding(.top,40.adjustedH)
             .padding(.horizontal,20)
-
-            
-            Spacer()
+            .padding(.bottom,60.adjustedH)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray750)
@@ -141,7 +142,7 @@ struct SignUpBottomSheetView: View {
     }
     
     private func updateAllAgreeStatus() {
-        let oldAllAgree = allAgree
+        _ = allAgree
         allAgree = ageAgree && serviceAgree && privacyAgree
     }
 }
