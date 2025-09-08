@@ -41,7 +41,7 @@ class ProfileSettingViewModel: ObservableObject {
         var displayText: String {
             switch self {
             case .under200: return "200만원 미만"
-            case .over200: return "월 200 이상"
+            case .over200: return "월 200만원 이상"
             case .none: return ""
             }
         }

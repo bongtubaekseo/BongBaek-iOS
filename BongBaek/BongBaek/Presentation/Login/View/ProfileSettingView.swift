@@ -201,14 +201,17 @@ struct ProfileSettingView: View {
     }
 
     private var startButton: some View {
-        Button("봉투백서 시작하기") {
+        Button(action: {
             viewModel.logCurrentSelection()
             viewModel.performSignUp()
+        }) {
+            Text("봉투백서 시작하기")
+                .titleSemiBold18() 
+                .foregroundColor(viewModel.isStartButtonEnabled ? .white : .gray500)
         }
         .frame(maxWidth: .infinity)
         .padding()
         .background(viewModel.isStartButtonEnabled ? .primaryNormal : .primaryBg)
-        .foregroundColor(viewModel.isStartButtonEnabled ? .white : .gray500)
         .cornerRadius(12)
         .padding(.top, 20)
         .disabled(!viewModel.isStartButtonEnabled)
