@@ -34,7 +34,7 @@ struct LoginView: View {
                        Button(action: {
 
                        }) {
-                           Image("appleid_button")
+                           Image("btn_login")
                                .resizable()
                                .scaledToFill()
                                .frame(height: 55.adjustedH)
