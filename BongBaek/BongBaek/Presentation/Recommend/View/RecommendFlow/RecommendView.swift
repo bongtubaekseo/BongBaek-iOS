@@ -138,7 +138,7 @@ struct RecommendView: View {
                         minLength: 2,
                         maxLength: 10,
                         regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                        customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                        customMessage: "특수문자는 기입할 수 없어요"
                     )
                 )
                 BorderTextField(
@@ -148,7 +148,7 @@ struct RecommendView: View {
                         minLength: 2,
                         maxLength: 10,
                         regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                        customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                        customMessage: "특수문자는 기입할 수 없어요"
                     )
                 )
             }
@@ -166,10 +166,8 @@ struct RecommendView: View {
     
     private var relationshipHeaderSection: some View {
         HStack {
-            Image("icon_person_16")
-                .renderingMode(.template)
-                .foregroundColor(.primaryNormal)
-                .frame(width: 22,height: 22)
+            Image("icon_relation")
+                .frame(width: 20,height: 20)
             
             Text("관계를 선택해주세요.")
                 .titleSemiBold18()
@@ -182,7 +180,7 @@ struct RecommendView: View {
     }
     
     private var relationshipGridSection: some View {
-        LazyVGrid(columns: columns, spacing: 10) {
+        LazyVGrid(columns: columns, spacing: 8) {
             ForEach(relationships, id: \.1) { relationship in
                 RelationshipButton(
                     image: relationship.0,
