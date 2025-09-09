@@ -74,7 +74,7 @@ struct ScheduleCellView: View {
                     Image("icon_calendar")
                         .resizable()
                         .frame(width: 16, height: 16)
-                    Text(event.eventInfo.eventDate)
+                    Text(event.eventInfo.eventDate.DateFormat())
                 }
                 .font(.caption_regular_12)
                 .foregroundColor(.gray200)
