@@ -17,7 +17,7 @@ struct HomeView: View {
             ScrollView {
                 HStack {
                     Text("봉투백서")
-                        .font(.head_bold_24)
+                        .font(.head_bold_24) //TODO: 나중에 bongBold_24변경 필요
                         .foregroundColor(.white)
                         .padding(.leading, 20)
                     Spacer()
