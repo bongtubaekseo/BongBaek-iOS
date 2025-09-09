@@ -39,6 +39,7 @@ struct RelationshipSliderView: View {
             Spacer()
         }
         .background(.gray750)
+        .cornerRadius(10)
         .padding(20)
         .frame(maxWidth: .infinity)
     }
@@ -57,6 +58,7 @@ struct SliderSection: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Image(icon)
+                    .frame(width: 20,height: 20)
                 
                 Text(title)
                     .bodyMedium16()
