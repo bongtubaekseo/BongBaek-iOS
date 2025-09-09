@@ -52,13 +52,14 @@ struct ScheduleIndicatorCellView: View {
                 Image(.iconCalendar)
                     .resizable()
                     .frame(width: 14, height: 14)
+                    .padding(.leading, 8)
                 
-                Text(event.eventInfo.eventDate)
+                Text(formatDate(event.eventInfo.eventDate))
                     .font(.caption_regular_12)
                     .foregroundColor(.gray100)
             }
             .padding(.vertical, 4)
-            .padding(.horizontal, 4)
+            .padding(.trailing, 10)
             .background(.gray750)
             .cornerRadius(4)
             .offset(y: -65)
@@ -82,4 +83,18 @@ struct ScheduleIndicatorCellView: View {
         .frame(height: 260)
         .cornerRadius(10)
     }
+}
+
+public func formatDate(_ dateString: String) -> String {
+    let inputFormatter = DateFormatter()
+    inputFormatter.dateFormat = "yyyy-MM-dd"
+    
+    let outputFormatter = DateFormatter()
+    outputFormatter.dateFormat = "yyyy년 MM월 dd일"
+    
+    if let date = inputFormatter.date(from: dateString) {
+        return outputFormatter.string(from: date)
+    }
+    
+    return dateString // 변환 실패 시 원본 반환
 }
