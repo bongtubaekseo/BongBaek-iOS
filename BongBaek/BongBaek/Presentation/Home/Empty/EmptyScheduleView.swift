@@ -18,7 +18,7 @@ struct EmptyScheduleView: View {
                     Text("아직 예정된 일정이")
                         .headBold26()
                         .foregroundStyle(.white)
-                    Text("존재하지 않아요!")
+                    Text("존재하지 않아요")
                         .headBold26()
                         .foregroundStyle(.white)
                 }
@@ -36,11 +36,15 @@ struct EmptyScheduleView: View {
                 Spacer()
                 
                 HStack(spacing: 4) {
-                    Text("일정추가하기 >")
+                    Text("일정추가하기")
                         .captionRegular12()
                         .foregroundColor(.gray300)
+                    
+                    Image("icon_left")
+                        .foregroundColor(.gray400)
+                        .frame(width: 3, height: 8)
                 }
-                .padding(.vertical, 10)
+                .padding(.vertical, 6)
                 .padding(.horizontal, 10)
                 .background(.gray900)
                 .cornerRadius(6)

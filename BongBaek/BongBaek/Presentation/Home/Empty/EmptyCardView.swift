@@ -30,9 +30,13 @@ struct EmptyCardView: View {
                    
 
                 HStack(spacing: 4) {
-                    Text("일정추가하기 >")
+                    Text("일정추가하기")
                         .captionRegular12()
                         .foregroundColor(.gray300)
+                    
+                    Image("icon_left")
+                        .foregroundColor(.gray400)
+                        .frame(width: 5, height: 10)
                 }
                 .padding(.vertical, 6)
                 .padding(.horizontal, 10)
