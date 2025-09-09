@@ -21,6 +21,7 @@ enum ScheduleCategory: String, CaseIterable {
 struct FullScheduleView: View {
     @State private var selectedCategory: ScheduleCategory = .all
     @StateObject private var viewModel = FullScheduleViewModel()
+    @StateObject private var mypageViewModel = MyPageViewModel()
     @EnvironmentObject var router: NavigationRouter
     @Environment(\.dismiss) private var dismiss
     
@@ -123,7 +124,7 @@ struct FullScheduleView: View {
             }
             .contentShape(Rectangle())
             
-            Text("다가올 경조사 일정")
+            Text(mypageViewModel.profileData?.memberName ?? "다가올 일정") //TODO: 확인필요
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.leading, 12)

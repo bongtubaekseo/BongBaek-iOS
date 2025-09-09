@@ -65,7 +65,7 @@ struct ScheduleCellView: View {
                 }
                 .padding(.horizontal, 8)
                 .padding(.vertical, 8)
-                .frame(minHeight: 28)
+                .frame(height: 28)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(.gray800)
                 .cornerRadius(4)
