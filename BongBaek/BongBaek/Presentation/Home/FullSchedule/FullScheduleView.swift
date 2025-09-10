@@ -124,12 +124,16 @@ struct FullScheduleView: View {
             }
             .contentShape(Rectangle())
             
-            Text(mypageViewModel.profileData?.memberName ?? "다가올 일정") //TODO: 확인필요
+            Text("\(mypageViewModel.profileData?.memberName ?? "봉백")님의 다가올 일정") //TODO: 확인필요
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.leading, 12)
             
             Spacer()
+        }
+        .onAppear {
+            print("MyProfile 나타남 - 데이터 로드 시작")
+            mypageViewModel.loadprofile()
         }
     }
     
