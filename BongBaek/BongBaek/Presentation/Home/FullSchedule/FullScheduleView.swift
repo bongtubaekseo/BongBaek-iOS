@@ -291,46 +291,48 @@ struct EventCellView: View {
     @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
+        VStack(alignment: .leading, spacing: 12) {
                 // 이벤트 카테고리
-                Text(event.eventInfo.eventCategory)
-                    .bodyMedium14()
+                Text(event.hostInfo.hostNickname)
+                    .captionRegular12()
                     .foregroundColor(.primaryNormal)
+
+            HStack {
+                Text(event.hostInfo.hostName)
+                    .titleSemiBold18()
+                    .foregroundColor(.white)
+
+                Spacer()
+
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    Text("\(event.eventInfo.cost.formatted())")
+                        .titleSemiBold18()
+                        .foregroundColor(.white)
+
+                    Text("원")
+                        .titleSemiBold18()
+                        .foregroundColor(.white.opacity(0.8))
+                }
+            }
+                
+            
+            HStack(spacing: 6) {
+                Text(event.eventInfo.eventCategory)
+                    .captionRegular12()
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(.primaryNormal.opacity(0.1))
-                    )
+                    .background(.primaryBg)
+                    .foregroundColor(.primaryNormal)
                 
-                Spacer()
-                
-                // 날짜
-                Text(formatDate(event.eventInfo.eventDate))
+                    .cornerRadius(4)
+
+                Text(event.eventInfo.relationship)
                     .captionRegular12()
-                    .foregroundColor(.gray400)
-            }
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    // 호스트 이름
-                    Text(event.hostInfo.hostName)
-                        .titleSemiBold16()
-                        .foregroundColor(.white)
-                    
-                    // 관계
-                    Text(event.eventInfo.relationship)
-                        .captionRegular12()
-                        .foregroundColor(.gray400)
-                }
-                
-                Spacer()
-                
-                // 금액
-                Text(formatMoney(event.eventInfo.cost))
-                    .titleSemiBold16()
-                    .foregroundColor(.white)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(.primaryBg)
+                    .foregroundColor(.primaryNormal)
+                    .cornerRadius(4)
             }
         }
         .padding(16)
