@@ -208,7 +208,7 @@ struct EventDateFormView: View {
             // 참석 여부 섹션
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 8) {
-                    Image("icon_check")
+                    Image("icon_check2")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
@@ -226,7 +226,7 @@ struct EventDateFormView: View {
                             action: {
                                 eventManager.selectedAttendance = attendance
                                 eventManager.isAttend = (attendance == .yes)
-                                print("🎯 참석 여부 선택: \(attendance.rawValue)")
+                                print("참석 여부 선택: \(attendance.rawValue)")
                             }
                         )
                     }
