@@ -152,9 +152,12 @@ struct EventLocationView: View {
                 .foregroundColor(.gray)
                 .font(.system(size: 20))
             
-            TextField("장소를 검색하세요", text: $searchText)
-                .font(.system(size: 16))
+            TextField("기타 사유를 입력해주세요",
+                      text: $searchText,
+                      prompt: Text("주소를 검색하면 더 빨리 찾을 수 있어요")
+                .foregroundColor(.gray500))
                 .foregroundColor(.white)
+                .font(.body2_regular_16)
                 .focused($isSearchFieldFocused)
                 .onChange(of: searchText) { _, newValue in
                     keywordSearch.query = newValue

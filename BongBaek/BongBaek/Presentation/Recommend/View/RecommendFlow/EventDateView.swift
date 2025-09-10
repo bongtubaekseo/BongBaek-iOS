@@ -372,6 +372,7 @@ struct DatePickerBottomSheet: View {
                 )
                 .datePickerStyle(.wheel)
                 .colorScheme(.dark)
+                .environment(\.locale, Locale(identifier: "ko_KR"))
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(.gray750)
