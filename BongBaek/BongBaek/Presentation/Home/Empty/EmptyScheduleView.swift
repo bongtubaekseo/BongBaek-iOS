@@ -22,7 +22,7 @@ struct EmptyScheduleView: View {
                         .headBold26()
                         .foregroundStyle(.white)
                 }
-                .padding(.top,40)
+                .padding(.top,29)
                 
                 HStack {
                     Spacer()
