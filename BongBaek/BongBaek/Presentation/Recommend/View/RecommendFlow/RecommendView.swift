@@ -32,11 +32,11 @@ struct RecommendView: View {
     
     // 기존 검증 로직 유지 (UI 반응용)
     private var isNextButtonEnabled: Bool {
-        // 1. 이름 필수 입력 + 유효성 검사 (2-10자)
-        let nameValid = eventManager.hostName.count >= 2 && eventManager.hostName.count <= 10
+        // 1. 이름 유효성 검사 통과
+        let nameValid = eventManager.isHostNameValid
         
-        // 2. 별명 유효성 검사 (비어있거나, 입력된 경우 2-10자)
-        let nicknameValid = eventManager.hostNickname.isEmpty || (eventManager.hostNickname.count >= 2 && eventManager.hostNickname.count <= 10)
+        // 2. 별명 유효성 검사 통과
+        let nicknameValid = eventManager.isHostNicknameValid
         
         // 3. 관계 선택 필수
         let relationSelected = !eventManager.relationship.isEmpty
@@ -134,6 +134,7 @@ struct RecommendView: View {
                 BorderTextField(
                     placeholder: "이름을 적어주세요",
                     text: $eventManager.hostName,
+                    isValid: $eventManager.isHostNameValid,
                     validationRule: ValidationRule(
                         minLength: 2,
                         maxLength: 10,
@@ -144,6 +145,7 @@ struct RecommendView: View {
                 BorderTextField(
                     placeholder: "별명을 적어주세요",
                     text: $eventManager.hostNickname,
+                    isValid: $eventManager.isHostNicknameValid,
                     validationRule: ValidationRule(
                         minLength: 2,
                         maxLength: 10,

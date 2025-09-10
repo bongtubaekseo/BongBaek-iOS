@@ -20,6 +20,8 @@ class EventCreationManager: ObservableObject {
     @Published var detailSelected: Bool = false
     @Published var contactFrequency: Double = 2.0
     @Published var meetFrequency: Double = 2.0
+    @Published var isHostNameValid: Bool = false
+    @Published var isHostNicknameValid: Bool = false
     
     // Step 2: EventInformationView 데이터
     @Published var eventCategory: String = ""
