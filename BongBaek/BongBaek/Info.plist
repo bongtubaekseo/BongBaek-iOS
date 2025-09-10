@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>BASE_URL_TEST</key>
-	<string>$(BASE_URL_TEST)</string>
 	<key>BASE_URL_RELEASE</key>
 	<string>$(BASE_URL_RELEASE)</string>
+	<key>BASE_URL_TEST</key>
+	<string>$(BASE_URL_TEST)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -35,6 +35,8 @@
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>MunhwajaeDolbom-Regular.ttf</string>
+		<string>MunhwajaeDolbom-Bold.ttf</string>
 		<string>Pretendard-Black.otf</string>
 		<string>Pretendard-Bold.otf</string>
 		<string>Pretendard-ExtraBold.otf</string>
