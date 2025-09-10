@@ -27,7 +27,7 @@ struct EventDateView: View {
     
     // 기존 검증 로직 유지 (UI 반응용)
     private var isNextButtonEnabled: Bool {
-        return eventManager.selectedAttendance != nil && !isPastDate
+        return eventManager.selectedAttendance != nil && !isPastDate &&  eventManager.hasSelectedEventDate
     }
     
     var body: some View {
@@ -262,9 +262,15 @@ struct EventDatePickerView: View {
             isDatePickerVisible.toggle()
         }) {
             HStack {
-                Text(DateFormatter.displayFormatter.string(from: eventManager.eventDate))
-                    .bodyRegular16()
-                    .foregroundColor(isPastDate ? .secondaryRed : .white)
+                if eventManager.hasSelectedEventDate {
+                    Text(DateFormatter.displayFormatter.string(from: eventManager.eventDate))
+                        .bodyRegular16()
+                        .foregroundColor(isPastDate ? .secondaryRed : .white)
+                } else {
+                    Text("날짜를 입력해주세요")
+                        .bodyRegular16()
+                        .foregroundColor(.gray400)
+                }
                 
                 Spacer()
             }
@@ -282,13 +288,21 @@ struct EventDatePickerView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
+        .onAppear {
+            if eventManager.hasSelectedEventDate {
+                checkDateAndUpdateUI(eventManager.eventDate)
+            }
+        }
         .onChange(of: eventManager.eventDate) { _, newDate in
+            eventManager.hasSelectedEventDate = true
             checkDateAndUpdateUI(newDate)
         }
         .sheet(isPresented: $isDatePickerVisible) {
             DatePickerBottomSheet(
                 selectedDate: $eventManager.eventDate,
-                onDismiss: { isDatePickerVisible = false }
+                onDismiss: {
+                    isDatePickerVisible = false
+                }
             )
         }
     }

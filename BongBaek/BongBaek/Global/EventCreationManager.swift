@@ -31,6 +31,7 @@ class EventCreationManager: ObservableObject {
     @Published var eventDate: Date = Date()
     @Published var isAttend: Bool = true
     @Published var selectedAttendance: AttendanceType? = nil
+    @Published var hasSelectedEventDate: Bool = false
     
     // Step 4: EventLocationView 데이터 (선택적)
     @Published var hasLocationData: Bool = false
@@ -386,6 +387,7 @@ class EventCreationManager: ObservableObject {
         eventDate = Date()
         isAttend = true
         selectedAttendance = nil
+        hasSelectedEventDate = false
         
         // Step 4 데이터 초기화
         clearLocationData()
@@ -418,6 +420,7 @@ class EventCreationManager: ObservableObject {
             eventDate = Date()
             isAttend = true
             selectedAttendance = nil
+            hasSelectedEventDate = false
             
         case 4:
             clearLocationData()
