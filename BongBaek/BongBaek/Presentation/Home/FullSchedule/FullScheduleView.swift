@@ -333,6 +333,12 @@ struct EventCellView: View {
                     .background(.primaryBg)
                     .foregroundColor(.primaryNormal)
                     .cornerRadius(4)
+                
+                Spacer()
+                
+                Text(event.eventInfo.eventDate.DateFormat())
+                    .captionRegular12()
+                    .foregroundColor(.gray400)
             }
         }
         .padding(16)
