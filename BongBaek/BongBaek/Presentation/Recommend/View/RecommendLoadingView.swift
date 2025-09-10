@@ -63,7 +63,7 @@ struct RecommendLoadingView: View {
     
     /// API 요청과 3초 대기를 모두 기다린 후 다음 화면으로 이동
     private func waitForBothCompletion() async {
-        print("🚀 API 요청과 3초 대기 시작...")
+        print("API 요청과 3초 대기 시작...")
         
         // 두 작업을 동시에 시작
         async let apiTask: () = eventManager.getAmountRecommendation()
