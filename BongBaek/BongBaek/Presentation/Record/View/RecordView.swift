@@ -12,7 +12,7 @@ enum EventsCategory: String, CaseIterable {
     case wedding = "결혼식"
     case funeral = "장례식"
     case babyParty = "돌잔치"
-    case birthday = "생일"
+    case birthday = "생일"    
     
     var display: String {
         return self.rawValue
@@ -24,7 +24,7 @@ struct RecordView: View {
     @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
-        ScrollView {
+        VStack(spacing: 0) {
             VStack(spacing: 0) {
                 RecordsHeaderView(
                     isDeleteMode: $viewModel.isDeleteMode,
@@ -51,21 +51,24 @@ struct RecordView: View {
                     }
                 )
                 .padding(.leading, 20)
-                
+            }
+            .background(Color.background)
+
+            ScrollView {
                 RecordContentView(
                     viewModel: viewModel
                 )
+            }
+            .refreshable {
+                Task {
+                    await viewModel.refreshRecords()
+                }
             }
         }
         .background(Color.background)
         .onAppear {
             Task {
                 await viewModel.loadAllRecords()
-            }
-        }
-        .refreshable {
-            Task {
-                await viewModel.refreshRecords()
             }
         }
     }
