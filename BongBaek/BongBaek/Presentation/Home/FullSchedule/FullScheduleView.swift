@@ -9,9 +9,9 @@ import SwiftUI
 enum ScheduleCategory: String, CaseIterable {
     case all = "전체"
     case wedding = "결혼식"
+    case funeral = "장례식"
     case babyParty = "돌잔치"
     case birthday = "생일"
-    case funeral = "장례식"
     
     var displayName: String {
         return self.rawValue
@@ -21,6 +21,7 @@ enum ScheduleCategory: String, CaseIterable {
 struct FullScheduleView: View {
     @State private var selectedCategory: ScheduleCategory = .all
     @StateObject private var viewModel = FullScheduleViewModel()
+    @StateObject private var mypageViewModel = MyPageViewModel()
     @EnvironmentObject var router: NavigationRouter
     @Environment(\.dismiss) private var dismiss
     
@@ -123,12 +124,16 @@ struct FullScheduleView: View {
             }
             .contentShape(Rectangle())
             
-            Text("다가올 경조사 일정")
+            Text("\(mypageViewModel.profileData?.memberName ?? "봉백")님의 다가올 일정") //TODO: 확인필요
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.leading, 12)
             
             Spacer()
+        }
+        .onAppear {
+            print("MyProfile 나타남 - 데이터 로드 시작")
+            mypageViewModel.loadprofile()
         }
     }
     
@@ -286,46 +291,54 @@ struct EventCellView: View {
     @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
+        VStack(alignment: .leading, spacing: 12) {
                 // 이벤트 카테고리
-                Text(event.eventInfo.eventCategory)
-                    .bodyMedium14()
+                Text(event.hostInfo.hostNickname)
+                    .captionRegular12()
                     .foregroundColor(.primaryNormal)
+
+            HStack {
+                Text(event.hostInfo.hostName)
+                    .titleSemiBold18()
+                    .foregroundColor(.white)
+
+                Spacer()
+
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    Text("\(event.eventInfo.cost.formatted())")
+                        .titleSemiBold18()
+                        .foregroundColor(.white)
+
+                    Text("원")
+                        .titleSemiBold18()
+                        .foregroundColor(.white.opacity(0.8))
+                }
+            }
+                
+            
+            HStack(spacing: 6) {
+                Text(event.eventInfo.eventCategory)
+                    .captionRegular12()
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(.primaryNormal.opacity(0.1))
-                    )
+                    .background(.primaryBg)
+                    .foregroundColor(.primaryNormal)
+                
+                    .cornerRadius(4)
+
+                Text(event.eventInfo.relationship)
+                    .captionRegular12()
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(.primaryBg)
+                    .foregroundColor(.primaryNormal)
+                    .cornerRadius(4)
                 
                 Spacer()
                 
-                // 날짜
-                Text(formatDate(event.eventInfo.eventDate))
+                Text(event.eventInfo.eventDate.DateFormat())
                     .captionRegular12()
                     .foregroundColor(.gray400)
-            }
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    // 호스트 이름
-                    Text(event.hostInfo.hostName)
-                        .titleSemiBold16()
-                        .foregroundColor(.white)
-                    
-                    // 관계
-                    Text(event.eventInfo.relationship)
-                        .captionRegular12()
-                        .foregroundColor(.gray400)
-                }
-                
-                Spacer()
-                
-                // 금액
-                Text(formatMoney(event.eventInfo.cost))
-                    .titleSemiBold16()
-                    .foregroundColor(.white)
             }
         }
         .padding(16)

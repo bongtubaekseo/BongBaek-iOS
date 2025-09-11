@@ -43,7 +43,16 @@ struct RecommendsView: View {
             }
         }
         .padding()
-        .background(.gray750)
+        .background(
+            LinearGradient(
+                colors: [
+                    Color(hex: "262825"),
+                    Color(hex: "171922")
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
         .cornerRadius(8)
         .padding(.horizontal)
     }
