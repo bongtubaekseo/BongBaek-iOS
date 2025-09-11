@@ -10,6 +10,7 @@ import SwiftUI
 struct ScheduleView: View {
     let events: [Event]
     @EnvironmentObject var router: NavigationRouter
+    @StateObject private var mypageViewModel = MyPageViewModel()
     
     private var sortedEvents: [Event] {
            return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
@@ -18,12 +19,13 @@ struct ScheduleView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("봉백님의 일정")
+                Text("\(mypageViewModel.profileData?.memberName ?? "봉백")님의 일정")
                     .font(.title_semibold_20)
                     .foregroundStyle(.white)
                 
                 Spacer()
 
+                if !events.isEmpty {
                     Button(action: {
                         router.push(to: .fullScheduleView)
                     }) {
@@ -33,6 +35,7 @@ struct ScheduleView: View {
                             .padding(.vertical, 4)
                             .padding(.horizontal, 8)
                             .background(Color.clear)
+                    }
                 }
             }
             .padding(.bottom, 20)
@@ -40,8 +43,6 @@ struct ScheduleView: View {
             if events.isEmpty {
                 EmptyCardView()
             } else {
-                
-                
                 ForEach(sortedEvents, id: \.eventId) { event in
                     ScheduleCellView(event: event)
                 }
@@ -49,5 +50,9 @@ struct ScheduleView: View {
         }
         .padding(.horizontal)
         .background(Color.black)
+        .onAppear {
+            print("MyProfile 나타남 - 데이터 로드 시작")
+            mypageViewModel.loadprofile()
+        }
     }
 }
