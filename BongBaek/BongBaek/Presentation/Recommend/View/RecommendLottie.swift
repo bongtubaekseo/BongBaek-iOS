@@ -16,6 +16,8 @@ struct RecommendLottie: View {
     @State private var category: String = "경조사"
     @State private var eventLocation: String = "없음"
     @State private var eventCategory: String = "해당없음"
+    
+    @State private var isSubmitting = false
 
     @EnvironmentObject var router: NavigationRouter
     @EnvironmentObject var eventManager: EventCreationManager
@@ -80,8 +82,8 @@ struct RecommendLottie: View {
                 print("장소: \(data.location)")
                 
                 recommendedAmount = data.cost
-                 minAmount = data.range.min
-                 maxAmount = data.range.max
+                minAmount = data.range.min
+                maxAmount = data.range.max
                 category = data.category
                 eventLocation = data.location
                 eventCategory = data.category
@@ -114,12 +116,12 @@ struct RecommendLottie: View {
                             .background(.gray750)
                     )
 
-                VStack(spacing: 24) {
+                VStack(spacing: 0) {
                     Text("추천 금액")
                         .captionRegular12()
                         .foregroundColor(.white)
                         .padding(.horizontal, 8)
-                        .padding(.vertical, 2)
+                        .padding(.vertical, 4)
                         .background(
                             RoundedRectangle(cornerRadius: 4)
                                 .fill(.primaryNormal)
@@ -144,6 +146,7 @@ struct RecommendLottie: View {
                             .foregroundColor(.gray600)
                             .padding(.bottom, 8)
                     }
+                    .padding(.top,6)
 
                     VStack(spacing: 6) {
                         Text("적절한 금액이에요!")
@@ -154,15 +157,18 @@ struct RecommendLottie: View {
                             .bodyRegular14()
                             .foregroundColor(.gray200)
                     }
-                    .padding(.horizontal, 24)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 30)
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
                             .fill(.gray750.opacity(0.6))
                     )
+                    .padding(.top,20)
                 }
                 .padding(.horizontal, 30)
                 .padding(.vertical, 30)
+                .frame(maxWidth: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(
@@ -177,6 +183,7 @@ struct RecommendLottie: View {
                         )
                 )
             }
+            .padding(.horizontal, 20)
             .transition(.opacity.combined(with: .scale))
         }
     }
@@ -315,7 +322,7 @@ struct RecommendLottie: View {
             HStack {
                 Image("icon_colorcheck")
                 Text("참고해주세요!")
-                    .bodyRegular16()
+                    .titleSemiBold18()
                     .foregroundColor(.white)
                 Spacer()
             }
@@ -339,47 +346,54 @@ struct RecommendLottie: View {
         )
     }
 
-        var bottomButtons: some View {
-            VStack(spacing: 12) {
-                Button("이 금액으로 결정하기") {
-                    Task {
-                        // 추천받은 금액으로 이벤트 생성
-                        let success = await eventManager.submitEventWithRecommendedAmount()
-                        
-                        if success {
-                            // 성공하면 성공 화면으로 이동
-                            await MainActor.run {
-                                router.push(to: .recommendSuccessView)
-                            }
-                        } else {
-                            // 실패 시 에러 처리 (예: 알럿 표시)
-                            print("이벤트 생성 실패: \(eventManager.submitError ?? "알 수 없는 오류")")
-                            // TODO: 에러 알럿 표시 로직 추가
+    var bottomButtons: some View {
+        VStack(spacing: 12) {
+            Button {
+                guard !isSubmitting else { return }
+                isSubmitting = true
+                
+                Task {
+                    let success = await eventManager.submitEventWithRecommendedAmount()
+                    
+                    if success {
+                        await MainActor.run {
+                            router.push(to: .recommendSuccessView)
                         }
+                    } else {
+                        print("이벤트 생성 실패: \(eventManager.submitError ?? "알 수 없는 오류")")
                     }
+                    
+                    await MainActor.run {
+                                isSubmitting = false
+                            }
                 }
-                .frame(maxWidth: .infinity) //TODO: 크기조절
-                .padding(.vertical, 14)
-                .background(Color("primary_normal"))
-                .foregroundColor(.white)
-                .font(.title_semibold_18)
-                .cornerRadius(10)
-
-                Button("추천받은 금액 수정하기") {
-                    // EventCreationManager에서 추천 데이터 가져와서 전달
-                    router.push(to: .modifyEventView(
-                        mode: .edit, eventDetailData: nil
-                    ))
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(Color("gray700"))
-                .foregroundColor(.gray200)
-                .font(.title_semibold_18)
-                .cornerRadius(10)
+            } label: {
+                Text("이 금액으로 결정하기")
+                    .font(.title_semibold_18)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18)
             }
-            .padding(.horizontal, 20)
+            .background(Color("primary_normal"))
+            .cornerRadius(10)
+            .disabled(isSubmitting)
+
+            Button {
+                router.push(to: .modifyEventView(
+                    mode: .edit, eventDetailData: nil
+                ))
+            } label: {
+                Text("추천받은 금액 수정하기")
+                    .font(.title_semibold_18)
+                    .foregroundColor(.gray200)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18)
+            }
+            .background(Color("gray700"))
+            .cornerRadius(10)
         }
+        .padding(.horizontal, 20)
+    }
 
     var categorySection: some View {
         HStack(spacing: 12) {

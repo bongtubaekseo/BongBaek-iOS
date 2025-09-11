@@ -19,7 +19,7 @@ struct StepProgressBar: View {
     init(
         currentStep: Int,
         totalSteps: Int,
-        progressColor: Color = .blue,
+        progressColor: Color = .primaryNormal,
         backgroundColor: Color = .gray.opacity(0.2),
         height: CGFloat = 4,
         showStepText: Bool = true,

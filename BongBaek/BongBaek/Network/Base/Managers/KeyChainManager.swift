@@ -17,7 +17,7 @@ final class KeychainManager {
     private init() {}
     
     func checkTokenStatusOnLaunch() {
-         print("🔐 ========== Keychain 토큰 상태 확인 ==========")
+         print("========== Keychain 토큰 상태 확인 ==========")
          
          // Access Token 확인
          switch getAccessToken() {
@@ -33,7 +33,7 @@ final class KeychainManager {
          // Refresh Token 확인
          switch getRefreshToken() {
          case .success(let token):
-             print("✅ Refresh Token 존재:")
+             print("Refresh Token 존재:")
              print("   - 토큰 길이: \(token.count)자")
              print("   - 토큰 앞 10자: \(String(token.prefix(10)))...")
          case .failure(let error):

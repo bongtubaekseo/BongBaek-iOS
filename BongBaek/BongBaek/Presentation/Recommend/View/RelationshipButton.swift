@@ -19,9 +19,11 @@ struct RelationshipButton: View {
                 Image(image)
                     .renderingMode(.template)
                     .foregroundColor(isSelected ? .white : .primaryNormal)
+                    .frame(width: 48, height: 40) 
+                    .scaledToFit()
                 
                 Text(text)
-                    .font(.caption)
+                    .bodyMedium14()
                     .foregroundColor(isSelected ? .white : .gray200)
             }
             .padding()

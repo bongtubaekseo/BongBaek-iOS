@@ -18,9 +18,12 @@ struct BorderTextField: View {
     @FocusState private var isFocused: Bool
     @State private var showPassword: Bool = false
     
+    @Binding var isValid: Bool
+    
     init(
         placeholder: String,
         text: Binding<String>,
+        isValid: Binding<Bool> = .constant(true),
         validationRule: ValidationRule? = nil,
         isSecure: Bool = false
     ) {
@@ -28,6 +31,7 @@ struct BorderTextField: View {
         self._text = text
         self.validationRule = validationRule
         self.isSecure = isSecure
+        self._isValid = isValid
     }
     
     var body: some View {
@@ -97,16 +101,25 @@ struct BorderTextField: View {
             
             // 유효성 검사 메시지
             if !validationMessage.isEmpty {
-                Text(validationMessage)
-                    .captionRegular12()
-                    .foregroundColor(validationState.color)
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-                    .animation(.easeInOut(duration: 0.2), value: validationMessage)
+                HStack(spacing: 4) {
+                    Image(validationState == .invalid ? "icon_caution" : "")
+                        .font(.system(size: 12))
+                        .foregroundColor(validationState.color)
+                    
+                    Text(validationMessage)
+                        .font(.system(size: 12))
+                        .foregroundColor(validationState.color)
+                }
+                .transition(.opacity.combined(with: .move(edge: .top)))
+                .animation(.easeInOut(duration: 0.2), value: validationMessage)
             }
         }
         .onChange(of: text) { _, newValue in
             validateInput(newValue)
         }
+        .onChange(of: isFocused) { _, newValue in
+             validateInput(text)
+         }
     }
     
     private var backgroundColor: Color {
@@ -123,22 +136,6 @@ struct BorderTextField: View {
         return .gray800
     }
     
-    private var borderColor: Color {
-        if isFocused {
-            return validationState == .invalid ? .secondaryRed : .primaryNormal
-        }
-        if !text.isEmpty {
-            switch validationState {
-            case .valid:
-                return .primaryNormal
-            case .invalid:
-                return .secondaryRed
-            default:
-                return .lineNormal
-            }
-        }
-        return .lineNormal
-    }
     
     private var borderWidth: CGFloat {
         if isFocused || (!text.isEmpty && validationState != .normal) {
@@ -148,21 +145,47 @@ struct BorderTextField: View {
     }
     
     // MARK: - 유효성 검사 함수
+    private var borderColor: Color {
+        return validationState.color
+    }
+    
     private func validateInput(_ input: String) {
         guard let rule = validationRule else {
-            validationState = .normal
+            isValid = !input.isEmpty
+            
+            if isFocused {
+                validationState = .focused
+            } else {
+                validationState = input.isEmpty ? .normal : .completed
+            }
             validationMessage = ""
             return
         }
         
-        let validation = rule.validate(input)
-        
         withAnimation(.easeInOut(duration: 0.2)) {
             if input.isEmpty {
-                validationState = .normal
+                isValid = false
+                validationState = isFocused ? .focused : .normal
                 validationMessage = ""
             } else {
-                validationState = validation.isValid ? .valid : .invalid
+                if let regex = rule.regex {
+                    let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+                    if !predicate.evaluate(with: input) {
+                        isValid = false
+                        validationState = .invalid
+                        validationMessage = rule.customMessage ?? "특수문자는 기입할 수 없어요"
+                        return
+                    }
+                }
+                
+                let validation = rule.validate(input)
+                isValid = validation.isValid
+                
+                if validation.isValid {
+                    validationState = isFocused ? .valid : .completed
+                } else {
+                    validationState = .invalid
+                }
                 validationMessage = validation.message
             }
         }

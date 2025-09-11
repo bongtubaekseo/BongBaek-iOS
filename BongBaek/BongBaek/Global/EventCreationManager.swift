@@ -20,6 +20,8 @@ class EventCreationManager: ObservableObject {
     @Published var detailSelected: Bool = false
     @Published var contactFrequency: Double = 2.0
     @Published var meetFrequency: Double = 2.0
+    @Published var isHostNameValid: Bool = false
+    @Published var isHostNicknameValid: Bool = false
     
     // Step 2: EventInformationView 데이터
     @Published var eventCategory: String = ""
@@ -29,6 +31,7 @@ class EventCreationManager: ObservableObject {
     @Published var eventDate: Date = Date()
     @Published var isAttend: Bool = true
     @Published var selectedAttendance: AttendanceType? = nil
+    @Published var hasSelectedEventDate: Bool = false
     
     // Step 4: EventLocationView 데이터 (선택적)
     @Published var hasLocationData: Bool = false
@@ -384,6 +387,7 @@ class EventCreationManager: ObservableObject {
         eventDate = Date()
         isAttend = true
         selectedAttendance = nil
+        hasSelectedEventDate = false
         
         // Step 4 데이터 초기화
         clearLocationData()
@@ -416,6 +420,7 @@ class EventCreationManager: ObservableObject {
             eventDate = Date()
             isAttend = true
             selectedAttendance = nil
+            hasSelectedEventDate = false
             
         case 4:
             clearLocationData()

@@ -10,9 +10,9 @@ import SwiftUI
 enum EventsCategory: String, CaseIterable {
     case all = "전체"
     case wedding = "결혼식"
+    case funeral = "장례식"
     case babyParty = "돌잔치"
     case birthday = "생일"
-    case funeral = "장례식"
     
     var display: String {
         return self.rawValue
