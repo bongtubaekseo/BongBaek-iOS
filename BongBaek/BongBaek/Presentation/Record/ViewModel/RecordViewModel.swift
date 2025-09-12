@@ -163,6 +163,7 @@ class RecordViewModel: ObservableObject {
         withAnimation(.easeInOut(duration: 0.2)) {
             selectedSection = section
             selectedRecordIDs.removeAll() // 섹션 변경 시 선택 초기화
+            selectedCategory = .all
         }
         
         // 해당 섹션 데이터가 없으면 로드
