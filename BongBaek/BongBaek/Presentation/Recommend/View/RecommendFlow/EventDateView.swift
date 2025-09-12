@@ -366,6 +366,13 @@ struct DatePickerBottomSheet: View {
     @Binding var selectedDate: Date
     let onDismiss: () -> Void
     @State private var tempDate: Date = Date()
+    @EnvironmentObject var eventManager: EventCreationManager
+    
+    init(selectedDate: Binding<Date>, onDismiss: @escaping () -> Void) {
+        self._selectedDate = selectedDate
+        self.onDismiss = onDismiss
+        self._tempDate = State(initialValue: selectedDate.wrappedValue)
+    }
     
     var body: some View {
         NavigationView {
@@ -392,14 +399,12 @@ struct DatePickerBottomSheet: View {
                         .fill(.gray750)
                 )
                 .labelsHidden()
-                .onAppear {
-                    tempDate = selectedDate
-                }
-                
+              
                 Spacer()
                 
                 Button("선택 완료") {
                     selectedDate = tempDate
+                    eventManager.hasSelectedEventDate = true
                     onDismiss()
                 }
                 .font(.title_semibold_18)
