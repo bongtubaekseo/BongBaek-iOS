@@ -77,10 +77,11 @@ struct FullScheduleView: View {
     var body: some View {
         VStack(spacing: 30) {
             headerView
+                .padding(.leading, 8)
             categoryScrollView
+                .padding(.leading, 16)
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 30) {
-                    
                     
                     if viewModel.isLoading {
                         loadingView
@@ -175,7 +176,7 @@ struct FullScheduleView: View {
     }
     
     private func yearSectionView(for year: String) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 20) {
             Text("\(year)년")
                 .headBold24()
                 .foregroundColor(.white)
