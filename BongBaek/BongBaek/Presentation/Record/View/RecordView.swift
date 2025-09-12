@@ -30,7 +30,8 @@ struct RecordView: View {
                     isDeleteMode: $viewModel.isDeleteMode,
                     onDeleteTapped: {
                         viewModel.deleteSelectedRecords()
-                    }
+                    },
+                    isCurrentSectionEmpty: viewModel.isCurrentSectionEmpty
                 )
                 .environmentObject(router)
                 
@@ -108,6 +109,8 @@ struct RecordsHeaderView: View {
     @State private var showAlert = false
     @EnvironmentObject var router: NavigationRouter
     
+    let isCurrentSectionEmpty: Bool
+    
     var body: some View {
         HStack {
             HStack {
@@ -145,9 +148,7 @@ struct RecordsHeaderView: View {
                 Spacer()
             }
             
-      
             HStack(spacing: 0) {
-                // 삭제 모드가 아닐 때만 + 버튼 표시
                 if !isDeleteMode {
                     Button(action: {
                         router.push(to: .createEventView)
@@ -161,49 +162,53 @@ struct RecordsHeaderView: View {
                     .transition(.move(edge: .trailing).combined(with: .opacity))
                 }
                 
-                Button(action: {
-                    if isDeleteMode {
-                        showAlert = true
-                    } else {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            isDeleteMode = true
+                if !isCurrentSectionEmpty {
+                    Button(action: {
+                        if isDeleteMode {
+                            showAlert = true
+                        } else {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isDeleteMode = true
+                            }
+                        }
+                    }) {
+                        if isDeleteMode {
+                            Text("삭제")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.red)
+                        } else {
+                            Image(systemName: "trash")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.white)
                         }
                     }
-                }) {
-                    if isDeleteMode {
-                        Text("삭제")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(.red)
-                    } else {
-                        Image(systemName: "trash")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.white)
-                    }
-                }
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
-                .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
-                    Button("취소", role: .cancel) {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            isDeleteMode = false
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
+                    .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
+                        Button("취소", role: .cancel) {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isDeleteMode = false
+                            }
                         }
-                    }
-                    Button("삭제", role: .destructive) {
-                        onDeleteTapped()
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            isDeleteMode = false
+                        Button("삭제", role: .destructive) {
+                            onDeleteTapped()
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isDeleteMode = false
+                            }
                         }
+                    } message: {
+                        Text("이 기록의 모든 내용이 삭제됩니다.")
+                            .bodyRegular14()
+                            .foregroundStyle(.gray600)
                     }
-                } message: {
-                    Text("이 기록의 모든 내용이 삭제됩니다.")
-                        .bodyRegular14()
-                        .foregroundStyle(.gray600)
                 }
             }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
         .animation(.easeInOut(duration: 0.2), value: isDeleteMode)
+        .animation(.easeInOut(duration: 0.2), value: isCurrentSectionEmpty)
     }
 }
 
