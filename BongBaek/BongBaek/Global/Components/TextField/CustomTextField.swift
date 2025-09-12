@@ -232,14 +232,27 @@ struct CustomTextField: View {
             // 숫자만 추출
             let numbersOnly = newValue.filter { $0.isNumber }
             
-            // 원본 text에는 숫자만 저장
-            text = numbersOnly
+            guard !numbersOnly.isEmpty else {
+                text = ""
+                displayText = ""
+                validateInput("")
+                return
+            }
+
+            if let number = Int(numbersOnly) {
+                let maxAmount = 99_999_999
+                let finalNumber = min(number, maxAmount)
             
-            // 화면에는 포맷된 텍스트 표시
-            displayText = formatNumber(numbersOnly)
-            
-            // 유효성 검사는 숫자만으로
-            validateInput(numbersOnly)
+                text = String(finalNumber)
+                
+                displayText = formatNumber(String(finalNumber))
+                
+                validateInput(String(finalNumber))
+            } else {
+                text = ""
+                displayText = ""
+                validateInput("")
+            }
         } else {
             // 일반 텍스트는 그대로 처리
             text = newValue

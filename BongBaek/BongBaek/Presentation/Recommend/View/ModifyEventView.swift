@@ -228,9 +228,11 @@ struct ModifyEventView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 16)
                 
-                EventMemoView(memo: $memo, isDisabled: isRecommendationEdit)
-                    .padding(.top, 16)
-                    .padding(.horizontal, 20)
+                if !isRecommendationEdit {
+                    EventMemoView(memo: $memo, isDisabled: isRecommendationEdit)
+                        .padding(.top, 16)
+                        .padding(.horizontal, 20)
+                }
                 
                 Button {
                     if mode == .create {
