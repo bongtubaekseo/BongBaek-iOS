@@ -17,6 +17,7 @@ struct AccountDeletionView: View {
     
     @State private var showDeleteAlert = false
     @State private var showCompletionAlert = false
+    @State private var isOtherModeActive = false
     
     let deletionReasons = [
         "사용이 불편했어요",
@@ -48,14 +49,16 @@ struct AccountDeletionView: View {
             .padding(.leading, 20)
             
             VStack(spacing: 12.adjustedH) {
-                ForEach(deletionReasons, id: \.self) { reason in
+                ForEach(isOtherModeActive ? ["기타"] : deletionReasons, id: \.self) { reason in
                     DeletionReasonButton(
                         title: reason,
                         isSelected: selectedReason == reason,
                         hasAnySelection: selectedReason != nil,
                         action: { selectReason(reason: reason) },
                         otherReasonText: $otherReasonText,
-                        isTextFieldFocused: $isTextFieldFocused
+                        isTextFieldFocused: $isTextFieldFocused,
+                        isOtherModeActive: isOtherModeActive,
+                        onReturnPressed: exitOtherMode
                     )
                 }
             }
@@ -64,6 +67,7 @@ struct AccountDeletionView: View {
             .cornerRadius(12)
             .padding(.horizontal, 20)
             .padding(.top, 20.adjustedH)
+            .animation(.easeInOut(duration: 0.2), value: isOtherModeActive)
             
             Spacer()
             
@@ -100,31 +104,43 @@ struct AccountDeletionView: View {
             Text("탈퇴시 데이터 복구가 어렵습니다.")
         }
         .onTapGesture {
-            isTextFieldFocused = false
+            if isOtherModeActive {
+                exitOtherMode()
+            } else {
+                isTextFieldFocused = false
+            }
         }
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
-
     }
 
     private func selectReason(reason: String) {
         if selectedReason == reason {
             selectedReason = nil
-            // 기타 선택 해제 시 텍스트도 초기화
             if reason == "기타" {
                 otherReasonText = ""
+                exitOtherMode()
             }
         } else {
             selectedReason = reason
-            // 기타 선택 시 TextField에 포커스
             if reason == "기타" {
+                isOtherModeActive = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     isTextFieldFocused = true
                 }
             } else {
-                // 다른 항목 선택 시 기타 텍스트 초기화
                 otherReasonText = ""
+                isOtherModeActive = false
             }
+        }
+    }
+    
+    private func exitOtherMode() {
+        isOtherModeActive = false
+        isTextFieldFocused = false
+        if selectedReason == "기타" && otherReasonText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            selectedReason = nil
+            otherReasonText = ""
         }
     }
     
@@ -192,6 +208,8 @@ struct DeletionReasonButton: View {
     let action: () -> Void
     @Binding var otherReasonText: String
     @FocusState.Binding var isTextFieldFocused: Bool
+    let isOtherModeActive: Bool
+    let onReturnPressed: () -> Void
     
     var body: some View {
         if title == "기타" && isSelected {
@@ -207,10 +225,12 @@ struct DeletionReasonButton: View {
                           text: $otherReasonText,
                           prompt: Text("기타 사유를 입력해주세요")
                     .foregroundColor(.gray500))
-                      
                     .font(.body1_medium_16)
                     .foregroundColor(.white)
                     .focused($isTextFieldFocused)
+                    .onSubmit {
+                        onReturnPressed()
+                    }
                     .onChange(of: otherReasonText) { oldValue, newValue in
                          if newValue.count > 50 {
                              otherReasonText = String(newValue.prefix(50))
