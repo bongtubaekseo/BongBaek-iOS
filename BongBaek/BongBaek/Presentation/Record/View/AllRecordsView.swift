@@ -158,6 +158,7 @@ struct AllRecordsView: View {
             
             // 상세정보 토글 버튼
             detailToggleButton
+                .padding(.top,20)
             
             if isDetailExpanded {
                 detailInfoView(eventDetail: eventDetail)
