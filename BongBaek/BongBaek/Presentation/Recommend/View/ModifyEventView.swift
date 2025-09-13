@@ -505,7 +505,7 @@ struct ModifyEventView: View {
                 distance: "0"
             )
             
-            // 🆕 초기 데이터를 백업으로 저장
+            //초기 데이터를 백업으로 저장
             backupLocationData()
         }
         
