@@ -48,8 +48,9 @@ struct ModifyEventView: View {
     @State private var submitError: String?
     
     private var isRecommendationEdit: Bool {
-           return mode == .edit && eventDetailData == nil && eventManager.recommendationResponse != nil
-       }
+        guard eventDetailData == nil else { return false }
+        return mode == .edit && eventManager.recommendationResponse != nil
+    }
     
     private var isAttending: Bool {
         selectedAttend?.title == "참석"
