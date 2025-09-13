@@ -278,7 +278,7 @@ struct AllRecordsView: View {
             .background(.gray800)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                    .stroke(Color.gray800.opacity(0.5), lineWidth: 1)
             )
             .cornerRadius(8)
             .padding(.horizontal, 20)
