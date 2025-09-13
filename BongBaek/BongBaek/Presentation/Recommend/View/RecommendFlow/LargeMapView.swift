@@ -55,48 +55,37 @@ struct LargeMapView: View {
                  .background(.gray900)
                 
                 VStack(alignment: .leading) {
-                    // 검색 섹션을 ZStack으로 감싸서 드롭다운이 바로 아래에 위치하도록
-                    ZStack(alignment: .topLeading) {
-                        VStack(alignment: .leading, spacing: 0) {
-                            searchSection
-                            
-                            // 드롭다운이 표시될 공간 확보
-                            if !searchText.isEmpty &&
-                               !keywordSearch.searchResults.isEmpty &&
-                               isSearchFieldFocused {
-                                Color.clear
-                                    .frame(height: CGFloat(keywordSearch.searchResults.count) * 60) // 대략적인 높이
-                            }
-                        }
-                        
-                        // 드롭다운 오버레이 - searchSection 바로 아래에 위치
-                        VStack(alignment: .leading, spacing: 0) {
-                            // TextField 높이만큼 공간 확보 (약 48px)
-                            Color.clear
-                                .frame(height: 48)
-                            
-                            if !searchText.isEmpty &&
-                               !keywordSearch.searchResults.isEmpty &&
-                               isSearchFieldFocused {
-                                searchResultsOverlay
-                            }
-                        }
-                    }
+                    // 검색 섹션
+                    searchSection
                     
-                    // 지도 섹션
-                    ZStack(alignment: .bottom) {
+                    // 지도 섹션을 ZStack으로 감싸서 dropdown 오버레이
+                    ZStack {
                         mapSection
                             .padding(.top, 16)
                         
-                        // 선택된 위치 정보를 지도 하단에 표시
-                        if let tempLocation = tempSelectedLocation {
-                            selectedLocationOverlay(tempLocation)
+                        VStack {
+                            if !searchText.isEmpty && isSearchFieldFocused {
+                                if keywordSearch.searchResults.isEmpty {
+                                    emptySearchResultsOverlay
+                                } else {
+                                    searchResultsOverlay
+                                }
+                            }
+                            Spacer()
+                        }
+                        
+                        VStack {
+                            Spacer()
+                            if let tempLocation = tempSelectedLocation {
+                                selectedLocationOverlay(tempLocation)
+                            }
                         }
                     }
                     
                     submitButton
+                        .padding(.top,20)
                 }
-                .padding(.top, 20)
+                .padding(.top, 8)
             }
             .onAppear {
                 print("LargeMapView 나타남")
@@ -159,9 +148,12 @@ struct LargeMapView: View {
                 .foregroundColor(.gray)
                 .font(.system(size: 20))
             
-            TextField("장소를 검색하세요", text: $searchText)
-                .font(.system(size: 16))
+            TextField("기타 사유를 입력해주세요",
+                      text: $searchText,
+                      prompt: Text("주소를 검색하면 더 빨리 찾을 수 있어요")
+                .foregroundColor(.gray500))
                 .foregroundColor(.white)
+                .font(.body2_regular_16)
                 .focused($isSearchFieldFocused)
                 .onChange(of: searchText) { _, newValue in
                     keywordSearch.query = newValue
@@ -282,21 +274,50 @@ struct LargeMapView: View {
         ))
     }
     
+    private var emptySearchResultsOverlay: some View {
+         VStack(spacing: 12) {
+             Image("icon_caution 1")
+                 .font(.system(size: 24))
+                 .foregroundColor(.orange)
+             
+             Text("검색 결과가 없습니다")
+                 .bodyMedium16()
+                 .foregroundColor(.white)
+         }
+         .frame(maxWidth: .infinity)
+         .padding(.vertical, 32)
+         .background(Color.gray750)
+         .overlay(
+             RoundedRectangle(cornerRadius: 8)
+                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+         )
+         .cornerRadius(12)
+         .padding(.horizontal, 20)
+         .padding(.top, 4)
+         .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+         .zIndex(1)
+         .transition(.asymmetric(
+             insertion: .scale(scale: 0.95, anchor: .top).combined(with: .opacity),
+             removal: .scale(scale: 0.95, anchor: .top).combined(with: .opacity)
+         ))
+     }
+    
     private var submitButton: some View {
         Button {
             handleFormSubmission()
         } label: {
             Text("위치 저장")
                 .titleSemiBold18()
-                .foregroundColor(isNextButtonEnabled ? .white : .gray400)
+                .foregroundColor(isNextButtonEnabled ? .white : .gray500)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
         .frame(height: 55)
-        .background(isNextButtonEnabled ? .primaryNormal : .gray600)
+        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .padding(.top, 8)
+        .padding(.bottom, 60)
         .animation(.easeInOut(duration: 0.2), value: isNextButtonEnabled)
     }
     

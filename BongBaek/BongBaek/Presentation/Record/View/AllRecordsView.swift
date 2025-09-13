@@ -58,8 +58,6 @@ struct AllRecordsView: View {
                     errorView(message: errorMessage)
                 } else if let eventDetail = viewModel.eventDetail {
                     eventContentView(eventDetail: eventDetail)
-                } else {
-                    dummyContentView()
                 }
             }
         }
@@ -116,12 +114,12 @@ struct AllRecordsView: View {
     
     private func eventContentView(eventDetail: EventDetailData) -> some View {
         VStack(spacing: 12) {
-            VStack(alignment:.leading) {
+            VStack(alignment:.leading,spacing: 10) {
                 Text("\(eventDetail.hostInfo.hostName)의 \(eventDetail.eventInfo.eventCategory)")
                     .titleSemiBold18()
                     .foregroundStyle(.white)
                     
-                Text(eventDetail.eventInfo.eventDate)
+                Text(eventDetail.eventInfo.eventDate.DateFormat())
                     .bodyRegular14()
                     .foregroundStyle(.gray400)
             }
@@ -174,66 +172,6 @@ struct AllRecordsView: View {
         .padding(.vertical, 16)
     }
 
-    private func dummyContentView() -> some View {
-        VStack(spacing: 12) {
-            VStack {
-                Text("김철수의 결혼식 (더미)")
-                    .titleSemiBold16()
-                    .foregroundStyle(.white)
-                    
-                Text("2024.12.15 (더미)")
-                    .bodyRegular14()
-                    .foregroundStyle(.gray300)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(20)
-            .background(.gray750)
-            .cornerRadius(12)
-            .padding(.horizontal, 20)
-            .padding(.top, 12)
-            
-            HStack {
-                Text("경조사비")
-                    .titleSemiBold16()
-                    .foregroundStyle(.white)
-                
-                Spacer()
-                
-                Text("100,000원 (더미)")
-                    .titleSemiBold18()
-                    .foregroundStyle(.white)
-            }
-            .padding(20)
-            .background(
-                LinearGradient(
-                    colors: [
-                        Color(.primaryNormal),
-                        Color(hex: "#6F53FF")
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
-            .cornerRadius(12)
-            .padding(.horizontal, 20)
-            .padding(.top, 8)
-            
-            // 상세정보 토글 버튼
-            detailToggleButton
-            
-            if isDetailExpanded {
-                dummyDetailInfoView()
-            }
-            
-            // 메모 섹션
-            memoSection
-            
-            // 삭제 버튼
-            deleteButton
-        }
-        .padding(.vertical, 16)
-    }
-    
     private var detailToggleButton: some View {
         Button(action: {
             withAnimation(.easeInOut(duration: 0.3)) {
