@@ -27,9 +27,32 @@ struct LargeMapView: View {
     var body: some View {
         ScrollView {
             VStack {
-                CustomNavigationBar(title: "행사장 위치") {
-                    dismiss()
-                }
+                HStack {
+                     Button(action: {
+                         dismiss()
+                     }) {
+                         Image(systemName: "xmark")
+                             .font(.system(size: 18, weight: .medium))
+                             .foregroundColor(.white)
+                     }
+                     .frame(width: 44, height: 44)
+                     .padding(.leading, -8)
+                     
+                     Spacer()
+                     
+                     Text("행사장 검색")
+                         .titleSemiBold18()
+                         .foregroundColor(.white)
+                     
+                     Spacer()
+                     
+                     Color.clear
+                         .frame(width: 44, height: 44)
+                 }
+                 .padding(.horizontal, 20)
+                 .padding(.top, 8)
+                 .padding(.bottom, 16)
+                 .background(.gray900)
                 
                 VStack(alignment: .leading) {
                     // 검색 섹션을 ZStack으로 감싸서 드롭다운이 바로 아래에 위치하도록
