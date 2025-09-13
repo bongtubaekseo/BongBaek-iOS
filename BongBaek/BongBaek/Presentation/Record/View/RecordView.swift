@@ -209,6 +209,12 @@ struct RecordsHeaderView: View {
         .padding(.vertical, 16)
         .animation(.easeInOut(duration: 0.2), value: isDeleteMode)
         .animation(.easeInOut(duration: 0.2), value: isCurrentSectionEmpty)
+        .onChange(of: isDeleteMode) { oldValue, newValue in
+            NotificationCenter.default.post(
+                name: .recordDeleteModeChanged,
+                object: newValue
+            )
+        }
     }
 }
 
