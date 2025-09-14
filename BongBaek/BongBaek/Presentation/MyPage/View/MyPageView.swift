@@ -34,6 +34,8 @@ struct MyPageView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var router: NavigationRouter
     @StateObject private var mypageViewModel = MyPageViewModel()
+    @State private var showLogoutAlert = false
+    
     private let serviceItems: [ServiceItem] = [
         ServiceItem(icon: "icon_intersect", title: "앱 버전", subtitle: "v 1.0.0", showChevron: false),
         ServiceItem(icon: "icon_information", title: "문의하기", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480aa8badeba07a68b944"),
@@ -143,8 +145,7 @@ struct MyPageView: View {
 
                         HStack {
                             Button(action: {
-                                AuthManager.shared.logout()
-//                                print("로그아웃 버튼 눌림")
+                                showLogoutAlert = true
                             }) {
                                 Text("로그아웃")
                                     .foregroundColor(.gray400)
@@ -175,6 +176,15 @@ struct MyPageView: View {
             mypageViewModel.loadprofile()
         }
         .navigationBarHidden(true)
+        .alert("로그아웃하시겠습니까?", isPresented: $showLogoutAlert) {
+            Button("취소", role: .cancel) {
+            }
+            Button("로그아웃", role: .destructive) {
+                AuthManager.shared.logout()
+            }
+        } message: {
+            Text("로그아웃 시 서비스 이용을 위해 다시 로그인해야 합니다.")
+        }
     }
     
     private func formatBirthday(_ birthday: String?) -> String? {
