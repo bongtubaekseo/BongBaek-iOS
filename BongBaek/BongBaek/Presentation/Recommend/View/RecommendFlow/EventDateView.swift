@@ -399,25 +399,31 @@ struct DatePickerBottomSheet: View {
                         .fill(.gray750)
                 )
                 .labelsHidden()
-              
+                
                 Spacer()
                 
-                Button("선택 완료") {
+                Button(action: {
                     selectedDate = tempDate
                     eventManager.hasSelectedEventDate = true
                     onDismiss()
+                }) {
+                    HStack {
+                        Spacer()
+                        Text("선택 완료")
+                            .font(.title_semibold_18)
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("primary_normal"))
+                    )
                 }
-                .font(.title_semibold_18)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color("primary_normal"))
-                )
+                .buttonStyle(PlainButtonStyle())
                 .padding(.horizontal, 24)
-                .padding(.bottom, 34)
-            }
+                .padding(.bottom, 34)            }
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(.gray750)
