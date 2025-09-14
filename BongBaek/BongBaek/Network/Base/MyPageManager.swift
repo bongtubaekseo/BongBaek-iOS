@@ -45,6 +45,7 @@ class MyPageManager: ObservableObject {
                     if response.isSuccess, let data = response.data{
                         self?.profileData = data
                         self?.profileError = nil
+                        UserDefaults.standard.set(data.memberName, forKey: "memberName")
                         print("마이페이지 데이터 로드 성공")
                     } else {
                         self?.profileError = response.message
@@ -80,6 +81,7 @@ class MyPageManager: ObservableObject {
                         self?.profileData = updateData
                         self?.profileError = nil
                         self?.isUpdateSuccess = true
+                        UserDefaults.standard.set(updateData.memberName, forKey: "memberName")
                         print("프로필 업데이트 성공")
                     } else {
                         self?.profileError = response.message
