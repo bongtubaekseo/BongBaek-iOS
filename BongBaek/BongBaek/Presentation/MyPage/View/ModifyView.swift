@@ -105,7 +105,7 @@ struct ModifyView: View {
                     minLength: 2,
                     maxLength: 10,
                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                    customMessage: "특수문자는 기입할 수 없어요"
                 ),
                 isRequired: true
             )
