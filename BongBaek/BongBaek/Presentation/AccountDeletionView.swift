@@ -17,7 +17,6 @@ struct AccountDeletionView: View {
     
     @State private var showDeleteAlert = false
     @State private var showCompletionAlert = false
-    @State private var isOtherModeActive = false
     
     let deletionReasons = [
         "사용이 불편했어요",
@@ -27,29 +26,34 @@ struct AccountDeletionView: View {
         "새로운 계정으로 사용하고 싶어요",
         "기타"
     ]
+
+    private var isOtherSelected: Bool {
+        return selectedReason == "기타"
+    }
+    
     var body: some View {
-        
         VStack(spacing: 0) {
             CustomNavigationBar(title: "서비스 탈퇴") {
-                print("123")
                 router.pop()
             }
             
-            VStack(alignment: .leading,spacing: 12.adjustedH) {
-                Text("탈퇴를 도와드릴게요")
-                    .font(.head_bold_24)
-                    .foregroundStyle(.gray100)
-                
-                Text("더 나은 서비스를 위해 탈퇴 이유을 알려주세요")
-                    .font(.body2_regular_14)
-                    .foregroundStyle(.gray400)
+            if !isOtherSelected {
+                VStack(alignment: .leading, spacing: 12.adjustedH) {
+                    Text("탈퇴를 도와드릴게요")
+                        .font(.head_bold_24)
+                        .foregroundStyle(.gray100)
+                    
+                    Text("더 나은 서비스를 위해 탈퇴 이유을 알려주세요")
+                        .font(.body2_regular_14)
+                        .foregroundStyle(.gray400)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 10.adjustedH)
+                .padding(.leading, 20)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 10.adjustedH)
-            .padding(.leading, 20)
-            
+
             VStack(spacing: 12.adjustedH) {
-                ForEach(isOtherModeActive ? ["기타"] : deletionReasons, id: \.self) { reason in
+                ForEach(isOtherSelected ? ["기타"] : deletionReasons, id: \.self) { reason in
                     DeletionReasonButton(
                         title: reason,
                         isSelected: selectedReason == reason,
@@ -57,46 +61,43 @@ struct AccountDeletionView: View {
                         action: { selectReason(reason: reason) },
                         otherReasonText: $otherReasonText,
                         isTextFieldFocused: $isTextFieldFocused,
-                        isOtherModeActive: isOtherModeActive,
-                        onReturnPressed: exitOtherMode
+                        onReturnPressed: { exitOtherMode() }
                     )
                 }
             }
-            .padding(20)
-            .background(.gray800)
-            .cornerRadius(12)
+            .padding(isOtherSelected ? 0 : 20)
+            .background(isOtherSelected ? Color.clear : .gray800)
+            .cornerRadius(isOtherSelected ? 0 : 12)
             .padding(.horizontal, 20)
-            .padding(.top, 20.adjustedH)
-            .animation(.easeInOut(duration: 0.2), value: isOtherModeActive)
+            .padding(.top, isOtherSelected ? 20 : 20.adjustedH)
             
             Spacer()
-            
-            Button(action: {
-                showDeleteAlert = true
-            }) {
-                Text("탈퇴하기")
-                    .font(.title_semibold_18)
-                    .foregroundColor(selectedReason != nil ? .white : .gray500)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 55)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(selectedReason != nil ? .primaryNormal : .primaryBg)
-                    )
+
+            if !isOtherSelected {
+                Button(action: {
+                    showDeleteAlert = true
+                }) {
+                    Text("탈퇴하기")
+                        .font(.title_semibold_18)
+                        .foregroundColor(selectedReason != nil ? .white : .gray500)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 55)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(selectedReason != nil ? .primaryNormal : .primaryBg)
+                        )
+                }
+                .disabled(!isDeleteButtonEnabled)
+                .buttonStyle(PlainButtonStyle())
+                .padding(.horizontal, 20)
+                .padding(.bottom, 40.adjustedH)
             }
-            .disabled(!isDeleteButtonEnabled)
-            .buttonStyle(PlainButtonStyle())
-            .animation(.easeInOut(duration: 0.2), value: selectedReason != nil)
-            .padding(.horizontal, 20)
-            .padding(.bottom, 40.adjustedH)
-             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
+        .animation(.easeInOut(duration: 0.3), value: isOtherSelected)
         .alert("정말 탈퇴하시겠습니까?", isPresented: $showDeleteAlert) {
-            Button("취소", role: .cancel) {
-                
-            }
+            Button("취소", role: .cancel) { }
             Button("탈퇴", role: .destructive) {
                 handleAccountDeletion()
             }
@@ -104,7 +105,7 @@ struct AccountDeletionView: View {
             Text("탈퇴시 데이터 복구가 어렵습니다.")
         }
         .onTapGesture {
-            if isOtherModeActive {
+            if isOtherSelected {
                 exitOtherMode()
             } else {
                 isTextFieldFocused = false
@@ -119,26 +120,22 @@ struct AccountDeletionView: View {
             selectedReason = nil
             if reason == "기타" {
                 otherReasonText = ""
-                exitOtherMode()
             }
         } else {
             selectedReason = reason
             if reason == "기타" {
-                isOtherModeActive = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     isTextFieldFocused = true
                 }
             } else {
                 otherReasonText = ""
-                isOtherModeActive = false
             }
         }
     }
     
     private func exitOtherMode() {
-        isOtherModeActive = false
         isTextFieldFocused = false
-        if selectedReason == "기타" && otherReasonText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        if otherReasonText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             selectedReason = nil
             otherReasonText = ""
         }
@@ -148,15 +145,12 @@ struct AccountDeletionView: View {
         guard let reason = selectedReason else { return }
         
         let withdrawalReasonCode = mapReasonToCode(reason: reason)
-        
         let detailText: String? = (reason == "기타") ? otherReasonText.trimmingCharacters(in: .whitespacesAndNewlines) : nil
         
         let withdrawRequest = WithdrawRequestData(
             withdrawalReason: withdrawalReasonCode,
             detail: detailText
         )
-        
-        print("전송할 데이터: \(withdrawRequest)")
         
         AuthManager.shared.withdraw(reason: withdrawRequest) { success in
             DispatchQueue.main.async {
@@ -174,7 +168,7 @@ struct AccountDeletionView: View {
         
         if reason == "기타" {
             let trimmedText = otherReasonText.trimmingCharacters(in: .whitespacesAndNewlines)
-                return !trimmedText.isEmpty && trimmedText.count >= 1 && trimmedText.count <= 50
+            return !trimmedText.isEmpty && trimmedText.count >= 1 && trimmedText.count <= 50
         } else {
             return true
         }
@@ -182,24 +176,16 @@ struct AccountDeletionView: View {
     
     private func mapReasonToCode(reason: String) -> String {
         switch reason {
-        case "사용이 불편했어요":
-            return "INCONVENIENT"
-        case "개인정보가 걱정돼요":
-            return "PRIVACY_CONCERN"
-        case "앱을 자주 사용하지 않아요":
-            return "RARELY_USED"
-        case "오류나 문제가 있었어요":
-            return "BUG_OR_ERROR"
-        case "새로운 계정으로 사용하고 싶어요":
-            return "NEW_ACCOUNT"
-        case "기타":
-            return "OTHER"
-        default:
-            return "OTHER"
+        case "사용이 불편했어요": return "INCONVENIENT"
+        case "개인정보가 걱정돼요": return "PRIVACY_CONCERN"
+        case "앱을 자주 사용하지 않아요": return "RARELY_USED"
+        case "오류나 문제가 있었어요": return "BUG_OR_ERROR"
+        case "새로운 계정으로 사용하고 싶어요": return "NEW_ACCOUNT"
+        case "기타": return "OTHER"
+        default: return "OTHER"
         }
     }
 }
-
 
 struct DeletionReasonButton: View {
     let title: String
@@ -208,15 +194,12 @@ struct DeletionReasonButton: View {
     let action: () -> Void
     @Binding var otherReasonText: String
     @FocusState.Binding var isTextFieldFocused: Bool
-    let isOtherModeActive: Bool
     let onReturnPressed: () -> Void
     
     var body: some View {
         if title == "기타" && isSelected {
-
             HStack(spacing: 12) {
-  
-                Image(getImageName())
+                Image("icon_colorcheck")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
@@ -232,10 +215,10 @@ struct DeletionReasonButton: View {
                         onReturnPressed()
                     }
                     .onChange(of: otherReasonText) { oldValue, newValue in
-                         if newValue.count > 50 {
-                             otherReasonText = String(newValue.prefix(50))
-                         }
-                     }
+                        if newValue.count > 50 {
+                            otherReasonText = String(newValue.prefix(50))
+                        }
+                    }
                 
                 Spacer()
             }
@@ -275,7 +258,6 @@ struct DeletionReasonButton: View {
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
-            .animation(.easeInOut(duration: 0.2), value: isSelected)
         }
     }
     
