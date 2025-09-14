@@ -10,10 +10,9 @@ import SwiftUI
 struct ScheduleView: View {
     let events: [Event]
     @EnvironmentObject var router: NavigationRouter
-//    @StateObject private var mypageViewModel = MyPageViewModel()
-    
+
     private var sortedEvents: [Event] {
-           return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
+           return events.sorted { $0.eventInfo.dDay > $1.eventInfo.dDay }
        }
     
     var body: some View {
@@ -50,9 +49,5 @@ struct ScheduleView: View {
         }
         .padding(.horizontal)
         .background(Color.black)
-//        .onAppear {
-//            print("MyProfile 나타남 - 데이터 로드 시작")
-//            mypageViewModel.loadprofile()
-//        }
     }
 }

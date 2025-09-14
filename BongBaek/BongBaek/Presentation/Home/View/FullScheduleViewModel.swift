@@ -60,7 +60,7 @@ class FullScheduleViewModel: ObservableObject {
     
     /// 정렬된 년도 목록
     var sortedYears: [String] {
-        eventsGrouped.keys.sorted(by: <)
+        eventsGrouped.keys.sorted(by: >)
     }
     
     /// 특정 년도의 월별 이벤트
@@ -71,7 +71,7 @@ class FullScheduleViewModel: ObservableObject {
     /// 특정 년도의 정렬된 월 목록
     func sortedMonthsForYear(_ year: String) -> [String] {
         let months = eventsGrouped[year] ?? [:]
-        return months.keys.sorted()
+        return months.keys.sorted(by: >)
     }
     
     // MARK: - API Methods

@@ -83,7 +83,7 @@ class RecordViewModel: ObservableObject {
      }
     
     var sortedYears: [String] {
-        currentEventsGrouped.keys.sorted(by: <)
+        currentEventsGrouped.keys.sorted(by: >)
     }
     
     func monthsForYear(_ year: String) -> [String: [AttendedEvent]] {
@@ -93,7 +93,7 @@ class RecordViewModel: ObservableObject {
     /// 특정 년도의 정렬된 월 목록
     func sortedMonthsForYear(_ year: String) -> [String] {
         let months = currentEventsGrouped[year] ?? [:]
-        return months.keys.sorted()
+        return months.keys.sorted(by: >)
     }
     
     /// 현재 섹션이 비어있는지 확인
