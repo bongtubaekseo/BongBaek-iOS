@@ -29,7 +29,7 @@ struct CustomTabView: View {
             TabBarItem(
                 tab: .record,
                 selectedTab: $selectedTab,
-                imageName: "mingcute_pen-fill",
+                imageName: "Property 1=selected",
                 title: "기록하기"
             )
         }

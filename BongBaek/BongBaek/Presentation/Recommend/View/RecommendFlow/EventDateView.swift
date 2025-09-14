@@ -366,6 +366,13 @@ struct DatePickerBottomSheet: View {
     @Binding var selectedDate: Date
     let onDismiss: () -> Void
     @State private var tempDate: Date = Date()
+    @EnvironmentObject var eventManager: EventCreationManager
+    
+    init(selectedDate: Binding<Date>, onDismiss: @escaping () -> Void) {
+        self._selectedDate = selectedDate
+        self.onDismiss = onDismiss
+        self._tempDate = State(initialValue: selectedDate.wrappedValue)
+    }
     
     var body: some View {
         NavigationView {
@@ -392,27 +399,31 @@ struct DatePickerBottomSheet: View {
                         .fill(.gray750)
                 )
                 .labelsHidden()
-                .onAppear {
-                    tempDate = selectedDate
-                }
                 
                 Spacer()
                 
-                Button("선택 완료") {
+                Button(action: {
                     selectedDate = tempDate
+                    eventManager.hasSelectedEventDate = true
                     onDismiss()
+                }) {
+                    HStack {
+                        Spacer()
+                        Text("선택 완료")
+                            .font(.title_semibold_18)
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("primary_normal"))
+                    )
                 }
-                .font(.title_semibold_18)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color("primary_normal"))
-                )
+                .buttonStyle(PlainButtonStyle())
                 .padding(.horizontal, 24)
-                .padding(.bottom, 34)
-            }
+                .padding(.bottom, 34)            }
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(.gray750)

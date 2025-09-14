@@ -12,12 +12,20 @@ struct ServiceItem: Identifiable {
     let title: String
     let subtitle: String?
     let showChevron: Bool
+    let url: String?
     
-    init(icon: String, title: String, subtitle: String? = nil, showChevron: Bool = false) {
+    init(
+        icon: String,
+        title: String,
+        subtitle: String? = nil,
+        showChevron: Bool = false,
+        url: String? = nil
+    ) {
         self.icon = icon
         self.title = title
         self.subtitle = subtitle
         self.showChevron = showChevron
+        self.url = url
     }
 }
 
@@ -26,13 +34,16 @@ struct MyPageView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var router: NavigationRouter
     @StateObject private var mypageViewModel = MyPageViewModel()
+    @State private var showLogoutAlert = false
     
     private let serviceItems: [ServiceItem] = [
         ServiceItem(icon: "icon_intersect", title: "앱 버전", subtitle: "v 1.0.0", showChevron: false),
-        ServiceItem(icon: "icon_information", title: "문의하기", showChevron: true),
-        ServiceItem(icon: "icon_book", title: "서비스 이용약관", showChevron: true),
-        ServiceItem(icon: "icon_key", title: "개인정보 처리방침", showChevron: true)
+        ServiceItem(icon: "icon_information", title: "문의하기", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480aa8badeba07a68b944"),
+        ServiceItem(icon: "icon_book", title: "서비스 이용약관", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d348036b260f175a236ec7c"),
+        ServiceItem(icon: "icon_key", title: "개인정보 처리방침", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480d0b1eafa217b306105")
     ]
+    
+   
     
     var body: some View {
         ZStack {
@@ -125,7 +136,8 @@ struct MyPageView: View {
                                         icon: item.icon,
                                         title: item.title,
                                         subtitle: item.subtitle,
-                                        showChevron: item.showChevron
+                                        showChevron: item.showChevron,
+                                        url: item.url
                                     )
                                 }
                             }
@@ -133,8 +145,7 @@ struct MyPageView: View {
 
                         HStack {
                             Button(action: {
-                                AuthManager.shared.logout()
-//                                print("로그아웃 버튼 눌림")
+                                showLogoutAlert = true
                             }) {
                                 Text("로그아웃")
                                     .foregroundColor(.gray400)
@@ -165,6 +176,15 @@ struct MyPageView: View {
             mypageViewModel.loadprofile()
         }
         .navigationBarHidden(true)
+        .alert("로그아웃하시겠습니까?", isPresented: $showLogoutAlert) {
+            Button("취소", role: .cancel) {
+            }
+            Button("로그아웃", role: .destructive) {
+                AuthManager.shared.logout()
+            }
+        } message: {
+            Text("로그아웃 시 서비스 이용을 위해 다시 로그인해야 합니다.")
+        }
     }
     
     private func formatBirthday(_ birthday: String?) -> String? {
@@ -193,16 +213,22 @@ struct ServiceRow: View {
     let title: String
     let subtitle: String?
     let showChevron: Bool
+    let url: String?
     
-    init(icon: String, title: String, subtitle: String? = nil, showChevron: Bool = false) {
+    @Environment(\.openURL) private var openURL
+    
+    init(icon: String, title: String, subtitle: String? = nil, showChevron: Bool = false, url: String? = nil) {
         self.icon = icon
         self.title = title
         self.subtitle = subtitle
         self.showChevron = showChevron
+        self.url = url
     }
     
     var body: some View {
-        Button(action: {}) {
+        Button(action: {
+            handleServiceItemTap(url: url)
+        }) {
             HStack(spacing: 16) {
                 Image(icon)
                     .frame(width: 24, height: 24)
@@ -226,7 +252,18 @@ struct ServiceRow: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
+            .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
+    }
+    
+    private func handleServiceItemTap(url: String?) {
+        guard let urlString = url,
+              let url = URL(string: urlString) else {
+            print("유효하지 않은 URL: \(url ?? "nil")")
+            return
+        }
+        
+        openURL(url)
     }
 }

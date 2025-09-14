@@ -32,7 +32,7 @@ struct CreateEventView: View {
    
     let attendItems = [
         TextDropdownItem(title: "참석"),
-        TextDropdownItem(title: "미참석"),
+        TextDropdownItem(title: "불참석"),
     ]
     
     let eventItems = [
@@ -145,8 +145,8 @@ struct CreateEventView: View {
                         )
                         .padding(.top, 16)
                         .onChange(of: selectedAttend) { _, newValue in
-                            // 미참석으로 변경되면 선택된 위치 초기화
-                            if newValue?.title == "미참석" {
+                            // 불참석으로 변경되면 선택된 위치 초기화
+                            if newValue?.title == "불참석" {
                                 selectedLocation = nil
                             }
                         }
@@ -336,7 +336,7 @@ struct CreateEventView: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation",
+                icon: "icon_relation 1",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation
@@ -526,7 +526,7 @@ struct CreateEventViewAfterEvent: View {
    
     let attendItems = [
         TextDropdownItem(title: "참석"),
-        TextDropdownItem(title: "미참석"),
+        TextDropdownItem(title: "불참석"),
     ]
     
     let eventItems = [
@@ -639,8 +639,8 @@ struct CreateEventViewAfterEvent: View {
                         )
                         .padding(.top, 16)
                         .onChange(of: selectedAttend) { _, newValue in
-                            // 미참석으로 변경되면 선택된 위치 초기화
-                            if newValue?.title == "미참석" {
+                            // 불참석으로 변경되면 선택된 위치 초기화
+                            if newValue?.title == "불참석" {
                                 selectedLocation = nil
                             }
                         }
@@ -829,7 +829,7 @@ struct CreateEventViewAfterEvent: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation",
+                icon: "icon_relation 1",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation

@@ -21,7 +21,6 @@ enum ScheduleCategory: String, CaseIterable {
 struct FullScheduleView: View {
     @State private var selectedCategory: ScheduleCategory = .all
     @StateObject private var viewModel = FullScheduleViewModel()
-    @StateObject private var mypageViewModel = MyPageViewModel()
     @EnvironmentObject var router: NavigationRouter
     @Environment(\.dismiss) private var dismiss
     
@@ -75,13 +74,11 @@ struct FullScheduleView: View {
 
 
     var body: some View {
-        VStack(spacing: 30) {
-            headerView
-                .padding(.leading, 8)
-            categoryScrollView
-                .padding(.leading, 16)
+        VStack(spacing: 0) {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 30) {
+                    headerView
+                    categoryScrollView
                     
                     if viewModel.isLoading {
                         loadingView
@@ -126,16 +123,12 @@ struct FullScheduleView: View {
             }
             .contentShape(Rectangle())
             
-            Text("\(mypageViewModel.profileData?.memberName ?? "봉백")님의 다가올 일정")
+            Text("\(UserDefaults.standard.memberName) 님의 다가올 일정") //TODO: 확인필요
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.leading, 12)
             
             Spacer()
-        }
-        .onAppear {
-            print("MyProfile 나타남 - 데이터 로드 시작")
-            mypageViewModel.loadprofile()
         }
     }
     
@@ -160,10 +153,10 @@ struct FullScheduleView: View {
             Text(category.displayName)
                 .bodyMedium16()
                 .foregroundColor(viewModel.selectedCategory == category ? .black : .gray300)
-                .frame(height: 36)
+                .frame(height: 40)
                 .padding(.horizontal, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 6)
+                    RoundedRectangle(cornerRadius: 8)
                         .fill(viewModel.selectedCategory == category ? .gray100 : .gray700)
                 )
         }
@@ -176,7 +169,7 @@ struct FullScheduleView: View {
     }
     
     private func yearSectionView(for year: String) -> some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 16) {
             Text("\(year)년")
                 .headBold24()
                 .foregroundColor(.white)

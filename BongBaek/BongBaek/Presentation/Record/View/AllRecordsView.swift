@@ -58,8 +58,6 @@ struct AllRecordsView: View {
                     errorView(message: errorMessage)
                 } else if let eventDetail = viewModel.eventDetail {
                     eventContentView(eventDetail: eventDetail)
-                } else {
-                    dummyContentView()
                 }
             }
         }
@@ -116,12 +114,12 @@ struct AllRecordsView: View {
     
     private func eventContentView(eventDetail: EventDetailData) -> some View {
         VStack(spacing: 12) {
-            VStack(alignment:.leading) {
+            VStack(alignment:.leading,spacing: 10) {
                 Text("\(eventDetail.hostInfo.hostName)의 \(eventDetail.eventInfo.eventCategory)")
                     .titleSemiBold18()
                     .foregroundStyle(.white)
                     
-                Text(eventDetail.eventInfo.eventDate)
+                Text(eventDetail.eventInfo.eventDate.DateFormat())
                     .bodyRegular14()
                     .foregroundStyle(.gray400)
             }
@@ -160,6 +158,7 @@ struct AllRecordsView: View {
             
             // 상세정보 토글 버튼
             detailToggleButton
+                .padding(.top,20)
             
             if isDetailExpanded {
                 detailInfoView(eventDetail: eventDetail)
@@ -167,73 +166,15 @@ struct AllRecordsView: View {
             
             // 메모 섹션
             memoSection
+                .padding(.top,40)
             
             // 삭제 버튼
             deleteButton
+                .padding(.top, 40)
         }
         .padding(.vertical, 16)
     }
 
-    private func dummyContentView() -> some View {
-        VStack(spacing: 12) {
-            VStack {
-                Text("김철수의 결혼식 (더미)")
-                    .titleSemiBold16()
-                    .foregroundStyle(.white)
-                    
-                Text("2024.12.15 (더미)")
-                    .bodyRegular14()
-                    .foregroundStyle(.gray300)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(20)
-            .background(.gray750)
-            .cornerRadius(12)
-            .padding(.horizontal, 20)
-            .padding(.top, 12)
-            
-            HStack {
-                Text("경조사비")
-                    .titleSemiBold16()
-                    .foregroundStyle(.white)
-                
-                Spacer()
-                
-                Text("100,000원 (더미)")
-                    .titleSemiBold18()
-                    .foregroundStyle(.white)
-            }
-            .padding(20)
-            .background(
-                LinearGradient(
-                    colors: [
-                        Color(.primaryNormal),
-                        Color(hex: "#6F53FF")
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
-            .cornerRadius(12)
-            .padding(.horizontal, 20)
-            .padding(.top, 8)
-            
-            // 상세정보 토글 버튼
-            detailToggleButton
-            
-            if isDetailExpanded {
-                dummyDetailInfoView()
-            }
-            
-            // 메모 섹션
-            memoSection
-            
-            // 삭제 버튼
-            deleteButton
-        }
-        .padding(.vertical, 16)
-    }
-    
     private var detailToggleButton: some View {
         Button(action: {
             withAnimation(.easeInOut(duration: 0.3)) {
@@ -258,38 +199,16 @@ struct AllRecordsView: View {
     }
     
     private func detailInfoView(eventDetail: EventDetailData) -> some View {
-        VStack(alignment: .leading, spacing: 24) {
+        VStack(alignment: .leading, spacing: 36) {
             DetailRow(image: "icon_person_16", title: "이름", value: eventDetail.hostInfo.hostName)
             DetailRow(image: "icon_nickname_16", title: "별명", value: eventDetail.hostInfo.hostNickname)
-            DetailRow(image: "icon_relation", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_relation 1", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_coin_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원")
-            DetailRow(image: "icon_check 1", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_check", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_event_16", title: "날짜", value: eventDetail.eventInfo.eventDate, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_location_16", title: "장소", value: eventDetail.locationInfo.location)
             //DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
-        }
-        .padding(20)
-        .background(.gray750)
-        .cornerRadius(12)
-        .padding(.horizontal, 20)
-        .transition(.asymmetric(
-            insertion: .scale(scale: 0.95, anchor: .top).combined(with: .opacity),
-            removal: .scale(scale: 0.95, anchor: .top).combined(with: .opacity)
-        ))
-    }
-    
-    private func dummyDetailInfoView() -> some View {
-        VStack(alignment: .leading, spacing: 24) {
-            DetailRow(image: "icon_person_16", title: "이름", value: "김철수 (더미)")
-            DetailRow(image: "icon_nickname_16", title: "별명", value: "철수 (더미)")
-            DetailRow(image: "icon_event_16", title: "관계", value: "친구 (더미)", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-            DetailRow(image: "icon_event_16", title: "경조사", value: "결혼식 (더미)", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-            DetailRow(image: "icon_event_16", title: "경조사비", value: "100,000원 (더미)")
-            DetailRow(image: "icon_event_16", title: "참석여부", value: "참석 (더미)", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-            DetailRow(image: "icon_event_16", title: "날짜", value: "2024.12.15 (더미)", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-            DetailRow(image: "icon_location_16", title: "장소", value: "강남구 웨딩홀 (더미)")
-            DetailRow(image: "icon_calendar", title: "D-Day", value: "D-30 (더미)", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
         }
         .padding(20)
         .background(.gray750)
@@ -337,7 +256,7 @@ struct AllRecordsView: View {
             .background(.gray800)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                    .stroke(Color.gray800.opacity(0.5), lineWidth: 1)
             )
             .cornerRadius(8)
             .padding(.horizontal, 20)
@@ -372,7 +291,7 @@ struct AllRecordsView: View {
         )
         .cornerRadius(12)
         .padding(.horizontal, 20)
-        .padding(.top, 16)
+        .padding(.bottom,60)
         .disabled(viewModel.isDeleting)
         .alert("경조사 기록을 삭제하시겠습니까?", isPresented: $showDeleteAlert) {
             Button("취소", role: .cancel) { }

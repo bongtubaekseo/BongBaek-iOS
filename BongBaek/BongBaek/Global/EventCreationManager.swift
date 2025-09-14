@@ -398,6 +398,10 @@ class EventCreationManager: ObservableObject {
         submitSuccess = false
         apiResponse = nil
         
+        recommendationResponse = nil
+        isLoadingRecommendation = false
+        recommendationError = nil
+        
         print("EventCreationManager: 모든 데이터 초기화 완료")
     }
     

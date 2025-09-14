@@ -48,8 +48,9 @@ struct ModifyEventView: View {
     @State private var submitError: String?
     
     private var isRecommendationEdit: Bool {
-           return mode == .edit && eventDetailData == nil && eventManager.recommendationResponse != nil
-       }
+        guard eventDetailData == nil else { return false }
+        return mode == .edit && eventManager.recommendationResponse != nil
+    }
     
     private var isAttending: Bool {
         selectedAttend?.title == "참석"
@@ -72,7 +73,7 @@ struct ModifyEventView: View {
     
     let attendItems = [
         TextDropdownItem(title: "참석"),
-        TextDropdownItem(title: "미참석"),
+        TextDropdownItem(title: "불참석"),
     ]
     
     let eventItems = [
@@ -186,8 +187,8 @@ struct ModifyEventView: View {
                         )
                         .padding(.top, 16)
                         .onChange(of: selectedAttend) { _, newValue in
-                            if newValue?.title == "미참석" {
-                                // 미참석으로 변경 시: 현재 위치를 백업하고 임시로 클리어
+                            if newValue?.title == "불참석" {
+                                // 불참석으로 변경 시: 현재 위치를 백업하고 임시로 클리어
                                 if selectedLocation != nil {
                                     backupLocationData()
                                 }
@@ -228,9 +229,11 @@ struct ModifyEventView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 16)
                 
-                EventMemoView(memo: $memo, isDisabled: isRecommendationEdit)
-                    .padding(.top, 16)
-                    .padding(.horizontal, 20)
+                if !isRecommendationEdit {
+                    EventMemoView(memo: $memo, isDisabled: isRecommendationEdit)
+                        .padding(.top, 16)
+                        .padding(.horizontal, 20)
+                }
                 
                 Button {
                     if mode == .create {
@@ -426,7 +429,7 @@ struct ModifyEventView: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation",
+                icon: "icon_relation 1",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation,
@@ -478,7 +481,7 @@ struct ModifyEventView: View {
         print("기존 기록 금액 설정: \(eventDetail.eventInfo.cost)원")
         
         // 참석 여부
-        let attendanceText = eventDetail.eventInfo.isAttend ? "참석" : "미참석"
+        let attendanceText = eventDetail.eventInfo.isAttend ? "참석" : "불참석"
         if let attendItem = attendItems.first(where: { $0.title == attendanceText }) {
             selectedAttend = attendItem
         }
@@ -503,7 +506,7 @@ struct ModifyEventView: View {
                 distance: "0"
             )
             
-            // 🆕 초기 데이터를 백업으로 저장
+            //초기 데이터를 백업으로 저장
             backupLocationData()
         }
         
@@ -538,7 +541,7 @@ struct ModifyEventView: View {
         }
         
         // 참석 여부 설정
-        let attendanceText = eventManager.isAttend ? "참석" : "미참석"
+        let attendanceText = eventManager.isAttend ? "참석" : "불참석"
         if let attendItem = attendItems.first(where: { $0.title == attendanceText }) {
             selectedAttend = attendItem
         }

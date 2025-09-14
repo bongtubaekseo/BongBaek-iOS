@@ -10,16 +10,15 @@ import SwiftUI
 struct ScheduleView: View {
     let events: [Event]
     @EnvironmentObject var router: NavigationRouter
-    @StateObject private var mypageViewModel = MyPageViewModel()
-    
+
     private var sortedEvents: [Event] {
-           return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
+           return events.sorted { $0.eventInfo.dDay > $1.eventInfo.dDay }
        }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("\(mypageViewModel.profileData?.memberName ?? "봉백")님의 일정")
+                Text("\(UserDefaults.standard.memberName)님의 일정")
                     .font(.title_semibold_20)
                     .foregroundStyle(.white)
                 
@@ -50,9 +49,5 @@ struct ScheduleView: View {
         }
         .padding(.horizontal)
         .background(Color.black)
-        .onAppear {
-            print("MyProfile 나타남 - 데이터 로드 시작")
-            mypageViewModel.loadprofile()
-        }
     }
 }

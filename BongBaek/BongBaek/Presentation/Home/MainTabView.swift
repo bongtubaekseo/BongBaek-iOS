@@ -14,6 +14,7 @@ struct MainTabView: View {
     @StateObject private var stepManager = GlobalStepManager()
     @StateObject private var router = NavigationRouter()
     @StateObject private var eventManager = EventCreationManager()
+    @State private var isDeleteModeActive = false
     
     var body: some View {
         NavigationStack(path: $router.path) {
@@ -34,13 +35,21 @@ struct MainTabView: View {
                         case .record:
                             RecordView()
                                 .environmentObject(router)
+                                .onReceive(NotificationCenter.default.publisher(for: .recordDeleteModeChanged)) { notification in
+                                     if let isDeleteMode = notification.object as? Bool {
+                                         withAnimation(.easeInOut(duration: 0.3)) {
+                                             isDeleteModeActive = isDeleteMode
+                                         }
+                                     }
+                                 }
+                            
                         }
                     }
                 }
                 .animation(.none, value: isRecommendFlowActive)
                 .animation(.none, value: selectedTab)
                 // 조건부 탭바 표시
-                if !isRecommendFlowActive {
+                if !isRecommendFlowActive && !isDeleteModeActive {
                     CustomTabView(selectedTab: $selectedTab)
                         .background(Color.gray750)
                         .clipShape(
@@ -181,4 +190,8 @@ struct MainTabView: View {
                 .environmentObject(eventManager)
         }
     }
+}
+
+extension Notification.Name {
+    static let recordDeleteModeChanged = Notification.Name("recordDeleteModeChanged")
 }

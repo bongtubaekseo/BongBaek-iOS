@@ -84,7 +84,7 @@ struct CustomDropdown<T: DropdownItem>: View {
 
     private func DropdownHeader() -> some View {
         Button(action: {
-            if !isDisabled {  // 비활성화 상태에서는 터치 무시
+            if !isDisabled {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                     isExpanded.toggle()
                 }
@@ -93,7 +93,9 @@ struct CustomDropdown<T: DropdownItem>: View {
             HStack {
                 if let selectedItem = selectedItem {
                     Text(selectedItem.displayText)
-                        .foregroundColor(isDisabled ? .white : .white)
+                        .foregroundColor(
+                            isExpanded ? Color("primary_normal") : .white
+                        )
                 } else {
                     Text(placeholder)
                         .foregroundColor(isDisabled ? .gray600 : .gray)
@@ -101,19 +103,19 @@ struct CustomDropdown<T: DropdownItem>: View {
 
                 Spacer()
 
-                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                    .foregroundColor(.gray)
+                Image(systemName: "chevron.down")
+                    .foregroundColor(isExpanded ? .primaryNormal : .white)
                     .rotationEffect(.degrees(isExpanded ? 180 : 0))
                     .animation(.easeInOut(duration: 0.2), value: isExpanded)
             }
             .frame(height: 50)
             .padding(.horizontal, 16)
-            .background(Color.gray.opacity(0.2))
+            .background(Color.gray750)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        (selectedItem != nil || isExpanded)
-                            ? Color("primary_normal") : Color("gray750"),
+                        isDisabled ? Color.gray750 :
+                        (isExpanded ? Color("primary_normal") : Color.gray750),
                         lineWidth: 1
                     )
             )
@@ -141,18 +143,19 @@ struct CustomDropdown<T: DropdownItem>: View {
 
                         Spacer()
 
-                        if selectedItem?.id == item.id {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(Color("primary_normal"))
-                        }
-                    }
-                    .frame(height: 44)
+                 }
+                    .frame(height: 52)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                     .background(
-                        selectedItem?.id == item.id
-                            ? Color("primary_normal").opacity(0.1)
-                            : Color.clear
+                        Group {
+                            if selectedItem?.id == item.id {
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(Color("primary_normal").opacity(0.1))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                            }
+                        }
                     )
                     .contentShape(Rectangle())
                 }

@@ -83,7 +83,7 @@ class RecordViewModel: ObservableObject {
      }
     
     var sortedYears: [String] {
-        currentEventsGrouped.keys.sorted(by: <)
+        currentEventsGrouped.keys.sorted(by: >)
     }
     
     func monthsForYear(_ year: String) -> [String: [AttendedEvent]] {
@@ -93,7 +93,7 @@ class RecordViewModel: ObservableObject {
     /// 특정 년도의 정렬된 월 목록
     func sortedMonthsForYear(_ year: String) -> [String] {
         let months = currentEventsGrouped[year] ?? [:]
-        return months.keys.sorted()
+        return months.keys.sorted(by: >)
     }
     
     /// 현재 섹션이 비어있는지 확인
@@ -163,6 +163,7 @@ class RecordViewModel: ObservableObject {
         withAnimation(.easeInOut(duration: 0.2)) {
             selectedSection = section
             selectedRecordIDs.removeAll() // 섹션 변경 시 선택 초기화
+            selectedCategory = .all
         }
         
         // 해당 섹션 데이터가 없으면 로드
@@ -392,5 +393,12 @@ extension EventsCategory {
         case .birthday: return "생일"
         case .funeral: return "장례식"
         }
+    }
+}
+
+extension RecordViewModel {
+    func clearSelectedRecords() {
+        selectedRecordIDs.removeAll()
+        print("선택된 레코드 초기화 완료 - 총 \(selectedRecordIDs.count)개")
     }
 }

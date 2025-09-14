@@ -403,6 +403,8 @@ class AuthManager: ObservableObject {
                 refresh: tokenInfo.refreshToken.token
                )
                
+               UserDefaults.standard.set(authData.name, forKey: "memberName")
+               
                switch saveResult {
                case .success:
                    print("토큰 저장 성공 - authenticated 상태로 변경")
