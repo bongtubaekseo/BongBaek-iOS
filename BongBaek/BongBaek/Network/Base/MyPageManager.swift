@@ -15,6 +15,7 @@ class MyPageManager: ObservableObject {
     @Published var profileData: UpdateProfileData? = nil
     @Published var isLoadingProfile = false
     @Published var profileError: String? = nil
+    @Published var isUpdateSuccess = false
     
     private let userService: MyPageServiceProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -58,6 +59,7 @@ class MyPageManager: ObservableObject {
         print("프로필 업데이트 시작: \(updateData)")
         isLoadingProfile = true
         profileError = nil
+        isUpdateSuccess = false
         
         userService.updateProfile(profileData: updateData)
             .receive(on: DispatchQueue.main)
@@ -66,6 +68,7 @@ class MyPageManager: ObservableObject {
                     self?.isLoadingProfile = false
                     if case .failure(let error) = completion {
                         self?.profileError = error.localizedDescription
+                        self?.isUpdateSuccess = false
                         print("프로필 업데이트 실패: \(error)")
                     }
                 },
@@ -76,10 +79,11 @@ class MyPageManager: ObservableObject {
                         // 성공 시 로컬 데이터도 업데이트
                         self?.profileData = updateData
                         self?.profileError = nil
+                        self?.isUpdateSuccess = true
                         print("프로필 업데이트 성공")
-                        NotificationCenter.default.post(name: .profileUpdateSuccess, object: nil)
                     } else {
                         self?.profileError = response.message
+                        self?.isUpdateSuccess = false
                         print("프로필 업데이트 API 실패: \(response.message)")
                     }
                 }
@@ -87,7 +91,10 @@ class MyPageManager: ObservableObject {
             .store(in: &cancellables)
     }
     
-    
+    func resetUpdateSuccess() {
+        isUpdateSuccess = false
+        print("MyPageManager: isUpdateSuccess 리셋 완료")
+    }
     
 }
 extension Notification.Name {
