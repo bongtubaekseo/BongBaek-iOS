@@ -30,6 +30,8 @@ struct RecordView: View {
                     isDeleteMode: $viewModel.isDeleteMode,
                     onDeleteTapped: {
                         viewModel.deleteSelectedRecords()
+                    }, onCancelTapped: {
+                        viewModel.clearSelectedRecords()
                     },
                     isCurrentSectionEmpty: viewModel.isCurrentSectionEmpty
                 )
@@ -106,6 +108,7 @@ struct CategoryFilterView: View {
 struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
     let onDeleteTapped: () -> Void
+    let onCancelTapped: () -> Void
     @State private var showAlert = false
     @EnvironmentObject var router: NavigationRouter
     
@@ -118,6 +121,7 @@ struct RecordsHeaderView: View {
                     Button(action: {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             isDeleteMode = false
+                            onCancelTapped()
                         }
                     }) {
                         Text("취소")
@@ -195,6 +199,7 @@ struct RecordsHeaderView: View {
                             onDeleteTapped()
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 isDeleteMode = false
+                                onCancelTapped()
                             }
                         }
                     } message: {

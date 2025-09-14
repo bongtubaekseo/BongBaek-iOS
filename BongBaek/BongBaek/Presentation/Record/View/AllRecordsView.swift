@@ -220,28 +220,6 @@ struct AllRecordsView: View {
         ))
     }
     
-//    private func dummyDetailInfoView() -> some View {
-//        VStack(alignment: .leading, spacing: 24) {
-//            DetailRow(image: "icon_person_16", title: "이름", value: "김철수 (더미)")
-//            DetailRow(image: "icon_nickname_16", title: "별명", value: "철수 (더미)")
-//            DetailRow(image: "icon_event_16", title: "관계", value: "친구 (더미)", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-//            DetailRow(image: "icon_event_16", title: "경조사", value: "결혼식 (더미)", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-//            DetailRow(image: "icon_event_16", title: "경조사비", value: "100,000원 (더미)")
-//            DetailRow(image: "icon_event_16", title: "참석여부", value: "참석 (더미)", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-//            DetailRow(image: "icon_event_16", title: "날짜", value: "2024.12.15 (더미)", valueTextColor: .blue, valueBackgroundColor: .blue.opacity(0.5))
-//            DetailRow(image: "icon_location_16", title: "장소", value: "강남구 웨딩홀 (더미)")
-//            DetailRow(image: "icon_calendar", title: "D-Day", value: "D-30 (더미)", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
-//        }
-//        .padding(20)
-//        .background(.gray750)
-//        .cornerRadius(12)
-//        .padding(.horizontal, 20)
-//        .transition(.asymmetric(
-//            insertion: .scale(scale: 0.95, anchor: .top).combined(with: .opacity),
-//            removal: .scale(scale: 0.95, anchor: .top).combined(with: .opacity)
-//        ))
-//    }
-    
     private var memoSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {

@@ -395,3 +395,10 @@ extension EventsCategory {
         }
     }
 }
+
+extension RecordViewModel {
+    func clearSelectedRecords() {
+        selectedRecordIDs.removeAll()
+        print("선택된 레코드 초기화 완료 - 총 \(selectedRecordIDs.count)개")
+    }
+}
