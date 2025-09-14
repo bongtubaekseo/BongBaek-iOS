@@ -75,11 +75,13 @@ struct FullScheduleView: View {
 
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 30) {
+            headerView
+                .padding(.leading, 8)
+            categoryScrollView
+                .padding(.leading, 16)
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 30) {
-                    headerView
-                    categoryScrollView
                     
                     if viewModel.isLoading {
                         loadingView
@@ -124,7 +126,7 @@ struct FullScheduleView: View {
             }
             .contentShape(Rectangle())
             
-            Text("\(mypageViewModel.profileData?.memberName ?? "봉백")님의 다가올 일정") //TODO: 확인필요
+            Text("\(mypageViewModel.profileData?.memberName ?? "봉백")님의 다가올 일정")
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.leading, 12)
@@ -158,10 +160,10 @@ struct FullScheduleView: View {
             Text(category.displayName)
                 .bodyMedium16()
                 .foregroundColor(viewModel.selectedCategory == category ? .black : .gray300)
-                .frame(height: 40)
+                .frame(height: 36)
                 .padding(.horizontal, 16)
                 .background(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 6)
                         .fill(viewModel.selectedCategory == category ? .gray100 : .gray700)
                 )
         }
@@ -174,7 +176,7 @@ struct FullScheduleView: View {
     }
     
     private func yearSectionView(for year: String) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 20) {
             Text("\(year)년")
                 .headBold24()
                 .foregroundColor(.white)

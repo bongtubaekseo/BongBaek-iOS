@@ -31,7 +31,7 @@ extension Font {
 extension Text {
     func brandBold24() -> some View {
         self.font(.brand_bold_24)
-            .kerning(TypographyHelper.customLetterSpacing(fontSize: 24, percent: -3)) //TODO: percent확인필요, 디자인쌤들 확인예정
+            .kerning(TypographyHelper.customLetterSpacing(fontSize: 24, percent: -4))
             .lineSpacing(TypographyHelper.customLineHeight(
                 fontSize: 24,
                 weight: .bold,
