@@ -336,7 +336,7 @@ struct CreateEventView: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation",
+                icon: "icon_relation 1",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation
@@ -829,7 +829,7 @@ struct CreateEventViewAfterEvent: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation",
+                icon: "icon_relation 1",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation
