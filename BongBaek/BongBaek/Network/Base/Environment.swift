@@ -13,7 +13,7 @@ struct EnvironmentSetting {
         case release
     }
     
-    static let current: APIEnvironment = .test
+    static let current: APIEnvironment = .release
 
     static var baseURL: String {
         switch current {
