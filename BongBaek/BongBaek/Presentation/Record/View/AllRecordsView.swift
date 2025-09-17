@@ -205,13 +205,13 @@ struct AllRecordsView: View {
             DetailRow(image: "icon_relation 1", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_coin_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원")
-            DetailRow(image: "icon_check", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
-            DetailRow(image: "icon_event_16", title: "날짜", value: eventDetail.eventInfo.eventDate, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_check 1", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_event_16", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_location_16", title: "장소", value: eventDetail.locationInfo.location)
             //DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
         }
         .padding(20)
-        .background(.gray750)
+        .background(.gray800)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .transition(.asymmetric(
@@ -353,6 +353,8 @@ struct DetailRow: View {
         HStack {
             HStack {
                 Image(image)
+                    .renderingMode(.template)
+                    .foregroundColor(.gray400)
                 Text(title)
                     .bodyMedium14()
                     .foregroundColor(.gray100)
