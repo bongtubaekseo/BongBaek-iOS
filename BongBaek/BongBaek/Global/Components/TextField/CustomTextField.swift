@@ -324,7 +324,7 @@ enum ValidationState {
         case .focused:
             return .primaryNormal
         case .completed:
-            return .white
+            return .lineNormal
         }
     }
 }
