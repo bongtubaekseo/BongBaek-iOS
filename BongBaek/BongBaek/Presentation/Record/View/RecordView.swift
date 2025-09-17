@@ -236,40 +236,47 @@ struct RecordSectionHeaderView: View {
             Button(action: {
                 onSectionChange(.attended)
             }) {
-                VStack(spacing: 8) {
-                    HStack {
-                        Text("참석했어요")
-                            .titleSemiBold16()
-                            .foregroundColor(selectedSection == .attended ? .white : .gray)
-                    }
+                VStack(spacing: 0) {
+                    Text("참석했어요")
+                        .titleSemiBold16()
+                        .foregroundColor(selectedSection == .attended ? .white : .gray)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     Rectangle()
-                        .fill(selectedSection == .attended ? .blue : .clear)
-                        .frame(height: 1)
+                        .fill(selectedSection == .attended ? .primaryNormal : .clear)
+                        .frame(height: 2)
                 }
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+                .background(selectedSection == .attended ? Color.primaryNormal.opacity(0.1) : Color.clear)
+                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 8))
+                .animation(.easeInOut(duration: 0.2), value: selectedSection)
             }
-            .frame(maxWidth: .infinity)
             
             // 불참했어요 탭
             Button(action: {
                 onSectionChange(.notAttended)
             }) {
-                VStack(spacing: 8) {
-                    HStack {
-                        Text("불참했어요")
-                            .titleSemiBold16()
-                            .foregroundColor(selectedSection == .notAttended ? .white : .gray)
-                    }
+                VStack(spacing: 0) {
+                    Text("불참했어요")
+                        .titleSemiBold16()
+                        .foregroundColor(selectedSection == .notAttended ? .white : .gray)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     Rectangle()
-                        .fill(selectedSection == .notAttended ? .blue : .clear)
-                        .frame(height: 1)
+                        .fill(selectedSection == .notAttended ? .primaryNormal : .clear)
+                        .frame(height: 2)
                 }
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+                .background(selectedSection == .notAttended ? Color.primaryNormal.opacity(0.1) : Color.clear)
+                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 8))
+                .animation(.easeInOut(duration: 0.2), value: selectedSection)
             }
-            .frame(maxWidth: .infinity)
         }
-        .padding(.horizontal, 20)
+        .frame(maxWidth: .infinity)
         .padding(.top, 16)
+        .padding(.bottom, 4)
     }
 }
 
