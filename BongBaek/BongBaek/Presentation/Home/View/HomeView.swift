@@ -55,21 +55,23 @@ struct HomeView: View {
                     RecommendsView(homeData: homeViewModel.homeData)
                             .environmentObject(stepManager)
                         .environmentObject(router)
-                        .padding(.top, 10)
+                        .padding(.top, 32)
                 } else {
                     RecommendsView(homeData: nil)
                         .environmentObject(stepManager)
                         .environmentObject(router)
-                        .padding(.top, 10)
+                        .padding(.top, 32)
                 }
                 
                 if homeViewModel.hasData {
                     ScheduleView(events: homeViewModel.homeData?.events ?? [])
                         .padding(.top, 32)
+                        .padding(.bottom, 60)
                 } else {
 
                     ScheduleView(events: [])
                         .padding(.top, 32)
+                        .padding(.bottom, 60)
                 }
             }
         }
