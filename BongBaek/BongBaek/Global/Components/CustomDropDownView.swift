@@ -95,6 +95,8 @@ struct CustomDropdown<T: DropdownItem>: View {
 
     private func DropdownHeader() -> some View {
         Button(action: {
+            hideKeyboard()
+            
             if !isDisabled {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                     isExpanded.toggle()
@@ -134,6 +136,7 @@ struct CustomDropdown<T: DropdownItem>: View {
         }
         .disabled(isDisabled)
     }
+
 
     private func DropdownContent() -> some View {
         VStack(alignment: .leading, spacing: 0) {
