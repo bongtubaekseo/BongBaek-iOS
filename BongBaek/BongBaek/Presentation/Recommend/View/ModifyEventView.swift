@@ -57,13 +57,19 @@ struct ModifyEventView: View {
     }
     
     private var isFormValid: Bool {
-        !nickname.isEmpty &&
-        !alias.isEmpty &&
-        !money.isEmpty &&
-        selectedAttend != nil &&
-        selectedEvent != nil &&
-        selectedRelation != nil &&
-        !selectedDate.isEmpty
+        let isMoneyValid: Bool = {
+            guard !money.isEmpty,
+                  let amount = Int(money) else { return false }
+            return amount >= 1 && amount <= 99_999_999
+        }()
+        
+        return !nickname.isEmpty &&
+               !alias.isEmpty &&
+               isMoneyValid && 
+               selectedAttend != nil &&
+               selectedEvent != nil &&
+               selectedRelation != nil &&
+               !selectedDate.isEmpty
     }
     
    
@@ -167,9 +173,15 @@ struct ModifyEventView: View {
                                 placeholder: "금액을 입력하세요",
                                 text: $money,
                                 validationRule: ValidationRule(
-                                    minLength: 1,
-                                    maxLength: 10
-                                ),keyboardType: .numberPad
+                                    customRule: { input in
+                                        guard let amount = Int(input), amount > 0 else {
+                                            return false
+                                        }
+                                        return amount >= 1 && amount <= 99_999_999
+                                    },
+                                    customMessage: "1원 이상 입력하세요"
+                                ),
+                                keyboardType: .numberPad
                             )
                             
                             Text("원")
@@ -318,7 +330,12 @@ struct ModifyEventView: View {
         VStack(spacing: 16) {
             HStack {
                 HStack {
-                    Image("icon_location_16")
+                    Image("icon_location 4")
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 16,height: 16)
+                        .foregroundStyle(.gray400)
+                    
                     Text("행사장")
                         .bodyMedium14()
                         .foregroundStyle(.gray300)

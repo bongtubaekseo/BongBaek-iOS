@@ -126,9 +126,15 @@ struct CreateEventView: View {
                                 placeholder: "금액을 입력하세요",
                                 text: $money,
                                 validationRule: ValidationRule(
-                                    minLength: 1,
-                                    maxLength: 10
-                                ),keyboardType: .numberPad
+                                    customRule: { input in
+                                        guard let amount = Int(input), amount > 0 else {
+                                            return false
+                                        }
+                                        return amount >= 1 && amount <= 99_999_999
+                                    },
+                                    customMessage: "1원 이상 입력하세요"
+                                ),
+                                keyboardType: .numberPad
                             )
                             
                             Text("원")
@@ -360,19 +366,25 @@ struct CreateEventView: View {
               let latitude = Double(location.y) else { return }
         
         mapView?.updateLocation(longitude: longitude, latitude: latitude)
-        print("✅ 지도 위치 업데이트: \(location.placeName)")
-        print("📍 좌표: \(longitude), \(latitude)")
+        print("지도 위치 업데이트: \(location.placeName)")
+        print("좌표: \(longitude), \(latitude)")
     }
     
     // 폼 유효성 검사
     private var isFormValid: Bool {
-        !nickname.isEmpty &&
-        !alias.isEmpty &&
-        !money.isEmpty &&
-        selectedAttend != nil &&
-        selectedEvent != nil &&
-        selectedRelation != nil &&
-        !selectedDate.isEmpty
+        let isMoneyValid: Bool = {
+            guard !money.isEmpty,
+                  let amount = Int(money) else { return false }
+            return amount >= 1 && amount <= 99_999_999
+        }()
+        
+        return !nickname.isEmpty &&
+               !alias.isEmpty &&
+               isMoneyValid &&
+               selectedAttend != nil &&
+               selectedEvent != nil &&
+               selectedRelation != nil &&
+               !selectedDate.isEmpty
     }
     
     // 새 이벤트 생성
@@ -620,9 +632,15 @@ struct CreateEventViewAfterEvent: View {
                                 placeholder: "금액을 입력하세요",
                                 text: $money,
                                 validationRule: ValidationRule(
-                                    minLength: 1,
-                                    maxLength: 10
-                                ),keyboardType: .numberPad
+                                    customRule: { input in
+                                        guard let amount = Int(input), amount > 0 else {
+                                            return false
+                                        }
+                                        return amount >= 1 && amount <= 99_999_999
+                                    },
+                                    customMessage: "1원 이상 입력하세요"
+                                ),
+                                keyboardType: .numberPad
                             )
                             
                             Text("원")
@@ -859,13 +877,19 @@ struct CreateEventViewAfterEvent: View {
     
     // 폼 유효성 검사
     private var isFormValid: Bool {
-        !nickname.isEmpty &&
-        !alias.isEmpty &&
-        !money.isEmpty &&
-        selectedAttend != nil &&
-        selectedEvent != nil &&
-        selectedRelation != nil &&
-        !selectedDate.isEmpty
+        let isMoneyValid: Bool = {
+            guard !money.isEmpty,
+                  let amount = Int(money) else { return false }
+            return amount >= 1 && amount <= 99_999_999
+        }()
+        
+        return !nickname.isEmpty &&
+               !alias.isEmpty &&
+               isMoneyValid &&
+               selectedAttend != nil &&
+               selectedEvent != nil &&
+               selectedRelation != nil &&
+               !selectedDate.isEmpty
     }
     
     // 새 이벤트 생성
