@@ -30,7 +30,7 @@ struct RecommendLoadingView: View {
                     LottieTest(animationFileName: "find_amount", loopMode: .loop)
                         .frame(width: 151, height: 140)
                     
-                    Text("\(UserDefaults.standard.memberName)을 위한\n금액을 찾고 있어요")
+                    Text("\(UserDefaults.standard.memberName)님을 위한\n금액을 찾고 있어요")
                         .titleSemiBold18()
                         .multilineTextAlignment(.center)
                         .foregroundColor(.gray100)

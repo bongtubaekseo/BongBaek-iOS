@@ -24,7 +24,6 @@ struct RecommendLottie: View {
 
     var body: some View {
         VStack(spacing: 30) {
-            Spacer()
 
             if !showRectangle {
                 LottieView(
@@ -71,7 +70,6 @@ struct RecommendLottie: View {
                 }
             }
 
-            Spacer()
         }
         .onAppear {
             if let data = eventManager.recommendationResponse?.data {
@@ -103,8 +101,17 @@ struct RecommendLottie: View {
     var headerSection: some View {
         VStack {
             VStack(spacing: 20) {
-
-
+                
+                HStack {
+                    Spacer()
+                    Text("추천 금액")
+                        .titleSemiBold18()
+                        .foregroundStyle(.white)
+                    
+                    Spacer()
+                }
+                .padding(.top,10)
+                
                 Text(eventCategory)
                     .bodyMedium14()
                     .foregroundColor(.white)
@@ -302,9 +309,9 @@ struct RecommendLottie: View {
                 Text("• 월 수입 고려")
                     .bodyRegular16()
                     .foregroundColor(.gray400)
-                Text("• 친구 관계 (친밀도 보통)")
-                    .bodyRegular16()
-                    .foregroundColor(.gray400)
+//                Text("• 친구 관계 (친밀도 보통)")
+//                    .bodyRegular16()
+//                    .foregroundColor(.gray400)
                 Text("• 식사 참석 여부")
                     .bodyRegular16()
                     .foregroundColor(.gray400)
