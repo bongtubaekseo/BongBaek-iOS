@@ -475,7 +475,7 @@ struct RecordCellView: View {
 
                     Spacer()
 
-                    Text(formatDate(event.eventInfo.eventDate))
+                    Text(event.eventInfo.eventDate.DateFormat())
                         .captionRegular12()
                         .foregroundColor(.gray400)
                 }
