@@ -310,15 +310,16 @@ struct EventLocationView: View {
         } label: {
             Text("금액 추천 받기")
                 .titleSemiBold18()
-                .foregroundColor(isNextButtonEnabled ? .white : .gray400)
+                .foregroundColor(isNextButtonEnabled ? .white : .gray500)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
         .frame(height: 55)
-        .background(isNextButtonEnabled ? .primaryNormal : .gray600)
+        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .padding(.top, 8)
+        .padding(.bottom, 60)
         .animation(.easeInOut(duration: 0.2), value: isNextButtonEnabled)
     }
     
