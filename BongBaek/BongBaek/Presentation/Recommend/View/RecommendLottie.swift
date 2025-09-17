@@ -16,6 +16,7 @@ struct RecommendLottie: View {
     @State private var category: String = "경조사"
     @State private var eventLocation: String = "없음"
     @State private var eventCategory: String = "해당없음"
+    @State private var progressScale: CGFloat = 0
     
     @State private var isSubmitting = false
 
@@ -39,7 +40,7 @@ struct RecommendLottie: View {
 
                 VStack(spacing: 24) {
                     VStack(spacing: 40) {
-                        amountLottieSection
+                        amountRangeSection
                         categorySection
                     }
                     .padding(.horizontal, 20)
@@ -53,7 +54,7 @@ struct RecommendLottie: View {
                         headerSection
                         
                         VStack(spacing: 40) {
-                            amountRangeSection
+                            amountLottieSection
                             categorySection
                         }
                         .padding(.horizontal, 20)
@@ -85,6 +86,12 @@ struct RecommendLottie: View {
                 category = data.category
                 eventLocation = data.location
                 eventCategory = data.category
+                
+                lottieviewModel.updateFromServerData(
+                    recommended: data.cost,
+                    min: data.range.min,
+                    max: data.range.max
+                )
 
             } else {
                 print("추천 데이터 없음")
@@ -196,53 +203,6 @@ struct RecommendLottie: View {
     }
     
     var amountLottieSection: some View {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("적정 범위")
-                    .titleSemiBold18()
-                    .foregroundColor(.white)
-
-                VStack(spacing: 8) {
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color(hex: "#292929"))
-                            .frame(width: 300, height: 12)
-
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(
-                                LinearGradient(
-                                    colors: [
-                                        Color(hex: "#502EFF"),
-                                        Color(hex: "#807FFF"),
-                                    ],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                            .frame(width: 5, height: 12)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                    HStack {
-                        Text("\(lottieviewModel.formattedMinAmount)원")
-                            .captionRegular12()
-                            .foregroundColor(.gray400)
-
-                        Spacer()
-
-                        Text("\(lottieviewModel.formattedMaxAmount)원")
-                            .captionRegular12()
-                            .foregroundColor(.gray400)
-                    }
-                }
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.black)
-            )
-        }
-
-    var amountRangeSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("적정 범위")
                 .titleSemiBold18()
@@ -252,7 +212,8 @@ struct RecommendLottie: View {
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
                         .fill(Color(hex: "#292929"))
-                        .frame(width: 300, height: 12)
+                        .frame(height: 12)
+
 
                     RoundedRectangle(cornerRadius: 4)
                         .fill(
@@ -265,10 +226,59 @@ struct RecommendLottie: View {
                                 endPoint: .trailing
                             )
                         )
-                        .frame(width: progressWidth, height: 12)
-                        .animation(.easeInOut(duration: 1.5), value: progressWidth)
+                        .frame(height: 12)
+                        .scaleEffect(x: progressScale, y: 1, anchor: .leading)
+                        .animation(.easeInOut(duration: 1.5), value: progressScale)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+
+                HStack {
+                    Text("\(minAmount)원")
+                        .captionRegular12()
+                        .foregroundColor(.gray400)
+
+                    Spacer()
+
+                    Text("\(maxAmount)원")
+                        .captionRegular12()
+                        .foregroundColor(.gray400)
+                }
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.black)
+        )
+    }
+
+    var amountRangeSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("적정 범위")
+                .titleSemiBold18()
+                .foregroundColor(.white)
+
+            VStack(spacing: 8) {
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color(hex: "#292929"))
+                        .frame(height: 12)
+
+
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color(hex: "#502EFF"),
+                                    Color(hex: "#807FFF"),
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(height: 12)
+                        .scaleEffect(x: progressScale, y: 1, anchor: .leading)
+                        .animation(.easeInOut(duration: 1.5), value: progressScale)
+                }
 
                 HStack {
                     Text("\(minAmount)원")
@@ -290,7 +300,8 @@ struct RecommendLottie: View {
         )
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now()) {
-                progressWidth = 150 //추천받은 금액을 서버에서 받아올 값
+                let progress = Double(recommendedAmount - minAmount) / Double(maxAmount - minAmount)
+                progressScale = progress
             }
         }
     }
@@ -309,9 +320,6 @@ struct RecommendLottie: View {
                 Text("• 월 수입 고려")
                     .bodyRegular16()
                     .foregroundColor(.gray400)
-//                Text("• 친구 관계 (친밀도 보통)")
-//                    .bodyRegular16()
-//                    .foregroundColor(.gray400)
                 Text("• 식사 참석 여부")
                     .bodyRegular16()
                     .foregroundColor(.gray400)

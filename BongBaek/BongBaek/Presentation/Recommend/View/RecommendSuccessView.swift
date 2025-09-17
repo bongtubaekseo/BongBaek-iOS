@@ -27,6 +27,8 @@ struct RecommendSuccessView: View {
                 
                 VStack(spacing: 20) {
                     Spacer()
+                        .frame(minHeight: 20)
+                    
                     LottieView(animationFileName: "success", loopMode: .playOnce)
                         .frame(width: 270, height: 256)
                     
@@ -38,6 +40,10 @@ struct RecommendSuccessView: View {
                         .bodyRegular14()
                         .multilineTextAlignment(.center)
                         .foregroundColor(.gray400)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Spacer()
+                        .frame(height: 40)
                     
                     VStack(spacing: 10) {
                         Button(action: {

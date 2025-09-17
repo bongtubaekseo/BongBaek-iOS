@@ -13,6 +13,12 @@ class RecommendCostViewModel: ObservableObject {
         Double(selectedAmount - minAmount) / Double(maxAmount - minAmount)
     }
     
+    func updateFromServerData(recommended: Int, min: Int, max: Int) {
+        selectedAmount = recommended
+        minAmount = min
+        maxAmount = max
+    }
+    
     var formattedSelectedAmount: String {
         NumberFormatter.decimalFormatter.string(from: NSNumber(value: selectedAmount)) ?? "0"
     }
