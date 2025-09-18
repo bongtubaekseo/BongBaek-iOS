@@ -49,34 +49,35 @@ struct MyPageView: View {
         ZStack {
             Color.black.ignoresSafeArea()
             
-            ScrollView {
-                VStack(spacing: 0) {
-                    HStack {
-                        Button(action: {
-                            router.pop()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("마이페이지")
-                            .titleSemiBold18()
+            VStack(spacing: 0) {
+                HStack {
+                    Button(action: {
+                        router.pop()
+                    }) {
+                        Image(systemName: "chevron.left")
                             .foregroundColor(.white)
-                        
-                        Spacer()
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 10)
                     
+                    Text("마이페이지")
+                        .titleSemiBold18()
+                        .foregroundColor(.white)
+                        .padding(.leading, 8)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+                .padding(.bottom, 16)
+                .background(Color.black)
+                
+                ScrollView {
                     VStack(spacing: 32) {
                         VStack(spacing: 16) {
                             Image(.myPageLogo)
                                 .frame(width: 110, height: 110)
                                 .padding(.top, 40)
                             
-                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서의겸손한야수")
+                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
                                 .headBold24()
                                 .foregroundStyle(.gray100)
                             

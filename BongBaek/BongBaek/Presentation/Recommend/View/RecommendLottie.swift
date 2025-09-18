@@ -45,29 +45,44 @@ struct RecommendLottie: View {
                     }
                     .padding(.horizontal, 20)
                 }
+                .offset(y: -40)
                 .padding(.bottom, 40)
             }
 
             if showRectangle {
-                ScrollView {
-                    VStack(spacing: 24) {
-                        headerSection
+                VStack(spacing: 0) {
+                    HStack {
+                        Spacer()
+                        Text("추천 금액")
+                            .titleSemiBold18()
+                            .foregroundStyle(.white)
                         
-                        VStack(spacing: 40) {
-                            amountLottieSection
-                            categorySection
-                        }
-                        .padding(.horizontal, 20)
-                        
-                        noticeSection
-                            .padding(.horizontal, 20)
-                        
-                        participationSection
-                            .padding(.horizontal, 20)
-                        
-                        bottomButtons
+                        Spacer()
                     }
-                    .padding(.bottom, 40)
+                    .padding(.top, 10)
+                    .padding(.bottom, 16)
+                    .background(Color.black)
+                    
+                    ScrollView {
+                        VStack(spacing: 24) {
+                            headerSection
+                            
+                            VStack(spacing: 40) {
+                                amountLottieSection
+                                categorySection
+                            }
+                            .padding(.horizontal, 20)
+                            
+                            noticeSection
+                                .padding(.horizontal, 20)
+                            
+                            participationSection
+                                .padding(.horizontal, 20)
+                            
+                            bottomButtons
+                        }
+                        .padding(.bottom, 40)
+                    }
                 }
             }
 
@@ -108,17 +123,6 @@ struct RecommendLottie: View {
     var headerSection: some View {
         VStack {
             VStack(spacing: 20) {
-                
-                HStack {
-                    Spacer()
-                    Text("추천 금액")
-                        .titleSemiBold18()
-                        .foregroundStyle(.white)
-                    
-                    Spacer()
-                }
-                .padding(.top,10)
-                
                 Text(eventCategory)
                     .bodyMedium14()
                     .foregroundColor(.white)
@@ -147,7 +151,7 @@ struct RecommendLottie: View {
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [
-                                        Color(hex: "#4E62FF"), //TODO: location확인
+                                        Color(hex: "#4E62FF"),
                                         Color(hex: "#502EFF"),
                                     ],
                                     startPoint: .leading,
@@ -160,7 +164,7 @@ struct RecommendLottie: View {
                             .foregroundColor(.gray600)
                             .padding(.bottom, 8)
                     }
-                    .padding(.top,6)
+                    .padding(.top, 6)
 
                     VStack(spacing: 6) {
                         Text("적절한 금액이에요!")
@@ -178,7 +182,7 @@ struct RecommendLottie: View {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(.gray750.opacity(0.6))
                     )
-                    .padding(.top,20)
+                    .padding(.top, 20)
                 }
                 .padding(.horizontal, 30)
                 .padding(.vertical, 30)
@@ -198,6 +202,7 @@ struct RecommendLottie: View {
                 )
             }
             .padding(.horizontal, 20)
+            .padding(.top, 20) // 고정 헤더와의 간격
             .transition(.opacity.combined(with: .scale))
         }
     }

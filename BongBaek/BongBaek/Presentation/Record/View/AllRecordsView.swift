@@ -16,49 +16,50 @@ struct AllRecordsView: View {
     @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
-        VStack {
-            ScrollView {
-                
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-
-                    }
-                    .contentShape(Rectangle())
-                    
-                    Text("경조사 전체기록")
-                        .titleSemiBold18()
+        VStack(spacing: 0) {
+            HStack {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
                         .foregroundColor(.white)
-                        .padding(.leading, 8)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-//                         편집 액션
-                        router.push(to: .modifyEventView(mode: .edit,eventDetailData: viewModel.eventDetail))
-                        
-                    }) {
-                        Image("icon_edit")
-                            .foregroundColor(.white)
+                }
+                .contentShape(Rectangle())
+                
+                Text("경조사 전체기록")
+                    .titleSemiBold18()
+                    .foregroundColor(.white)
+                    .padding(.leading, 8)
+                
+                Spacer()
+                
+                Button(action: {
+                    // 편집 액션
+                    router.push(to: .modifyEventView(mode: .edit, eventDetailData: viewModel.eventDetail))
+                }) {
+                    Image("icon_edit")
+                        .foregroundColor(.white)
+                }
+                .contentShape(Rectangle())
+                .padding(.trailing, 20)
+            }
+            .padding(.top, 20)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 4)
+            .background(Color.background) // 헤더 배경색 명시
+            
+            // 스크롤 가능한 콘텐츠
+            ScrollView {
+                VStack {
+                    if viewModel.isLoading {
+                        loadingView
+                    } else if let errorMessage = viewModel.errorMessage {
+                        errorView(message: errorMessage)
+                    } else if let eventDetail = viewModel.eventDetail {
+                        eventContentView(eventDetail: eventDetail)
                     }
-                    .contentShape(Rectangle())
-                    .padding(.trailing, 20)
                 }
-                .padding(.top, 20)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 4)
-                
-                
-                if viewModel.isLoading {
-                    loadingView
-                } else if let errorMessage = viewModel.errorMessage {
-                    errorView(message: errorMessage)
-                } else if let eventDetail = viewModel.eventDetail {
-                    eventContentView(eventDetail: eventDetail)
-                }
+                .padding(.top, 16) // 헤더와의 간격
             }
         }
         .background(Color.background)
