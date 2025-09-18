@@ -100,7 +100,7 @@ struct EventMemoView: View {
                             Spacer()
                             Text("\(memo.count)/\(maxLength)")
                                 .font(.system(size: 12))
-                                .foregroundColor(memo.count >= maxLength ? .red : .gray400)
+                                .foregroundColor(memo.count > maxLength ? .red : .gray400)
                                 .padding(.trailing, 8)
                                 .padding(.bottom, 8)
                         }

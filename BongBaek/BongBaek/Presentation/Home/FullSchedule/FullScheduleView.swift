@@ -135,7 +135,7 @@ struct FullScheduleView: View {
     private var categoryScrollView: some View {
         VStack(alignment: .leading, spacing: 12) {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
+                HStack(spacing: 8) {
                     ForEach(ScheduleCategory.allCases, id: \.self) { category in
                         categoryButton(for: category)
                     }
@@ -151,7 +151,7 @@ struct FullScheduleView: View {
             viewModel.updateCategory(category)
         }) {
             Text(category.displayName)
-                .bodyMedium16()
+                .bodyMedium14()
                 .foregroundColor(viewModel.selectedCategory == category ? .black : .gray300)
                 .frame(height: 40)
                 .padding(.horizontal, 16)
