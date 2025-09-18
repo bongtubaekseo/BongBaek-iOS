@@ -141,16 +141,19 @@ struct ModifyEventView: View {
                             CustomTextField(
                                 title: "이름",
                                 icon: "icon_person_16",
-                                placeholder: "닉네임을 입력하세요",
+                                placeholder: "이름을 입력하세요",
                                 text: $nickname,
                                 validationRule: ValidationRule(
                                     minLength: 2,
-                                    maxLength: 10
+                                    maxLength: 10,
+                                    regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    
                                 ),
                                 isReadOnly: isRecommendationEdit,
                                 isRequired: true
                             )
-                            
+                                                        
                             CustomTextField(
                                 title: "별명",
                                 icon: "icon_event_16",
@@ -158,7 +161,9 @@ struct ModifyEventView: View {
                                 text: $alias,
                                 validationRule: ValidationRule(
                                     minLength: 2,
-                                    maxLength: 10
+                                    maxLength: 10,
+                                    regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
                                 isReadOnly: isRecommendationEdit,
                                 isRequired: true
@@ -187,7 +192,8 @@ struct ModifyEventView: View {
                                         },
                                         customMessage: "1원 이상 입력하세요"
                                     ),
-                                    keyboardType: .numberPad
+                                    isRequired: true
+                                    ,keyboardType: .numberPad
                                 )
                                 
                                 Text("원")
@@ -272,12 +278,12 @@ struct ModifyEventView: View {
                         } else {
                             Text(mode == .create ? "기록하기" : "수정하기")
                                 .titleSemiBold18()
-                                .foregroundColor(.white)
+                                .foregroundColor(isFormValid ? .white : .gray500)
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 55)
-                    .background(isFormValid ? .primaryNormal : .gray600)
+                    .background(isFormValid ? .primaryNormal : .primaryBg)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 8)

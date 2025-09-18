@@ -71,25 +71,43 @@ struct RecommendView: View {
                         relationshipHeaderSection
                         
                         relationshipGridSection
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
                         
                         detailRecommendSection
                             .padding(.top, 16)
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
                         
                         if eventManager.detailSelected {
                             RelationshipSliderView()
                                 .id("sliderView")
+                                .onTapGesture {
+                                    hideKeyboard()
+                                }
                         }
                         
                         submitButton
                             .padding(.top, 60)
-                            .padding(.bottom,60)
-                        
+                            .padding(.bottom, 60)
+                            .onTapGesture {
+                                hideKeyboard() 
+                            }
                     }
                 }
                 .onTapGesture {
-                    hideKeyboard()
+                    hideKeyboard() // 빈 공간 터치 시 키보드 해제
                 }
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 10)
+                        .onChanged { _ in
+                            hideKeyboard() // 스크롤 시작 시 키보드 해제
+                        }
+                )
                 .onChange(of: eventManager.detailSelected) { _, newValue in
+                    hideKeyboard() // 상세 선택 변경 시 키보드 해제
                     if newValue {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                             withAnimation(.easeInOut(duration: 0.3)) {
@@ -102,6 +120,9 @@ struct RecommendView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.background)
+        .onTapGesture {
+            hideKeyboard() // 전체 화면 터치 시 키보드 해제
+        }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 withAnimation(.easeInOut(duration: 0.8)) {
@@ -202,7 +223,7 @@ struct RecommendView: View {
     private var detailRecommendSection: some View {
         DetailRecommendButton(isSelected: eventManager.detailSelected) {
             eventManager.detailSelected.toggle()
-            print("🔍 상세 추천: \(eventManager.detailSelected ? "활성화" : "비활성화")")
+            print("상세 추천: \(eventManager.detailSelected ? "활성화" : "비활성화")")
         }
         .padding(.horizontal, 20)
         .padding(.top, 16)

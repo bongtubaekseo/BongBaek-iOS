@@ -232,8 +232,8 @@ struct ModifyView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(viewModel.isUpdateButtonEnabled ? .primaryNormal : Color.gray.opacity(0.3))
-        .foregroundColor(.white)
+        .background(viewModel.isUpdateButtonEnabled ? .primaryNormal : .primaryBg)
+        .foregroundColor(viewModel.isUpdateButtonEnabled ? .white : .gray500)
         .cornerRadius(12)
         .padding(.top, 20)
         .disabled(!viewModel.isUpdateButtonEnabled)

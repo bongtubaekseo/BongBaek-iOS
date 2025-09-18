@@ -40,6 +40,16 @@ struct EventMemoView: View {
         }
     }
     
+    private var backgroundColor: Color {
+        if isDisabled {
+            return .gray800
+        } else if memo.isEmpty {
+            return .gray800
+        } else {
+            return .gray750
+        }
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
@@ -98,7 +108,7 @@ struct EventMemoView: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(isDisabled ? .gray800 : .gray750)
+                .background(backgroundColor)
                 .cornerRadius(8)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
@@ -106,6 +116,7 @@ struct EventMemoView: View {
                 )
                 .animation(.easeInOut(duration: 0.2), value: isFocused)
                 .animation(.easeInOut(duration: 0.2), value: memo.count >= maxLength)
+                .animation(.easeInOut(duration: 0.2), value: memo.isEmpty)
             }
         }
     }

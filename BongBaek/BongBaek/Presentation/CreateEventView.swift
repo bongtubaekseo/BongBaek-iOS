@@ -136,6 +136,7 @@ struct CreateEventView: View {
                                         },
                                         customMessage: "1원 이상 입력하세요"
                                     ),
+                                    isRequired: true,
                                     keyboardType: .numberPad
                                 )
                                 
@@ -206,12 +207,12 @@ struct CreateEventView: View {
                         } else {
                             Text("기록하기")
                                 .titleSemiBold18()
-                                .foregroundColor(.white)
+                                .foregroundColor(isFormValid ? .white : .gray500)
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 55)
-                    .background(isFormValid ? .primaryNormal : .gray600)
+                    .background(isFormValid ? .primaryNormal : .primaryBg)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
@@ -645,6 +646,7 @@ struct CreateEventViewAfterEvent: View {
                                         },
                                         customMessage: "1원 이상 입력하세요"
                                     ),
+                                    isRequired: true,
                                     keyboardType: .numberPad
                                 )
                                 
@@ -715,12 +717,12 @@ struct CreateEventViewAfterEvent: View {
                         } else {
                             Text("기록하기")
                                 .titleSemiBold18()
-                                .foregroundColor(.white)
+                                .foregroundColor(isFormValid ? .white : .gray500)
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 55)
-                    .background(isFormValid ? .primaryNormal : .gray600)
+                    .background(isFormValid ? .primaryNormal : .primaryBg)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
