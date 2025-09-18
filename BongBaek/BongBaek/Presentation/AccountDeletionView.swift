@@ -211,6 +211,7 @@ struct AccountDeletionView: View {
         AuthManager.shared.withdraw(reason: withdrawRequest) { success in
             DispatchQueue.main.async {
                 if success {
+                    UserDefaults.standard.clearApiKey()
                     router.push(to: .accountDeletionConfirmView)
                 } else {
                     print("탈퇴 처리 실패")

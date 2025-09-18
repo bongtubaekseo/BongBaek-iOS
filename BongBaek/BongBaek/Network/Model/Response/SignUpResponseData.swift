@@ -48,4 +48,5 @@ struct AuthResponseData: Codable {
     let kakaoAccessToken: String?
     let appleId: String?
     let name: String?
+    let apiKey: String?
 }

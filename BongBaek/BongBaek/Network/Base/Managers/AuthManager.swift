@@ -405,6 +405,12 @@ class AuthManager: ObservableObject {
                
                UserDefaults.standard.set(authData.name, forKey: "memberName")
                
+               if let apiKey = authData.apiKey  {
+                   
+                   print("전달받은 apikey는 \(apiKey)")
+                   UserDefaults.standard.set(authData.apiKey, forKey: "apiKey")
+               }
+
                switch saveResult {
                case .success:
                    print("토큰 저장 성공 - authenticated 상태로 변경")

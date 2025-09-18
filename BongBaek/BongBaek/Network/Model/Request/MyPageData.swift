@@ -18,4 +18,16 @@ extension UserDefaults {
     var memberName: String {
         return string(forKey: "memberName") ?? ""
     }
+    
+    var apiKey: String {
+        return string(forKey: "apiKey") ?? ""
+    }
+    
+    func clearApiKey() {
+        removeObject(forKey: "apiKey")
+    }
+    
+    func clearMemberName() {
+        removeObject(forKey: "memberName")
+    }
 }
