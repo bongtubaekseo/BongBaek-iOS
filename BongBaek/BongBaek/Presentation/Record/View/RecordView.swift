@@ -54,6 +54,7 @@ struct RecordView: View {
                     }
                 )
                 .padding(.leading, 20)
+                .padding(.bottom, 20)
             }
             .background(Color.background)
 

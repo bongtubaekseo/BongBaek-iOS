@@ -156,7 +156,7 @@ struct ModifyEventView: View {
                                                         
                             CustomTextField(
                                 title: "별명",
-                                icon: "icon_event_16",
+                                icon: "icon_nickname",
                                 placeholder: "별명을 입력하세요",
                                 text: $alias,
                                 validationRule: ValidationRule(
@@ -347,7 +347,7 @@ struct ModifyEventView: View {
                     Image("icon_location 4")
                         .resizable()
                         .renderingMode(.template)
-                        .frame(width: 16,height: 16)
+                        .frame(width: 20,height: 20)
                         .foregroundStyle(.gray400)
                     
                     Text("행사장")

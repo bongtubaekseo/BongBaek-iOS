@@ -101,7 +101,7 @@ struct CreateEventView: View {
                             
                             CustomTextField(
                                 title: "별명",
-                                icon: "icon_event_16",
+                                icon: "icon_nickname",
                                 placeholder: "별명을 입력하세요",
                                 text: $alias,
                                 validationRule: ValidationRule(
@@ -254,10 +254,16 @@ struct CreateEventView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location_16")
+                    Image("icon_location 5")
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 20,height: 20)
+                        .foregroundColor(.gray400)
+                
+
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray300)
+                        .foregroundStyle(.gray100)
                 }
                 
                 Spacer()
@@ -764,10 +770,16 @@ struct CreateEventViewAfterEvent: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location_16")
+                    Image("icon_location 5")
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 20,height: 20)
+                        .foregroundColor(.gray400)
+                
+
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray300)
+                        .foregroundStyle(.gray100)
                 }
                 
                 Spacer()

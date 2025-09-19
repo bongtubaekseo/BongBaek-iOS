@@ -35,10 +35,12 @@ struct LoginView: View {
                        Button(action: {
 
                        }) {
-                           Image("btn_login")
+                           Image("btn_login_apple")
                                .resizable()
                                .scaledToFill()
                                .frame(height: 55.adjustedH)
+                               .clipped()
+                               .cornerRadius(8)
 
                        }
                        .buttonStyle(PlainButtonStyle())
@@ -52,7 +54,7 @@ struct LoginView: View {
                            loginViewModel.requestAppleOauth()
                                .frame(maxWidth: 375)
                                .frame(height: 44)
-                               .blendMode(.overlay)
+                               .opacity(0.001)
                        }
                        
                        
@@ -60,10 +62,13 @@ struct LoginView: View {
                            appStateManager.loginWithKakao()
                            
                        }) {
-                           Image("btn_kakao")
+                           Image("btn_login_kakao")
                                .resizable()
                                .scaledToFill()
                                .frame(height: 55.adjustedH)
+                               .clipped()
+                               .cornerRadius(8)
+
 
                        }
                        .buttonStyle(PlainButtonStyle())

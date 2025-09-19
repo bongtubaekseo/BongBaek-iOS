@@ -46,6 +46,7 @@ struct AllRecordsView: View {
             .padding(.top, 20)
             .padding(.horizontal, 12)
             .padding(.vertical, 4)
+            .padding(.bottom, 20)
             .background(Color.background) // 헤더 배경색 명시
             
             // 스크롤 가능한 콘텐츠
@@ -354,8 +355,10 @@ struct DetailRow: View {
         HStack {
             HStack {
                 Image(image)
+                    .resizable()
                     .renderingMode(.template)
                     .foregroundColor(.gray400)
+                    .frame(width: 16,height: 16)
                 Text(title)
                     .bodyMedium14()
                     .foregroundColor(.gray100)
