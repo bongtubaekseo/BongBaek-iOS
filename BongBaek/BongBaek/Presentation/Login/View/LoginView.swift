@@ -54,7 +54,7 @@ struct LoginView: View {
                            loginViewModel.requestAppleOauth()
                                .frame(maxWidth: 375)
                                .frame(height: 44)
-                               .opacity(0.001)
+                               .blendMode(.hue)
                        }
                        
                        

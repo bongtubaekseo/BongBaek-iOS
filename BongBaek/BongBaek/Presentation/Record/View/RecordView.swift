@@ -200,7 +200,6 @@ struct RecordsHeaderView: View {
                             onDeleteTapped()
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 isDeleteMode = false
-                                onCancelTapped()
                             }
                         }
                     } message: {

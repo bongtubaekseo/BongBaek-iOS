@@ -195,28 +195,46 @@ class RecordViewModel: ObservableObject {
     
     /// 선택된 기록들 삭제
     func deleteSelectedRecords() {
-        print("삭제할 기록 ID들: \(selectedRecordIDs)")
+        let idsToDelete = Array(selectedRecordIDs)
+        print("삭제할 ID들: \(idsToDelete)")
         
-        Task {
-            for eventId in selectedRecordIDs {
+        Task { @MainActor in
+            isLoading = true
+            
+            for eventId in idsToDelete {
                 do {
+                    print("API 호출: \(eventId)")
                     let response = try await eventService.deleteEvent(eventId: eventId).async()
                     if response.isSuccess {
-                        print("이벤트 삭제 성공: \(eventId)")
+                        print("삭제 성공: \(eventId)")
                     } else {
-                        print("이벤트 삭제 실패: \(eventId) - \(response.message)")
+                        print("삭제 실패: \(response.message)")
                     }
                 } catch {
-                    print("이벤트 삭제 에러: \(eventId) - \(error)")
+                    print("삭제 에러: \(error)")
                 }
             }
             
-            // 모든 작업을 메인 스레드에서 실행
+            print("모든 삭제 완료, UI 업데이트 시작")
+            
+            // UI 상태 초기화
             selectedRecordIDs.removeAll()
             isDeleteMode = false
+            
+            // 데이터 초기화 및 재로드
+            attendedEvents.removeAll()
+            notAttendedEvents.removeAll()
+            attendedCurrentPage = 0
+            notAttendedCurrentPage = 0
+            attendedIsLastPage = false
+            notAttendedIsLastPage = false
+            isLoadingData = false
+            
+            // 데이터 새로 로드
             await loadAllRecords()
             
-            print("선택된 기록들이 삭제되었습니다")
+            isLoading = false
+            print("완료")
         }
     }
     
