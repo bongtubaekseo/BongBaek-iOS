@@ -102,6 +102,20 @@ struct ScheduleAlarmView: View {
                 .padding(.top, 12)
             }
         }
+        .onChange(of: sortedEvents.count) { oldValue, newValue in
+            if currentIndex >= newValue {
+                withAnimation(.easeOut) {
+                    currentIndex = 0
+                    scrollOffset = 0
+                    dragOffset = 0
+                }
+            }
+        }
+        .onAppear {
+            currentIndex = 0
+            scrollOffset = 0
+            dragOffset = 0
+        }
     }
 
     private func updateCurrentIndex(midX: CGFloat, index: Int) {
