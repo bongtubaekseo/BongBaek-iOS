@@ -57,19 +57,23 @@ struct MyPageView: View {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.white)
                     }
+                    .frame(width: 44, height: 44)
+                    
+                    Spacer()
                     
                     Text("마이페이지")
                         .titleSemiBold18()
                         .foregroundColor(.white)
-                        .padding(.leading, 8)
                     
                     Spacer()
+                    
+                    Color.clear
+                        .frame(width: 44, height: 44)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 10)
                 .padding(.bottom, 16)
                 .background(Color.black)
-                
                 ScrollView {
                     VStack(spacing: 32) {
                         VStack(spacing: 16) {
@@ -184,7 +188,7 @@ struct MyPageView: View {
                 AuthManager.shared.logout()
             }
         } message: {
-            Text("로그아웃 시 서비스 이용을 위해 다시 로그인해야 합니다.")
+            Text("로그아웃 시 서비스 이용을 위해\n다시 로그인해야 합니다.")
         }
     }
     

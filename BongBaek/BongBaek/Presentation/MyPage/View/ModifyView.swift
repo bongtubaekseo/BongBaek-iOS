@@ -39,12 +39,12 @@ struct ModifyView: View {
                     textFieldSection
                     incomeToggleSection
                     
-                    if viewModel.hasIncome {
-                        incomeSelectionSection
-                    }
+                    incomeSelectionSection
+                        .opacity(viewModel.hasIncome ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
                     
                     updateButton
-                        .padding(.top, 20.adjustedH)
+                        .padding(.bottom, 60.adjustedH)
                     
                     Spacer()
                 }
@@ -60,7 +60,6 @@ struct ModifyView: View {
         .onAppear {
             viewModel.initializeState()
             setupInitialValues()
-
         }
         .onChange(of: viewModel.updateSuccess) { oldValue, newValue in
             print("updateSuccess 변화: \(oldValue) → \(newValue)")
@@ -75,7 +74,6 @@ struct ModifyView: View {
             }
         }
         .onDisappear {
-            // 화면이 사라질 때 혹시나 남은 상태 정리
             if viewModel.updateSuccess {
                 viewModel.resetUpdateSuccess()
                 print("onDisappear: 남은 상태 정리 완료")
