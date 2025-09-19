@@ -168,7 +168,7 @@ struct ModifyEventView: View {
                                 isReadOnly: isRecommendationEdit,
                                 isRequired: true
                             )
-                            .padding(.top, 32)
+                            .padding(.top, 12)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
@@ -352,7 +352,7 @@ struct ModifyEventView: View {
                     
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray300)
+                        .foregroundStyle(.gray100)
                 }
                 
                 Spacer()

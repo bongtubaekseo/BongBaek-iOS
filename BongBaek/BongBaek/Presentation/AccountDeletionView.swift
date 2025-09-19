@@ -49,7 +49,7 @@ struct AccountDeletionView: View {
                     .font(.head_bold_24)
                     .foregroundStyle(.gray100)
                 
-                Text("더 나은 서비스를 위해 탈퇴 이유을 알려주세요")
+                Text("더 나은 서비스를 위해 탈퇴 이유를 알려주세요")
                     .font(.body2_regular_14)
                     .foregroundStyle(.gray400)
             }

@@ -112,7 +112,7 @@ struct CreateEventView: View {
                                 ),
                                 isRequired: true
                             )
-                            .padding(.top, 32)
+                            .padding(.top, 12)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
@@ -254,11 +254,11 @@ struct CreateEventView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 5")
+                    Image("icon_location 4")
                         .resizable()
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
-                        .foregroundColor(.gray400)
+                        .foregroundStyle(.gray400)
                 
 
                     Text("행사장")
@@ -628,7 +628,7 @@ struct CreateEventViewAfterEvent: View {
                                 ),
                                 isRequired: true
                             )
-                            .padding(.top, 32)
+                            .padding(.top, 12)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
@@ -770,11 +770,11 @@ struct CreateEventViewAfterEvent: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 5")
+                    Image("icon_location 4")
                         .resizable()
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
-                        .foregroundColor(.gray400)
+                        .foregroundStyle(.gray400)
                 
 
                     Text("행사장")
