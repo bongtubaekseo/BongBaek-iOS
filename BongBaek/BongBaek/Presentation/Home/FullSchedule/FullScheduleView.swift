@@ -75,11 +75,16 @@ struct FullScheduleView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            headerView
+                .padding(.horizontal)
+                .padding(.top, 20)
+                .padding(.bottom, 20)
+            
+            categoryScrollView
+                .padding(.horizontal)
+            
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 30) {
-                    headerView
-                    categoryScrollView
-                    
                     if viewModel.isLoading {
                         loadingView
                     } else if viewModel.hasError {
@@ -94,7 +99,8 @@ struct FullScheduleView: View {
                         loadingMoreView
                     }
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.top, 40)
             }
         }
         .navigationBarHidden(true)
