@@ -250,7 +250,7 @@ struct ModifyView: View {
         viewModel.nickname = profileData.memberName
         viewModel.selectedDate = formatBirthdayForInput(profileData.memberBirthday)
         setupIncomeData(profileData.memberIncome)
-        
+        viewModel.saveInitialValues()
         print("초기값 설정 완료: \(profileData)")
     }
     
