@@ -82,6 +82,7 @@ struct FullScheduleView: View {
             
             categoryScrollView
                 .padding(.horizontal)
+                .padding(.bottom, 20)
             
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 30) {
@@ -129,7 +130,7 @@ struct FullScheduleView: View {
             }
             .contentShape(Rectangle())
             
-            Text("\(UserDefaults.standard.memberName) 님의 다가올 일정") //TODO: 확인필요
+            Text("\(UserDefaults.standard.memberName)님의 다가올 일정") 
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.leading, 12)
