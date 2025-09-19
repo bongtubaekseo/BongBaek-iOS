@@ -11,6 +11,7 @@ struct HomeView: View {
     @StateObject private var stepManager = GlobalStepManager()
     @EnvironmentObject var router: NavigationRouter
     @StateObject private var homeViewModel = HomeViewModel()
+    @StateObject private var loginVM = LoginViewModel()
     
     var body: some View {
         VStack(spacing: 0) {

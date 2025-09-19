@@ -125,6 +125,9 @@ struct LoginView: View {
                ProfileSettingView()
            }
        }
+       .onAppear {
+           appStateManager.authManager.clearAllTokensAndData()
+       }
        .sheet(isPresented: $appStateManager.showSignUpSheet) {
            SignUpBottomSheetView(
                onComplete: {

@@ -19,6 +19,7 @@ struct AuthData: Codable {
     let isCompletedSignUp: Bool
     let kakaoId: String
     let kakaoAccessToken: String?
+    let apiKey: String?
 }
 
 struct AppleAuthData: Codable {
@@ -26,6 +27,7 @@ struct AppleAuthData: Codable {
     let token: TokenInfo?
     let isCompletedSignUp: Bool
     let appleId: String
+    let apiKey: String?
 }
 
 struct TokenInfo: Codable {

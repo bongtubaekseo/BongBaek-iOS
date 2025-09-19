@@ -19,7 +19,7 @@ class AppStateManager: ObservableObject {
     @Published var currentState: AppState = .launch
     @Published var authData: AuthData?
     @Published var showSignUpSheet = false
-    private let authManager = AuthManager.shared
+    let authManager = AuthManager.shared
     private var cancellables = Set<AnyCancellable>()
     
     init() {

@@ -118,7 +118,8 @@ class LoginViewModel: ObservableObject {
                     if response.isSuccess, let tokenData = response.data {
                         // 토큰 재발급 성공
                         // ToDo: - 성공 처리 후 토큰 save 함수 생성
-                        print("토큰 재발급 성공")
+                        print("토큰 재발급 성공\(tokenData.accessToken)")
+                        print("토큰 재발급 성공\(tokenData.refreshToken)")
                     } else {
                         // 토큰 재발급 실패 (리프레시 토큰 만료 등)
                         self?.errorMessage = response.message
