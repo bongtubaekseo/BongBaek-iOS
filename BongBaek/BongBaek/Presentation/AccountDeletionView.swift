@@ -407,7 +407,7 @@ struct DeletionReasonButton: View {
     
     private func getImageName() -> String {
         if !hasAnySelection {
-            return "icon_check"
+            return "icon_check 2"
         } else {
             return isSelected ? "icon_colorcheck" : "icon_come_16"
         }
