@@ -55,8 +55,8 @@ struct EventDateView: View {
                     handleFormSubmission()
                 }
             )
-            .padding(.horizontal, 24)
-            .padding(.bottom, 50)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 60)
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

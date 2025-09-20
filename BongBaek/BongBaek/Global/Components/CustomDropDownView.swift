@@ -49,23 +49,34 @@ struct CustomDropdown<T: DropdownItem>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             if !title.isEmpty {
-                HStack {
+                
+                HStack(spacing: 8) {
+                    
                     if let icon = icon {
                         Image(icon)
+                            .resizable()
+                            .renderingMode(.template)
+                            .frame(width: 20,height: 20)
+                            .foregroundColor(.gray400)
                         
                     }
-                    Text(title)
-                        .bodyMedium16()
-                        .foregroundColor(.white)
                     
-                    VStack {
-                        Text("*")
+                    HStack(spacing: 2) {
+                        Text(title)
                             .bodyMedium16()
-                            .foregroundColor(.blue)
-                            .padding(.top, 2)
-                            .padding(.leading, 1)
+                            .foregroundColor(.white)
                         
-                        Spacer()
+                        
+                        VStack {
+                            Text("*")
+                                .bodyMedium16()
+                                .foregroundColor(.primaryNormal)
+                                .padding(.top, 2)
+                                .padding(.leading, 1)
+                            
+                            Spacer()
+                        }
+                        
                     }
                 }
             }
@@ -84,6 +95,8 @@ struct CustomDropdown<T: DropdownItem>: View {
 
     private func DropdownHeader() -> some View {
         Button(action: {
+            hideKeyboard()
+            
             if !isDisabled {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                     isExpanded.toggle()
@@ -123,6 +136,7 @@ struct CustomDropdown<T: DropdownItem>: View {
         }
         .disabled(isDisabled)
     }
+
 
     private func DropdownContent() -> some View {
         VStack(alignment: .leading, spacing: 0) {

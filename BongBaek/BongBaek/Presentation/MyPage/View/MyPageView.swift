@@ -49,34 +49,39 @@ struct MyPageView: View {
         ZStack {
             Color.black.ignoresSafeArea()
             
-            ScrollView {
-                VStack(spacing: 0) {
-                    HStack {
-                        Button(action: {
-                            router.pop()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("마이페이지")
-                            .titleSemiBold18()
+            VStack(spacing: 0) {
+                HStack {
+                    Button(action: {
+                        router.pop()
+                    }) {
+                        Image(systemName: "chevron.left")
                             .foregroundColor(.white)
-                        
-                        Spacer()
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 10)
+                    .frame(width: 44, height: 44)
                     
+                    Spacer()
+                    
+                    Text("마이페이지")
+                        .titleSemiBold18()
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Color.clear
+                        .frame(width: 44, height: 44)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+                .padding(.bottom, 16)
+                .background(Color.black)
+                ScrollView {
                     VStack(spacing: 32) {
                         VStack(spacing: 16) {
                             Image(.myPageLogo)
                                 .frame(width: 110, height: 110)
                                 .padding(.top, 40)
                             
-                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서의겸손한야수")
+                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
                                 .headBold24()
                                 .foregroundStyle(.gray100)
                             
@@ -183,7 +188,7 @@ struct MyPageView: View {
                 AuthManager.shared.logout()
             }
         } message: {
-            Text("로그아웃 시 서비스 이용을 위해 다시 로그인해야 합니다.")
+            Text("로그아웃 시 서비스 이용을 위해\n다시 로그인해야 합니다.")
         }
     }
     

@@ -23,6 +23,11 @@ class ModifyViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     @Published var updateSuccess: Bool = false
     
+    private var initialNickname: String = ""
+    private var initialDate: String = ""
+    private var initialHasIncome: Bool = true
+    private var initialSelection: IncomeSelection = .none
+    
     // MARK: - Private Properties
     let myPageManager = MyPageManager.shared
     private var cancellables = Set<AnyCancellable>()
@@ -96,16 +101,43 @@ class ModifyViewModel: ObservableObject {
                               nickname.count <= 10 &&
                               !selectedDate.isEmpty
         
+        let normalizedCurrentDate = normalizeDate(selectedDate)
+           let normalizedInitialDate = normalizeDate(initialDate)
+        
+        let hasChanges = nickname != initialNickname ||
+                        normalizedCurrentDate != normalizedInitialDate ||
+                        hasIncome != initialHasIncome ||
+                        currentSelection != initialSelection
+        
+        print("=== 버튼 활성화 체크 ===")
+        print("현재 nickname: '\(nickname)' vs 초기값: '\(initialNickname)'")
+        print("현재 date: '\(selectedDate)' vs 초기값: '\(initialDate)'")
+        print("현재 hasIncome: \(hasIncome) vs 초기값: \(initialHasIncome)")
+        print("현재 selection: \(currentSelection) vs 초기값: \(initialSelection)")
+        print("hasChanges: \(hasChanges)")
+        print("=====================")
+        
         if hasIncome {
-            return basicFieldsValid && currentSelection != .none && !isUpdating
+            return basicFieldsValid && currentSelection != .none && !isUpdating && hasChanges
         } else {
-            return basicFieldsValid && !isUpdating
+            return basicFieldsValid && !isUpdating && hasChanges
         }
     }
     
     // MARK: - Initialization
     
-
+    func saveInitialValues() {
+        initialNickname = nickname
+        initialDate = selectedDate
+        initialHasIncome = hasIncome
+        initialSelection = currentSelection
+        print("=== 초기값 저장 ===")
+        print("nickname: '\(initialNickname)'")
+        print("date: '\(initialDate)'")
+        print("hasIncome: \(initialHasIncome)")
+        print("selection: \(initialSelection)")
+        print("==================")
+    }
     
     // MARK: - Public Methods
     func selectIncome(_ selection: IncomeSelection) {
@@ -143,6 +175,23 @@ class ModifyViewModel: ObservableObject {
             memberBirthday: formattedBirthday,
             memberIncome: incomeValue
         )
+    }
+    
+    private func normalizeDate(_ dateString: String) -> String {
+        if dateString.contains("년") {
+            let components = dateString.components(separatedBy: CharacterSet.decimalDigits.inverted)
+            let numbers = components.filter { !$0.isEmpty }
+            if numbers.count >= 3 {
+                let year = numbers[0]
+                let month = String(format: "%02d", Int(numbers[1]) ?? 0)
+                let day = String(format: "%02d", Int(numbers[2]) ?? 0)
+                return "\(year)-\(month)-\(day)"
+            }
+        } else if dateString.contains(".") {
+            // "2011.09.19" → "2011-09-19"
+            return dateString.replacingOccurrences(of: ".", with: "-")
+        }
+        return dateString
     }
     
     func dismissError() {

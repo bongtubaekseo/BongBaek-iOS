@@ -75,11 +75,17 @@ struct FullScheduleView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            headerView
+                .padding(.horizontal)
+                .padding(.top, 20)
+                .padding(.bottom, 20)
+            
+            categoryScrollView
+                .padding(.horizontal)
+                .padding(.bottom, 20)
+            
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 30) {
-                    headerView
-                    categoryScrollView
-                    
                     if viewModel.isLoading {
                         loadingView
                     } else if viewModel.hasError {
@@ -94,7 +100,8 @@ struct FullScheduleView: View {
                         loadingMoreView
                     }
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.top, 40)
             }
         }
         .navigationBarHidden(true)
@@ -125,7 +132,8 @@ struct FullScheduleView: View {
             }
             .contentShape(Rectangle())
             
-            Text("\(UserDefaults.standard.memberName) 님의 다가올 일정")
+            Text("\(UserDefaults.standard.memberName)님의 다가올 일정") 
+
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.top, 10)
@@ -138,7 +146,7 @@ struct FullScheduleView: View {
     private var categoryScrollView: some View {
         VStack(alignment: .leading, spacing: 12) {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
+                HStack(spacing: 8) {
                     ForEach(ScheduleCategory.allCases, id: \.self) { category in
                         categoryButton(for: category)
                     }
@@ -154,7 +162,7 @@ struct FullScheduleView: View {
             viewModel.updateCategory(category)
         }) {
             Text(category.displayName)
-                .bodyMedium16()
+                .bodyMedium14()
                 .foregroundColor(viewModel.selectedCategory == category ? .black : .gray300)
                 .frame(height: 40)
                 .padding(.horizontal, 16)

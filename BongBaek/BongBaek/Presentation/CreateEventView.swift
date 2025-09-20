@@ -52,170 +52,181 @@ struct CreateEventView: View {
     ]
     
     var body: some View {
-        VStack {
-            ScrollView {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Text("취소")
-                            .bodyRegular16()
-                            .foregroundStyle(.gray200)
-                    }
-                    .frame(width: 44, height: 44)
-                    .padding(.leading, -8)
-                    
-                    Spacer()
-                    
-                    Text("경조사 기록하기")
-                        .titleSemiBold18()
-                        .foregroundColor(.white)
-                    
-                    Spacer()
-                    
-                    Color.clear
-                        .frame(width: 44, height: 44)
+        VStack(spacing: 0) {
+            HStack {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Text("취소")
+                        .bodyRegular16()
+                        .foregroundStyle(.gray200)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 4)
-                .padding(.bottom, 16)
-                .background(.gray900)
+                .frame(width: 44, height: 44)
+                .padding(.leading, -8)
                 
+                Spacer()
+                
+                Text("경조사 기록하기")
+                    .titleSemiBold18()
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Color.clear
+                    .frame(width: 44, height: 44)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 4)
+            .padding(.bottom, 16)
+            .background(.gray900)
+            
+            // 스크롤 가능한 콘텐츠
+            ScrollView {
                 VStack(spacing: 0) {
-                    VStack {
-                        CustomTextField(
-                            title: "이름",
-                            icon: "icon_person_16",
-                            placeholder: "이름을 입력하세요",
-                            text: $nickname,
-                            validationRule: ValidationRule(
-                                minLength: 2,
-                                maxLength: 10,
-                                regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
-                            ),
-                            isRequired: true
-                        )
-                        
-                        CustomTextField(
-                            title: "별명",
-                            icon: "icon_event_16",
-                            placeholder: "별명을 입력하세요",
-                            text: $alias,
-                            validationRule: ValidationRule(
-                                minLength: 2,
-                                maxLength: 10,
-                                regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
-                            ),
-                            isRequired: true
-                        )
-                        .padding(.top, 32)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 24)
-
-                    dropdownSection
-                        .padding(.top, 16)
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 8) {
+                    VStack(spacing: 0) {
+                        VStack {
                             CustomTextField(
-                                title: "경조사비",
-                                icon: "icon_coin_16",
-                                placeholder: "금액을 입력하세요",
-                                text: $money,
+                                title: "이름",
+                                icon: "icon_person_16",
+                                placeholder: "이름을 입력하세요",
+                                text: $nickname,
                                 validationRule: ValidationRule(
-                                    minLength: 1,
-                                    maxLength: 10
-                                ),keyboardType: .numberPad
+                                    minLength: 2,
+                                    maxLength: 10,
+                                    regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                ),
+                                isRequired: true
                             )
                             
-                            Text("원")
-                                .bodyRegular16()
-                                .foregroundColor(.white)
+                            CustomTextField(
+                                title: "별명",
+                                icon: "icon_nickname",
+                                placeholder: "별명을 입력하세요",
+                                text: $alias,
+                                validationRule: ValidationRule(
+                                    minLength: 2,
+                                    maxLength: 10,
+                                    regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                ),
+                                isRequired: true
+                            )
+                            .padding(.top, 12)
                         }
-                        
-                        CustomDropdown(
-                            title: "참석여부",
-                            icon: "icon_check 1",
-                            placeholder: "참석여부를 선택하세요",
-                            items: attendItems,
-                            selectedItem: $selectedAttend
-                        )
-                        .padding(.top, 16)
-                        .onChange(of: selectedAttend) { _, newValue in
-                            // 불참석으로 변경되면 선택된 위치 초기화
-                            if newValue?.title == "불참석" {
-                                selectedLocation = nil
-                            }
-                        }
-                        
-                        CustomTextField(
-                            title: "날짜",
-                            icon: "icon_calendar_16",
-                            placeholder: "날짜를 선택하세요",
-                            text: $selectedDate,
-                            isReadOnly: true,
-                            isRequired: true
-                        ) {
-                            print("날짜 필드 터치됨")
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                showDatePicker = true
-                            }
-                        }
-                        .padding(.top, 16)
-                        
-                        // 행사장 섹션
-                        locationSection
+                        .padding(.horizontal, 20)
+                        .padding(.top, 24)
+
+                        dropdownSection
                             .padding(.top, 16)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 8) {
+                                CustomTextField(
+                                    title: "경조사비",
+                                    icon: "icon_coin_16",
+                                    placeholder: "금액을 입력하세요",
+                                    text: $money,
+                                    validationRule: ValidationRule(
+                                        customRule: { input in
+                                            guard let amount = Int(input), amount > 0 else {
+                                                return false
+                                            }
+                                            return amount >= 1 && amount <= 99_999_999
+                                        },
+                                        customMessage: "1원 이상 입력하세요"
+                                    ),
+                                    isRequired: true,
+                                    keyboardType: .numberPad
+                                )
+                                
+                                Text("원")
+                                    .bodyRegular16()
+                                    .foregroundColor(.white)
+                            }
+                            
+                            CustomDropdown(
+                                title: "참석여부",
+                                icon: "icon_check 1",
+                                placeholder: "참석여부를 선택하세요",
+                                items: attendItems,
+                                selectedItem: $selectedAttend
+                            )
+                            .padding(.top, 16)
+                            .onChange(of: selectedAttend) { _, newValue in
+                                // 불참석으로 변경되면 선택된 위치 초기화
+                                if newValue?.title == "불참석" {
+                                    selectedLocation = nil
+                                }
+                            }
+                            
+                            CustomTextField(
+                                title: "날짜",
+                                icon: "icon_calendar_16",
+                                placeholder: "날짜를 선택하세요",
+                                text: $selectedDate,
+                                isReadOnly: true,
+                                isRequired: true
+                            ) {
+                                print("날짜 필드 터치됨")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    showDatePicker = true
+                                }
+                            }
+                            .padding(.top, 16)
+                            
+                            // 행사장 섹션
+                            locationSection
+                                .padding(.top, 16)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+                        .padding(.bottom, 24)
                     }
+                    .background(.gray800)
+                    .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
-                    .padding(.bottom, 24)
-                }
-                .background(.gray800)
-                .cornerRadius(12)
-                .padding(.horizontal, 20)
-                .padding(.top, 16)
-                
-                EventMemoView(memo: $memo)
-                    .padding(.top, 16)
-                    .padding(.horizontal,20)
-                
-                Button {
-                    createEvent()
-                } label: {
-                    if isSubmitting {
-                        HStack {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .scaleEffect(0.8)
-                            Text("기록 중...")
+                    
+                    EventMemoView(memo: $memo)
+                        .padding(.top, 16)
+                        .padding(.horizontal, 20)
+                    
+                    Button {
+                        createEvent()
+                    } label: {
+                        if isSubmitting {
+                            HStack {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .scaleEffect(0.8)
+                                Text("기록 중...")
+                                    .titleSemiBold18()
+                                    .foregroundColor(.white)
+                            }
+                        } else {
+                            Text("기록하기")
                                 .titleSemiBold18()
-                                .foregroundColor(.white)
+                                .foregroundColor(isFormValid ? .white : .gray500)
                         }
-                    } else {
-                        Text("기록하기")
-                            .titleSemiBold18()
-                            .foregroundColor(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 55)
+                    .background(isFormValid ? .primaryNormal : .primaryBg)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+                    .disabled(!isFormValid || isSubmitting)
+                    
+                    if let error = submitError {
+                        Text(error)
+                            .font(.system(size: 12))
+                            .foregroundColor(.red)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 8)
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 55)
-                .background(isFormValid ? .primaryNormal : .gray600)
-                .cornerRadius(12)
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
-                .disabled(!isFormValid || isSubmitting)
-                
-                if let error = submitError {
-                    Text(error)
-                        .font(.system(size: 12))
-                        .foregroundColor(.red)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-                }
+                .padding(.bottom, 40) // 하단 여백
             }
             .onTapGesture {
                 hideKeyboard()
@@ -226,7 +237,6 @@ struct CreateEventView: View {
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showDatePicker) {
-            
             DatePickerBottomSheetView.unlimited { selectedDateString in
                 selectedDate = selectedDateString
                 print("선택된 날짜: \(selectedDateString)")
@@ -244,10 +254,16 @@ struct CreateEventView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location_16")
+                    Image("icon_location 4")
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 20,height: 20)
+                        .foregroundStyle(.gray400)
+                
+
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray300)
+                        .foregroundStyle(.gray100)
                 }
                 
                 Spacer()
@@ -336,7 +352,7 @@ struct CreateEventView: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation 1",
+                icon: "icon_relation 2",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation
@@ -360,19 +376,25 @@ struct CreateEventView: View {
               let latitude = Double(location.y) else { return }
         
         mapView?.updateLocation(longitude: longitude, latitude: latitude)
-        print("✅ 지도 위치 업데이트: \(location.placeName)")
-        print("📍 좌표: \(longitude), \(latitude)")
+        print("지도 위치 업데이트: \(location.placeName)")
+        print("좌표: \(longitude), \(latitude)")
     }
     
     // 폼 유효성 검사
     private var isFormValid: Bool {
-        !nickname.isEmpty &&
-        !alias.isEmpty &&
-        !money.isEmpty &&
-        selectedAttend != nil &&
-        selectedEvent != nil &&
-        selectedRelation != nil &&
-        !selectedDate.isEmpty
+        let isMoneyValid: Bool = {
+            guard !money.isEmpty,
+                  let amount = Int(money) else { return false }
+            return amount >= 1 && amount <= 99_999_999
+        }()
+        
+        return !nickname.isEmpty &&
+               !alias.isEmpty &&
+               isMoneyValid &&
+               selectedAttend != nil &&
+               selectedEvent != nil &&
+               selectedRelation != nil &&
+               !selectedDate.isEmpty
     }
     
     // 새 이벤트 생성
@@ -546,170 +568,181 @@ struct CreateEventViewAfterEvent: View {
     ]
     
     var body: some View {
-        VStack {
-            ScrollView {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Text("취소")
-                            .bodyRegular16()
-                            .foregroundStyle(.gray200)
-                    }
-                    .frame(width: 44, height: 44)
-                    .padding(.leading, -8)
-                    
-                    Spacer()
-                    
-                    Text("경조사 기록하기")
-                        .titleSemiBold18()
-                        .foregroundColor(.white)
-                    
-                    Spacer()
-                    
-                    Color.clear
-                        .frame(width: 44, height: 44)
+        VStack(spacing: 0) {
+            HStack {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Text("취소")
+                        .bodyRegular16()
+                        .foregroundStyle(.gray200)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 4)
-                .padding(.bottom, 16)
-                .background(.gray900)
+                .frame(width: 44, height: 44)
+                .padding(.leading, -8)
                 
+                Spacer()
+                
+                Text("경조사 기록하기")
+                    .titleSemiBold18()
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Color.clear
+                    .frame(width: 44, height: 44)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 4)
+            .padding(.bottom, 16)
+            .background(.gray900)
+            
+            // 스크롤 가능한 콘텐츠
+            ScrollView {
                 VStack(spacing: 0) {
-                    VStack {
-                        CustomTextField(
-                            title: "이름",
-                            icon: "icon_person_16",
-                            placeholder: "이름을 입력하세요",
-                            text: $nickname,
-                            validationRule: ValidationRule(
-                                minLength: 2,
-                                maxLength: 10,
-                                regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
-                            ),
-                            isRequired: true
-                        )
-                        
-                        CustomTextField(
-                            title: "별명",
-                            icon: "icon_event_16",
-                            placeholder: "별명을 입력하세요",
-                            text: $alias,
-                            validationRule: ValidationRule(
-                                minLength: 2,
-                                maxLength: 10,
-                                regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
-                            ),
-                            isRequired: true
-                        )
-                        .padding(.top, 32)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 24)
-
-                    dropdownSection
-                        .padding(.top, 16)
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 8) {
+                    VStack(spacing: 0) {
+                        VStack {
                             CustomTextField(
-                                title: "경조사비",
-                                icon: "icon_coin_16",
-                                placeholder: "금액을 입력하세요",
-                                text: $money,
+                                title: "이름",
+                                icon: "icon_person_16",
+                                placeholder: "이름을 입력하세요",
+                                text: $nickname,
                                 validationRule: ValidationRule(
-                                    minLength: 1,
-                                    maxLength: 10
-                                ),keyboardType: .numberPad
+                                    minLength: 2,
+                                    maxLength: 10,
+                                    regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                ),
+                                isRequired: true
                             )
                             
-                            Text("원")
-                                .bodyRegular16()
-                                .foregroundColor(.white)
+                            CustomTextField(
+                                title: "별명",
+                                icon: "icon_event_16",
+                                placeholder: "별명을 입력하세요",
+                                text: $alias,
+                                validationRule: ValidationRule(
+                                    minLength: 2,
+                                    maxLength: 10,
+                                    regex: "^[가-힣a-zA-Z0-9\\s]+$",
+                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                ),
+                                isRequired: true
+                            )
+                            .padding(.top, 12)
                         }
-                        
-                        CustomDropdown(
-                            title: "참석여부",
-                            icon: "icon_check 1",
-                            placeholder: "참석여부를 선택하세요",
-                            items: attendItems,
-                            selectedItem: $selectedAttend
-                        )
-                        .padding(.top, 16)
-                        .onChange(of: selectedAttend) { _, newValue in
-                            // 불참석으로 변경되면 선택된 위치 초기화
-                            if newValue?.title == "불참석" {
-                                selectedLocation = nil
-                            }
-                        }
-                        
-                        CustomTextField(
-                            title: "날짜",
-                            icon: "icon_calendar_16",
-                            placeholder: "날짜를 선택하세요",
-                            text: $selectedDate,
-                            isReadOnly: true,
-                            isRequired: true
-                        ) {
-                            print("날짜 필드 터치됨")
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                showDatePicker = true
-                            }
-                        }
-                        .padding(.top, 16)
-                        
-                        // 행사장 섹션
-                        locationSection
+                        .padding(.horizontal, 20)
+                        .padding(.top, 24)
+
+                        dropdownSection
                             .padding(.top, 16)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 8) {
+                                CustomTextField(
+                                    title: "경조사비",
+                                    icon: "icon_coin_16",
+                                    placeholder: "금액을 입력하세요",
+                                    text: $money,
+                                    validationRule: ValidationRule(
+                                        customRule: { input in
+                                            guard let amount = Int(input), amount > 0 else {
+                                                return false
+                                            }
+                                            return amount >= 1 && amount <= 99_999_999
+                                        },
+                                        customMessage: "1원 이상 입력하세요"
+                                    ),
+                                    isRequired: true,
+                                    keyboardType: .numberPad
+                                )
+                                
+                                Text("원")
+                                    .bodyRegular16()
+                                    .foregroundColor(.white)
+                            }
+                            
+                            CustomDropdown(
+                                title: "참석여부",
+                                icon: "icon_check 1",
+                                placeholder: "참석여부를 선택하세요",
+                                items: attendItems,
+                                selectedItem: $selectedAttend
+                            )
+                            .padding(.top, 16)
+                            .onChange(of: selectedAttend) { _, newValue in
+                                // 불참석으로 변경되면 선택된 위치 초기화
+                                if newValue?.title == "불참석" {
+                                    selectedLocation = nil
+                                }
+                            }
+                            
+                            CustomTextField(
+                                title: "날짜",
+                                icon: "icon_calendar_16",
+                                placeholder: "날짜를 선택하세요",
+                                text: $selectedDate,
+                                isReadOnly: true,
+                                isRequired: true
+                            ) {
+                                print("날짜 필드 터치됨")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    showDatePicker = true
+                                }
+                            }
+                            .padding(.top, 16)
+                            
+                            // 행사장 섹션
+                            locationSection
+                                .padding(.top, 16)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+                        .padding(.bottom, 24)
                     }
+                    .background(.gray800)
+                    .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
-                    .padding(.bottom, 24)
-                }
-                .background(.gray800)
-                .cornerRadius(12)
-                .padding(.horizontal, 20)
-                .padding(.top, 16)
-                
-                EventMemoView(memo: $memo)
-                    .padding(.top, 16)
-                    .padding(.horizontal,20)
-                
-                Button {
-                    createEvent()
-                } label: {
-                    if isSubmitting {
-                        HStack {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .scaleEffect(0.8)
-                            Text("기록 중...")
+                    
+                    EventMemoView(memo: $memo)
+                        .padding(.top, 16)
+                        .padding(.horizontal, 20)
+                    
+                    Button {
+                        createEvent()
+                    } label: {
+                        if isSubmitting {
+                            HStack {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .scaleEffect(0.8)
+                                Text("기록 중...")
+                                    .titleSemiBold18()
+                                    .foregroundColor(.white)
+                            }
+                        } else {
+                            Text("기록하기")
                                 .titleSemiBold18()
-                                .foregroundColor(.white)
+                                .foregroundColor(isFormValid ? .white : .gray500)
                         }
-                    } else {
-                        Text("기록하기")
-                            .titleSemiBold18()
-                            .foregroundColor(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 55)
+                    .background(isFormValid ? .primaryNormal : .primaryBg)
+                    .cornerRadius(12)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+                    .disabled(!isFormValid || isSubmitting)
+                    
+                    if let error = submitError {
+                        Text(error)
+                            .font(.system(size: 12))
+                            .foregroundColor(.red)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 8)
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 55)
-                .background(isFormValid ? .primaryNormal : .gray600)
-                .cornerRadius(12)
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
-                .disabled(!isFormValid || isSubmitting)
-                
-                if let error = submitError {
-                    Text(error)
-                        .font(.system(size: 12))
-                        .foregroundColor(.red)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-                }
+                .padding(.bottom, 40) // 하단 여백
             }
             .onTapGesture {
                 hideKeyboard()
@@ -737,10 +770,16 @@ struct CreateEventViewAfterEvent: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location_16")
+                    Image("icon_location 4")
+                        .resizable()
+                        .renderingMode(.template)
+                        .frame(width: 20,height: 20)
+                        .foregroundStyle(.gray400)
+                
+
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray300)
+                        .foregroundStyle(.gray100)
                 }
                 
                 Spacer()
@@ -829,7 +868,7 @@ struct CreateEventViewAfterEvent: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation 1",
+                icon: "icon_relation 2",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation
@@ -859,13 +898,19 @@ struct CreateEventViewAfterEvent: View {
     
     // 폼 유효성 검사
     private var isFormValid: Bool {
-        !nickname.isEmpty &&
-        !alias.isEmpty &&
-        !money.isEmpty &&
-        selectedAttend != nil &&
-        selectedEvent != nil &&
-        selectedRelation != nil &&
-        !selectedDate.isEmpty
+        let isMoneyValid: Bool = {
+            guard !money.isEmpty,
+                  let amount = Int(money) else { return false }
+            return amount >= 1 && amount <= 99_999_999
+        }()
+        
+        return !nickname.isEmpty &&
+               !alias.isEmpty &&
+               isMoneyValid &&
+               selectedAttend != nil &&
+               selectedEvent != nil &&
+               selectedRelation != nil &&
+               !selectedDate.isEmpty
     }
     
     // 새 이벤트 생성

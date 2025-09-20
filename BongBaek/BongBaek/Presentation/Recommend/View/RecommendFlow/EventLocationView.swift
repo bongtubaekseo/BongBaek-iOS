@@ -65,7 +65,7 @@ struct EventLocationView: View {
                     }
                     
                     submitButton
-                        .padding(.top,20)
+                        .padding(.top,30)
                 }
                 .padding(.top, 20)
             }
@@ -154,7 +154,7 @@ struct EventLocationView: View {
     private var searchSection: some View {
         HStack(spacing: 12) {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.gray)
+                .foregroundColor(.white)
                 .font(.system(size: 20))
             
             TextField("기타 사유를 입력해주세요",
@@ -177,7 +177,7 @@ struct EventLocationView: View {
                     isSearchFieldFocused = false
                 }) {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.gray500)
                         .font(.system(size: 16))
                 }
                 .transition(.scale.combined(with: .opacity))
@@ -185,10 +185,10 @@ struct EventLocationView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.gray.opacity(0.2))
+        .background(Color.gray750)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                .stroke(Color.gray750.opacity(0.5), lineWidth: 1)
         )
         .cornerRadius(8)
         .padding(.horizontal, 20)
@@ -310,15 +310,16 @@ struct EventLocationView: View {
         } label: {
             Text("금액 추천 받기")
                 .titleSemiBold18()
-                .foregroundColor(isNextButtonEnabled ? .white : .gray400)
+                .foregroundColor(isNextButtonEnabled ? .white : .gray500)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
         .frame(height: 55)
-        .background(isNextButtonEnabled ? .primaryNormal : .gray600)
+        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .padding(.top, 8)
+        .padding(.bottom, 60)
         .animation(.easeInOut(duration: 0.2), value: isNextButtonEnabled)
     }
     

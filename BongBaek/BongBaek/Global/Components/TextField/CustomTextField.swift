@@ -60,7 +60,9 @@ struct CustomTextField: View {
             HStack(spacing: 8) {
                 Image(icon)
                     .resizable()
-                    .frame(width: 16,height: 16)
+                    .renderingMode(.template)
+                    .frame(width: 20,height: 20)
+                    .foregroundColor(.gray400)
                 
                 HStack(spacing: 2) {
                     Text(title)
@@ -324,7 +326,7 @@ enum ValidationState {
         case .focused:
             return .primaryNormal
         case .completed:
-            return .white
+            return .lineNormal
         }
     }
 }
@@ -384,8 +386,11 @@ struct ValidationRule {
         
         if let customRule = customRule {
             let isValid = customRule(text)
-            let message = customMessage ?? (isValid ? "올바른 형식입니다" : "형식이 올바르지 않습니다")
-            return (isValid, message)
+            if isValid {
+                return (true, "") 
+            } else {
+                return (false, customMessage ?? "형식이 올바르지 않습니다")
+            }
         }
         
         return (true, "")

@@ -39,12 +39,12 @@ struct ModifyView: View {
                     textFieldSection
                     incomeToggleSection
                     
-                    if viewModel.hasIncome {
-                        incomeSelectionSection
-                    }
+                    incomeSelectionSection
+                        .opacity(viewModel.hasIncome ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
                     
                     updateButton
-                        .padding(.top, 20.adjustedH)
+                        .padding(.bottom, 60.adjustedH)
                     
                     Spacer()
                 }
@@ -60,7 +60,6 @@ struct ModifyView: View {
         .onAppear {
             viewModel.initializeState()
             setupInitialValues()
-
         }
         .onChange(of: viewModel.updateSuccess) { oldValue, newValue in
             print("updateSuccess 변화: \(oldValue) → \(newValue)")
@@ -75,7 +74,6 @@ struct ModifyView: View {
             }
         }
         .onDisappear {
-            // 화면이 사라질 때 혹시나 남은 상태 정리
             if viewModel.updateSuccess {
                 viewModel.resetUpdateSuccess()
                 print("onDisappear: 남은 상태 정리 완료")
@@ -232,8 +230,8 @@ struct ModifyView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(viewModel.isUpdateButtonEnabled ? .primaryNormal : Color.gray.opacity(0.3))
-        .foregroundColor(.white)
+        .background(viewModel.isUpdateButtonEnabled ? .primaryNormal : .primaryBg)
+        .foregroundColor(viewModel.isUpdateButtonEnabled ? .white : .gray500)
         .cornerRadius(12)
         .padding(.top, 20)
         .disabled(!viewModel.isUpdateButtonEnabled)
@@ -252,7 +250,7 @@ struct ModifyView: View {
         viewModel.nickname = profileData.memberName
         viewModel.selectedDate = formatBirthdayForInput(profileData.memberBirthday)
         setupIncomeData(profileData.memberIncome)
-        
+        viewModel.saveInitialValues()
         print("초기값 설정 완료: \(profileData)")
     }
     

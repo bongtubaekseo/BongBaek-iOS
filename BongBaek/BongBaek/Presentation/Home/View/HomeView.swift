@@ -11,6 +11,7 @@ struct HomeView: View {
     @StateObject private var stepManager = GlobalStepManager()
     @EnvironmentObject var router: NavigationRouter
     @StateObject private var homeViewModel = HomeViewModel()
+    @StateObject private var loginVM = LoginViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -46,7 +47,6 @@ struct HomeView: View {
                 } else {
                     // 데이터가 없거나 에러일 때 더미 데이터 또는 빈 뷰
                     ScheduleAlarmView(homeData: .constant(nil))
-                        .padding(.horizontal, 20)
                         .frame(height: 276)
                         .padding(.top, 30)
                 }
@@ -55,24 +55,25 @@ struct HomeView: View {
                     RecommendsView(homeData: homeViewModel.homeData)
                             .environmentObject(stepManager)
                         .environmentObject(router)
-                        .padding(.top, 10)
+                        .padding(.top, 32)
                 } else {
                     RecommendsView(homeData: nil)
                         .environmentObject(stepManager)
                         .environmentObject(router)
-                        .padding(.top, 10)
+                        .padding(.top, 32)
                 }
                 
                 if homeViewModel.hasData {
                     ScheduleView(events: homeViewModel.homeData?.events ?? [])
                         .padding(.top, 32)
+                        .padding(.bottom, 60)
                 } else {
 
                     ScheduleView(events: [])
                         .padding(.top, 32)
+                        .padding(.bottom, 60)
                 }
             }
-            .padding(.bottom, 20)
         }
         .onAppear {
             print("HomeView 나타남 - 데이터 로드 시작")

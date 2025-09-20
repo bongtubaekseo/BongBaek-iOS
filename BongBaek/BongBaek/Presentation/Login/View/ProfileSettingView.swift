@@ -206,22 +206,25 @@ struct ProfileSettingView: View {
             viewModel.logCurrentSelection()
             viewModel.performSignUp()
         }) {
-            Text("봉투백서 시작하기")
-                .titleSemiBold18() 
-                .foregroundColor(viewModel.isStartButtonEnabled ? .white : .gray500)
+            HStack {
+                if viewModel.isSigningUp {
+                    ProgressView()
+                        .tint(.white)
+                        .scaleEffect(0.8)
+                        .padding(.trailing, 8)
+                }
+                
+                Text("봉투백서 시작하기")
+                    .titleSemiBold18()
+                    .foregroundColor(viewModel.isStartButtonEnabled ? .white : .gray500)
+            }
         }
         .frame(maxWidth: .infinity)
         .padding()
         .background(viewModel.isStartButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
         .padding(.top, 20)
-        .disabled(!viewModel.isStartButtonEnabled)
+        .disabled(!viewModel.isStartButtonEnabled || viewModel.isSigningUp)
         .animation(.easeInOut(duration: 0.2), value: viewModel.isStartButtonEnabled)
-        .overlay(
-            viewModel.isSigningUp ?
-            ProgressView()
-                .tint(.white)
-                .scaleEffect(0.8) : nil
-        )
     }
 }

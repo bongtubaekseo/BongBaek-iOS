@@ -27,10 +27,8 @@ extension AuthTarget: TargetType {
         guard let url = URL(string: EnvironmentSetting.baseURL) else {
             fatalError("Invalid base URL")
         }
-        return URL(string:"http://13.124.42.111")!
-        
-        
-     //   url
+        return url
+
     }
     
     var path: String {
@@ -65,7 +63,7 @@ extension AuthTarget: TargetType {
         case .signUp(let memberInfo):
             return .requestJSONEncodable(memberInfo)
             
-        case .retryToken, .logout:
+        case .logout:
             return .requestPlain
             
         case .appleLogin(let idToken):
@@ -73,6 +71,15 @@ extension AuthTarget: TargetType {
             return .requestJSONEncodable(loginRequest)
         case .withdraw(let reason):
             return .requestJSONEncodable(reason)
+        case .retryToken:
+            // RefreshToken을 body에 포함
+            guard let refreshToken = KeychainManager.shared.refreshToken else {
+                print("RefreshToken이 Keychain에 없습니다")
+                // 빈 요청이라도 보내거나, 에러 처리 필요
+                return .requestPlain
+            }
+            let refreshRequest = RefreshTokenRequest(refreshToken: refreshToken)
+            return .requestJSONEncodable(refreshRequest)
         }
     }
     
@@ -92,4 +99,8 @@ extension AuthTarget: TargetType {
         
         return headers
     }
+}
+
+struct RefreshTokenRequest: Codable {
+    let refreshToken: String
 }
