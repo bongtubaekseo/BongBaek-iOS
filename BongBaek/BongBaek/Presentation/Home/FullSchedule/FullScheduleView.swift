@@ -63,7 +63,7 @@ struct FullScheduleView: View {
             return schedulesGrouped.mapValues { months in
                 months.mapValues { schedules in
                     schedules.filter { schedule in
-                        schedule.type == selectedCategory.rawValue // 추후 type 대신 eventCategory필요
+                        schedule.type == selectedCategory.rawValue
                     }
                 }
                 .filter{ !$0.value.isEmpty}
@@ -127,13 +127,17 @@ struct FullScheduleView: View {
             }) {
                 Image(systemName: "chevron.left")
                     .foregroundStyle(.white)
+                    //.padding(.leading,7)
+                    .padding(.top,10)
             }
             .contentShape(Rectangle())
             
             Text("\(UserDefaults.standard.memberName)님의 다가올 일정") 
+
                 .titleSemiBold18()
                 .foregroundColor(.white)
-                .padding(.leading, 12)
+                .padding(.top, 10)
+                //.padding(.leading, 9)
             
             Spacer()
         }
@@ -294,7 +298,6 @@ struct EventCellView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-                // 이벤트 카테고리
                 Text(event.hostInfo.hostNickname)
                     .captionRegular12()
                     .foregroundColor(.primaryNormal)
