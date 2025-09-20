@@ -59,9 +59,15 @@ struct ScheduleCellView: View {
                     Image("carbon_location-filled")
                         .resizable()
                         .frame(width: 16, height: 16)
-                    Text(event.locationInfo.location)
-                        .captionRegular12()
-                        .foregroundColor(.gray200)
+                    Text({
+                        let location = event.locationInfo.location
+                        if location == "미정" || location.isEmpty {
+                            return "-"
+                        }
+                        return location
+                    }())
+                    .captionRegular12()
+                    .foregroundColor(.gray200)
                 }
                 .padding(.horizontal, 8)
                 .padding(.vertical, 8)
