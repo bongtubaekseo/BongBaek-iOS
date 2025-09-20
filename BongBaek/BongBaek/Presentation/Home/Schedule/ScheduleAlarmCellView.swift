@@ -64,9 +64,9 @@ struct ScheduleIndicatorCellView: View {
             .cornerRadius(4)
             .offset(y: -65)
         }
-        .padding(.top, 40)
+        .padding(.top, 32)
         .padding(.horizontal, 20)
-        .padding(.bottom, 30)
+        .padding(.bottom, 32)
         .background(
             LinearGradient(
                 stops: [
