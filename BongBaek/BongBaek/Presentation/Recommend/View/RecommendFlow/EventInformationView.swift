@@ -106,16 +106,16 @@ struct EventInformationTitleView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("어떤 경조사에")
-                .font(.system(size: 28, weight: .bold))
+                .headBold24()
                 .foregroundColor(.white)
             
             Text("참여하시나요?")
-                .font(.system(size: 28, weight: .bold))
+                .headBold24()
                 .foregroundColor(.white)
             
             Text("상황에 맞는 봉투를 준비해드릴게요")
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(.gray)
+                .bodyRegular14()
+                .foregroundColor(.gray400)
                 .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

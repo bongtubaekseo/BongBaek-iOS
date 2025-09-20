@@ -67,7 +67,7 @@ class EventCreationManager: ObservableObject {
     /// Step 1 검증: RecommendView 완료 가능 여부
     var canCompleteRecommendStep: Bool {
         let nameValid = hostName.count >= 2 && hostName.count <= 10
-        let nicknameValid = hostNickname.isEmpty || (hostNickname.count >= 2 && hostNickname.count <= 10)
+        let nicknameValid = hostNickname.count >= 2 && hostNickname.count <= 10  
         let relationshipValid = !relationship.isEmpty
         return nameValid && nicknameValid && relationshipValid
     }
@@ -378,6 +378,8 @@ class EventCreationManager: ObservableObject {
         detailSelected = false
         contactFrequency = 3.0
         meetFrequency = 3.0
+        isHostNameValid = false
+        isHostNicknameValid = false
         
         // Step 2 데이터 초기화
         eventCategory = ""

@@ -33,6 +33,7 @@ struct CustomTabView: View {
                 title: "기록하기"
             )
         }
+        .padding(.bottom, 8)
         .frame(width: UIScreen.main.bounds.width, height: 91)
         .background(
             LinearGradient(

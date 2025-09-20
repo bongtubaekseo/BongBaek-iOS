@@ -215,7 +215,7 @@ struct CreateEventView: View {
                     .background(isFormValid ? .primaryNormal : .primaryBg)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
-                    .padding(.top, 8)
+                    .padding(.top, 20)
                     .disabled(!isFormValid || isSubmitting)
                     
                     if let error = submitError {
@@ -731,7 +731,7 @@ struct CreateEventViewAfterEvent: View {
                     .background(isFormValid ? .primaryNormal : .primaryBg)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
-                    .padding(.top, 8)
+                    .padding(.top, 20)
                     .disabled(!isFormValid || isSubmitting)
                     
                     if let error = submitError {

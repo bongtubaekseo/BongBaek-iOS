@@ -38,10 +38,9 @@ struct AppConfig {
     }()
     
     
-     var kakaoAPIKey: String = {
-        let key = UserDefaults.standard.apiKey
-        return key
-    }()
+    var kakaoAPIKey: String {
+        return UserDefaults.standard.apiKey
+    }
     
 
     var networkTimeout: TimeInterval { return 30.0 }

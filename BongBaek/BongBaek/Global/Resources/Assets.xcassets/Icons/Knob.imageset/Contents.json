@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Knob.svg",
+      "filename" : "Knob.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "Knob@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Knob@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
