@@ -80,10 +80,14 @@ struct SliderSection: View {
                         .fontWeight(.bold)
                         .foregroundStyle(.white)
                         .padding(.all, 12)
-                        .frame(width: 88, height: 88)
+                        .frame(width: 84, height: 84)
                         .offset(y: 6)
+                        .padding(.horizontal, 2)
                 }
+                
             )
+            .padding(.horizontal, 2)
+            
             
             HStack {
                 Text(leftLabel)
@@ -97,6 +101,7 @@ struct SliderSection: View {
                     .foregroundStyle(.gray400)
             }
             .padding(.top, 24)
+            .padding(.horizontal, 2)
         }
     }
 }

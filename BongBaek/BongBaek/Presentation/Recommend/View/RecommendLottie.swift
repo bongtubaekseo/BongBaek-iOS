@@ -61,7 +61,7 @@ struct RecommendLottie: View {
                     }
                     .padding(.top, 10)
                     .padding(.bottom, 16)
-                    .background(Color.black)
+                    .background(Color.gray900)
                     
                     ScrollView {
                         VStack(spacing: 24) {

@@ -32,16 +32,15 @@ struct RecommendView: View {
     
     // 기존 검증 로직 유지 (UI 반응용)
     private var isNextButtonEnabled: Bool {
-        // 1. 이름 유효성 검사 통과
-        let nameValid = eventManager.isHostNameValid
+        let nameText = eventManager.hostName.trimmingCharacters(in: .whitespaces)
+        let nameValid = !nameText.isEmpty && eventManager.isHostNameValid
         
-        // 2. 별명 유효성 검사 통과
-        let nicknameValid = eventManager.isHostNicknameValid
+        let nicknameText = eventManager.hostNickname.trimmingCharacters(in: .whitespaces)
+        let nicknameValid = !nicknameText.isEmpty && eventManager.isHostNicknameValid
         
-        // 3. 관계 선택 필수
-        let relationSelected = !eventManager.relationship.isEmpty
+        let relationValid = !eventManager.relationship.isEmpty
         
-        return nameValid && nicknameValid && relationSelected
+        return nameValid && nicknameValid && relationValid
     }
     
     var body: some View {
