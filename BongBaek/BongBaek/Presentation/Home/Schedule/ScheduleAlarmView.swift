@@ -19,8 +19,16 @@ struct ScheduleAlarmView: View {
     @State private var dragOffset: CGFloat = 0
 
     private let cardSpacing: CGFloat = 8
-    private let cardWidth: CGFloat = 340
     private let sidePadding: CGFloat = 20
+    
+    private var cardWidth: CGFloat {
+            let screenWidth = UIScreen.main.bounds.width
+            if sortedEvents.count <= 1 {
+                return screenWidth - 40
+            } else {
+                return 320
+            }
+        }
 
     var body: some View {
         VStack(spacing: 0) {
