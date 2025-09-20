@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+struct Relationship {
+    let icon: String
+    let displayText: String
+    let apiValue: String
+}
+
 struct RecommendView: View {
     @State private var navigateToEventInfo = false
     @Environment(\.dismiss) private var dismiss
@@ -17,12 +23,12 @@ struct RecommendView: View {
     @EnvironmentObject var eventManager: EventCreationManager
     
     let relationships = [
-        ("icon_family", "가족/친척"),
-        ("icon_friends", "친구"),
-        ("icon_handshakes", "직장"),
-        ("icon_colleague", "선후배"),
-        ("icon_neighbor", "이웃"),
-        ("icon_others", "기타")
+        Relationship(icon: "icon_family", displayText: "가족/친척", apiValue: "가족/친척"),
+        Relationship(icon: "icon_friends", displayText: "친구", apiValue: "친구"),
+        Relationship(icon: "icon_handshakes", displayText: "직장동료", apiValue: "직장"),
+        Relationship(icon: "icon_colleague", displayText: "선후배", apiValue: "선후배"),
+        Relationship(icon: "icon_neighbor", displayText: "이웃", apiValue: "이웃"),
+        Relationship(icon: "icon_others", displayText: "기타", apiValue: "기타")
     ]
     
     let columns = [
@@ -203,15 +209,14 @@ struct RecommendView: View {
     
     private var relationshipGridSection: some View {
         LazyVGrid(columns: columns, spacing: 8) {
-            ForEach(relationships, id: \.1) { relationship in
+            ForEach(relationships, id: \.displayText) { relationship in
                 RelationshipButton(
-                    image: relationship.0,
-                    text: relationship.1,
-                    isSelected: eventManager.relationship == relationship.1
+                    image: relationship.icon,
+                    text: relationship.displayText, 
+                    isSelected: eventManager.relationship == relationship.apiValue
                 ) {
-                    // EventCreationManager의 relationship에 직접 할당
-                    eventManager.relationship = relationship.1
-                    print("관계 선택: \(relationship.1)")
+                    eventManager.relationship = relationship.apiValue
+                    print("관계 선택: \(relationship.apiValue)")
                 }
             }
         }

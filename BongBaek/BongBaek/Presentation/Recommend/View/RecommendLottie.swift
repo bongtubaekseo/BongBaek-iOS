@@ -214,27 +214,28 @@ struct RecommendLottie: View {
                 .foregroundColor(.white)
 
             VStack(spacing: 8) {
-                ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(Color(hex: "#292929"))
-                        .frame(height: 12)
+                GeometryReader { geometry in
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color(hex: "#292929"))
+                            .frame(height: 12)
 
-
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    Color(hex: "#502EFF"),
-                                    Color(hex: "#807FFF"),
-                                ],
-                                startPoint: .leading,
-                                endPoint: .trailing
+                        Capsule()
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color(hex: "#502EFF"),
+                                        Color(hex: "#807FFF"),
+                                    ],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
                             )
-                        )
-                        .frame(height: 12)
-                        .scaleEffect(x: progressScale, y: 1, anchor: .leading)
-                        .animation(.easeInOut(duration: 1.5), value: progressScale)
+                            .frame(width: geometry.size.width * progressScale, height: 12)
+                            .animation(.easeInOut(duration: 1.5), value: progressScale)
+                    }
                 }
+                .frame(height: 12)
 
                 HStack {
                     Text("\(minAmount)원")
@@ -249,13 +250,14 @@ struct RecommendLottie: View {
                 }
             }
         }
-        .padding(16)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.black)
         )
     }
-
+    
     var amountRangeSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("적정 범위")
@@ -263,27 +265,28 @@ struct RecommendLottie: View {
                 .foregroundColor(.white)
 
             VStack(spacing: 8) {
-                ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(Color(hex: "#292929"))
-                        .frame(height: 12)
+                GeometryReader { geometry in
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color(hex: "#292929"))
+                            .frame(height: 12)
 
-
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    Color(hex: "#502EFF"),
-                                    Color(hex: "#807FFF"),
-                                ],
-                                startPoint: .leading,
-                                endPoint: .trailing
+                        Capsule()
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color(hex: "#502EFF"),
+                                        Color(hex: "#807FFF"),
+                                    ],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
                             )
-                        )
-                        .frame(height: 12)
-                        .scaleEffect(x: progressScale, y: 1, anchor: .leading)
-                        .animation(.easeInOut(duration: 1.5), value: progressScale)
+                            .frame(width: geometry.size.width * progressScale, height: 12) 
+                            .animation(.easeInOut(duration: 1.5), value: progressScale)
+                    }
                 }
+                .frame(height: 12)
 
                 HStack {
                     Text("\(minAmount)원")
@@ -298,7 +301,8 @@ struct RecommendLottie: View {
                 }
             }
         }
-        .padding(16)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.black)
