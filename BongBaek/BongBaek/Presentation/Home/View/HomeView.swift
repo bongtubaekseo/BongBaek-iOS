@@ -25,6 +25,7 @@ struct HomeView: View {
                     
                     Image(.homeLogo)
                         .frame(width: 40, height: 40)
+                        .scaledToFit()
                         .padding(.trailing, 20)
                         .onTapGesture {
                             router.push(to : .MyPageView)
