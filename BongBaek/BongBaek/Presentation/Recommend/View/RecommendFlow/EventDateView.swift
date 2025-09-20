@@ -325,12 +325,16 @@ struct AttendanceButton: View {
         Button(action: action) {
             Text(attendanceType.rawValue)
                 .bodyMedium16()
-                .foregroundColor(.white)
+                .foregroundColor(isSelected ? .white : .gray500)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(isSelected ? Color("primary_normal") : Color.black.opacity(0.4))
+                        .fill(isSelected ? Color("primary_normal") : .gray800)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.lineNormal, lineWidth: isSelected ? 0 : 1)
                 )
                 .contentShape(Rectangle())
         }

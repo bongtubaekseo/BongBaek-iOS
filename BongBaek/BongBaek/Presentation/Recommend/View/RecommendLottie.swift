@@ -78,8 +78,10 @@ struct RecommendLottie: View {
                             
                             participationSection
                                 .padding(.horizontal, 20)
+                                .padding(.top, -10)
                             
                             bottomButtons
+                                .padding(.top, 60)
                         }
                         .padding(.bottom, 40)
                     }
@@ -282,7 +284,7 @@ struct RecommendLottie: View {
                                     endPoint: .trailing
                                 )
                             )
-                            .frame(width: geometry.size.width * progressScale, height: 12) 
+                            .frame(width: geometry.size.width * progressScale, height: 12)
                             .animation(.easeInOut(duration: 1.5), value: progressScale)
                     }
                 }
@@ -420,7 +422,7 @@ struct RecommendLottie: View {
     }
 
     var categorySection: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 8) {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
