@@ -87,7 +87,7 @@ struct HomeView: View {
         .navigationBarHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
-        .background(Color.black.ignoresSafeArea())
+        .background(Color.gray900.ignoresSafeArea())
     }
 }
 

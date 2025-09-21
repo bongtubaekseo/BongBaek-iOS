@@ -48,6 +48,6 @@ struct ScheduleView: View {
             }
         }
         .padding(.horizontal)
-        .background(Color.black)
+        .background(Color.gray900)
     }
 }
