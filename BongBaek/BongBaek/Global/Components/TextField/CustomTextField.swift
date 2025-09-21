@@ -75,7 +75,7 @@ struct CustomTextField: View {
                             Text("*")
                                 .bodyMedium16()
                                 .foregroundColor(.primaryNormal)
-                                .padding(.top, 2)
+                                .padding(.top, 4)
                                 .padding(.leading, 1)
                             
                             Spacer()
@@ -155,6 +155,7 @@ struct CustomTextField: View {
                     .foregroundColor(lineColor)
                     .animation(.easeInOut(duration: 0.2), value: validationState)
             }
+            .padding(.top, -4)
             
             if !validationMessage.isEmpty {
                 HStack(spacing: 4) {

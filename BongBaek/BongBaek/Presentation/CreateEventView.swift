@@ -84,7 +84,7 @@ struct CreateEventView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        VStack {
+                        VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
                                 icon: "icon_person_16",
@@ -112,15 +112,15 @@ struct CreateEventView: View {
                                 ),
                                 isRequired: true
                             )
-                            .padding(.top, 12)
+                            .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
 
                         dropdownSection
-                            .padding(.top, 16)
+                            .padding(.top, 32)
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
@@ -143,6 +143,7 @@ struct CreateEventView: View {
                                 Text("원")
                                     .bodyRegular16()
                                     .foregroundColor(.white)
+                                    .padding(.top, 24)
                             }
                             
                             CustomDropdown(
@@ -152,7 +153,7 @@ struct CreateEventView: View {
                                 items: attendItems,
                                 selectedItem: $selectedAttend
                             )
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             .onChange(of: selectedAttend) { _, newValue in
                                 // 불참석으로 변경되면 선택된 위치 초기화
                                 if newValue?.title == "불참석" {
@@ -173,23 +174,23 @@ struct CreateEventView: View {
                                     showDatePicker = true
                                 }
                             }
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             
                             // 행사장 섹션
                             locationSection
-                                .padding(.top, 16)
+                                .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 16)
+                        .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
                     .background(.gray800)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
-                    .padding(.top, 16)
+                    .padding(.top, 20)
                     
                     EventMemoView(memo: $memo)
-                        .padding(.top, 16)
+                        .padding(.top, 40)
                         .padding(.horizontal, 20)
                     
                     Button {
@@ -600,7 +601,7 @@ struct CreateEventViewAfterEvent: View {
             ScrollView {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        VStack {
+                        VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
                                 icon: "icon_person_16",
@@ -628,15 +629,15 @@ struct CreateEventViewAfterEvent: View {
                                 ),
                                 isRequired: true
                             )
-                            .padding(.top, 12)
+                            .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
 
                         dropdownSection
-                            .padding(.top, 16)
+                            .padding(.top, 32)
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
@@ -659,6 +660,7 @@ struct CreateEventViewAfterEvent: View {
                                 Text("원")
                                     .bodyRegular16()
                                     .foregroundColor(.white)
+                                    .padding(.top, 24)
                             }
                             
                             CustomDropdown(
@@ -668,7 +670,7 @@ struct CreateEventViewAfterEvent: View {
                                 items: attendItems,
                                 selectedItem: $selectedAttend
                             )
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             .onChange(of: selectedAttend) { _, newValue in
                                 // 불참석으로 변경되면 선택된 위치 초기화
                                 if newValue?.title == "불참석" {
@@ -689,23 +691,23 @@ struct CreateEventViewAfterEvent: View {
                                     showDatePicker = true
                                 }
                             }
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             
                             // 행사장 섹션
                             locationSection
-                                .padding(.top, 16)
+                                .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 16)
+                        .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
                     .background(.gray800)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
-                    .padding(.top, 16)
+                    .padding(.top, 20)
                     
                     EventMemoView(memo: $memo)
-                        .padding(.top, 16)
+                        .padding(.top, 40)
                         .padding(.horizontal, 20)
                     
                     Button {

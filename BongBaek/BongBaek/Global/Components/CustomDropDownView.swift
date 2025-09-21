@@ -71,7 +71,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                             Text("*")
                                 .bodyMedium16()
                                 .foregroundColor(.primaryNormal)
-                                .padding(.top, 2)
+                                .padding(.top, 4)
                                 .padding(.leading, 1)
                             
                             Spacer()
@@ -89,7 +89,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                         .padding(.top, 12)
                 }
             }
-            .padding(.top, 8)
+            .padding(.top, 4)
         }
     }
 
@@ -178,10 +178,10 @@ struct CustomDropdown<T: DropdownItem>: View {
             }
         }
         .background(.gray750)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color("primary_normal"), lineWidth: 1)
-        )
+//        .overlay(
+//            RoundedRectangle(cornerRadius: 8)
+//                .stroke(Color("primary_normal"), lineWidth: 1)
+//        )
         .cornerRadius(8)
         .transition(
             .asymmetric(

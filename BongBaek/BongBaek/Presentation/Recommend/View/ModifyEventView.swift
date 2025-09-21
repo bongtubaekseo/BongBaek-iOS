@@ -137,7 +137,7 @@ struct ModifyEventView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        VStack {
+                        VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
                                 icon: "icon_person_16",
@@ -168,15 +168,15 @@ struct ModifyEventView: View {
                                 isReadOnly: isRecommendationEdit,
                                 isRequired: true
                             )
-                            .padding(.top, 12)
+                            .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
 
                         dropdownSection
-                            .padding(.top, 16)
+                            .padding(.top, 32)
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
@@ -199,6 +199,7 @@ struct ModifyEventView: View {
                                 Text("원")
                                     .bodyRegular16()
                                     .foregroundColor(.white)
+                                    .padding(.top, 24)
                             }
                             
                             CustomDropdown(
@@ -209,7 +210,7 @@ struct ModifyEventView: View {
                                 selectedItem: $selectedAttend,
                                 isDisabled: isRecommendationEdit
                             )
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             .onChange(of: selectedAttend) { _, newValue in
                                 if newValue?.title == "불참석" {
                                     // 불참석으로 변경 시: 현재 위치를 백업하고 임시로 클리어
@@ -240,22 +241,23 @@ struct ModifyEventView: View {
                                     showDatePicker = true
                                 }
                             }
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                            
                             locationSection
+                                .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 16)
+                        .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
                     .background(.gray800)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
-                    .padding(.top, 16)
+                    .padding(.top, 20)
                     
                     if !isRecommendationEdit {
                         EventMemoView(memo: $memo, isDisabled: isRecommendationEdit)
-                            .padding(.top, 16)
+                            .padding(.top, 40)
                             .padding(.horizontal, 20)
                     }
                     
@@ -341,7 +343,7 @@ struct ModifyEventView: View {
     }
     
     private var locationSection: some View {
-        VStack(spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
                     Image("icon_location 4")
@@ -400,7 +402,7 @@ struct ModifyEventView: View {
                 .animation(.easeInOut(duration: 0.3), value: isAttending)
             }
         }
-        .padding(.top, 16)
+//        .padding(.top, 16)
     }
     
     private var mapSection: some View {
