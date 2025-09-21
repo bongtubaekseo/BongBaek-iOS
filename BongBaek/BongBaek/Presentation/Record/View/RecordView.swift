@@ -211,7 +211,8 @@ struct RecordsHeaderView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 16)
+        .padding(.top, 16)
+        .padding(.bottom, 0)
         .animation(.easeInOut(duration: 0.2), value: isDeleteMode)
         .animation(.easeInOut(duration: 0.2), value: isCurrentSectionEmpty)
         .onChange(of: isDeleteMode) { oldValue, newValue in
@@ -275,7 +276,7 @@ struct RecordSectionHeaderView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 16)
+        .padding(.top, 12)
         .padding(.bottom, 4)
     }
 }
