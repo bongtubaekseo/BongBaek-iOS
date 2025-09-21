@@ -32,8 +32,8 @@ struct RecommendView: View {
     ]
     
     let columns = [
-        GridItem(.flexible(), spacing: 10),
-        GridItem(.flexible(), spacing: 10)
+        GridItem(.flexible(), spacing: 7),
+        GridItem(.flexible(), spacing: 7)
     ]
     
     // 기존 검증 로직 유지 (UI 반응용)
@@ -58,19 +58,20 @@ struct RecommendView: View {
             StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 10)
+            
+            RecommendGuideTextView(
+                title1: "먼저, 마음을 전하고 싶은 분의",
+                title2: "정보를 적어주세요",
+                subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
+                subtitle2: "더 정확한 추천을 해드릴게요",
+                titleColor: .gray100
+            )
+            .padding(.leading, 20)
+            .padding(.top, 32)
 
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack {
-                        RecommendGuideTextView(
-                            title1: "먼저, 마음을 전하고 싶은 분의",
-                            title2: "정보를 적어주세요,",
-                            subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
-                            subtitle2: "더 정확한 추천을 해드릴께요"
-                        )
-                        .padding(.leading, 20)
-                        .padding(.top, 20)
-                        
                         userInfoSection
                         
                         relationshipHeaderSection
@@ -96,7 +97,7 @@ struct RecommendView: View {
                         
                         submitButton
                             .padding(.top, 60)
-                            .padding(.bottom, 60)
+                            .padding(.bottom, 36)
                             .onTapGesture {
                                 hideKeyboard() 
                             }
@@ -152,7 +153,7 @@ struct RecommendView: View {
                 
                 Text("상대방의 이름과 별명을 알려주세요")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.gray100)
             }
             .padding(.bottom, 20)
             
@@ -189,7 +190,7 @@ struct RecommendView: View {
                 .fill(.gray750)
                 .padding(.horizontal, 20)
         )
-        .padding(.top, 12)
+        .padding(.top, 32)
     }
     
     private var relationshipHeaderSection: some View {
@@ -197,9 +198,9 @@ struct RecommendView: View {
             Image("icon_relation")
                 .frame(width: 20,height: 20)
             
-            Text("관계를 선택해주세요.")
+            Text("관계를 선택해주세요")
                 .titleSemiBold18()
-                .foregroundStyle(.white)
+                .foregroundStyle(.gray100)
             
             Spacer()
         }
@@ -250,8 +251,8 @@ struct RecommendView: View {
         .cornerRadius(12)
         .contentShape(Rectangle())
         .padding(.horizontal, 20)
-        .padding(.top, 8)
-        .padding(.bottom, 24)
+//        .padding(.top, 8)
+//        .padding(.bottom, 24)
         .animation(.easeInOut(duration: 0.2), value: isNextButtonEnabled)
     }
     

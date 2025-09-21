@@ -48,7 +48,7 @@ struct DetailRecommendButton: View {
                 
                 Spacer()
                 
-                Image(isSelected ? "btn_checkbox" : "Property 1=icon_check_empty")
+                Image(isSelected ? "checkbox 1" : "checkbox")
                     .foregroundColor(isSelected ? .red : .blue)
                     .frame(width:30,height: 30)
             }

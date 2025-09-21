@@ -32,7 +32,7 @@ struct EventDateView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomNavigationBar(title: "날짜 정보") {
+            CustomNavigationBar(title: "행사 날짜") {
                 dismiss()
             }
 
@@ -41,7 +41,7 @@ struct EventDateView: View {
                 .padding(.bottom, 10)
             
             EventDateTitleView()
-                .padding(.top, 12)
+                .padding(.top, 32)
             
             EventDateFormView()
                 .padding(.horizontal, 24)
@@ -56,7 +56,7 @@ struct EventDateView: View {
                 }
             )
             .padding(.horizontal, 20)
-            .padding(.bottom, 60)
+            .padding(.bottom, 36)
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -149,15 +149,15 @@ struct EventDateTitleView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("행사 날짜와 참석여부를")
                 .headBold24()
-                .foregroundColor(.white)
+                .foregroundColor(.gray100)
             
             Text("알려주세요")
                 .headBold24()
-                .foregroundColor(.white)
+                .foregroundColor(.gray100)
             
             Text("봉투백서가 경조사 일정을 관리해드릴게요!")
                 .bodyRegular14()
-                .foregroundColor(Color(hex: "#7A7F8A"))
+                .foregroundColor(.gray400)
                 .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

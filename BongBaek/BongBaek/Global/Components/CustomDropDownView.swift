@@ -173,6 +173,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                     )
                     .contentShape(Rectangle())
                 }
+                .padding(.top, 5)
                 .buttonStyle(PlainButtonStyle())
 
             }

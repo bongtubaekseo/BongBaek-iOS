@@ -107,7 +107,7 @@ struct FullScheduleView: View {
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .background(Color.black.ignoresSafeArea())
+        .background(Color.gray900.ignoresSafeArea())
         .onAppear {
             Task {
                 await viewModel.loadAllEvents()
