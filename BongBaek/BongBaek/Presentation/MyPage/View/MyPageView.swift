@@ -47,8 +47,15 @@ struct MyPageView: View {
     
     var body: some View {
         ZStack {
+            VStack(spacing : 0){
+                Color.gray900
+                    //.frame(height: 300)
+                    .ignoresSafeArea(edges: .top)
+                Color.gray800
+                    .frame(maxWidth: .infinity)
+                    .ignoresSafeArea(edges: .bottom)
+            }
             //Color.black.ignoresSafeArea()
-            
             VStack(spacing: 0) {
                 HStack {
                     Button(action: {
@@ -73,7 +80,7 @@ struct MyPageView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 10)
                 .padding(.bottom, 16)
-                .background(Color.black)
+                .background(Color.gray900)
                 ScrollView {
                     VStack(spacing : 0) {
                         VStack(spacing: 32) {
@@ -127,8 +134,13 @@ struct MyPageView: View {
                             .padding(.horizontal, 20)
                             .padding(.bottom, 20)
                         }
-                        .background(Color.black)
-                        .cornerRadius(20)
+                        .background(Color.gray900)
+                        .clipShape(
+                            .rect(
+                                bottomLeadingRadius : 20,
+                                bottomTrailingRadius : 20
+                            )
+                        )
 
                         VStack(alignment: .leading, spacing: 0) {
                             HStack {
@@ -183,6 +195,7 @@ struct MyPageView: View {
                 }
             }
         }
+        .background(Color.gray900)
         .onAppear {
             print("MyPageView 나타남 - 데이터 로드 시작")
             mypageViewModel.loadprofile()
