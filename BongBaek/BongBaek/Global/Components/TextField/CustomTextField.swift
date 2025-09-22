@@ -172,11 +172,11 @@ struct CustomTextField: View {
                 HStack(spacing: 4) {
                     Image(validationState == .invalid ? "icon_caution" : "")
                         .font(.system(size: 12))
-                        .foregroundColor(validationState.color)
+                        .foregroundColor(validationState.color())
                     
                     Text(validationMessage)
                         .font(.system(size: 12))
-                        .foregroundColor(validationState.color)
+                        .foregroundColor(validationState.color())
                 }
                 .transition(.opacity.combined(with: .move(edge: .top)))
                 .animation(.easeInOut(duration: 0.2), value: validationMessage)
@@ -275,7 +275,7 @@ struct CustomTextField: View {
     }
     
     private var lineColor: Color {
-        return validationState.color
+        return validationState.color(isReadOnly: isReadOnly)
     }
     
     private func validateInput(_ input: String) {
@@ -327,7 +327,7 @@ enum ValidationState {
     case focused
     case completed
     
-    var color: Color {
+    func color(isReadOnly: Bool = false) -> Color {
         switch self {
         case .normal:
             return .gray500
@@ -338,7 +338,7 @@ enum ValidationState {
         case .focused:
             return .primaryNormal
         case .completed:
-            return .white
+            return isReadOnly ? .lineNormal : .white
         }
     }
 }
