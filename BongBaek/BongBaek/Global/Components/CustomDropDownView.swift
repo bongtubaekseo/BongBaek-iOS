@@ -63,13 +63,13 @@ struct CustomDropdown<T: DropdownItem>: View {
                     
                     HStack(spacing: 2) {
                         Text(title)
-                            .bodyMedium16()
+                            .bodyMedium14()
                             .foregroundColor(.white)
                         
                         
                         VStack {
                             Text("*")
-                                .bodyMedium16()
+                                .bodyMedium14()
                                 .foregroundColor(.primaryNormal)
                                 .padding(.top, 4)
                                 .padding(.leading, 1)
@@ -106,18 +106,23 @@ struct CustomDropdown<T: DropdownItem>: View {
             HStack {
                 if let selectedItem = selectedItem {
                     Text(selectedItem.displayText)
+                        .bodyMedium16()
                         .foregroundColor(
                             isExpanded ? Color("primary_normal") : .white
                         )
                 } else {
                     Text(placeholder)
+                        .bodyRegular16()
                         .foregroundColor(isDisabled ? .gray600 : .gray)
                 }
 
                 Spacer()
 
                 Image(systemName: "chevron.down")
-                    .foregroundColor(isExpanded ? .primaryNormal : .white)
+                    .foregroundColor(
+                        isExpanded ? .primaryNormal :
+                        (selectedItem != nil ? .white : .gray400)
+                    )
                     .rotationEffect(.degrees(isExpanded ? 180 : 0))
                     .animation(.easeInOut(duration: 0.2), value: isExpanded)
             }
@@ -150,10 +155,12 @@ struct CustomDropdown<T: DropdownItem>: View {
                 }) {
                     HStack {
                         Text(item.displayText)
+                            .bodyRegular16()
                             .foregroundColor(
                                 selectedItem?.id == item.id
                                     ? Color("primary_normal") : .white
                             )
+                            
 
                         Spacer()
 
@@ -166,23 +173,21 @@ struct CustomDropdown<T: DropdownItem>: View {
                             if selectedItem?.id == item.id {
                                 RoundedRectangle(cornerRadius: 6)
                                     .fill(Color("primary_normal").opacity(0.1))
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 4)
+//                                    .padding(.vertical, 4)
+                                    // horizontal padding 제거
                             }
                         }
                     )
                     .contentShape(Rectangle())
                 }
-                .padding(.top, 5)
+//                .padding(.top, 5)
                 .buttonStyle(PlainButtonStyle())
 
             }
         }
+        .padding(.horizontal, 12) // VStack 자체에 horizontal padding 적용
+        .padding(.vertical, 12) // VStack 자체에 vertical padding 적용
         .background(.gray750)
-//        .overlay(
-//            RoundedRectangle(cornerRadius: 8)
-//                .stroke(Color("primary_normal"), lineWidth: 1)
-//        )
         .cornerRadius(8)
         .transition(
             .asymmetric(

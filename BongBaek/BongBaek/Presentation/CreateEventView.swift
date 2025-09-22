@@ -96,7 +96,8 @@ struct CreateEventView: View {
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
                             
                             CustomTextField(
@@ -110,7 +111,8 @@ struct CreateEventView: View {
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
                             .padding(.top, 32)
                         }
@@ -137,6 +139,7 @@ struct CreateEventView: View {
                                         customMessage: "1원 이상 입력하세요"
                                     ),
                                     isRequired: true,
+                                    isSmallText: true,
                                     keyboardType: .numberPad
                                 )
                                 
@@ -167,7 +170,8 @@ struct CreateEventView: View {
                                 placeholder: "날짜를 선택하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             ) {
                                 print("날짜 필드 터치됨")
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -612,7 +616,8 @@ struct CreateEventViewAfterEvent: View {
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
                             
                             CustomTextField(
@@ -626,7 +631,8 @@ struct CreateEventViewAfterEvent: View {
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
                             .padding(.top, 32)
                         }
@@ -653,6 +659,7 @@ struct CreateEventViewAfterEvent: View {
                                         customMessage: "1원 이상 입력하세요"
                                     ),
                                     isRequired: true,
+                                    isSmallText: true,
                                     keyboardType: .numberPad
                                 )
                                 
@@ -683,7 +690,8 @@ struct CreateEventViewAfterEvent: View {
                                 placeholder: "날짜를 선택하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             ) {
                                 print("날짜 필드 터치됨")
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {

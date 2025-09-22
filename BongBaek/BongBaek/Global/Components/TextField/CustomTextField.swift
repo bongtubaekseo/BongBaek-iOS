@@ -17,6 +17,7 @@ struct CustomTextField: View {
     let isSecure: Bool
     let isRequired: Bool
     let keyboardType: UIKeyboardType
+    let isSmallText: Bool
     
     @Binding var isValid: Bool
     
@@ -39,6 +40,7 @@ struct CustomTextField: View {
          isSecure: Bool = false,
          isReadOnly: Bool = false,
          isRequired: Bool = false,
+         isSmallText: Bool = false,
          keyboardType: UIKeyboardType = .default, // 새로 추가
          onTap: (() -> Void)? = nil) {
         self.title = title
@@ -49,6 +51,7 @@ struct CustomTextField: View {
         self.isSecure = isSecure
         self.isReadOnly = isReadOnly
         self.isRequired = isRequired
+        self.isSmallText = isSmallText
         self.keyboardType = keyboardType
         self.onTap = onTap
         self._isValid = isValid
@@ -65,9 +68,17 @@ struct CustomTextField: View {
                     .foregroundColor(.gray400)
                 
                 HStack(spacing: 2) {
-                    Text(title)
-                        .bodyMedium16()
-                        .foregroundColor(.white)
+                    
+                    if isSmallText {
+                        Text(title)
+                            .bodyMedium14()
+                            .foregroundColor(.white)
+                    } else {
+                        Text(title)
+                            .bodyMedium16()
+                            .foregroundColor(.white)
+                    }
+
                     
                     if isRequired {
                         

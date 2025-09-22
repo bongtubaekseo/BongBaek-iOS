@@ -151,7 +151,8 @@ struct ModifyEventView: View {
                                     
                                 ),
                                 isReadOnly: isRecommendationEdit,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
                                                         
                             CustomTextField(
@@ -166,7 +167,8 @@ struct ModifyEventView: View {
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
                                 isReadOnly: isRecommendationEdit,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
                             .padding(.top, 32)
                         }
@@ -192,7 +194,8 @@ struct ModifyEventView: View {
                                         },
                                         customMessage: "1원 이상 입력하세요"
                                     ),
-                                    isRequired: true
+                                    isRequired: true,
+                                    isSmallText: true
                                     ,keyboardType: .numberPad
                                 )
                                 
@@ -232,7 +235,8 @@ struct ModifyEventView: View {
                                 placeholder: "생년월일을 입력하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             ) {
                                 guard !isRecommendationEdit else { return }
                                 print("생년월일 필드 터치됨")
