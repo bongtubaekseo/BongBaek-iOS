@@ -32,6 +32,8 @@ class RecordViewModel: ObservableObject {
     @Published var isLoadingMore = false
     @Published var errorMessage: String?
     
+    var hasSelectedRecords: Bool { !selectedRecordIDs.isEmpty }
+
     private var attendedCurrentPage = 0
     private var notAttendedCurrentPage = 0
     private var attendedIsLastPage = false
