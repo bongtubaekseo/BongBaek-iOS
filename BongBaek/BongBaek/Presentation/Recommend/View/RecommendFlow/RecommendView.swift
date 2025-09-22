@@ -68,6 +68,7 @@ struct RecommendView: View {
             )
             .padding(.leading, 20)
             .padding(.top, 32)
+            .padding(.bottom,32)
 
             ScrollViewReader { proxy in
                 ScrollView {
@@ -190,7 +191,7 @@ struct RecommendView: View {
                 .fill(.gray750)
                 .padding(.horizontal, 20)
         )
-        .padding(.top, 32)
+//        .padding(.top, 32)
     }
     
     private var relationshipHeaderSection: some View {
@@ -243,7 +244,7 @@ struct RecommendView: View {
                 .titleSemiBold18()
                 .foregroundStyle(isNextButtonEnabled ? .white : .gray500)
                 .frame(maxWidth: .infinity)
-                .frame(height: 60)
+                .frame(height: 55)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)

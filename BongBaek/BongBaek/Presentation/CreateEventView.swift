@@ -255,8 +255,7 @@ struct CreateEventView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 4")
-                        .resizable()
+                    Image("icon_location 6")
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
                         .foregroundStyle(.gray400)
@@ -772,8 +771,7 @@ struct CreateEventViewAfterEvent: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 4")
-                        .resizable()
+                    Image("icon_location 6")
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
                         .foregroundStyle(.gray400)
