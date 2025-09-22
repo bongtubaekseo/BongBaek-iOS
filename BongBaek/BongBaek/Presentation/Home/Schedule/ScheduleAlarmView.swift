@@ -21,12 +21,14 @@ struct ScheduleAlarmView: View {
     private let cardSpacing: CGFloat = 8
     private let sidePadding: CGFloat = 20
     
+    
     private var cardWidth: CGFloat {
             let screenWidth = UIScreen.main.bounds.width
             if sortedEvents.count <= 1 {
                 return screenWidth - 40
             } else {
-                return 320
+                return screenWidth - sidePadding - 20
+                
             }
         }
 
@@ -60,7 +62,8 @@ struct ScheduleAlarmView: View {
                                     )
                             }
                         }
-                        .padding(.horizontal, sidePadding)
+                        .padding(.leading, sidePadding)
+                        .padding(.trailing, 20)
                         .offset(x: scrollOffset + dragOffset)
                         .gesture(
                             DragGesture()
