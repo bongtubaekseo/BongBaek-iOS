@@ -103,19 +103,19 @@ struct FullScheduleView: View {
                 .padding(.horizontal)
                 .padding(.top, 40)
             }
+            .refreshable {
+                Task {
+                    await viewModel.refreshEvents()
+                }
+            }
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .background(Color.black.ignoresSafeArea())
+        .background(Color.gray900.ignoresSafeArea())
         .onAppear {
             Task {
                 await viewModel.loadAllEvents()
-            }
-        }
-        .refreshable {
-            Task {
-                await viewModel.refreshEvents()
             }
         }
     }

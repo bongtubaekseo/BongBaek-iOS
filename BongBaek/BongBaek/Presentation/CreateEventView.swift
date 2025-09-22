@@ -84,7 +84,7 @@ struct CreateEventView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        VStack {
+                        VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
                                 icon: "icon_person_16",
@@ -96,7 +96,8 @@ struct CreateEventView: View {
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
                             
                             CustomTextField(
@@ -110,17 +111,18 @@ struct CreateEventView: View {
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
-                            .padding(.top, 12)
+                            .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
 
                         dropdownSection
-                            .padding(.top, 16)
+                            .padding(.top, 32)
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
@@ -137,12 +139,14 @@ struct CreateEventView: View {
                                         customMessage: "1원 이상 입력하세요"
                                     ),
                                     isRequired: true,
+                                    isSmallText: true,
                                     keyboardType: .numberPad
                                 )
                                 
                                 Text("원")
                                     .bodyRegular16()
                                     .foregroundColor(.white)
+                                    .padding(.top, 24)
                             }
                             
                             CustomDropdown(
@@ -152,7 +156,7 @@ struct CreateEventView: View {
                                 items: attendItems,
                                 selectedItem: $selectedAttend
                             )
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             .onChange(of: selectedAttend) { _, newValue in
                                 // 불참석으로 변경되면 선택된 위치 초기화
                                 if newValue?.title == "불참석" {
@@ -166,30 +170,31 @@ struct CreateEventView: View {
                                 placeholder: "날짜를 선택하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             ) {
                                 print("날짜 필드 터치됨")
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                     showDatePicker = true
                                 }
                             }
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             
                             // 행사장 섹션
                             locationSection
-                                .padding(.top, 16)
+                                .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 16)
+                        .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
                     .background(.gray800)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
-                    .padding(.top, 16)
+                    .padding(.top, 20)
                     
                     EventMemoView(memo: $memo)
-                        .padding(.top, 16)
+                        .padding(.top, 40)
                         .padding(.horizontal, 20)
                     
                     Button {
@@ -254,12 +259,10 @@ struct CreateEventView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 4")
-                        .resizable()
+                    Image("icon_location 6")
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
                         .foregroundStyle(.gray400)
-                
 
                     Text("행사장")
                         .bodyMedium14()
@@ -271,7 +274,7 @@ struct CreateEventView: View {
                 Button {
                     showLargeMapView = true
                 } label: {
-                    Text(selectedLocation != nil ? "위치 변경" : "추가하기")
+                    Text(selectedLocation != nil ? "수정하기" : "추가하기")
                         .bodyRegular14()
                         .foregroundStyle(isAttending ? .gray300 : .gray600) // 참석시에만 활성화
                 }
@@ -280,10 +283,10 @@ struct CreateEventView: View {
             
             // 참석할 때만 지도 섹션 표시
             if isAttending, let location = selectedLocation {
-                VStack(spacing: 12) {
+                VStack(spacing: 0) {
                     
                     mapSection
-                    // 선택된 위치 정보 표시
+                    
                     VStack(alignment: .leading, spacing: 4) {
                         Text(location.placeName)
                             .bodyMedium16()
@@ -301,12 +304,14 @@ struct CreateEventView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 16)
                     .background(.gray750)
-                    .cornerRadius(8)
-                    
-                    // 지도 표시
-               
+                    .clipShape(
+                        .rect(
+                            bottomLeadingRadius: 10,
+                            bottomTrailingRadius: 10
+                        )
+                    )
                 }
                 .transition(.opacity.combined(with: .scale))
                 .animation(.easeInOut(duration: 0.3), value: selectedLocation != nil)
@@ -324,7 +329,12 @@ struct CreateEventView: View {
             if let mapView = mapView {
                 mapView
                     .frame(height: 200)
-                    .cornerRadius(12)
+                    .clipShape( // cornerRadius 대신 clipShape 사용
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
                     .onAppear {
                         updateMapLocation()
                     }
@@ -336,7 +346,12 @@ struct CreateEventView: View {
                     .foregroundStyle(.gray700)
                     .frame(maxWidth: .infinity)
                     .frame(height: 200)
-                    .cornerRadius(12)
+                    .clipShape(
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
                     .onAppear {
                         mapView = KakaoMapView(draw: .constant(true))
                         // 지도 생성 후 위치 업데이트
@@ -600,7 +615,7 @@ struct CreateEventViewAfterEvent: View {
             ScrollView {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        VStack {
+                        VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
                                 icon: "icon_person_16",
@@ -612,7 +627,8 @@ struct CreateEventViewAfterEvent: View {
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
                             
                             CustomTextField(
@@ -626,17 +642,18 @@ struct CreateEventViewAfterEvent: View {
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
-                            .padding(.top, 12)
+                            .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
 
                         dropdownSection
-                            .padding(.top, 16)
+                            .padding(.top, 32)
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
@@ -653,12 +670,14 @@ struct CreateEventViewAfterEvent: View {
                                         customMessage: "1원 이상 입력하세요"
                                     ),
                                     isRequired: true,
+                                    isSmallText: true,
                                     keyboardType: .numberPad
                                 )
                                 
                                 Text("원")
                                     .bodyRegular16()
                                     .foregroundColor(.white)
+                                    .padding(.top, 24)
                             }
                             
                             CustomDropdown(
@@ -668,7 +687,7 @@ struct CreateEventViewAfterEvent: View {
                                 items: attendItems,
                                 selectedItem: $selectedAttend
                             )
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             .onChange(of: selectedAttend) { _, newValue in
                                 // 불참석으로 변경되면 선택된 위치 초기화
                                 if newValue?.title == "불참석" {
@@ -682,30 +701,31 @@ struct CreateEventViewAfterEvent: View {
                                 placeholder: "날짜를 선택하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             ) {
                                 print("날짜 필드 터치됨")
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                     showDatePicker = true
                                 }
                             }
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             
                             // 행사장 섹션
                             locationSection
-                                .padding(.top, 16)
+                                .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 16)
+                        .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
                     .background(.gray800)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
-                    .padding(.top, 16)
+                    .padding(.top, 20)
                     
                     EventMemoView(memo: $memo)
-                        .padding(.top, 16)
+                        .padding(.top, 40)
                         .padding(.horizontal, 20)
                     
                     Button {
@@ -770,13 +790,11 @@ struct CreateEventViewAfterEvent: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 4")
-                        .resizable()
+                    Image("icon_location 6")
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
                         .foregroundStyle(.gray400)
-                
-
+                    
                     Text("행사장")
                         .bodyMedium14()
                         .foregroundStyle(.gray100)
@@ -787,7 +805,7 @@ struct CreateEventViewAfterEvent: View {
                 Button {
                     showLargeMapView = true
                 } label: {
-                    Text(selectedLocation != nil ? "위치 변경" : "추가하기")
+                    Text(selectedLocation != nil ? "수정하기" : "추가하기")
                         .bodyRegular14()
                         .foregroundStyle(isAttending ? .gray300 : .gray600) // 참석시에만 활성화
                 }
@@ -796,10 +814,9 @@ struct CreateEventViewAfterEvent: View {
             
             // 참석할 때만 지도 섹션 표시
             if isAttending, let location = selectedLocation {
-                VStack(spacing: 12) {
-                    
+                VStack(spacing: 0) {
                     mapSection
-                    // 선택된 위치 정보 표시
+                    
                     VStack(alignment: .leading, spacing: 4) {
                         Text(location.placeName)
                             .bodyMedium16()
@@ -817,12 +834,14 @@ struct CreateEventViewAfterEvent: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 16)
                     .background(.gray750)
-                    .cornerRadius(8)
-                    
-                    // 지도 표시
-               
+                    .clipShape(
+                        .rect(
+                            bottomLeadingRadius: 10,
+                            bottomTrailingRadius: 10
+                        )
+                    )
                 }
                 .transition(.opacity.combined(with: .scale))
                 .animation(.easeInOut(duration: 0.3), value: selectedLocation != nil)
@@ -840,7 +859,12 @@ struct CreateEventViewAfterEvent: View {
             if let mapView = mapView {
                 mapView
                     .frame(height: 200)
-                    .cornerRadius(12)
+                    .clipShape( // cornerRadius 대신 clipShape 사용
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
                     .onAppear {
                         updateMapLocation()
                     }
@@ -852,7 +876,12 @@ struct CreateEventViewAfterEvent: View {
                     .foregroundStyle(.gray700)
                     .frame(maxWidth: .infinity)
                     .frame(height: 200)
-                    .cornerRadius(12)
+                    .clipShape( // cornerRadius 대신 clipShape 사용
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
                     .onAppear {
                         mapView = KakaoMapView(draw: .constant(true))
                         // 지도 생성 후 위치 업데이트

@@ -41,12 +41,14 @@ struct ModifyView: View {
                     
                     incomeSelectionSection
                         .opacity(viewModel.hasIncome ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
-                    
-                    updateButton
-                        .padding(.bottom, 60.adjustedH)
+                        .animation(.easeInOut(duration: 0.0), value: viewModel.hasIncome)
+                        .padding(.bottom, 60)
                     
                     Spacer()
+                    
+                    updateButton
+                        .padding(.bottom, 36)
+
                 }
             }
             .scrollIndicators(.hidden)
@@ -161,8 +163,8 @@ struct ModifyView: View {
     private var incomeSelectionSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
-                .titleSemiBold16()
-                .foregroundStyle(.white)
+                .titleSemiBold18()
+                .foregroundStyle(.gray100)
                 .padding(.bottom, 20)
             
             VStack(spacing: 12) {
@@ -193,14 +195,15 @@ struct ModifyView: View {
         } label: {
             HStack {
                 Text(selection.displayText)
-                    .foregroundStyle(.white)
+                    .bodyRegular14()
+                    .foregroundStyle(.gray100)
                 
                 Spacer()
                 
                 if viewModel.isSelected(selection) {
                     Image(systemName: "checkmark")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.primaryNormal)
+                        .font(.system(size: 12, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }
@@ -214,7 +217,7 @@ struct ModifyView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        viewModel.isSelected(selection) ? .primaryNormal : .gray100,
+                        viewModel.isSelected(selection) ? .primaryNormal : .commonLineNormal,
                         lineWidth: viewModel.isSelected(selection) ? 2 : 1
                     )
             )
@@ -233,7 +236,7 @@ struct ModifyView: View {
         .background(viewModel.isUpdateButtonEnabled ? .primaryNormal : .primaryBg)
         .foregroundColor(viewModel.isUpdateButtonEnabled ? .white : .gray500)
         .cornerRadius(12)
-        .padding(.top, 20)
+//        .pad  ding(.top, 20)
         .disabled(!viewModel.isUpdateButtonEnabled)
         .animation(.easeInOut(duration: 0.2), value: viewModel.isUpdateButtonEnabled)
         .overlay(

@@ -122,7 +122,7 @@ struct AccountDeletionView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)
-        .alert("정말 탈퇴하시겠습니까?", isPresented: $showDeleteAlert) {
+        .alert("봉투백서를 탈퇴하시겠습니까?", isPresented: $showDeleteAlert) {
             Button("취소", role: .cancel) {
                 
             }
@@ -130,7 +130,7 @@ struct AccountDeletionView: View {
                 handleAccountDeletion()
             }
         } message: {
-            Text("탈퇴시 데이터 복구가 어렵습니다.")
+            Text("탈퇴 시 데이터 복구가 어렵습니다.")
         }
         .onTapGesture {
             isTextFieldFocused = false
@@ -269,8 +269,7 @@ struct DeletionReasonButton: View {
           
                         Image(getImageName())
                             .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
+                            .frame(width: 20, height: 20)
                         
                         Text("기타")
                             .font(.body1_medium_16)
@@ -347,8 +346,7 @@ struct DeletionReasonButton: View {
                     HStack(spacing: 12) {
                         Image(getImageName())
                             .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
+                            .frame(width: 20, height: 20)
                         
                         Text(otherReasonText.isEmpty ? "기타" : otherReasonText)
                             .font(.body1_medium_16)
@@ -378,8 +376,7 @@ struct DeletionReasonButton: View {
                 HStack(spacing: 12) {
                     Image(getImageName())
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
+                        .frame(width: 20, height: 20)
                     
                     Text(title)
                         .font(.body1_medium_16)

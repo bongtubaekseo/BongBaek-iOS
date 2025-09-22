@@ -15,7 +15,7 @@ struct RelationshipButton: View {
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
+            VStack(spacing: 4) {
                 Image(image)
                     .renderingMode(.template)
                     .foregroundColor(isSelected ? .white : .primaryNormal)
@@ -26,7 +26,6 @@ struct RelationshipButton: View {
                     .bodyMedium14()
                     .foregroundColor(isSelected ? .white : .gray200)
             }
-            .padding()
             .frame(maxWidth: .infinity, minHeight: 83)
             .background(
                 RoundedRectangle(cornerRadius: 12)

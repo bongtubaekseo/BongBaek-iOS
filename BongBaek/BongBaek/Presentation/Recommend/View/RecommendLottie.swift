@@ -467,6 +467,7 @@ struct RecommendLottie: View {
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
+
             .padding(.trailing, 20)
             .frame(maxWidth: .infinity, minHeight: 70)
             .background(

@@ -137,7 +137,7 @@ struct ModifyEventView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
-                        VStack {
+                        VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
                                 icon: "icon_person_16",
@@ -151,7 +151,8 @@ struct ModifyEventView: View {
                                     
                                 ),
                                 isReadOnly: isRecommendationEdit,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
                                                         
                             CustomTextField(
@@ -166,17 +167,18 @@ struct ModifyEventView: View {
                                     customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
                                 ),
                                 isReadOnly: isRecommendationEdit,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             )
-                            .padding(.top, 12)
+                            .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 24)
 
                         dropdownSection
-                            .padding(.top, 16)
+                            .padding(.top, 32)
 
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
@@ -192,13 +194,15 @@ struct ModifyEventView: View {
                                         },
                                         customMessage: "1원 이상 입력하세요"
                                     ),
-                                    isRequired: true
+                                    isRequired: true,
+                                    isSmallText: true
                                     ,keyboardType: .numberPad
                                 )
                                 
                                 Text("원")
                                     .bodyRegular16()
                                     .foregroundColor(.white)
+                                    .padding(.top, 24)
                             }
                             
                             CustomDropdown(
@@ -209,7 +213,7 @@ struct ModifyEventView: View {
                                 selectedItem: $selectedAttend,
                                 isDisabled: isRecommendationEdit
                             )
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                             .onChange(of: selectedAttend) { _, newValue in
                                 if newValue?.title == "불참석" {
                                     // 불참석으로 변경 시: 현재 위치를 백업하고 임시로 클리어
@@ -231,7 +235,8 @@ struct ModifyEventView: View {
                                 placeholder: "생년월일을 입력하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
-                                isRequired: true
+                                isRequired: true,
+                                isSmallText: true
                             ) {
                                 guard !isRecommendationEdit else { return }
                                 print("생년월일 필드 터치됨")
@@ -240,22 +245,23 @@ struct ModifyEventView: View {
                                     showDatePicker = true
                                 }
                             }
-                            .padding(.top, 16)
+                            .padding(.top, 32)
                            
                             locationSection
+                                .padding(.top, 32)
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 16)
+                        .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
                     .background(.gray800)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
-                    .padding(.top, 16)
+                    .padding(.top, 20)
                     
                     if !isRecommendationEdit {
                         EventMemoView(memo: $memo, isDisabled: isRecommendationEdit)
-                            .padding(.top, 16)
+                            .padding(.top, 40)
                             .padding(.horizontal, 20)
                     }
                     
@@ -341,11 +347,10 @@ struct ModifyEventView: View {
     }
     
     private var locationSection: some View {
-        VStack(spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 4")
-                        .resizable()
+                    Image("icon_location 6")
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
                         .foregroundStyle(.gray400)
@@ -371,14 +376,12 @@ struct ModifyEventView: View {
             
             // 참석할 때만 지도 섹션 표시
             if isAttending {
-                VStack(alignment: .leading, spacing: 8) {
-                    // 지도 표시
+                VStack(alignment: .leading, spacing: 0) { 
+                    // 지도 표시 (상단 모서리만 둥글게)
                     mapSection
                         .frame(maxWidth: .infinity)
                         .frame(height: 180)
-                        .cornerRadius(12)
-                    
-                    // 위치 정보 표시
+                        
                     if hasLocationData {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(locationName)
@@ -386,67 +389,86 @@ struct ModifyEventView: View {
                                 .foregroundStyle(.white)
                             
                             Text(locationAddress)
-                                .bodyMedium16()
-                                .foregroundStyle(.gray300)
+                                .bodyRegular14()
+                                .foregroundStyle(.gray400)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .background(.gray750)
-                        .cornerRadius(8)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 16)
+                        .background(.gray700)
+                        .clipShape(
+                            .rect(
+                                bottomLeadingRadius: 10,
+                                bottomTrailingRadius: 10
+                            )
+                        )
                     }
                 }
                 .transition(.opacity.combined(with: .scale))
                 .animation(.easeInOut(duration: 0.3), value: isAttending)
             }
         }
-        .padding(.top, 16)
     }
     
     private var mapSection: some View {
-           Group {
-               // 위치 정보가 있는 경우 지도 표시
-               if hasLocationData {
-                   if let mapView = mapView {
-                       mapView
-                           .frame(height: 180)
-                           .cornerRadius(12)
-                           .onAppear {
-                               updateMapLocation()
-                           }
-                   } else {
-                       Rectangle()
-                           .foregroundStyle(.gray750)
-                           .frame(maxWidth: .infinity)
-                           .frame(height: 180)
-                           .cornerRadius(12)
-                           .onAppear {
-                               mapView = KakaoMapView(draw: .constant(true))
-                               // 지도 생성 후 위치 업데이트
-                               DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                   updateMapLocation()
-                               }
-                           }
-                   }
-               } else {
-                   // 위치 정보가 없는 경우 빈 Rectangle 표시
-                   VStack {
-                       Image(systemName: "location.slash")
-                           .font(.system(size: 30))
-                           .foregroundColor(.gray500)
-                       
-                       Text("위치 정보가 없습니다")
-                           .bodyRegular14()
-                           .foregroundColor(.gray500)
-                           .padding(.top, 8)
-                   }
-                   .frame(maxWidth: .infinity)
-                   .frame(height: 180)
-                   .background(.gray750)
-                   .cornerRadius(12)
-               }
-           }
-       }
+        Group {
+            // 위치 정보가 있는 경우 지도 표시
+            if hasLocationData {
+                if let mapView = mapView {
+                    mapView
+                        .frame(height: 180)
+                        .clipShape(
+                            .rect(
+                                topLeadingRadius: 10,
+                                topTrailingRadius: 10
+                            )
+                        )
+                        .onAppear {
+                            updateMapLocation()
+                        }
+                } else {
+                    Rectangle()
+                        .foregroundStyle(.gray750)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 180)
+                        .clipShape(
+                            .rect(
+                                topLeadingRadius: 10,
+                                topTrailingRadius: 10
+                            )
+                        )
+                        .onAppear {
+                            mapView = KakaoMapView(draw: .constant(true))
+                            // 지도 생성 후 위치 업데이트
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                updateMapLocation()
+                            }
+                        }
+                }
+            } else {
+                // 위치 정보가 없는 경우 빈 Rectangle 표시
+                VStack {
+                    Image(systemName: "location.slash")
+                        .font(.system(size: 30))
+                        .foregroundColor(.gray500)
+                    
+                    Text("위치 정보가 없습니다")
+                        .bodyRegular14()
+                        .foregroundColor(.gray500)
+                        .padding(.top, 8)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 180)
+                .background(.gray750)
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 10,
+                        topTrailingRadius: 10
+                    )
+                )
+            }
+        }
+    }
     
     private func updateMapLocation() {
          guard hasLocationData else { return }

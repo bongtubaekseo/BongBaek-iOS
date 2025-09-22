@@ -43,7 +43,7 @@ struct EventLocationView: View {
                     // 지도 섹션을 ZStack으로 감싸서 dropdown 오버레이
                     ZStack {
                         mapSection
-                            .padding(.top, 16)
+                            .padding(.top, 30)
                         
                         VStack {
                             if !searchText.isEmpty && isSearchFieldFocused {
@@ -65,7 +65,7 @@ struct EventLocationView: View {
                     }
                     
                     submitButton
-                        .padding(.top,30)
+                        .padding(.top,60)
                 }
                 .padding(.top, 20)
             }
@@ -126,11 +126,11 @@ struct EventLocationView: View {
     // MARK: - View Components
     
     private var titleSection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading,spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
                 Text("어디서 열리나요?")
                     .headBold24()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.gray100)
                 
                 Spacer()
                 
@@ -139,14 +139,14 @@ struct EventLocationView: View {
                 }) {
                     Text("건너뛰기")
                         .bodyRegular14()
-                        .foregroundColor(.gray300)
+                        .foregroundColor(.gray500)
                 }
             }
             
             Text("주소를 검색하면 더 빨리 찾을 수 있어요!")
                 .bodyRegular14()
-                .foregroundStyle(.gray300)
-                .padding(.top, 8)
+                .foregroundStyle(.gray400)
+                .padding(.top, 12)
         }
         .padding(.horizontal, 20)
     }
@@ -319,7 +319,7 @@ struct EventLocationView: View {
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .padding(.top, 8)
-        .padding(.bottom, 60)
+        .padding(.bottom, 36)
         .animation(.easeInOut(duration: 0.2), value: isNextButtonEnabled)
     }
     

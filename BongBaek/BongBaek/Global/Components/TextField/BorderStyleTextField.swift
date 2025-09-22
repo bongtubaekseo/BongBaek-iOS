@@ -13,7 +13,7 @@ struct BorderTextField: View {
     let validationRule: ValidationRule?
     let isSecure: Bool
     
-    @State private var validationState: ValidationState = .normal
+    @State private var validationState: ValidationState2 = .normal
     @State private var validationMessage: String = ""
     @FocusState private var isFocused: Bool
     @State private var showPassword: Bool = false

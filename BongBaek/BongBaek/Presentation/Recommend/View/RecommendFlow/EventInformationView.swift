@@ -31,7 +31,7 @@ struct EventInformationView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomNavigationBar(title: "관계정보") {
+            CustomNavigationBar(title: "경조사 정보") {
                 dismiss()
             }
             
@@ -40,7 +40,7 @@ struct EventInformationView: View {
                 .padding(.bottom, 10)
             
             EventInformationTitleView()
-                .padding(.top, 12)
+                .padding(.top, 32)
             
             EventTypeOptionsView()
                 .padding(.horizontal, 24)
@@ -55,7 +55,7 @@ struct EventInformationView: View {
                 }
             )
             .padding(.horizontal, 24)
-            .padding(.bottom, 50.adjustedH)
+            .padding(.bottom, 36)
         }
         .onAppear {
             print("EventInformationView 나타남 - path.count: \(router.path.count)")
@@ -107,11 +107,11 @@ struct EventInformationTitleView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("어떤 경조사에")
                 .headBold24()
-                .foregroundColor(.white)
+                .foregroundColor(.gray100)
             
             Text("참여하시나요?")
                 .headBold24()
-                .foregroundColor(.white)
+                .foregroundColor(.gray100)
             
             Text("상황에 맞는 봉투를 준비해드릴게요")
                 .bodyRegular14()

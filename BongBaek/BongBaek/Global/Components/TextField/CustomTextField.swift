@@ -17,6 +17,7 @@ struct CustomTextField: View {
     let isSecure: Bool
     let isRequired: Bool
     let keyboardType: UIKeyboardType
+    let isSmallText: Bool
     
     @Binding var isValid: Bool
     
@@ -39,6 +40,7 @@ struct CustomTextField: View {
          isSecure: Bool = false,
          isReadOnly: Bool = false,
          isRequired: Bool = false,
+         isSmallText: Bool = false,
          keyboardType: UIKeyboardType = .default, // 새로 추가
          onTap: (() -> Void)? = nil) {
         self.title = title
@@ -49,6 +51,7 @@ struct CustomTextField: View {
         self.isSecure = isSecure
         self.isReadOnly = isReadOnly
         self.isRequired = isRequired
+        self.isSmallText = isSmallText
         self.keyboardType = keyboardType
         self.onTap = onTap
         self._isValid = isValid
@@ -65,9 +68,17 @@ struct CustomTextField: View {
                     .foregroundColor(.gray400)
                 
                 HStack(spacing: 2) {
-                    Text(title)
-                        .bodyMedium16()
-                        .foregroundColor(.white)
+                    
+                    if isSmallText {
+                        Text(title)
+                            .bodyMedium14()
+                            .foregroundColor(.white)
+                    } else {
+                        Text(title)
+                            .bodyMedium16()
+                            .foregroundColor(.white)
+                    }
+
                     
                     if isRequired {
                         
@@ -75,7 +86,7 @@ struct CustomTextField: View {
                             Text("*")
                                 .bodyMedium16()
                                 .foregroundColor(.primaryNormal)
-                                .padding(.top, 2)
+                                .padding(.top, 4)
                                 .padding(.leading, 1)
                             
                             Spacer()
@@ -155,6 +166,7 @@ struct CustomTextField: View {
                     .foregroundColor(lineColor)
                     .animation(.easeInOut(duration: 0.2), value: validationState)
             }
+            .padding(.top, -4)
             
             if !validationMessage.isEmpty {
                 HStack(spacing: 4) {
@@ -309,6 +321,29 @@ struct CustomTextField: View {
     }
 }
 enum ValidationState {
+    case normal
+    case valid
+    case invalid
+    case focused
+    case completed
+    
+    var color: Color {
+        switch self {
+        case .normal:
+            return .gray500
+        case .valid:
+            return .primaryNormal
+        case .invalid:
+            return .secondaryRed
+        case .focused:
+            return .primaryNormal
+        case .completed:
+            return .white
+        }
+    }
+}
+
+enum ValidationState2 {
     case normal
     case valid
     case invalid
