@@ -47,7 +47,7 @@ struct MyPageView: View {
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            //Color.black.ignoresSafeArea()
             
             VStack(spacing: 0) {
                 HStack {
@@ -75,55 +75,60 @@ struct MyPageView: View {
                 .padding(.bottom, 16)
                 .background(Color.black)
                 ScrollView {
-                    VStack(spacing: 32) {
-                        VStack(spacing: 16) {
-                            Image(.myPageLogo)
-                                .frame(width: 110, height: 110)
-                                .padding(.top, 40)
-                            
-                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
-                                .headBold24()
-                                .foregroundStyle(.gray100)
-                            
-                            Button(action: {
-                                router.push(to: .ModifyView(profileData: mypageViewModel.profileData))
-                            }) {
-                                Text("내 정보 수정")
-                                    .captionRegular12()
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 8)
-                                    .background(.primaryNormal)
-                                    .cornerRadius(20)
-                            }
-                        }
-                        
-                        HStack {
-                            VStack(alignment: .leading, spacing: 20) {
-                                Text("생년월일")
-                                    .bodyMedium14()
-                                    .foregroundStyle(.gray200)
-                                Text("수입")
-                                    .bodyMedium14()
-                                    .foregroundStyle(.gray200)
-                            }
-                            
-                            Spacer()
-                            
-                            VStack(alignment: .trailing, spacing: 20) {
-                                Text(formatBirthday(mypageViewModel.profileData?.memberBirthday) ?? "2000년 01월 05일")
-                                    .bodyMedium14()
+                    VStack(spacing : 0) {
+                        VStack(spacing: 32) {
+                            VStack(spacing: 16) {
+                                Image(.myPageLogo)
+                                    .frame(width: 110, height: 110)
+                                    .padding(.top, 40)
+                                
+                                Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
+                                    .headBold24()
                                     .foregroundStyle(.gray100)
-                                Text(formatIncome(mypageViewModel.profileData?.memberIncome) ?? "없음")
-                                    .bodyMedium14()
-                                    .foregroundStyle(.gray100)
+                                
+                                Button(action: {
+                                    router.push(to: .ModifyView(profileData: mypageViewModel.profileData))
+                                }) {
+                                    Text("내 정보 수정")
+                                        .captionRegular12()
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 16)
+                                        .padding(.vertical, 8)
+                                        .background(.primaryNormal)
+                                        .cornerRadius(20)
+                                }
                             }
+                            
+                            HStack {
+                                VStack(alignment: .leading, spacing: 20) {
+                                    Text("생년월일")
+                                        .bodyMedium14()
+                                        .foregroundStyle(.gray200)
+                                    Text("수입")
+                                        .bodyMedium14()
+                                        .foregroundStyle(.gray200)
+                                }
+                                
+                                Spacer()
+                                
+                                VStack(alignment: .trailing, spacing: 20) {
+                                    Text(formatBirthday(mypageViewModel.profileData?.memberBirthday) ?? "2000년 01월 05일")
+                                        .bodyMedium14()
+                                        .foregroundStyle(.gray100)
+                                    Text(formatIncome(mypageViewModel.profileData?.memberIncome) ?? "없음")
+                                        .bodyMedium14()
+                                        .foregroundStyle(.gray100)
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 20)
+                            .background(.gray750)
+                            .cornerRadius(20)
+                            .padding(.horizontal, 20)
+                            .padding(.bottom, 20)
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 20)
-                        .background(.gray750)
+                        .background(Color.black)
                         .cornerRadius(20)
-                        .padding(.horizontal, 20)
 
                         VStack(alignment: .leading, spacing: 0) {
                             HStack {
@@ -133,6 +138,7 @@ struct MyPageView: View {
                                 Spacer()
                             }
                             .padding(.horizontal, 20)
+                            .padding(.top, 24)
                             .padding(.bottom, 16)
                             
                             VStack(spacing: 0) {
@@ -173,6 +179,7 @@ struct MyPageView: View {
                         .padding(.top, 12)
                         .padding(.bottom, 40)
                     }
+                    .background(Color.gray800)
                 }
             }
         }
