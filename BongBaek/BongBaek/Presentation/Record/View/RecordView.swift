@@ -33,7 +33,8 @@ struct RecordView: View {
                     }, onCancelTapped: {
                         viewModel.clearSelectedRecords()
                     },
-                    isCurrentSectionEmpty: viewModel.isCurrentSectionEmpty
+                    isCurrentSectionEmpty: viewModel.isCurrentSectionEmpty,
+                    hasSelectedRecords: viewModel.hasSelectedRecords
                 )
                 .environmentObject(router)
                 
@@ -114,6 +115,7 @@ struct RecordsHeaderView: View {
     @EnvironmentObject var router: NavigationRouter
     
     let isCurrentSectionEmpty: Bool
+    let hasSelectedRecords: Bool
     
     var body: some View {
         HStack {
@@ -180,7 +182,7 @@ struct RecordsHeaderView: View {
                         if isDeleteMode {
                             Text("삭제")
                                 .titleSemiBold16()
-                                .foregroundStyle(.gray400)
+                                .foregroundStyle(hasSelectedRecords ? .secondaryRed : .gray400)
                         } else {
                             Image(systemName: "trash")
                                 .font(.system(size: 18, weight: .medium))
