@@ -172,7 +172,7 @@ struct AllRecordsView: View {
             
             // 삭제 버튼
             deleteButton
-                .padding(.top, 40)
+                .padding(.top, 60)
         }
         .padding(.vertical, 16)
     }
@@ -301,7 +301,8 @@ struct AllRecordsView: View {
         )
         .cornerRadius(12)
         .padding(.horizontal, 20)
-        .padding(.bottom,60)
+        .padding(.top,60)
+//        .padding(.bottom,60)
         .disabled(viewModel.isDeleting)
         .alert("경조사 기록을 삭제하시겠습니까?", isPresented: $showDeleteAlert) {
             Button("취소", role: .cancel) { }
