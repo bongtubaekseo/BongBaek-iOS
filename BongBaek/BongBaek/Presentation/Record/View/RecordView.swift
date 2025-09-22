@@ -54,7 +54,7 @@ struct RecordView: View {
                         viewModel.changeCategory(to: category)
                     }
                 )
-                .padding(.leading, 20)
+//                .padding(.leading, 20)
                 .padding(.bottom, 20)
             }
             .background(Color.background)
@@ -102,6 +102,7 @@ struct CategoryFilterView: View {
                     }
                 }
             }
+            .padding(.horizontal, 20)
         }
     }
 }
@@ -191,6 +192,7 @@ struct RecordsHeaderView: View {
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
+                    .disabled(isDeleteMode && !hasSelectedRecords)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
                     .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
                         Button("취소", role: .cancel) {

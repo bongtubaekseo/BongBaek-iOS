@@ -112,7 +112,7 @@ struct LargeMapView: View {
     
     // 선택된 위치 정보를 지도 하단에 표시하는 오버레이
     private func selectedLocationOverlay(_ location: KLDocument) -> some View {
-       VStack(alignment: .leading, spacing: 8) {
+       VStack(alignment: .leading, spacing: 4) {
            Text(location.placeName)
                .titleSemiBold18()
                .foregroundColor(.white)
@@ -125,7 +125,7 @@ struct LargeMapView: View {
        .frame(maxWidth: .infinity, alignment: .leading)
        .padding(.horizontal, 16)
        .padding(.vertical, 12)
-       .background(Color.black.opacity(0.8))
+       .background(Color.gray750)
        .overlay(
            RoundedRectangle(cornerRadius: 12)
             .stroke(.gray750, lineWidth: 1)
@@ -168,7 +168,7 @@ struct LargeMapView: View {
                     isSearchFieldFocused = false
                 }) {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.gray500)
                         .font(.system(size: 16))
                 }
                 .transition(.scale.combined(with: .opacity))
@@ -176,10 +176,10 @@ struct LargeMapView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.gray.opacity(0.2))
+        .background(Color.gray750)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                .stroke(Color.gray750.opacity(0.5), lineWidth: 1)
         )
         .cornerRadius(8)
         .padding(.horizontal, 20)
@@ -253,7 +253,7 @@ struct LargeMapView: View {
                 
                 if document.id != keywordSearch.searchResults.last?.id {
                     Divider()
-                        .background(Color.gray750.opacity(0.3))
+                        .background(Color.gray750.opacity(1.0))
                         .padding(.horizontal, 16)
                 }
             }
@@ -261,13 +261,12 @@ struct LargeMapView: View {
         .background(Color.gray750)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray750, lineWidth: 1)
-                .padding(.vertical, 14)
+                .stroke(Color.gray750.opacity(1.0), lineWidth: 1)
         )
         .cornerRadius(10)
         .padding(.horizontal, 20)
         .padding(.top, 8)
-        .shadow(color: .gray750.opacity(0.1), radius: 8, x: 0, y: 4)
+        .shadow(color: .gray750.opacity(1.0), radius: 8, x: 0, y: 4)
         .zIndex(100)
         .transition(.asymmetric(
             insertion: .scale(scale: 0.95, anchor: .top).combined(with: .opacity),

@@ -105,17 +105,17 @@ struct AccountDeletionView: View {
             }) {
                 Text("탈퇴하기")
                     .font(.title_semibold_18)
-                    .foregroundColor(selectedReason != nil ? .white : .gray500)
+                    .foregroundColor(isDeleteButtonEnabled ? .white : .gray500) // 수정
                     .frame(maxWidth: .infinity)
                     .frame(height: 55)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(selectedReason != nil ? .primaryNormal : .primaryBg)
+                            .fill(isDeleteButtonEnabled ? .primaryNormal : .primaryBg) // 수정
                     )
             }
             .disabled(!isDeleteButtonEnabled)
             .buttonStyle(PlainButtonStyle())
-            .animation(.easeInOut(duration: 0.2), value: selectedReason != nil)
+            .animation(.easeInOut(duration: 0.2), value: isDeleteButtonEnabled) // 수정
             .padding(.horizontal, 20)
             .padding(.bottom, 40.adjustedH)
              

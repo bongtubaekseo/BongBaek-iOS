@@ -95,7 +95,7 @@ struct EventLocationView: View {
     
     // 선택된 위치 정보를 지도 하단에 표시하는 오버레이
     private func selectedLocationOverlay(_ location: KLDocument) -> some View {
-       VStack(alignment: .leading, spacing: 8) {
+       VStack(alignment: .leading, spacing: 4) {
            Text(location.placeName)
                .titleSemiBold18()
                .foregroundColor(.white)
@@ -108,7 +108,7 @@ struct EventLocationView: View {
        .frame(maxWidth: .infinity, alignment: .leading)
        .padding(.horizontal, 16)
        .padding(.vertical, 12)
-       .background(Color.gray750.opacity(0.8))
+       .background(Color.gray750)
        .overlay(
            RoundedRectangle(cornerRadius: 12)
             .stroke(.gray750, lineWidth: 1)

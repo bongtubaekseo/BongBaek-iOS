@@ -217,7 +217,7 @@ struct AllRecordsView: View {
                             return "-"
                         }
                     return location
-                }())
+                }(),useMediumFont: true)
             //DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
         }
         .padding(20)
