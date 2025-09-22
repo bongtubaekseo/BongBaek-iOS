@@ -19,7 +19,7 @@ struct RecommendLoadingView: View {
             
             VStack(spacing: 0) {
                 HStack {
-                    Text("금액추천중")
+                    Text("금액 추천 중")
                         .titleSemiBold18()
                         .foregroundColor(.white)
                         .padding(.top, 20)

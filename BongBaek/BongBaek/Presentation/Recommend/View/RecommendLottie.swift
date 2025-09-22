@@ -423,12 +423,11 @@ struct RecommendLottie: View {
 
     var categorySection: some View {
         HStack(spacing: 8) {
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(.gray900)
                         .frame(width: 40, height: 40)
-
                     Image("icon_star")
                 }
                 VStack(alignment: .leading, spacing: 2) {
@@ -439,18 +438,17 @@ struct RecommendLottie: View {
                         .bodyMedium16()
                         .foregroundColor(.white)
                 }
-
                 Spacer()
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
-            .frame(width: 163, height: 70)
+            .frame(maxWidth: .infinity, minHeight: 70)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color("gray750"))
             )
 
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(.gray900)
@@ -469,11 +467,13 @@ struct RecommendLottie: View {
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
-            .frame(width: 164, height: 70)
+            .padding(.trailing, 20)
+            .frame(maxWidth: .infinity, minHeight: 70)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color("gray750"))
             )
         }
+        .frame(maxWidth: .infinity)
     }
 }

@@ -121,25 +121,25 @@ struct FullScheduleView: View {
     }
     
     private var headerView: some View {
-        HStack {
-            Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "chevron.left")
-                    .foregroundStyle(.white)
-                    //.padding(.leading,7)
-                    .padding(.top,10)
-            }
-            .contentShape(Rectangle())
-            
-            Text("\(UserDefaults.standard.memberName)님의 다가올 일정") 
-
+        ZStack {
+            Text("\(UserDefaults.standard.memberName)님의 다가올 일정")
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.top, 10)
-                //.padding(.leading, 9)
             
-            Spacer()
+            HStack {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.white)
+                        .padding(.leading, 7)
+                        .padding(.top, 10)
+                }
+                .contentShape(Rectangle())
+                
+                Spacer()
+            }
         }
     }
     
@@ -162,7 +162,7 @@ struct FullScheduleView: View {
             viewModel.updateCategory(category)
         }) {
             Text(category.displayName)
-                .bodyMedium14()
+                .bodyMedium16()
                 .foregroundColor(viewModel.selectedCategory == category ? .black : .gray300)
                 .frame(height: 40)
                 .padding(.horizontal, 16)
