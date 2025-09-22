@@ -42,6 +42,7 @@ struct ModifyView: View {
                     incomeSelectionSection
                         .opacity(viewModel.hasIncome ? 1.0 : 0.0)
                         .animation(.easeInOut(duration: 0.0), value: viewModel.hasIncome)
+                        .padding(.bottom, 60)
                     
                     Spacer()
                     

@@ -32,9 +32,10 @@ struct ProfileSettingView: View {
                     incomeSelectionSection
                         .opacity(viewModel.hasIncome ? 1.0 : 0.0)
                         .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
+                        .padding(.bottom, 60)
                     
                     startButton
-                        .padding(.bottom, 60.adjustedH)
+                        .padding(.bottom, 36)
                     
                     Spacer()
                 }
