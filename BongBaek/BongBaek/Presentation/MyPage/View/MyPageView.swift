@@ -55,7 +55,7 @@ struct MyPageView: View {
                         router.pop()
                     }) {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
+                            .foregroundColor(.gray300)
                     }
                     .frame(width: 44, height: 44)
                     
