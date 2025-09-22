@@ -160,7 +160,7 @@ struct RecordsHeaderView: View {
                     }) {
                         Image(systemName: "plus")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.white)
+                            .foregroundColor(.gray400)
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
@@ -179,12 +179,12 @@ struct RecordsHeaderView: View {
                     }) {
                         if isDeleteMode {
                             Text("삭제")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.red)
+                                .titleSemiBold16()
+                                .foregroundStyle(.gray400)
                         } else {
                             Image(systemName: "trash")
                                 .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(.white)
+                                .foregroundColor(.gray400)
                         }
                     }
                     .frame(width: 44, height: 44)
