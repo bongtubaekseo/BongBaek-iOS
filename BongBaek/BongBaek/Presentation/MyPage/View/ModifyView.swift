@@ -162,8 +162,8 @@ struct ModifyView: View {
     private var incomeSelectionSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
-                .titleSemiBold16()
-                .foregroundStyle(.white)
+                .titleSemiBold18()
+                .foregroundStyle(.gray100)
                 .padding(.bottom, 20)
             
             VStack(spacing: 12) {
@@ -194,6 +194,7 @@ struct ModifyView: View {
         } label: {
             HStack {
                 Text(selection.displayText)
+                    .bodyRegular14()
                     .foregroundStyle(.gray100)
                 
                 Spacer()
@@ -201,7 +202,7 @@ struct ModifyView: View {
                 if viewModel.isSelected(selection) {
                     Image(systemName: "checkmark")
                         .foregroundStyle(.primaryNormal)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 12, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }

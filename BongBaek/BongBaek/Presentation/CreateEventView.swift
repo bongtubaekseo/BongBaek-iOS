@@ -263,7 +263,6 @@ struct CreateEventView: View {
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
                         .foregroundStyle(.gray400)
-                
 
                     Text("행사장")
                         .bodyMedium14()
@@ -275,7 +274,7 @@ struct CreateEventView: View {
                 Button {
                     showLargeMapView = true
                 } label: {
-                    Text(selectedLocation != nil ? "위치 변경" : "추가하기")
+                    Text(selectedLocation != nil ? "수정하기" : "추가하기")
                         .bodyRegular14()
                         .foregroundStyle(isAttending ? .gray300 : .gray600) // 참석시에만 활성화
                 }
@@ -284,10 +283,10 @@ struct CreateEventView: View {
             
             // 참석할 때만 지도 섹션 표시
             if isAttending, let location = selectedLocation {
-                VStack(spacing: 12) {
+                VStack(spacing: 0) {
                     
                     mapSection
-                    // 선택된 위치 정보 표시
+                    
                     VStack(alignment: .leading, spacing: 4) {
                         Text(location.placeName)
                             .bodyMedium16()
@@ -305,12 +304,14 @@ struct CreateEventView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 16)
                     .background(.gray750)
-                    .cornerRadius(8)
-                    
-                    // 지도 표시
-               
+                    .clipShape(
+                        .rect(
+                            bottomLeadingRadius: 10,
+                            bottomTrailingRadius: 10
+                        )
+                    )
                 }
                 .transition(.opacity.combined(with: .scale))
                 .animation(.easeInOut(duration: 0.3), value: selectedLocation != nil)
@@ -328,7 +329,12 @@ struct CreateEventView: View {
             if let mapView = mapView {
                 mapView
                     .frame(height: 200)
-                    .cornerRadius(12)
+                    .clipShape( // cornerRadius 대신 clipShape 사용
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
                     .onAppear {
                         updateMapLocation()
                     }
@@ -340,7 +346,12 @@ struct CreateEventView: View {
                     .foregroundStyle(.gray700)
                     .frame(maxWidth: .infinity)
                     .frame(height: 200)
-                    .cornerRadius(12)
+                    .clipShape(
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
                     .onAppear {
                         mapView = KakaoMapView(draw: .constant(true))
                         // 지도 생성 후 위치 업데이트
@@ -783,8 +794,7 @@ struct CreateEventViewAfterEvent: View {
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
                         .foregroundStyle(.gray400)
-                
-
+                    
                     Text("행사장")
                         .bodyMedium14()
                         .foregroundStyle(.gray100)
@@ -795,7 +805,7 @@ struct CreateEventViewAfterEvent: View {
                 Button {
                     showLargeMapView = true
                 } label: {
-                    Text(selectedLocation != nil ? "위치 변경" : "추가하기")
+                    Text(selectedLocation != nil ? "수정하기" : "추가하기")
                         .bodyRegular14()
                         .foregroundStyle(isAttending ? .gray300 : .gray600) // 참석시에만 활성화
                 }
@@ -804,10 +814,9 @@ struct CreateEventViewAfterEvent: View {
             
             // 참석할 때만 지도 섹션 표시
             if isAttending, let location = selectedLocation {
-                VStack(spacing: 12) {
-                    
+                VStack(spacing: 0) {
                     mapSection
-                    // 선택된 위치 정보 표시
+                    
                     VStack(alignment: .leading, spacing: 4) {
                         Text(location.placeName)
                             .bodyMedium16()
@@ -825,12 +834,14 @@ struct CreateEventViewAfterEvent: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 16)
                     .background(.gray750)
-                    .cornerRadius(8)
-                    
-                    // 지도 표시
-               
+                    .clipShape(
+                        .rect(
+                            bottomLeadingRadius: 10,
+                            bottomTrailingRadius: 10
+                        )
+                    )
                 }
                 .transition(.opacity.combined(with: .scale))
                 .animation(.easeInOut(duration: 0.3), value: selectedLocation != nil)
@@ -848,7 +859,12 @@ struct CreateEventViewAfterEvent: View {
             if let mapView = mapView {
                 mapView
                     .frame(height: 200)
-                    .cornerRadius(12)
+                    .clipShape( // cornerRadius 대신 clipShape 사용
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
                     .onAppear {
                         updateMapLocation()
                     }
@@ -860,7 +876,12 @@ struct CreateEventViewAfterEvent: View {
                     .foregroundStyle(.gray700)
                     .frame(maxWidth: .infinity)
                     .frame(height: 200)
-                    .cornerRadius(12)
+                    .clipShape( // cornerRadius 대신 clipShape 사용
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
                     .onAppear {
                         mapView = KakaoMapView(draw: .constant(true))
                         // 지도 생성 후 위치 업데이트

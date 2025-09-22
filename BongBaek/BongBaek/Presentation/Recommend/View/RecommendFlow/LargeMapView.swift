@@ -114,12 +114,12 @@ struct LargeMapView: View {
     private func selectedLocationOverlay(_ location: KLDocument) -> some View {
        VStack(alignment: .leading, spacing: 8) {
            Text(location.placeName)
-               .font(.system(size: 18, weight: .semibold))
+               .titleSemiBold18()
                .foregroundColor(.white)
            
            Text(location.addressName)
-               .font(.system(size: 14))
-               .foregroundColor(.gray300)
+               .bodyRegular14()
+               .foregroundColor(.gray400)
            
        }
        .frame(maxWidth: .infinity, alignment: .leading)

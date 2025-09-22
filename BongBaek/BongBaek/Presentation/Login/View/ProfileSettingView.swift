@@ -140,7 +140,7 @@ struct ProfileSettingView: View {
     private var incomeSelectionSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
-                .titleSemiBold16()
+                .titleSemiBold18()
                 .foregroundStyle(.white)
                 .padding(.bottom, 20)
             
@@ -172,6 +172,7 @@ struct ProfileSettingView: View {
         } label: {
             HStack {
                 Text(selection.displayText)
+                    .bodyRegular14()
                     .foregroundStyle(.gray100)
                 
                 Spacer()
@@ -179,7 +180,7 @@ struct ProfileSettingView: View {
                 if viewModel.isSelected(selection) {
                     Image(systemName: "checkmark")
                         .foregroundStyle(.primaryNormal)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 12, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }

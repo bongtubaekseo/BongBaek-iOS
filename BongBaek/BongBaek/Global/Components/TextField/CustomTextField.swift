@@ -338,6 +338,29 @@ enum ValidationState {
         case .focused:
             return .primaryNormal
         case .completed:
+            return .white
+        }
+    }
+}
+
+enum ValidationState2 {
+    case normal
+    case valid
+    case invalid
+    case focused
+    case completed
+    
+    var color: Color {
+        switch self {
+        case .normal:
+            return .gray500
+        case .valid:
+            return .primaryNormal
+        case .invalid:
+            return .secondaryRed
+        case .focused:
+            return .primaryNormal
+        case .completed:
             return .lineNormal
         }
     }

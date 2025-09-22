@@ -376,14 +376,12 @@ struct ModifyEventView: View {
             
             // 참석할 때만 지도 섹션 표시
             if isAttending {
-                VStack(alignment: .leading, spacing: 8) {
-                    // 지도 표시
+                VStack(alignment: .leading, spacing: 0) { 
+                    // 지도 표시 (상단 모서리만 둥글게)
                     mapSection
                         .frame(maxWidth: .infinity)
                         .frame(height: 180)
-                        .cornerRadius(12)
-                    
-                    // 위치 정보 표시
+                        
                     if hasLocationData {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(locationName)
@@ -391,67 +389,86 @@ struct ModifyEventView: View {
                                 .foregroundStyle(.white)
                             
                             Text(locationAddress)
-                                .bodyMedium16()
-                                .foregroundStyle(.gray300)
+                                .bodyRegular14()
+                                .foregroundStyle(.gray400)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .background(.gray750)
-                        .cornerRadius(8)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 16)
+                        .background(.gray700)
+                        .clipShape(
+                            .rect(
+                                bottomLeadingRadius: 10,
+                                bottomTrailingRadius: 10
+                            )
+                        )
                     }
                 }
                 .transition(.opacity.combined(with: .scale))
                 .animation(.easeInOut(duration: 0.3), value: isAttending)
             }
         }
-//        .padding(.top, 16)
     }
     
     private var mapSection: some View {
-           Group {
-               // 위치 정보가 있는 경우 지도 표시
-               if hasLocationData {
-                   if let mapView = mapView {
-                       mapView
-                           .frame(height: 180)
-                           .cornerRadius(12)
-                           .onAppear {
-                               updateMapLocation()
-                           }
-                   } else {
-                       Rectangle()
-                           .foregroundStyle(.gray750)
-                           .frame(maxWidth: .infinity)
-                           .frame(height: 180)
-                           .cornerRadius(12)
-                           .onAppear {
-                               mapView = KakaoMapView(draw: .constant(true))
-                               // 지도 생성 후 위치 업데이트
-                               DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                   updateMapLocation()
-                               }
-                           }
-                   }
-               } else {
-                   // 위치 정보가 없는 경우 빈 Rectangle 표시
-                   VStack {
-                       Image(systemName: "location.slash")
-                           .font(.system(size: 30))
-                           .foregroundColor(.gray500)
-                       
-                       Text("위치 정보가 없습니다")
-                           .bodyRegular14()
-                           .foregroundColor(.gray500)
-                           .padding(.top, 8)
-                   }
-                   .frame(maxWidth: .infinity)
-                   .frame(height: 180)
-                   .background(.gray750)
-                   .cornerRadius(12)
-               }
-           }
-       }
+        Group {
+            // 위치 정보가 있는 경우 지도 표시
+            if hasLocationData {
+                if let mapView = mapView {
+                    mapView
+                        .frame(height: 180)
+                        .clipShape(
+                            .rect(
+                                topLeadingRadius: 10,
+                                topTrailingRadius: 10
+                            )
+                        )
+                        .onAppear {
+                            updateMapLocation()
+                        }
+                } else {
+                    Rectangle()
+                        .foregroundStyle(.gray750)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 180)
+                        .clipShape(
+                            .rect(
+                                topLeadingRadius: 10,
+                                topTrailingRadius: 10
+                            )
+                        )
+                        .onAppear {
+                            mapView = KakaoMapView(draw: .constant(true))
+                            // 지도 생성 후 위치 업데이트
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                updateMapLocation()
+                            }
+                        }
+                }
+            } else {
+                // 위치 정보가 없는 경우 빈 Rectangle 표시
+                VStack {
+                    Image(systemName: "location.slash")
+                        .font(.system(size: 30))
+                        .foregroundColor(.gray500)
+                    
+                    Text("위치 정보가 없습니다")
+                        .bodyRegular14()
+                        .foregroundColor(.gray500)
+                        .padding(.top, 8)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 180)
+                .background(.gray750)
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 10,
+                        topTrailingRadius: 10
+                    )
+                )
+            }
+        }
+    }
     
     private func updateMapLocation() {
          guard hasLocationData else { return }
