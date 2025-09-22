@@ -209,7 +209,15 @@ struct AllRecordsView: View {
             DetailRow(image: "icon_coin_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원")
             DetailRow(image: "icon_check 1", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
             DetailRow(image: "icon_calendar_16", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
-            DetailRow(image: "icon_location_16", title: "장소", value: eventDetail.locationInfo.location)
+            DetailRow(image: "icon_location_16",
+                      title: "장소",
+                      value: {
+                    let location = eventDetail.locationInfo.location
+                        if location == "미정" || location.isEmpty {
+                            return "-"
+                        }
+                    return location
+                }())
             //DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
         }
         .padding(20)
