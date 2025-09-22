@@ -164,7 +164,7 @@ struct FullScheduleView: View {
             Text(category.displayName)
                 .bodyMedium16()
                 .foregroundColor(viewModel.selectedCategory == category ? .black : .gray300)
-                .frame(height: 40)
+                .frame(height: 36)
                 .padding(.horizontal, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)

@@ -163,7 +163,7 @@ struct ModifyView: View {
     private var incomeSelectionSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
-                .titleSemiBold18()
+                .titleSemiBold16()
                 .foregroundStyle(.gray100)
                 .padding(.bottom, 20)
             
@@ -226,25 +226,32 @@ struct ModifyView: View {
     }
 
     private var updateButton: some View {
-        Button("수정하기") {
+        Button {
             print("수정하기 버튼 클릭")
             viewModel.logCurrentSelection()
             viewModel.performProfileUpdate()
+        } label: {
+            HStack {
+                
+                if viewModel.isUpdating {
+                    ProgressView()
+                        .tint(.white)
+                        .scaleEffect(0.8)
+                        .padding(.leading, 8)
+                }
+                Text("수정하기")
+                    .titleSemiBold18()
+                    .foregroundColor(viewModel.isUpdateButtonEnabled ? .white : .gray500)
+                
+
+            }
         }
         .frame(maxWidth: .infinity)
         .padding()
         .background(viewModel.isUpdateButtonEnabled ? .primaryNormal : .primaryBg)
-        .foregroundColor(viewModel.isUpdateButtonEnabled ? .white : .gray500)
         .cornerRadius(12)
-//        .pad  ding(.top, 20)
         .disabled(!viewModel.isUpdateButtonEnabled)
         .animation(.easeInOut(duration: 0.2), value: viewModel.isUpdateButtonEnabled)
-        .overlay(
-            viewModel.isUpdating ?
-            ProgressView()
-                .tint(.white)
-                .scaleEffect(0.8) : nil
-        )
     }
     
     private func setupInitialValues() {

@@ -269,7 +269,9 @@ struct DeletionReasonButton: View {
           
                         Image(getImageName())
                             .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20)
+                            .clipped()
                         
                         Text("기타")
                             .font(.body1_medium_16)
@@ -346,7 +348,9 @@ struct DeletionReasonButton: View {
                     HStack(spacing: 12) {
                         Image(getImageName())
                             .resizable()
+                            .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20)
+                            .clipped()
                         
                         Text(otherReasonText.isEmpty ? "기타" : otherReasonText)
                             .font(.body1_medium_16)
@@ -369,14 +373,15 @@ struct DeletionReasonButton: View {
                     .cornerRadius(8)
                 }
                 .buttonStyle(PlainButtonStyle())
-                .animation(.easeInOut(duration: 0.2), value: isSelected)
             }
         } else {
             Button(action: action) {
                 HStack(spacing: 12) {
                     Image(getImageName())
                         .resizable()
+                        .aspectRatio(contentMode: .fit)
                         .frame(width: 20, height: 20)
+                        .clipped()
                     
                     Text(title)
                         .font(.body1_medium_16)
@@ -398,15 +403,15 @@ struct DeletionReasonButton: View {
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
-            .animation(.easeInOut(duration: 0.2), value: isSelected)
+//            .animation(.easeInOut(duration: 0.2), value: isSelected)
         }
     }
     
     private func getImageName() -> String {
         if !hasAnySelection {
-            return "icon_check 2"
+            return "Exclude 2"
         } else {
-            return isSelected ? "icon_colorcheck" : "icon_come_16"
+            return isSelected ? "Exclude 1" : "Exclude 2"
         }
     }
 }

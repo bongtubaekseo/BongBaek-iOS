@@ -16,6 +16,7 @@ struct CustomTextField: View {
     let validationRule: ValidationRule?
     let isSecure: Bool
     let isRequired: Bool
+    let isRecommendationEdit: Bool
     let keyboardType: UIKeyboardType
     let isSmallText: Bool
     
@@ -42,6 +43,7 @@ struct CustomTextField: View {
          isRequired: Bool = false,
          isSmallText: Bool = false,
          keyboardType: UIKeyboardType = .default, // 새로 추가
+         isRecommendationEdit: Bool = false,
          onTap: (() -> Void)? = nil) {
         self.title = title
         self.icon = icon
@@ -53,6 +55,7 @@ struct CustomTextField: View {
         self.isRequired = isRequired
         self.isSmallText = isSmallText
         self.keyboardType = keyboardType
+        self.isRecommendationEdit = isRecommendationEdit
         self.onTap = onTap
         self._isValid = isValid
     }
@@ -72,11 +75,11 @@ struct CustomTextField: View {
                     if isSmallText {
                         Text(title)
                             .bodyMedium14()
-                            .foregroundColor(.white)
+                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
                     } else {
                         Text(title)
                             .bodyMedium16()
-                            .foregroundColor(.white)
+                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
                     }
 
                     
@@ -103,7 +106,7 @@ struct CustomTextField: View {
                             .textFieldStyle(PlainTextFieldStyle())
                             .focused($isFocused)
                             .disabled(isReadOnly)
-                            .foregroundColor(.white)
+                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
                             .tint(.white)
                             .keyboardType(keyboardType) // 키보드 타입 적용
                     } else {
@@ -119,7 +122,7 @@ struct CustomTextField: View {
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .focused($isFocused)
                                 .disabled(isReadOnly)
-                                .foregroundColor(.gray100)
+                                .foregroundColor(isRecommendationEdit ? .gray400 : .gray100)
                                 .tint(.white)
                                 .keyboardType(keyboardType) // 키보드 타입 적용
                                 .onChange(of: displayText) { _, newValue in
@@ -275,7 +278,7 @@ struct CustomTextField: View {
     }
     
     private var lineColor: Color {
-        return validationState.color(isReadOnly: isReadOnly)
+        return validationState.color(isReadOnly: isReadOnly, isRecommendationEdit: isRecommendationEdit)
     }
     
     private func validateInput(_ input: String) {
@@ -327,7 +330,7 @@ enum ValidationState {
     case focused
     case completed
     
-    func color(isReadOnly: Bool = false) -> Color {
+    func color(isReadOnly: Bool = false, isRecommendationEdit: Bool = false) -> Color {
         switch self {
         case .normal:
             return .gray500
@@ -338,7 +341,11 @@ enum ValidationState {
         case .focused:
             return .primaryNormal
         case .completed:
-            return isReadOnly ? .lineNormal : .white
+            if isReadOnly && isRecommendationEdit {
+                return .lineNormal
+            } else {
+                return .white
+            }
         }
     }
 }

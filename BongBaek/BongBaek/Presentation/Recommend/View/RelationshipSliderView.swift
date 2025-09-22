@@ -40,7 +40,9 @@ struct RelationshipSliderView: View {
         .padding(.vertical, 20)
         .background(.gray750)
         .cornerRadius(10)
-        .padding(20)
+        .padding(.horizontal, 20)
+        .padding(.top, 8) // 상단 패딩을 8로 설정
+        .padding(.bottom, 20) // 하단은 20 유지
         .frame(maxWidth: .infinity)
     }
 }

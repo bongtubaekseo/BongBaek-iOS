@@ -280,6 +280,7 @@ struct CreateEventView: View {
                 }
                 .disabled(!isAttending) // 참석시에만 클릭 가능
             }
+            .padding(.bottom, 6)
             
             // 참석할 때만 지도 섹션 표시
             if isAttending, let location = selectedLocation {
@@ -305,7 +306,7 @@ struct CreateEventView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 16)
-                    .background(.gray750)
+                    .background(.gray700)
                     .clipShape(
                         .rect(
                             bottomLeadingRadius: 10,
@@ -811,6 +812,7 @@ struct CreateEventViewAfterEvent: View {
                 }
                 .disabled(!isAttending) // 참석시에만 클릭 가능
             }
+            .padding(.bottom, 6)
             
             // 참석할 때만 지도 섹션 표시
             if isAttending, let location = selectedLocation {
@@ -835,7 +837,7 @@ struct CreateEventViewAfterEvent: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 16)
-                    .background(.gray750)
+                    .background(.gray700)
                     .clipShape(
                         .rect(
                             bottomLeadingRadius: 10,

@@ -91,9 +91,9 @@ struct CategoryFilterView: View {
                         onCategoryChange(category)
                     }) {
                         Text(category.display)
-                            .bodyMedium14()
-                            .foregroundColor(selectedCategory == category ? .black : .gray300)
-                            .frame(height: 40)
+                            .bodyMedium16()
+                            .foregroundColor(selectedCategory == category ? .gray700 : .gray300)
+                            .frame(height: 36)
                             .padding(.horizontal, 16)
                             .background(
                                 RoundedRectangle(cornerRadius: 8)

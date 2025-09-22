@@ -141,8 +141,8 @@ struct ProfileSettingView: View {
     private var incomeSelectionSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
-                .titleSemiBold18()
-                .foregroundStyle(.white)
+                .titleSemiBold16()
+                .foregroundStyle(.gray100)
                 .padding(.bottom, 20)
             
             VStack(spacing: 12) {

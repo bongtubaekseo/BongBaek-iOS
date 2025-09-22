@@ -152,7 +152,8 @@ struct ModifyEventView: View {
                                 ),
                                 isReadOnly: isRecommendationEdit,
                                 isRequired: true,
-                                isSmallText: true
+                                isSmallText: true,
+                                isRecommendationEdit: isRecommendationEdit
                             )
                                                         
                             CustomTextField(
@@ -168,7 +169,8 @@ struct ModifyEventView: View {
                                 ),
                                 isReadOnly: isRecommendationEdit,
                                 isRequired: true,
-                                isSmallText: true
+                                isSmallText: true,
+                                isRecommendationEdit: isRecommendationEdit
                             )
                             .padding(.top, 32)
                         }
@@ -236,7 +238,8 @@ struct ModifyEventView: View {
                                 text: $selectedDate,
                                 isReadOnly: true,
                                 isRequired: true,
-                                isSmallText: true
+                                isSmallText: true,
+                                isRecommendationEdit: isRecommendationEdit
                             ) {
                                 guard !isRecommendationEdit else { return }
                                 print("생년월일 필드 터치됨")
@@ -357,7 +360,10 @@ struct ModifyEventView: View {
                     
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray100)
+                        .foregroundStyle(
+                            (isAttending && !isRecommendationEdit) ? .gray100 : .gray400
+                        )
+
                 }
                 
                 Spacer()
@@ -373,6 +379,7 @@ struct ModifyEventView: View {
                 }
                 .disabled(!isAttending || isRecommendationEdit)
             }
+            .padding(.bottom, 6)
             
             // 참석할 때만 지도 섹션 표시
             if isAttending {

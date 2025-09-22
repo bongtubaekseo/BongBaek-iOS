@@ -101,7 +101,7 @@ struct RecommendLottie: View {
                 minAmount = data.range.min
                 maxAmount = data.range.max
                 category = data.category
-                eventLocation = data.location
+                eventLocation = data.location == "미정" ? "-" : data.location
                 eventCategory = data.category
                 
                 lottieviewModel.updateFromServerData(

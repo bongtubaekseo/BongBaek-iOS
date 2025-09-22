@@ -221,13 +221,13 @@ struct LargeMapView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(document.placeName)
-                                .font(.system(size: 16, weight: .medium))
+                                .titleSemiBold18()
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Text(document.addressName)
-                                .font(.system(size: 14))
-                                .foregroundColor(.gray)
+                                .bodyRegular14()
+                                .foregroundColor(.gray400)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             if !document.roadAddressName.isEmpty {
@@ -253,7 +253,7 @@ struct LargeMapView: View {
                 
                 if document.id != keywordSearch.searchResults.last?.id {
                     Divider()
-                        .background(Color.gray.opacity(0.3))
+                        .background(Color.gray750.opacity(0.3))
                         .padding(.horizontal, 16)
                 }
             }
@@ -261,12 +261,13 @@ struct LargeMapView: View {
         .background(Color.gray750)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                .stroke(Color.gray750, lineWidth: 1)
+                .padding(.vertical, 14)
         )
-        .cornerRadius(12)
+        .cornerRadius(10)
         .padding(.horizontal, 20)
         .padding(.top, 8)
-        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .shadow(color: .gray750.opacity(0.1), radius: 8, x: 0, y: 4)
         .zIndex(100)
         .transition(.asymmetric(
             insertion: .scale(scale: 0.95, anchor: .top).combined(with: .opacity),

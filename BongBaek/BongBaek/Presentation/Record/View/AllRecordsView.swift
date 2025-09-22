@@ -168,7 +168,7 @@ struct AllRecordsView: View {
             
             // 메모 섹션
             memoSection
-                .padding(.top,40)
+                .padding(.top,22)
             
             // 삭제 버튼
             deleteButton
@@ -257,7 +257,7 @@ struct AllRecordsView: View {
                     Text("메모가 없습니다.")
                         .bodyRegular16()
                         .foregroundColor(.gray500)
-                        .padding(.top, 8)
+                        .padding(.top, -2)
                         .padding(.leading, 5)
                         .allowsHitTesting(false)
                 }
