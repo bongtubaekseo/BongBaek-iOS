@@ -81,7 +81,7 @@ struct FullScheduleView: View {
                 .padding(.bottom, 20)
             
             categoryScrollView
-                .padding(.horizontal)
+                //.padding(.horizontal)
                 .padding(.bottom, 20)
             
             ScrollView {
@@ -121,39 +121,39 @@ struct FullScheduleView: View {
     }
     
     private var headerView: some View {
-        HStack {
-            Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "chevron.left")
-                    .foregroundStyle(.white)
-                    //.padding(.leading,7)
-                    .padding(.top,10)
-            }
-            .contentShape(Rectangle())
-            
-            Text("\(UserDefaults.standard.memberName)님의 다가올 일정") 
-
+        ZStack {
+            Text("\(UserDefaults.standard.memberName)님의 다가올 일정")
                 .titleSemiBold18()
                 .foregroundColor(.white)
                 .padding(.top, 10)
-                //.padding(.leading, 9)
             
-            Spacer()
+            HStack {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.white)
+                        .padding(.leading, 7)
+                        .padding(.top, 10)
+                }
+                .contentShape(Rectangle())
+                
+                Spacer()
+            }
         }
     }
     
     private var categoryScrollView: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(ScheduleCategory.allCases, id: \.self) { category in
-                        categoryButton(for: category)
-                    }
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 8) {
+                ForEach(ScheduleCategory.allCases, id: \.self) { category in
+                    categoryButton(for: category)
                 }
-                .padding(.horizontal, 4)
             }
+            .padding(.horizontal, 20)
         }
+        .frame(height: 50)
+        .clipped()
     }
     
     private func categoryButton(for category: ScheduleCategory) -> some View {
@@ -162,7 +162,7 @@ struct FullScheduleView: View {
             viewModel.updateCategory(category)
         }) {
             Text(category.displayName)
-                .bodyMedium14()
+                .bodyMedium16()
                 .foregroundColor(viewModel.selectedCategory == category ? .black : .gray300)
                 .frame(height: 40)
                 .padding(.horizontal, 16)

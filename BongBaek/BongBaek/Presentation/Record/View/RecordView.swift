@@ -33,7 +33,8 @@ struct RecordView: View {
                     }, onCancelTapped: {
                         viewModel.clearSelectedRecords()
                     },
-                    isCurrentSectionEmpty: viewModel.isCurrentSectionEmpty
+                    isCurrentSectionEmpty: viewModel.isCurrentSectionEmpty,
+                    hasSelectedRecords: viewModel.hasSelectedRecords
                 )
                 .environmentObject(router)
                 
@@ -114,6 +115,7 @@ struct RecordsHeaderView: View {
     @EnvironmentObject var router: NavigationRouter
     
     let isCurrentSectionEmpty: Bool
+    let hasSelectedRecords: Bool
     
     var body: some View {
         HStack {
@@ -160,7 +162,7 @@ struct RecordsHeaderView: View {
                     }) {
                         Image(systemName: "plus")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.white)
+                            .foregroundColor(.gray400)
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
@@ -179,12 +181,12 @@ struct RecordsHeaderView: View {
                     }) {
                         if isDeleteMode {
                             Text("삭제")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.red)
+                                .titleSemiBold16()
+                                .foregroundStyle(hasSelectedRecords ? .secondaryRed : .gray400)
                         } else {
                             Image(systemName: "trash")
                                 .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(.white)
+                                .foregroundColor(.gray400)
                         }
                     }
                     .frame(width: 44, height: 44)
@@ -211,7 +213,8 @@ struct RecordsHeaderView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 16)
+        .padding(.top, 16)
+        .padding(.bottom, 0)
         .animation(.easeInOut(duration: 0.2), value: isDeleteMode)
         .animation(.easeInOut(duration: 0.2), value: isCurrentSectionEmpty)
         .onChange(of: isDeleteMode) { oldValue, newValue in
@@ -275,7 +278,7 @@ struct RecordSectionHeaderView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 16)
+        .padding(.top, 12)
         .padding(.bottom, 4)
     }
 }
