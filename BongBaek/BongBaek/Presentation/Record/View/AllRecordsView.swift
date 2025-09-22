@@ -377,10 +377,10 @@ struct DetailRow: View {
             Text(value)
                 .bodyRegular14()
                 .foregroundColor(valueTextColor ?? .white)
-                .padding(.horizontal, valueBackgroundColor != nil ? 4 : 0)
+                .padding(.horizontal, valueBackgroundColor != nil ? 8 : 0)
                 .padding(.vertical, valueBackgroundColor != nil ? 4 : 0)
                 .background(valueBackgroundColor ?? .clear)
-                .cornerRadius(valueBackgroundColor != nil ? 6 : 0)
+                .cornerRadius(valueBackgroundColor != nil ? 4 : 0)
         }
     }
 }
