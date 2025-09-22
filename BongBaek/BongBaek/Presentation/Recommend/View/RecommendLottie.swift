@@ -469,7 +469,8 @@ struct RecommendLottie: View {
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
-            .frame(width: 164, height: 70)
+            .frame(maxWidth: .infinity)
+            .frame(height: 70)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color("gray750"))
