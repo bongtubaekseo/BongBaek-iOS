@@ -198,6 +198,7 @@ struct RecordsHeaderView: View {
                         Button("취소", role: .cancel) {
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 isDeleteMode = false
+                                onCancelTapped()
                             }
                         }
                         Button("삭제", role: .destructive) {
