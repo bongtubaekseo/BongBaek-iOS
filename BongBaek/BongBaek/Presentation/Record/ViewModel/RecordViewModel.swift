@@ -32,6 +32,8 @@ class RecordViewModel: ObservableObject {
     @Published var isLoadingMore = false
     @Published var errorMessage: String?
     
+    var hasSelectedRecords: Bool { !selectedRecordIDs.isEmpty }
+
     private var attendedCurrentPage = 0
     private var notAttendedCurrentPage = 0
     private var attendedIsLastPage = false
@@ -83,7 +85,7 @@ class RecordViewModel: ObservableObject {
      }
     
     var sortedYears: [String] {
-        currentEventsGrouped.keys.sorted(by: <)
+        currentEventsGrouped.keys.sorted(by: >)
     }
     
     func monthsForYear(_ year: String) -> [String: [AttendedEvent]] {
@@ -93,7 +95,7 @@ class RecordViewModel: ObservableObject {
     /// 특정 년도의 정렬된 월 목록
     func sortedMonthsForYear(_ year: String) -> [String] {
         let months = currentEventsGrouped[year] ?? [:]
-        return months.keys.sorted()
+        return months.keys.sorted(by: >)
     }
     
     /// 현재 섹션이 비어있는지 확인
@@ -163,6 +165,7 @@ class RecordViewModel: ObservableObject {
         withAnimation(.easeInOut(duration: 0.2)) {
             selectedSection = section
             selectedRecordIDs.removeAll() // 섹션 변경 시 선택 초기화
+            selectedCategory = .all
         }
         
         // 해당 섹션 데이터가 없으면 로드
@@ -194,28 +197,46 @@ class RecordViewModel: ObservableObject {
     
     /// 선택된 기록들 삭제
     func deleteSelectedRecords() {
-        print("삭제할 기록 ID들: \(selectedRecordIDs)")
+        let idsToDelete = Array(selectedRecordIDs)
+        print("삭제할 ID들: \(idsToDelete)")
         
-        Task {
-            for eventId in selectedRecordIDs {
+        Task { @MainActor in
+            isLoading = true
+            
+            for eventId in idsToDelete {
                 do {
+                    print("API 호출: \(eventId)")
                     let response = try await eventService.deleteEvent(eventId: eventId).async()
                     if response.isSuccess {
-                        print("이벤트 삭제 성공: \(eventId)")
+                        print("삭제 성공: \(eventId)")
                     } else {
-                        print("이벤트 삭제 실패: \(eventId) - \(response.message)")
+                        print("삭제 실패: \(response.message)")
                     }
                 } catch {
-                    print("이벤트 삭제 에러: \(eventId) - \(error)")
+                    print("삭제 에러: \(error)")
                 }
             }
             
-            // 모든 작업을 메인 스레드에서 실행
+            print("모든 삭제 완료, UI 업데이트 시작")
+            
+            // UI 상태 초기화
             selectedRecordIDs.removeAll()
             isDeleteMode = false
+            
+            // 데이터 초기화 및 재로드
+            attendedEvents.removeAll()
+            notAttendedEvents.removeAll()
+            attendedCurrentPage = 0
+            notAttendedCurrentPage = 0
+            attendedIsLastPage = false
+            notAttendedIsLastPage = false
+            isLoadingData = false
+            
+            // 데이터 새로 로드
             await loadAllRecords()
             
-            print("선택된 기록들이 삭제되었습니다")
+            isLoading = false
+            print("완료")
         }
     }
     
@@ -392,5 +413,12 @@ extension EventsCategory {
         case .birthday: return "생일"
         case .funeral: return "장례식"
         }
+    }
+}
+
+extension RecordViewModel {
+    func clearSelectedRecords() {
+        selectedRecordIDs.removeAll()
+        print("선택된 레코드 초기화 완료 - 총 \(selectedRecordIDs.count)개")
     }
 }

@@ -15,16 +15,17 @@ struct RelationshipButton: View {
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
+            VStack(spacing: 4) {
                 Image(image)
                     .renderingMode(.template)
                     .foregroundColor(isSelected ? .white : .primaryNormal)
+                    .frame(width: 48, height: 40) 
+                    .scaledToFit()
                 
                 Text(text)
-                    .font(.caption)
+                    .bodyMedium14()
                     .foregroundColor(isSelected ? .white : .gray200)
             }
-            .padding()
             .frame(maxWidth: .infinity, minHeight: 83)
             .background(
                 RoundedRectangle(cornerRadius: 12)

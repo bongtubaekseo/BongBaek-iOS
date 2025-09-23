@@ -16,7 +16,11 @@ struct CustomTextField: View {
     let validationRule: ValidationRule?
     let isSecure: Bool
     let isRequired: Bool
-    let keyboardType: UIKeyboardType 
+    let isRecommendationEdit: Bool
+    let keyboardType: UIKeyboardType
+    let isSmallText: Bool
+    
+    @Binding var isValid: Bool
     
     @State private var validationState: ValidationState = .normal
     @State private var validationMessage: String = ""
@@ -32,11 +36,14 @@ struct CustomTextField: View {
          icon: String,
          placeholder: String,
          text: Binding<String>,
+         isValid: Binding<Bool> = .constant(true),
          validationRule: ValidationRule? = nil,
          isSecure: Bool = false,
          isReadOnly: Bool = false,
          isRequired: Bool = false,
+         isSmallText: Bool = false,
          keyboardType: UIKeyboardType = .default, // 새로 추가
+         isRecommendationEdit: Bool = false,
          onTap: (() -> Void)? = nil) {
         self.title = title
         self.icon = icon
@@ -46,8 +53,11 @@ struct CustomTextField: View {
         self.isSecure = isSecure
         self.isReadOnly = isReadOnly
         self.isRequired = isRequired
+        self.isSmallText = isSmallText
         self.keyboardType = keyboardType
+        self.isRecommendationEdit = isRecommendationEdit
         self.onTap = onTap
+        self._isValid = isValid
     }
     
     var body: some View {
@@ -56,20 +66,30 @@ struct CustomTextField: View {
             HStack(spacing: 8) {
                 Image(icon)
                     .resizable()
-                    .frame(width: 16,height: 16)
+                    .renderingMode(.template)
+                    .frame(width: 20,height: 20)
+                    .foregroundColor(.gray400)
                 
                 HStack(spacing: 2) {
-                    Text(title)
-                        .bodyMedium16()
-                        .foregroundColor(.white)
+                    
+                    if isSmallText {
+                        Text(title)
+                            .bodyMedium14()
+                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
+                    } else {
+                        Text(title)
+                            .bodyMedium16()
+                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
+                    }
+
                     
                     if isRequired {
                         
                         VStack {
                             Text("*")
                                 .bodyMedium16()
-                                .foregroundColor(.blue)
-                                .padding(.top, 2)
+                                .foregroundColor(.primaryNormal)
+                                .padding(.top, 4)
                                 .padding(.leading, 1)
                             
                             Spacer()
@@ -86,7 +106,7 @@ struct CustomTextField: View {
                             .textFieldStyle(PlainTextFieldStyle())
                             .focused($isFocused)
                             .disabled(isReadOnly)
-                            .foregroundColor(.white)
+                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
                             .tint(.white)
                             .keyboardType(keyboardType) // 키보드 타입 적용
                     } else {
@@ -102,7 +122,7 @@ struct CustomTextField: View {
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .focused($isFocused)
                                 .disabled(isReadOnly)
-                                .foregroundColor(.white)
+                                .foregroundColor(isRecommendationEdit ? .gray400 : .gray100)
                                 .tint(.white)
                                 .keyboardType(keyboardType) // 키보드 타입 적용
                                 .onChange(of: displayText) { _, newValue in
@@ -149,13 +169,20 @@ struct CustomTextField: View {
                     .foregroundColor(lineColor)
                     .animation(.easeInOut(duration: 0.2), value: validationState)
             }
+            .padding(.top, -4)
             
             if !validationMessage.isEmpty {
-                Text(validationMessage)
-                    .font(.system(size: 12))
-                    .foregroundColor(validationState.color)
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-                    .animation(.easeInOut(duration: 0.2), value: validationMessage)
+                HStack(spacing: 4) {
+                    Image(validationState == .invalid ? "icon_caution" : "")
+                        .font(.system(size: 12))
+                        .foregroundColor(validationState.color())
+                    
+                    Text(validationMessage)
+                        .font(.system(size: 12))
+                        .foregroundColor(validationState.color())
+                }
+                .transition(.opacity.combined(with: .move(edge: .top)))
+                .animation(.easeInOut(duration: 0.2), value: validationMessage)
             }
         }
         .onAppear {
@@ -177,6 +204,9 @@ struct CustomTextField: View {
                 }
             }
             validateInput(newValue)
+        }
+        .onChange(of: isFocused) { _, newValue in
+            validateInput(text)
         }
     }
     
@@ -219,14 +249,27 @@ struct CustomTextField: View {
             // 숫자만 추출
             let numbersOnly = newValue.filter { $0.isNumber }
             
-            // 원본 text에는 숫자만 저장
-            text = numbersOnly
+            guard !numbersOnly.isEmpty else {
+                text = ""
+                displayText = ""
+                validateInput("")
+                return
+            }
+
+            if let number = Int(numbersOnly) {
+                let maxAmount = 99_999_999
+                let finalNumber = min(number, maxAmount)
             
-            // 화면에는 포맷된 텍스트 표시
-            displayText = formatNumber(numbersOnly)
-            
-            // 유효성 검사는 숫자만으로
-            validateInput(numbersOnly)
+                text = String(finalNumber)
+                
+                displayText = formatNumber(String(finalNumber))
+                
+                validateInput(String(finalNumber))
+            } else {
+                text = ""
+                displayText = ""
+                validateInput("")
+            }
         } else {
             // 일반 텍스트는 그대로 처리
             text = newValue
@@ -235,30 +278,48 @@ struct CustomTextField: View {
     }
     
     private var lineColor: Color {
-        if isFocused {
-            return validationState == .invalid ? .red : .blue
-        }
-        return validationState.color
+        return validationState.color(isReadOnly: isReadOnly, isRecommendationEdit: isRecommendationEdit)
     }
     
     private func validateInput(_ input: String) {
         guard let rule = validationRule else {
-            validationState = .normal
+            isValid = !input.isEmpty
+            
+            if isFocused {
+                validationState = .focused
+            } else {
+                validationState = input.isEmpty ? .normal : .completed
+            }
             validationMessage = ""
             return
         }
         
-        let validation = rule.validate(input)
-        
         withAnimation(.easeInOut(duration: 0.2)) {
             if input.isEmpty {
-                validationState = .normal
+                isValid = false
+                validationState = isFocused ? .focused : .normal
                 validationMessage = ""
             } else {
-                validationState = validation.isValid ? .valid : .invalid
+                if let regex = rule.regex {
+                    let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
+                    if !predicate.evaluate(with: input) {
+                        isValid = false
+                        validationState = .invalid
+                        validationMessage = rule.customMessage ?? "특수문자는 기입할 수 없어요"
+                        return
+                    }
+                }
+                
+                let validation = rule.validate(input)
+                isValid = validation.isValid
+                
+                if validation.isValid {
+                    validationState = isFocused ? .valid : .completed
+                } else {
+                    validationState = .invalid
+                }
                 validationMessage = validation.message
             }
-           
         }
     }
 }
@@ -266,6 +327,35 @@ enum ValidationState {
     case normal
     case valid
     case invalid
+    case focused
+    case completed
+    
+    func color(isReadOnly: Bool = false, isRecommendationEdit: Bool = false) -> Color {
+        switch self {
+        case .normal:
+            return .gray500
+        case .valid:
+            return .primaryNormal
+        case .invalid:
+            return .secondaryRed
+        case .focused:
+            return .primaryNormal
+        case .completed:
+            if isReadOnly && isRecommendationEdit {
+                return .lineNormal
+            } else {
+                return .white
+            }
+        }
+    }
+}
+
+enum ValidationState2 {
+    case normal
+    case valid
+    case invalid
+    case focused
+    case completed
     
     var color: Color {
         switch self {
@@ -275,6 +365,10 @@ enum ValidationState {
             return .primaryNormal
         case .invalid:
             return .secondaryRed
+        case .focused:
+            return .primaryNormal
+        case .completed:
+            return .lineNormal
         }
     }
 }
@@ -334,8 +428,11 @@ struct ValidationRule {
         
         if let customRule = customRule {
             let isValid = customRule(text)
-            let message = customMessage ?? (isValid ? "올바른 형식입니다" : "형식이 올바르지 않습니다")
-            return (isValid, message)
+            if isValid {
+                return (true, "") 
+            } else {
+                return (false, customMessage ?? "형식이 올바르지 않습니다")
+            }
         }
         
         return (true, "")

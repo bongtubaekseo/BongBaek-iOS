@@ -12,7 +12,7 @@ struct RelationshipSliderView: View {
     let range: ClosedRange<Double> = 1...5
 
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing:0) {
             SliderSection(
                 value: $eventManager.contactFrequency, 
                 range: range,
@@ -22,8 +22,7 @@ struct RelationshipSliderView: View {
                 leftLabel: "가끔",
                 rightLabel: "매일"
             )
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
+//            .padding(.top, 20)
             
             SliderSection(
                 value: $eventManager.meetFrequency,
@@ -34,12 +33,16 @@ struct RelationshipSliderView: View {
                 leftLabel: "가끔",
                 rightLabel: "매일"
             )
-            .padding(.horizontal, 20)
+            .padding(.top, 40)
             
-            Spacer()
         }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 20)
         .background(.gray750)
-        .padding(20)
+        .cornerRadius(10)
+        .padding(.horizontal, 20)
+        .padding(.top, 8) // 상단 패딩을 8로 설정
+        .padding(.bottom, 20) // 하단은 20 유지
         .frame(maxWidth: .infinity)
     }
 }
@@ -57,6 +60,7 @@ struct SliderSection: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Image(icon)
+                    .frame(width: 20,height: 20)
                 
                 Text(title)
                     .bodyMedium16()
@@ -78,10 +82,14 @@ struct SliderSection: View {
                         .fontWeight(.bold)
                         .foregroundStyle(.white)
                         .padding(.all, 12)
-                        .frame(width: 88, height: 88)
+                        .frame(width: 84, height: 84)
                         .offset(y: 6)
+                        .padding(.horizontal, 2)
                 }
+                
             )
+            .padding(.horizontal, 2)
+            
             
             HStack {
                 Text(leftLabel)
@@ -95,6 +103,7 @@ struct SliderSection: View {
                     .foregroundStyle(.gray400)
             }
             .padding(.top, 24)
+            .padding(.horizontal, 2)
         }
     }
 }

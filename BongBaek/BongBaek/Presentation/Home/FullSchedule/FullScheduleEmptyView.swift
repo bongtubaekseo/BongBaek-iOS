@@ -13,7 +13,7 @@ struct FullScheduleEmptyView: View {
     
     var body: some View {
         VStack(alignment: .center) {
-            Text("기록한 \(message)없어요!")
+            Text("다가올 \(message) 없어요!")
                 .headBold24()
                 .foregroundColor(.white)
             

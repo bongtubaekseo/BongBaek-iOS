@@ -38,12 +38,9 @@ struct AppConfig {
     }()
     
     
-     var kakaoAPIKey: String = {
-        guard let key = Bundle.main.infoDictionary?["KAKAO_API_KEY"] as? String else {
-            fatalError("Kakao API Key is missing in Info.plist")
-        }
-        return key
-    }()
+    var kakaoAPIKey: String {
+        return UserDefaults.standard.apiKey
+    }
     
 
     var networkTimeout: TimeInterval { return 30.0 }

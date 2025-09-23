@@ -10,20 +10,21 @@ import SwiftUI
 struct ScheduleView: View {
     let events: [Event]
     @EnvironmentObject var router: NavigationRouter
-    
+
     private var sortedEvents: [Event] {
-           return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
+           return events.sorted { $0.eventInfo.dDay > $1.eventInfo.dDay }
        }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("봉백님의 일정")
+                Text("\(UserDefaults.standard.memberName.isEmpty ? "봉백" : UserDefaults.standard.memberName)님의 일정")
                     .font(.title_semibold_20)
                     .foregroundStyle(.white)
                 
                 Spacer()
 
+                if !events.isEmpty {
                     Button(action: {
                         router.push(to: .fullScheduleView)
                     }) {
@@ -33,6 +34,7 @@ struct ScheduleView: View {
                             .padding(.vertical, 4)
                             .padding(.horizontal, 8)
                             .background(Color.clear)
+                    }
                 }
             }
             .padding(.bottom, 20)
@@ -40,14 +42,12 @@ struct ScheduleView: View {
             if events.isEmpty {
                 EmptyCardView()
             } else {
-                
-                
                 ForEach(sortedEvents, id: \.eventId) { event in
                     ScheduleCellView(event: event)
                 }
             }
         }
         .padding(.horizontal)
-        .background(Color.black)
+        .background(Color.gray900)
     }
 }

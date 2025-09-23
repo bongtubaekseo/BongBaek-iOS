@@ -19,8 +19,18 @@ struct ScheduleAlarmView: View {
     @State private var dragOffset: CGFloat = 0
 
     private let cardSpacing: CGFloat = 8
-    private let cardWidth: CGFloat = 340
     private let sidePadding: CGFloat = 20
+    
+    
+    private var cardWidth: CGFloat {
+            let screenWidth = UIScreen.main.bounds.width
+            if sortedEvents.count <= 1 {
+                return screenWidth - 40
+            } else {
+                return screenWidth - sidePadding - 20
+                
+            }
+        }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -52,7 +62,8 @@ struct ScheduleAlarmView: View {
                                     )
                             }
                         }
-                        .padding(.horizontal, sidePadding)
+                        .padding(.leading, sidePadding)
+                        .padding(.trailing, 20)
                         .offset(x: scrollOffset + dragOffset)
                         .gesture(
                             DragGesture()
@@ -61,11 +72,11 @@ struct ScheduleAlarmView: View {
                                 }
                                 .onEnded { value in
                                     let totalOffset =
-                                        scrollOffset + value.translation.width
+                                    scrollOffset + value.translation.width
                                     let cardWithSpacing =
-                                        cardWidth + cardSpacing
+                                    cardWidth + cardSpacing
                                     let rawIndex =
-                                        -totalOffset / cardWithSpacing
+                                    -totalOffset / cardWithSpacing
                                     let maxIndex = min(
                                         sortedEvents.count - 1,
                                         2
@@ -74,11 +85,11 @@ struct ScheduleAlarmView: View {
                                         0,
                                         min(maxIndex, Int(rawIndex.rounded()))
                                     )
-
+                                    
                                     withAnimation(.easeOut) {
                                         currentIndex = newIndex
                                         scrollOffset =
-                                            -CGFloat(newIndex) * cardWithSpacing
+                                        -CGFloat(newIndex) * cardWithSpacing
                                         dragOffset = 0
                                     }
                                 }
@@ -87,20 +98,36 @@ struct ScheduleAlarmView: View {
                     .clipped()
                 }
                 .frame(height: 260)
-
-                HStack(spacing: 6) {
-                    ForEach(0..<min(sortedEvents.count, 3), id: \.self) {
-                        index in
-                        Circle()
-                            .fill(
-                                index == currentIndex
+                
+                if min(sortedEvents.count, 3) > 1 {
+                    HStack(spacing: 6) {
+                        ForEach(0..<min(sortedEvents.count, 3), id: \.self) {
+                            index in
+                            Circle()
+                                .fill(
+                                    index == currentIndex
                                     ? Color.white : Color.gray.opacity(0.5)
-                            )
-                            .frame(width: 6, height: 6)
+                                )
+                                .frame(width: 6, height: 6)
+                        }
                     }
+                    .padding(.top, 12)
                 }
-                .padding(.top, 12)
             }
+        }
+        .onChange(of: sortedEvents.count) { oldValue, newValue in
+            if currentIndex >= newValue {
+                withAnimation(.easeOut) {
+                    currentIndex = 0
+                    scrollOffset = 0
+                    dragOffset = 0
+                }
+            }
+        }
+        .onAppear {
+            currentIndex = 0
+            scrollOffset = 0
+            dragOffset = 0
         }
     }
 

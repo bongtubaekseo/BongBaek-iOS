@@ -30,7 +30,7 @@ struct ModifyView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomNavigationBar(title: "프로필 설정") {
+            CustomNavigationBar(title: "프로필 수정") {
                 router.pop()
             }
             
@@ -39,14 +39,16 @@ struct ModifyView: View {
                     textFieldSection
                     incomeToggleSection
                     
-                    if viewModel.hasIncome {
-                        incomeSelectionSection
-                    }
-                    
-                    startButton
-                        .padding(.top, 20.adjustedH)
+                    incomeSelectionSection
+                        .opacity(viewModel.hasIncome ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.0), value: viewModel.hasIncome)
+                        .padding(.bottom, 60)
                     
                     Spacer()
+                    
+                    updateButton
+                        .padding(.bottom, 36)
+
                 }
             }
             .scrollIndicators(.hidden)
@@ -58,17 +60,26 @@ struct ModifyView: View {
             }
         }
         .onAppear {
+            viewModel.initializeState()
             setupInitialValues()
-            NotificationCenter.default.publisher(for: .profileUpdateSuccess)
-                  .receive(on: DispatchQueue.main)
-                  .sink { _ in
-                      print("프로필 업데이트 성공! 이전 화면으로 이동")
-                      
-                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                          router.pop()
-                      }
-                  }
-                  .store(in: &cancellables)
+        }
+        .onChange(of: viewModel.updateSuccess) { oldValue, newValue in
+            print("updateSuccess 변화: \(oldValue) → \(newValue)")
+            if newValue {
+                print("프로필 업데이트 성공! 이전 화면으로 이동")
+                viewModel.resetUpdateSuccess()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    print("router.pop() 실행")
+                    router.pop()
+                    print("updateSuccess 리셋 완료")
+                }
+            }
+        }
+        .onDisappear {
+            if viewModel.updateSuccess {
+                viewModel.resetUpdateSuccess()
+                print("onDisappear: 남은 상태 정리 완료")
+            }
         }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -85,13 +96,6 @@ struct ModifyView: View {
             }
             .presentationDetents([.height(359)])
         }
-        .alert("회원가입 실패", isPresented: $viewModel.showErrorAlert) {
-            Button("확인") {
-                viewModel.dismissError()
-            }
-        } message: {
-            Text(viewModel.errorMessage)
-        }
     }
     
     private var textFieldSection: some View {
@@ -105,7 +109,7 @@ struct ModifyView: View {
                     minLength: 2,
                     maxLength: 10,
                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                    customMessage: "특수문자는 기입할 수 없어요"
                 ),
                 isRequired: true
             )
@@ -160,7 +164,7 @@ struct ModifyView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
                 .titleSemiBold16()
-                .foregroundStyle(.white)
+                .foregroundStyle(.gray100)
                 .padding(.bottom, 20)
             
             VStack(spacing: 12) {
@@ -191,14 +195,15 @@ struct ModifyView: View {
         } label: {
             HStack {
                 Text(selection.displayText)
-                    .foregroundStyle(.white)
+                    .bodyRegular14()
+                    .foregroundStyle(.gray100)
                 
                 Spacer()
                 
                 if viewModel.isSelected(selection) {
                     Image(systemName: "checkmark")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.primaryNormal)
+                        .font(.system(size: 12, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }
@@ -212,7 +217,7 @@ struct ModifyView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        viewModel.isSelected(selection) ? .primaryNormal : .gray100,
+                        viewModel.isSelected(selection) ? .primaryNormal : .commonLineNormal,
                         lineWidth: viewModel.isSelected(selection) ? 2 : 1
                     )
             )
@@ -220,25 +225,33 @@ struct ModifyView: View {
         .animation(.easeInOut(duration: 0.2), value: viewModel.currentSelection)
     }
 
-    private var startButton: some View {
-        Button("수정하기") {
+    private var updateButton: some View {
+        Button {
+            print("수정하기 버튼 클릭")
             viewModel.logCurrentSelection()
             viewModel.performProfileUpdate()
+        } label: {
+            HStack {
+                
+                if viewModel.isUpdating {
+                    ProgressView()
+                        .tint(.white)
+                        .scaleEffect(0.8)
+                        .padding(.leading, 8)
+                }
+                Text("수정하기")
+                    .titleSemiBold18()
+                    .foregroundColor(viewModel.isUpdateButtonEnabled ? .white : .gray500)
+                
+
+            }
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(viewModel.isStartButtonEnabled ? .primaryNormal : Color.gray.opacity(0.3))
-        .foregroundColor(.white)
+        .background(viewModel.isUpdateButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
-        .padding(.top, 20)
-        .disabled(!viewModel.isStartButtonEnabled)
-        .animation(.easeInOut(duration: 0.2), value: viewModel.isStartButtonEnabled)
-        .overlay(
-            viewModel.isSigningUp ?
-            ProgressView()
-                .tint(.white)
-                .scaleEffect(0.8) : nil
-        )
+        .disabled(!viewModel.isUpdateButtonEnabled)
+        .animation(.easeInOut(duration: 0.2), value: viewModel.isUpdateButtonEnabled)
     }
     
     private func setupInitialValues() {
@@ -247,7 +260,7 @@ struct ModifyView: View {
         viewModel.nickname = profileData.memberName
         viewModel.selectedDate = formatBirthdayForInput(profileData.memberBirthday)
         setupIncomeData(profileData.memberIncome)
-        
+        viewModel.saveInitialValues()
         print("초기값 설정 완료: \(profileData)")
     }
     

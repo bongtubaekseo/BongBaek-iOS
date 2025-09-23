@@ -20,6 +20,8 @@ class EventCreationManager: ObservableObject {
     @Published var detailSelected: Bool = false
     @Published var contactFrequency: Double = 2.0
     @Published var meetFrequency: Double = 2.0
+    @Published var isHostNameValid: Bool = false
+    @Published var isHostNicknameValid: Bool = false
     
     // Step 2: EventInformationView 데이터
     @Published var eventCategory: String = ""
@@ -29,6 +31,7 @@ class EventCreationManager: ObservableObject {
     @Published var eventDate: Date = Date()
     @Published var isAttend: Bool = true
     @Published var selectedAttendance: AttendanceType? = nil
+    @Published var hasSelectedEventDate: Bool = false
     
     // Step 4: EventLocationView 데이터 (선택적)
     @Published var hasLocationData: Bool = false
@@ -64,7 +67,7 @@ class EventCreationManager: ObservableObject {
     /// Step 1 검증: RecommendView 완료 가능 여부
     var canCompleteRecommendStep: Bool {
         let nameValid = hostName.count >= 2 && hostName.count <= 10
-        let nicknameValid = hostNickname.isEmpty || (hostNickname.count >= 2 && hostNickname.count <= 10)
+        let nicknameValid = hostNickname.count >= 2 && hostNickname.count <= 10  
         let relationshipValid = !relationship.isEmpty
         return nameValid && nicknameValid && relationshipValid
     }
@@ -375,6 +378,8 @@ class EventCreationManager: ObservableObject {
         detailSelected = false
         contactFrequency = 3.0
         meetFrequency = 3.0
+        isHostNameValid = false
+        isHostNicknameValid = false
         
         // Step 2 데이터 초기화
         eventCategory = ""
@@ -384,6 +389,7 @@ class EventCreationManager: ObservableObject {
         eventDate = Date()
         isAttend = true
         selectedAttendance = nil
+        hasSelectedEventDate = false
         
         // Step 4 데이터 초기화
         clearLocationData()
@@ -393,6 +399,10 @@ class EventCreationManager: ObservableObject {
         submitError = nil
         submitSuccess = false
         apiResponse = nil
+        
+        recommendationResponse = nil
+        isLoadingRecommendation = false
+        recommendationError = nil
         
         print("EventCreationManager: 모든 데이터 초기화 완료")
     }
@@ -416,6 +426,7 @@ class EventCreationManager: ObservableObject {
             eventDate = Date()
             isAttend = true
             selectedAttendance = nil
+            hasSelectedEventDate = false
             
         case 4:
             clearLocationData()

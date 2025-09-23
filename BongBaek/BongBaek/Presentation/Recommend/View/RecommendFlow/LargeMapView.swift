@@ -27,53 +27,65 @@ struct LargeMapView: View {
     var body: some View {
         ScrollView {
             VStack {
-                CustomNavigationBar(title: "행사장 위치") {
-                    dismiss()
-                }
+                HStack {
+                     Button(action: {
+                         dismiss()
+                     }) {
+                         Image(systemName: "xmark")
+                             .font(.system(size: 18, weight: .medium))
+                             .foregroundColor(.white)
+                     }
+                     .frame(width: 44, height: 44)
+                     .padding(.leading, -8)
+                     
+                     Spacer()
+                     
+                     Text("행사장 검색")
+                         .titleSemiBold18()
+                         .foregroundColor(.white)
+                     
+                     Spacer()
+                     
+                     Color.clear
+                         .frame(width: 44, height: 44)
+                 }
+                 .padding(.horizontal, 20)
+                 .padding(.top, 8)
+                 .padding(.bottom, 16)
+                 .background(.gray900)
                 
                 VStack(alignment: .leading) {
-                    // 검색 섹션을 ZStack으로 감싸서 드롭다운이 바로 아래에 위치하도록
-                    ZStack(alignment: .topLeading) {
-                        VStack(alignment: .leading, spacing: 0) {
-                            searchSection
-                            
-                            // 드롭다운이 표시될 공간 확보
-                            if !searchText.isEmpty &&
-                               !keywordSearch.searchResults.isEmpty &&
-                               isSearchFieldFocused {
-                                Color.clear
-                                    .frame(height: CGFloat(keywordSearch.searchResults.count) * 60) // 대략적인 높이
-                            }
-                        }
-                        
-                        // 드롭다운 오버레이 - searchSection 바로 아래에 위치
-                        VStack(alignment: .leading, spacing: 0) {
-                            // TextField 높이만큼 공간 확보 (약 48px)
-                            Color.clear
-                                .frame(height: 48)
-                            
-                            if !searchText.isEmpty &&
-                               !keywordSearch.searchResults.isEmpty &&
-                               isSearchFieldFocused {
-                                searchResultsOverlay
-                            }
-                        }
-                    }
+                    // 검색 섹션
+                    searchSection
                     
-                    // 지도 섹션
-                    ZStack(alignment: .bottom) {
+                    // 지도 섹션을 ZStack으로 감싸서 dropdown 오버레이
+                    ZStack {
                         mapSection
                             .padding(.top, 16)
                         
-                        // 선택된 위치 정보를 지도 하단에 표시
-                        if let tempLocation = tempSelectedLocation {
-                            selectedLocationOverlay(tempLocation)
+                        VStack {
+                            if !searchText.isEmpty && isSearchFieldFocused {
+                                if keywordSearch.searchResults.isEmpty {
+                                    emptySearchResultsOverlay
+                                } else {
+                                    searchResultsOverlay
+                                }
+                            }
+                            Spacer()
+                        }
+                        
+                        VStack {
+                            Spacer()
+                            if let tempLocation = tempSelectedLocation {
+                                selectedLocationOverlay(tempLocation)
+                            }
                         }
                     }
                     
                     submitButton
+                        .padding(.top,20)
                 }
-                .padding(.top, 20)
+                .padding(.top, 8)
             }
             .onAppear {
                 print("LargeMapView 나타남")
@@ -100,20 +112,20 @@ struct LargeMapView: View {
     
     // 선택된 위치 정보를 지도 하단에 표시하는 오버레이
     private func selectedLocationOverlay(_ location: KLDocument) -> some View {
-       VStack(alignment: .leading, spacing: 8) {
+       VStack(alignment: .leading, spacing: 4) {
            Text(location.placeName)
-               .font(.system(size: 18, weight: .semibold))
+               .titleSemiBold18()
                .foregroundColor(.white)
            
            Text(location.addressName)
-               .font(.system(size: 14))
-               .foregroundColor(.gray300)
+               .bodyRegular14()
+               .foregroundColor(.gray400)
            
        }
        .frame(maxWidth: .infinity, alignment: .leading)
        .padding(.horizontal, 16)
        .padding(.vertical, 12)
-       .background(Color.black.opacity(0.8))
+       .background(Color.gray750)
        .overlay(
            RoundedRectangle(cornerRadius: 12)
             .stroke(.gray750, lineWidth: 1)
@@ -136,9 +148,12 @@ struct LargeMapView: View {
                 .foregroundColor(.gray)
                 .font(.system(size: 20))
             
-            TextField("장소를 검색하세요", text: $searchText)
-                .font(.system(size: 16))
+            TextField("기타 사유를 입력해주세요",
+                      text: $searchText,
+                      prompt: Text("주소를 검색하면 더 빨리 찾을 수 있어요")
+                .foregroundColor(.gray500))
                 .foregroundColor(.white)
+                .font(.body2_regular_16)
                 .focused($isSearchFieldFocused)
                 .onChange(of: searchText) { _, newValue in
                     keywordSearch.query = newValue
@@ -153,7 +168,7 @@ struct LargeMapView: View {
                     isSearchFieldFocused = false
                 }) {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.gray500)
                         .font(.system(size: 16))
                 }
                 .transition(.scale.combined(with: .opacity))
@@ -161,10 +176,10 @@ struct LargeMapView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.gray.opacity(0.2))
+        .background(Color.gray750)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                .stroke(Color.gray750.opacity(0.5), lineWidth: 1)
         )
         .cornerRadius(8)
         .padding(.horizontal, 20)
@@ -206,13 +221,13 @@ struct LargeMapView: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(document.placeName)
-                                .font(.system(size: 16, weight: .medium))
+                                .titleSemiBold18()
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Text(document.addressName)
-                                .font(.system(size: 14))
-                                .foregroundColor(.gray)
+                                .bodyRegular14()
+                                .foregroundColor(.gray400)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             if !document.roadAddressName.isEmpty {
@@ -238,7 +253,7 @@ struct LargeMapView: View {
                 
                 if document.id != keywordSearch.searchResults.last?.id {
                     Divider()
-                        .background(Color.gray.opacity(0.3))
+                        .background(Color.gray750.opacity(1.0))
                         .padding(.horizontal, 16)
                 }
             }
@@ -246,12 +261,12 @@ struct LargeMapView: View {
         .background(Color.gray750)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                .stroke(Color.gray750.opacity(1.0), lineWidth: 1)
         )
-        .cornerRadius(12)
+        .cornerRadius(10)
         .padding(.horizontal, 20)
         .padding(.top, 8)
-        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .shadow(color: .gray750.opacity(1.0), radius: 8, x: 0, y: 4)
         .zIndex(100)
         .transition(.asymmetric(
             insertion: .scale(scale: 0.95, anchor: .top).combined(with: .opacity),
@@ -259,21 +274,50 @@ struct LargeMapView: View {
         ))
     }
     
+    private var emptySearchResultsOverlay: some View {
+         VStack(spacing: 12) {
+             Image("icon_caution 1")
+                 .font(.system(size: 24))
+                 .foregroundColor(.orange)
+             
+             Text("검색 결과가 없습니다")
+                 .bodyMedium16()
+                 .foregroundColor(.white)
+         }
+         .frame(maxWidth: .infinity)
+         .padding(.vertical, 32)
+         .background(Color.gray750)
+         .overlay(
+             RoundedRectangle(cornerRadius: 8)
+                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+         )
+         .cornerRadius(12)
+         .padding(.horizontal, 20)
+         .padding(.top, 4)
+         .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+         .zIndex(1)
+         .transition(.asymmetric(
+             insertion: .scale(scale: 0.95, anchor: .top).combined(with: .opacity),
+             removal: .scale(scale: 0.95, anchor: .top).combined(with: .opacity)
+         ))
+     }
+    
     private var submitButton: some View {
         Button {
             handleFormSubmission()
         } label: {
             Text("위치 저장")
                 .titleSemiBold18()
-                .foregroundColor(isNextButtonEnabled ? .white : .gray400)
+                .foregroundColor(isNextButtonEnabled ? .white : .gray500)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
         .frame(height: 55)
-        .background(isNextButtonEnabled ? .primaryNormal : .gray600)
+        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .padding(.top, 8)
+        .padding(.bottom, 60)
         .animation(.easeInOut(duration: 0.2), value: isNextButtonEnabled)
     }
     

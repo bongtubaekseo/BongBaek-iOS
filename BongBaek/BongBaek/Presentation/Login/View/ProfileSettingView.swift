@@ -29,12 +29,13 @@ struct ProfileSettingView: View {
                     textFieldSection
                     incomeToggleSection
                     
-                    if viewModel.hasIncome {
-                        incomeSelectionSection
-                    }
+                    incomeSelectionSection
+                        .opacity(viewModel.hasIncome ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
+                        .padding(.bottom, 60)
                     
                     startButton
-                        .padding(.top, 20.adjustedH)
+                        .padding(.bottom, 36)
                     
                     Spacer()
                 }
@@ -79,13 +80,14 @@ struct ProfileSettingView: View {
             CustomTextField(
                 title: "이름",
                 icon: "icon_person_16",
-                placeholder: "이름을 입력하세요",
+                placeholder: "이름을 입력해주세요",
                 text: $viewModel.nickname,
+                isValid: $viewModel.isNicknameValid,
                 validationRule: ValidationRule(
                     minLength: 2,
                     maxLength: 10,
                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                    customMessage: "특수문자는 기입할 수 없어요"
                 ),
                 isRequired: true
             )
@@ -94,7 +96,7 @@ struct ProfileSettingView: View {
             CustomTextField(
                 title: "생년월일",
                 icon: "icon_calendar_16",
-                placeholder: "생년월일을 입력하세요",
+                placeholder: "생년월일을 입력해주세요",
                 text: $viewModel.selectedDate,
                 isReadOnly: true,
                 isRequired: true) {
@@ -106,7 +108,7 @@ struct ProfileSettingView: View {
                     }
                 }
         }
-        .padding(.top, 30)
+        .padding(.top, 20)
     }
     
     private var incomeToggleSection: some View {
@@ -140,7 +142,7 @@ struct ProfileSettingView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
                 .titleSemiBold16()
-                .foregroundStyle(.white)
+                .foregroundStyle(.gray100)
                 .padding(.bottom, 20)
             
             VStack(spacing: 12) {
@@ -171,14 +173,15 @@ struct ProfileSettingView: View {
         } label: {
             HStack {
                 Text(selection.displayText)
-                    .foregroundStyle(.white)
+                    .bodyRegular14()
+                    .foregroundStyle(.gray100)
                 
                 Spacer()
                 
                 if viewModel.isSelected(selection) {
                     Image(systemName: "checkmark")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.primaryNormal)
+                        .font(.system(size: 12, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
             }
@@ -192,7 +195,7 @@ struct ProfileSettingView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        viewModel.isSelected(selection) ? .primaryNormal : .gray100,
+                        viewModel.isSelected(selection) ? .primaryNormal : .commonLineNormal,
                         lineWidth: viewModel.isSelected(selection) ? 2 : 1
                     )
             )
@@ -201,23 +204,29 @@ struct ProfileSettingView: View {
     }
 
     private var startButton: some View {
-        Button("봉투백서 시작하기") {
+        Button(action: {
             viewModel.logCurrentSelection()
             viewModel.performSignUp()
+        }) {
+            HStack {
+                if viewModel.isSigningUp {
+                    ProgressView()
+                        .tint(.white)
+                        .scaleEffect(0.8)
+                        .padding(.trailing, 8)
+                }
+                
+                Text("봉투백서 시작하기")
+                    .titleSemiBold18()
+                    .foregroundColor(viewModel.isStartButtonEnabled ? .white : .gray500)
+            }
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(viewModel.isStartButtonEnabled ? .primaryNormal : Color.gray.opacity(0.3))
-        .foregroundColor(.white)
+        .background(viewModel.isStartButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
         .padding(.top, 20)
-        .disabled(!viewModel.isStartButtonEnabled)
+        .disabled(!viewModel.isStartButtonEnabled || viewModel.isSigningUp)
         .animation(.easeInOut(duration: 0.2), value: viewModel.isStartButtonEnabled)
-        .overlay(
-            viewModel.isSigningUp ?
-            ProgressView()
-                .tint(.white)
-                .scaleEffect(0.8) : nil
-        )
     }
 }

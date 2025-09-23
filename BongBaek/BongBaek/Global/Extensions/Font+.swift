@@ -8,6 +8,8 @@
 import SwiftUI
 
 extension Font {
+    static let brand_bold_24 = Font.custom("MunhwajaeDolbom-Bold", size: 24)
+    
     static let head_bold_26 = Font.custom("Pretendard-Bold", size: 26)
     static let head_bold_24 = Font.custom("Pretendard-Bold", size: 24)
     
@@ -27,6 +29,15 @@ extension Font {
 
 
 extension Text {
+    func brandBold24() -> some View {
+        self.font(.brand_bold_24)
+            .kerning(TypographyHelper.customLetterSpacing(fontSize: 24, percent: -4))
+            .lineSpacing(TypographyHelper.customLineHeight(
+                fontSize: 24,
+                weight: .bold,
+                targetLineHeightPercent: 100))
+    }
+    
     func headBold26() -> some View {
         self.font(.head_bold_26)
             .kerning(TypographyHelper.customLetterSpacing(fontSize: 26, percent: -2))

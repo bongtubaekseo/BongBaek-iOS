@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+struct Relationship {
+    let icon: String
+    let displayText: String
+    let apiValue: String
+}
+
 struct RecommendView: View {
     @State private var navigateToEventInfo = false
     @Environment(\.dismiss) private var dismiss
@@ -17,31 +23,30 @@ struct RecommendView: View {
     @EnvironmentObject var eventManager: EventCreationManager
     
     let relationships = [
-        ("icon_family", "가족/친척"),
-        ("icon_friends", "친구"),
-        ("icon_handshakes", "직장"),
-        ("icon_colleague", "선후배"),
-        ("icon_neighbor", "이웃"),
-        ("icon_others", "기타")
+        Relationship(icon: "icon_family", displayText: "가족/친척", apiValue: "가족/친척"),
+        Relationship(icon: "icon_friends", displayText: "친구", apiValue: "친구"),
+        Relationship(icon: "icon_handshakes", displayText: "직장동료", apiValue: "직장"),
+        Relationship(icon: "icon_colleague", displayText: "선후배", apiValue: "선후배"),
+        Relationship(icon: "icon_neighbor", displayText: "이웃", apiValue: "이웃"),
+        Relationship(icon: "icon_others", displayText: "기타", apiValue: "기타")
     ]
     
     let columns = [
-        GridItem(.flexible(), spacing: 10),
-        GridItem(.flexible(), spacing: 10)
+        GridItem(.flexible(), spacing: 7),
+        GridItem(.flexible(), spacing: 7)
     ]
     
     // 기존 검증 로직 유지 (UI 반응용)
     private var isNextButtonEnabled: Bool {
-        // 1. 이름 필수 입력 + 유효성 검사 (2-10자)
-        let nameValid = eventManager.hostName.count >= 2 && eventManager.hostName.count <= 10
+        let nameText = eventManager.hostName.trimmingCharacters(in: .whitespaces)
+        let nameValid = !nameText.isEmpty && eventManager.isHostNameValid
         
-        // 2. 별명 유효성 검사 (비어있거나, 입력된 경우 2-10자)
-        let nicknameValid = eventManager.hostNickname.isEmpty || (eventManager.hostNickname.count >= 2 && eventManager.hostNickname.count <= 10)
+        let nicknameText = eventManager.hostNickname.trimmingCharacters(in: .whitespaces)
+        let nicknameValid = !nicknameText.isEmpty && eventManager.isHostNicknameValid
         
-        // 3. 관계 선택 필수
-        let relationSelected = !eventManager.relationship.isEmpty
+        let relationValid = !eventManager.relationship.isEmpty
         
-        return nameValid && nicknameValid && relationSelected
+        return nameValid && nicknameValid && relationValid
     }
     
     var body: some View {
@@ -53,43 +58,63 @@ struct RecommendView: View {
             StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 10)
+            
+            RecommendGuideTextView(
+                title1: "먼저, 마음을 전하고 싶은 분의",
+                title2: "정보를 적어주세요",
+                subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
+                subtitle2: "더 정확한 추천을 해드릴게요",
+                titleColor: .gray100
+            )
+            .padding(.leading, 20)
+            .padding(.top, 32)
+            .padding(.bottom,32)
 
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack {
-                        RecommendGuideTextView(
-                            title1: "먼저, 마음을 전하고 싶은 분의",
-                            title2: "정보를 적어주세요,",
-                            subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
-                            subtitle2: "더 정확한 추천을 해드릴께요"
-                        )
-                        .padding(.leading, 20)
-                        .padding(.top, 20)
-                        
                         userInfoSection
                         
                         relationshipHeaderSection
                         
                         relationshipGridSection
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
                         
                         detailRecommendSection
                             .padding(.top, 16)
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
                         
                         if eventManager.detailSelected {
                             RelationshipSliderView()
                                 .id("sliderView")
+                                .onTapGesture {
+                                    hideKeyboard()
+                                }
                         }
                         
                         submitButton
                             .padding(.top, 60)
-                            .padding(.bottom,60)
-                        
+                            .padding(.bottom, 36)
+                            .onTapGesture {
+                                hideKeyboard() 
+                            }
                     }
                 }
                 .onTapGesture {
-                    hideKeyboard()
+                    hideKeyboard() // 빈 공간 터치 시 키보드 해제
                 }
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 10)
+                        .onChanged { _ in
+                            hideKeyboard() // 스크롤 시작 시 키보드 해제
+                        }
+                )
                 .onChange(of: eventManager.detailSelected) { _, newValue in
+                    hideKeyboard() // 상세 선택 변경 시 키보드 해제
                     if newValue {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                             withAnimation(.easeInOut(duration: 0.3)) {
@@ -102,6 +127,9 @@ struct RecommendView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.background)
+        .onTapGesture {
+            hideKeyboard() // 전체 화면 터치 시 키보드 해제
+        }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 withAnimation(.easeInOut(duration: 0.8)) {
@@ -126,7 +154,7 @@ struct RecommendView: View {
                 
                 Text("상대방의 이름과 별명을 알려주세요")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.gray100)
             }
             .padding(.bottom, 20)
             
@@ -134,21 +162,23 @@ struct RecommendView: View {
                 BorderTextField(
                     placeholder: "이름을 적어주세요",
                     text: $eventManager.hostName,
+                    isValid: $eventManager.isHostNameValid,
                     validationRule: ValidationRule(
                         minLength: 2,
                         maxLength: 10,
                         regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                        customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                        customMessage: "특수문자는 기입할 수 없어요"
                     )
                 )
                 BorderTextField(
                     placeholder: "별명을 적어주세요",
                     text: $eventManager.hostNickname,
+                    isValid: $eventManager.isHostNicknameValid,
                     validationRule: ValidationRule(
                         minLength: 2,
                         maxLength: 10,
                         regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                        customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                        customMessage: "특수문자는 기입할 수 없어요"
                     )
                 )
             }
@@ -161,19 +191,17 @@ struct RecommendView: View {
                 .fill(.gray750)
                 .padding(.horizontal, 20)
         )
-        .padding(.top, 12)
+//        .padding(.top, 32)
     }
     
     private var relationshipHeaderSection: some View {
         HStack {
-            Image("icon_person_16")
-                .renderingMode(.template)
-                .foregroundColor(.primaryNormal)
-                .frame(width: 22,height: 22)
+            Image("icon_relation")
+                .frame(width: 20,height: 20)
             
-            Text("관계를 선택해주세요.")
+            Text("관계를 선택해주세요")
                 .titleSemiBold18()
-                .foregroundStyle(.white)
+                .foregroundStyle(.gray100)
             
             Spacer()
         }
@@ -182,16 +210,15 @@ struct RecommendView: View {
     }
     
     private var relationshipGridSection: some View {
-        LazyVGrid(columns: columns, spacing: 10) {
-            ForEach(relationships, id: \.1) { relationship in
+        LazyVGrid(columns: columns, spacing: 8) {
+            ForEach(relationships, id: \.displayText) { relationship in
                 RelationshipButton(
-                    image: relationship.0,
-                    text: relationship.1,
-                    isSelected: eventManager.relationship == relationship.1
+                    image: relationship.icon,
+                    text: relationship.displayText, 
+                    isSelected: eventManager.relationship == relationship.apiValue
                 ) {
-                    // EventCreationManager의 relationship에 직접 할당
-                    eventManager.relationship = relationship.1
-                    print("관계 선택: \(relationship.1)")
+                    eventManager.relationship = relationship.apiValue
+                    print("관계 선택: \(relationship.apiValue)")
                 }
             }
         }
@@ -202,7 +229,7 @@ struct RecommendView: View {
     private var detailRecommendSection: some View {
         DetailRecommendButton(isSelected: eventManager.detailSelected) {
             eventManager.detailSelected.toggle()
-            print("🔍 상세 추천: \(eventManager.detailSelected ? "활성화" : "비활성화")")
+            print("상세 추천: \(eventManager.detailSelected ? "활성화" : "비활성화")")
         }
         .padding(.horizontal, 20)
         .padding(.top, 16)
@@ -217,7 +244,7 @@ struct RecommendView: View {
                 .titleSemiBold18()
                 .foregroundStyle(isNextButtonEnabled ? .white : .gray500)
                 .frame(maxWidth: .infinity)
-                .frame(height: 60)
+                .frame(height: 55)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
@@ -225,8 +252,8 @@ struct RecommendView: View {
         .cornerRadius(12)
         .contentShape(Rectangle())
         .padding(.horizontal, 20)
-        .padding(.top, 8)
-        .padding(.bottom, 24)
+//        .padding(.top, 8)
+//        .padding(.bottom, 24)
         .animation(.easeInOut(duration: 0.2), value: isNextButtonEnabled)
     }
     

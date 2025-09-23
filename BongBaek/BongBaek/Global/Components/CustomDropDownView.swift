@@ -49,23 +49,29 @@ struct CustomDropdown<T: DropdownItem>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             if !title.isEmpty {
-                HStack {
+                HStack(spacing: 8) {
                     if let icon = icon {
                         Image(icon)
-                        
+                            .resizable()
+                            .renderingMode(.template)
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(.gray400)
                     }
-                    Text(title)
-                        .bodyMedium16()
-                        .foregroundColor(.white)
-                    
-                    VStack {
-                        Text("*")
-                            .bodyMedium16()
-                            .foregroundColor(.blue)
-                            .padding(.top, 2)
-                            .padding(.leading, 1)
+
+                    HStack(spacing: 2) {
+                        Text(title)
+                            .bodyMedium14()
+                            .foregroundColor(isDisabled ? .gray400 : .white)
                         
-                        Spacer()
+                        VStack {
+                            Text("*")
+                                .bodyMedium14()
+                                .foregroundColor(.primaryNormal)
+                                .padding(.top, 4)
+                                .padding(.leading, 1)
+
+                            Spacer()
+                        }
                     }
                 }
             }
@@ -78,13 +84,15 @@ struct CustomDropdown<T: DropdownItem>: View {
                         .padding(.top, 12)
                 }
             }
-            .padding(.top, 8)
+            .padding(.top, 4)
         }
     }
 
     private func DropdownHeader() -> some View {
         Button(action: {
-            if !isDisabled {  // 비활성화 상태에서는 터치 무시
+            hideKeyboard()
+
+            if !isDisabled {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                     isExpanded.toggle()
                 }
@@ -93,27 +101,36 @@ struct CustomDropdown<T: DropdownItem>: View {
             HStack {
                 if let selectedItem = selectedItem {
                     Text(selectedItem.displayText)
-                        .foregroundColor(isDisabled ? .white : .white)
+                        .bodyMedium16()
+                        .foregroundColor(
+                            isDisabled ? .gray300 : // isDisabled일 때 gray300
+                                (isExpanded ? Color("primary_normal") : .white)
+                        )
                 } else {
                     Text(placeholder)
+                        .bodyRegular16()
                         .foregroundColor(isDisabled ? .gray600 : .gray)
                 }
 
                 Spacer()
 
-                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                    .foregroundColor(.gray)
+                Image(systemName: "chevron.down")
+                    .foregroundColor(
+                        isDisabled ? .gray400 : // isDisabled일 때 gray400
+                            (isExpanded ? .primaryNormal :
+                                (selectedItem != nil ? .white : .gray400))
+                    )
                     .rotationEffect(.degrees(isExpanded ? 180 : 0))
                     .animation(.easeInOut(duration: 0.2), value: isExpanded)
             }
             .frame(height: 50)
             .padding(.horizontal, 16)
-            .background(Color.gray.opacity(0.2))
+            .background(Color.gray750)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        (selectedItem != nil || isExpanded)
-                            ? Color("primary_normal") : Color("gray750"),
+                        isDisabled ? Color.gray750 :
+                            (isExpanded ? Color("primary_normal") : Color.gray750),
                         lineWidth: 1
                     )
             )
@@ -127,44 +144,49 @@ struct CustomDropdown<T: DropdownItem>: View {
             ForEach(items, id: \.id) { item in
                 Button(action: {
                     selectedItem = item
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8))
-                    {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
                         isExpanded = false
                     }
                 }) {
                     HStack {
-                        Text(item.displayText)
+                        Group {
+                            if selectedItem?.id == item.id {
+                                Text(item.displayText)
+                                    .bodyMedium16()
+                            } else {
+                                Text(item.displayText)
+                                    .bodyRegular16()
+                            }
+                        }
                             .foregroundColor(
                                 selectedItem?.id == item.id
                                     ? Color("primary_normal") : .white
                             )
 
                         Spacer()
-
-                        if selectedItem?.id == item.id {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(Color("primary_normal"))
-                        }
                     }
-                    .frame(height: 44)
+                    .frame(height: 52)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                     .background(
-                        selectedItem?.id == item.id
-                            ? Color("primary_normal").opacity(0.1)
-                            : Color.clear
+                        Group {
+                            if selectedItem?.id == item.id {
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(Color("primary_normal").opacity(0.1))
+//                                    .padding(.vertical, 4)
+                                // horizontal padding 제거
+                            }
+                        }
                     )
                     .contentShape(Rectangle())
                 }
+//                .padding(.top, 5)
                 .buttonStyle(PlainButtonStyle())
-
             }
         }
+        .padding(.horizontal, 12) // VStack 자체에 horizontal padding 적용
+        .padding(.vertical, 12) // VStack 자체에 vertical padding 적용
         .background(.gray750)
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color("primary_normal"), lineWidth: 1)
-        )
         .cornerRadius(8)
         .transition(
             .asymmetric(

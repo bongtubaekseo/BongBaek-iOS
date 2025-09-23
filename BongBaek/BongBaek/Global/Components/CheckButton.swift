@@ -13,6 +13,7 @@ struct CheckButton: View {
     @Binding var isChecked: Bool
     let hasDetailButton: Bool
     let manualToggle: Bool
+    let isHighlighted: Bool
     let onTap: (() -> Void)?
     let onDetailTap: (() -> Void)?
     
@@ -21,6 +22,7 @@ struct CheckButton: View {
          isChecked: Binding<Bool>,
          hasDetailButton: Bool = false,
          manualToggle: Bool = false,
+         isHighlighted: Bool = false,
          onTap: (() -> Void)? = nil,
          onDetailTap: (() -> Void)? = nil) {
         self.title = title
@@ -28,6 +30,7 @@ struct CheckButton: View {
         self._isChecked = isChecked
         self.hasDetailButton = hasDetailButton
         self.manualToggle = manualToggle
+        self.isHighlighted = isHighlighted
         self.onTap = onTap
         self.onDetailTap = onDetailTap
     }
@@ -36,17 +39,17 @@ struct CheckButton: View {
         HStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(isChecked ? Color.blue : Color.gray.opacity(0.5), lineWidth: 1.5)
+                    .stroke(isChecked ? Color.primaryNormal : Color.gray.opacity(0.5), lineWidth: 1.5)
                     .frame(width: 20, height: 20)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(isChecked ? Color.blue : Color.clear)
+                            .fill(isChecked ? Color.primaryNormal : Color.clear)
                     )
                 
                 if isChecked {
                     Image(systemName: "checkmark")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(.gray750)
                         .scaleEffect(isChecked ? 1.0 : 0.5)
                         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isChecked)
                 }
@@ -66,9 +69,16 @@ struct CheckButton: View {
                         }
                     }
                     
-                    Text(title)
-                        .bodyRegular16()
-                        .foregroundColor(.gray300)
+                    
+                    if isHighlighted {
+                        Text(title)
+                            .titleSemiBold16()
+                            .foregroundColor(.white)
+                    } else {
+                        Text(title)
+                            .bodyRegular16()
+                            .foregroundColor(.gray300)
+                    }
                 }
                 
                 Spacer()

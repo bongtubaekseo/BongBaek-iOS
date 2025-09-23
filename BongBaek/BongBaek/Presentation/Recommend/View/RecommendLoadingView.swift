@@ -19,7 +19,7 @@ struct RecommendLoadingView: View {
             
             VStack(spacing: 0) {
                 HStack {
-                    Text("금액추천중")
+                    Text("금액 추천 중")
                         .titleSemiBold18()
                         .foregroundColor(.white)
                         .padding(.top, 20)
@@ -30,7 +30,7 @@ struct RecommendLoadingView: View {
                     LottieTest(animationFileName: "find_amount", loopMode: .loop)
                         .frame(width: 151, height: 140)
                     
-                    Text("봉백님을 위한\n금액을 찾고 있어요")
+                    Text("\(UserDefaults.standard.memberName)님을 위한\n금액을 찾고 있어요")
                         .titleSemiBold18()
                         .multilineTextAlignment(.center)
                         .foregroundColor(.gray100)
@@ -63,7 +63,7 @@ struct RecommendLoadingView: View {
     
     /// API 요청과 3초 대기를 모두 기다린 후 다음 화면으로 이동
     private func waitForBothCompletion() async {
-        print("🚀 API 요청과 3초 대기 시작...")
+        print("API 요청과 3초 대기 시작...")
         
         // 두 작업을 동시에 시작
         async let apiTask: () = eventManager.getAmountRecommendation()

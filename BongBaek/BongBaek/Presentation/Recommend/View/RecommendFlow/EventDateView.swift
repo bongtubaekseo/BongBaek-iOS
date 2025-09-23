@@ -27,12 +27,12 @@ struct EventDateView: View {
     
     // 기존 검증 로직 유지 (UI 반응용)
     private var isNextButtonEnabled: Bool {
-        return eventManager.selectedAttendance != nil && !isPastDate
+        return eventManager.selectedAttendance != nil && !isPastDate &&  eventManager.hasSelectedEventDate
     }
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomNavigationBar(title: "날짜 정보") {
+            CustomNavigationBar(title: "행사 날짜") {
                 dismiss()
             }
 
@@ -41,7 +41,7 @@ struct EventDateView: View {
                 .padding(.bottom, 10)
             
             EventDateTitleView()
-                .padding(.top, 12)
+                .padding(.top, 32)
             
             EventDateFormView()
                 .padding(.horizontal, 24)
@@ -55,8 +55,8 @@ struct EventDateView: View {
                     handleFormSubmission()
                 }
             )
-            .padding(.horizontal, 24)
-            .padding(.bottom, 50)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 36)
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -149,15 +149,15 @@ struct EventDateTitleView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("행사 날짜와 참석여부를")
                 .headBold24()
-                .foregroundColor(.white)
+                .foregroundColor(.gray100)
             
             Text("알려주세요")
                 .headBold24()
-                .foregroundColor(.white)
+                .foregroundColor(.gray100)
             
             Text("봉투백서가 경조사 일정을 관리해드릴게요!")
                 .bodyRegular14()
-                .foregroundColor(Color(hex: "#7A7F8A"))
+                .foregroundColor(.gray400)
                 .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -208,7 +208,7 @@ struct EventDateFormView: View {
             // 참석 여부 섹션
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 8) {
-                    Image("icon_check")
+                    Image("icon_check2")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
@@ -226,7 +226,7 @@ struct EventDateFormView: View {
                             action: {
                                 eventManager.selectedAttendance = attendance
                                 eventManager.isAttend = (attendance == .yes)
-                                print("🎯 참석 여부 선택: \(attendance.rawValue)")
+                                print("참석 여부 선택: \(attendance.rawValue)")
                             }
                         )
                     }
@@ -262,9 +262,15 @@ struct EventDatePickerView: View {
             isDatePickerVisible.toggle()
         }) {
             HStack {
-                Text(DateFormatter.displayFormatter.string(from: eventManager.eventDate))
-                    .bodyRegular16()
-                    .foregroundColor(isPastDate ? .secondaryRed : .white)
+                if eventManager.hasSelectedEventDate {
+                    Text(DateFormatter.displayFormatter.string(from: eventManager.eventDate))
+                        .bodyRegular16()
+                        .foregroundColor(isPastDate ? .secondaryRed : .white)
+                } else {
+                    Text("날짜를 입력해주세요")
+                        .bodyRegular16()
+                        .foregroundColor(.gray400)
+                }
                 
                 Spacer()
             }
@@ -282,13 +288,21 @@ struct EventDatePickerView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
+        .onAppear {
+            if eventManager.hasSelectedEventDate {
+                checkDateAndUpdateUI(eventManager.eventDate)
+            }
+        }
         .onChange(of: eventManager.eventDate) { _, newDate in
+            eventManager.hasSelectedEventDate = true
             checkDateAndUpdateUI(newDate)
         }
         .sheet(isPresented: $isDatePickerVisible) {
             DatePickerBottomSheet(
                 selectedDate: $eventManager.eventDate,
-                onDismiss: { isDatePickerVisible = false }
+                onDismiss: {
+                    isDatePickerVisible = false
+                }
             )
         }
     }
@@ -311,12 +325,16 @@ struct AttendanceButton: View {
         Button(action: action) {
             Text(attendanceType.rawValue)
                 .bodyMedium16()
-                .foregroundColor(.white)
+                .foregroundColor(isSelected ? .white : .gray500)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(isSelected ? Color("primary_normal") : Color.black.opacity(0.4))
+                        .fill(isSelected ? Color("primary_normal") : .gray800)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.lineNormal, lineWidth: isSelected ? 0 : 1)
                 )
                 .contentShape(Rectangle())
         }
@@ -352,6 +370,13 @@ struct DatePickerBottomSheet: View {
     @Binding var selectedDate: Date
     let onDismiss: () -> Void
     @State private var tempDate: Date = Date()
+    @EnvironmentObject var eventManager: EventCreationManager
+    
+    init(selectedDate: Binding<Date>, onDismiss: @escaping () -> Void) {
+        self._selectedDate = selectedDate
+        self.onDismiss = onDismiss
+        self._tempDate = State(initialValue: selectedDate.wrappedValue)
+    }
     
     var body: some View {
         NavigationView {
@@ -372,32 +397,37 @@ struct DatePickerBottomSheet: View {
                 )
                 .datePickerStyle(.wheel)
                 .colorScheme(.dark)
+                .environment(\.locale, Locale(identifier: "ko_KR"))
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(.gray750)
                 )
                 .labelsHidden()
-                .onAppear {
-                    tempDate = selectedDate
-                }
                 
                 Spacer()
                 
-                Button("선택 완료") {
+                Button(action: {
                     selectedDate = tempDate
+                    eventManager.hasSelectedEventDate = true
                     onDismiss()
+                }) {
+                    HStack {
+                        Spacer()
+                        Text("선택 완료")
+                            .font(.title_semibold_18)
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color("primary_normal"))
+                    )
                 }
-                .font(.title_semibold_18)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color("primary_normal"))
-                )
+                .buttonStyle(PlainButtonStyle())
                 .padding(.horizontal, 24)
-                .padding(.bottom, 34)
-            }
+                .padding(.bottom, 34)            }
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(.gray750)

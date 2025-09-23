@@ -9,9 +9,9 @@ import SwiftUI
 enum ScheduleCategory: String, CaseIterable {
     case all = "전체"
     case wedding = "결혼식"
+    case funeral = "장례식"
     case babyParty = "돌잔치"
     case birthday = "생일"
-    case funeral = "장례식"
     
     var displayName: String {
         return self.rawValue
@@ -63,7 +63,7 @@ struct FullScheduleView: View {
             return schedulesGrouped.mapValues { months in
                 months.mapValues { schedules in
                     schedules.filter { schedule in
-                        schedule.type == selectedCategory.rawValue // 추후 type 대신 eventCategory필요
+                        schedule.type == selectedCategory.rawValue
                     }
                 }
                 .filter{ !$0.value.isEmpty}
@@ -75,11 +75,17 @@ struct FullScheduleView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            headerView
+                .padding(.horizontal)
+                .padding(.top, 20)
+                .padding(.bottom, 20)
+            
+            categoryScrollView
+                //.padding(.horizontal)
+                .padding(.bottom, 20)
+            
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 30) {
-                    headerView
-                    categoryScrollView
-                    
                     if viewModel.isLoading {
                         loadingView
                     } else if viewModel.hasError {
@@ -94,55 +100,60 @@ struct FullScheduleView: View {
                         loadingMoreView
                     }
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.top, 40)
+            }
+            .refreshable {
+                Task {
+                    await viewModel.refreshEvents()
+                }
             }
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .background(Color.black.ignoresSafeArea())
+        .background(Color.gray900.ignoresSafeArea())
         .onAppear {
             Task {
                 await viewModel.loadAllEvents()
             }
         }
-        .refreshable {
-            Task {
-                await viewModel.refreshEvents()
-            }
-        }
     }
     
     private var headerView: some View {
-        HStack {
-            Button(action: {
-                dismiss()
-            }) {
-                Image(systemName: "chevron.left")
-                    .foregroundStyle(.white)
-            }
-            .contentShape(Rectangle())
-            
-            Text("다가올 경조사 일정")
+        ZStack {
+            Text("\(UserDefaults.standard.memberName)님의 다가올 일정")
                 .titleSemiBold18()
                 .foregroundColor(.white)
-                .padding(.leading, 12)
+                .padding(.top, 10)
             
-            Spacer()
+            HStack {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundStyle(.white)
+                        .padding(.leading, 7)
+                        .padding(.top, 10)
+                }
+                .contentShape(Rectangle())
+                
+                Spacer()
+            }
         }
     }
     
     private var categoryScrollView: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(ScheduleCategory.allCases, id: \.self) { category in
-                        categoryButton(for: category)
-                    }
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 8) {
+                ForEach(ScheduleCategory.allCases, id: \.self) { category in
+                    categoryButton(for: category)
                 }
-                .padding(.horizontal, 4)
             }
+            .padding(.horizontal, 20)
         }
+        .frame(height: 50)
+        .clipped()
     }
     
     private func categoryButton(for category: ScheduleCategory) -> some View {
@@ -153,7 +164,7 @@ struct FullScheduleView: View {
             Text(category.displayName)
                 .bodyMedium16()
                 .foregroundColor(viewModel.selectedCategory == category ? .black : .gray300)
-                .frame(height: 40)
+                .frame(height: 36)
                 .padding(.horizontal, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
@@ -286,46 +297,53 @@ struct EventCellView: View {
     @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                // 이벤트 카테고리
-                Text(event.eventInfo.eventCategory)
-                    .bodyMedium14()
+        VStack(alignment: .leading, spacing: 12) {
+                Text(event.hostInfo.hostNickname)
+                    .captionRegular12()
                     .foregroundColor(.primaryNormal)
+
+            HStack {
+                Text(event.hostInfo.hostName)
+                    .titleSemiBold18()
+                    .foregroundColor(.white)
+
+                Spacer()
+
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    Text("\(event.eventInfo.cost.formatted())")
+                        .titleSemiBold18()
+                        .foregroundColor(.white)
+
+                    Text("원")
+                        .titleSemiBold18()
+                        .foregroundColor(.white.opacity(0.8))
+                }
+            }
+                
+            
+            HStack(spacing: 6) {
+                Text(event.eventInfo.eventCategory)
+                    .captionRegular12()
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(.primaryNormal.opacity(0.1))
-                    )
+                    .background(.primaryBg)
+                    .foregroundColor(.primaryNormal)
+                
+                    .cornerRadius(4)
+
+                Text(event.eventInfo.relationship)
+                    .captionRegular12()
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(.primaryBg)
+                    .foregroundColor(.primaryNormal)
+                    .cornerRadius(4)
                 
                 Spacer()
                 
-                // 날짜
-                Text(formatDate(event.eventInfo.eventDate))
+                Text(event.eventInfo.eventDate.DateFormat())
                     .captionRegular12()
                     .foregroundColor(.gray400)
-            }
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    // 호스트 이름
-                    Text(event.hostInfo.hostName)
-                        .titleSemiBold16()
-                        .foregroundColor(.white)
-                    
-                    // 관계
-                    Text(event.eventInfo.relationship)
-                        .captionRegular12()
-                        .foregroundColor(.gray400)
-                }
-                
-                Spacer()
-                
-                // 금액
-                Text(formatMoney(event.eventInfo.cost))
-                    .titleSemiBold16()
-                    .foregroundColor(.white)
             }
         }
         .padding(16)

@@ -27,9 +27,18 @@ class KeyWordSearch: ObservableObject {
     func search() {
         let url = "https://dapi.kakao.com/v2/local/search/keyword.json"
         
+        let apiKey = APIKEY
+        
+        guard !apiKey.isEmpty else {
+                    print("카카오 API Key가 비어있습니다")
+                    return
+                }
+        
+      
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK \(APIKEY)"
         ]
+        
         let parameters: [String: Any] = [
             "query": query,
             "x": 126.97806,

@@ -10,9 +10,9 @@ import SwiftUI
 enum EventsCategory: String, CaseIterable {
     case all = "전체"
     case wedding = "결혼식"
-    case babyParty = "돌잔치"
-    case birthday = "생일"
     case funeral = "장례식"
+    case babyParty = "돌잔치"
+    case birthday = "생일"    
     
     var display: String {
         return self.rawValue
@@ -24,13 +24,17 @@ struct RecordView: View {
     @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
-        ScrollView {
+        VStack(spacing: 0) {
             VStack(spacing: 0) {
                 RecordsHeaderView(
                     isDeleteMode: $viewModel.isDeleteMode,
                     onDeleteTapped: {
                         viewModel.deleteSelectedRecords()
-                    }
+                    }, onCancelTapped: {
+                        viewModel.clearSelectedRecords()
+                    },
+                    isCurrentSectionEmpty: viewModel.isCurrentSectionEmpty,
+                    hasSelectedRecords: viewModel.hasSelectedRecords
                 )
                 .environmentObject(router)
                 
@@ -50,22 +54,26 @@ struct RecordView: View {
                         viewModel.changeCategory(to: category)
                     }
                 )
-                .padding(.leading, 20)
-                
+//                .padding(.leading, 20)
+                .padding(.bottom, 20)
+            }
+            .background(Color.background)
+
+            ScrollView {
                 RecordContentView(
                     viewModel: viewModel
                 )
+            }
+            .refreshable {
+                Task {
+                    await viewModel.refreshRecords()
+                }
             }
         }
         .background(Color.background)
         .onAppear {
             Task {
                 await viewModel.loadAllRecords()
-            }
-        }
-        .refreshable {
-            Task {
-                await viewModel.refreshRecords()
             }
         }
     }
@@ -83,9 +91,9 @@ struct CategoryFilterView: View {
                         onCategoryChange(category)
                     }) {
                         Text(category.display)
-                            .bodyMedium14()
-                            .foregroundColor(selectedCategory == category ? .black : .gray300)
-                            .frame(height: 40)
+                            .bodyMedium16()
+                            .foregroundColor(selectedCategory == category ? .gray700 : .gray300)
+                            .frame(height: 36)
                             .padding(.horizontal, 16)
                             .background(
                                 RoundedRectangle(cornerRadius: 8)
@@ -94,6 +102,7 @@ struct CategoryFilterView: View {
                     }
                 }
             }
+            .padding(.horizontal, 20)
         }
     }
 }
@@ -102,8 +111,12 @@ struct CategoryFilterView: View {
 struct RecordsHeaderView: View {
     @Binding var isDeleteMode: Bool
     let onDeleteTapped: () -> Void
+    let onCancelTapped: () -> Void
     @State private var showAlert = false
     @EnvironmentObject var router: NavigationRouter
+    
+    let isCurrentSectionEmpty: Bool
+    let hasSelectedRecords: Bool
     
     var body: some View {
         HStack {
@@ -112,6 +125,7 @@ struct RecordsHeaderView: View {
                     Button(action: {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             isDeleteMode = false
+                            onCancelTapped()
                         }
                     }) {
                         Text("취소")
@@ -142,65 +156,76 @@ struct RecordsHeaderView: View {
                 Spacer()
             }
             
-      
             HStack(spacing: 0) {
-                // 삭제 모드가 아닐 때만 + 버튼 표시
                 if !isDeleteMode {
                     Button(action: {
                         router.push(to: .createEventView)
                     }) {
                         Image(systemName: "plus")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.white)
+                            .foregroundColor(.gray400)
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
                     .transition(.move(edge: .trailing).combined(with: .opacity))
                 }
                 
-                Button(action: {
-                    if isDeleteMode {
-                        showAlert = true
-                    } else {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            isDeleteMode = true
+                if !isCurrentSectionEmpty {
+                    Button(action: {
+                        if isDeleteMode {
+                            showAlert = true
+                        } else {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isDeleteMode = true
+                            }
+                        }
+                    }) {
+                        if isDeleteMode {
+                            Text("삭제")
+                                .titleSemiBold16()
+                                .foregroundStyle(hasSelectedRecords ? .secondaryRed : .gray400)
+                        } else {
+                            Image(systemName: "trash")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.gray400)
                         }
                     }
-                }) {
-                    if isDeleteMode {
-                        Text("삭제")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(.red)
-                    } else {
-                        Image(systemName: "trash")
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.white)
-                    }
-                }
-                .frame(width: 44, height: 44)
-                .contentShape(Rectangle())
-                .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
-                    Button("취소", role: .cancel) {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            isDeleteMode = false
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+                    .disabled(isDeleteMode && !hasSelectedRecords)
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
+                    .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
+                        Button("취소", role: .cancel) {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isDeleteMode = false
+                                onCancelTapped()
+                            }
                         }
-                    }
-                    Button("삭제", role: .destructive) {
-                        onDeleteTapped()
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            isDeleteMode = false
+                        Button("삭제", role: .destructive) {
+                            onDeleteTapped()
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                isDeleteMode = false
+                            }
                         }
+                    } message: {
+                        Text("이 기록의 모든 내용이 삭제됩니다.")
+                            .bodyRegular14()
+                            .foregroundStyle(.gray600)
                     }
-                } message: {
-                    Text("이 기록의 모든 내용이 삭제됩니다.")
-                        .bodyRegular14()
-                        .foregroundStyle(.gray600)
                 }
             }
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 16)
+        .padding(.top, 16)
+        .padding(.bottom, 0)
         .animation(.easeInOut(duration: 0.2), value: isDeleteMode)
+        .animation(.easeInOut(duration: 0.2), value: isCurrentSectionEmpty)
+        .onChange(of: isDeleteMode) { oldValue, newValue in
+            NotificationCenter.default.post(
+                name: .recordDeleteModeChanged,
+                object: newValue
+            )
+        }
     }
 }
 
@@ -217,40 +242,47 @@ struct RecordSectionHeaderView: View {
             Button(action: {
                 onSectionChange(.attended)
             }) {
-                VStack(spacing: 8) {
-                    HStack {
-                        Text("참석했어요")
-                            .titleSemiBold16()
-                            .foregroundColor(selectedSection == .attended ? .white : .gray)
-                    }
+                VStack(spacing: 0) {
+                    Text("참석했어요")
+                        .titleSemiBold16()
+                        .foregroundColor(selectedSection == .attended ? .white : .gray)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     Rectangle()
-                        .fill(selectedSection == .attended ? .blue : .clear)
-                        .frame(height: 1)
+                        .fill(selectedSection == .attended ? .primaryNormal : .clear)
+                        .frame(height: 2)
                 }
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+                .background(selectedSection == .attended ? Color.primaryNormal.opacity(0.1) : Color.clear)
+                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 8))
+                .animation(.easeInOut(duration: 0.2), value: selectedSection)
             }
-            .frame(maxWidth: .infinity)
             
             // 불참했어요 탭
             Button(action: {
                 onSectionChange(.notAttended)
             }) {
-                VStack(spacing: 8) {
-                    HStack {
-                        Text("불참했어요")
-                            .titleSemiBold16()
-                            .foregroundColor(selectedSection == .notAttended ? .white : .gray)
-                    }
+                VStack(spacing: 0) {
+                    Text("불참했어요")
+                        .titleSemiBold16()
+                        .foregroundColor(selectedSection == .notAttended ? .white : .gray)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     Rectangle()
-                        .fill(selectedSection == .notAttended ? .blue : .clear)
-                        .frame(height: 1)
+                        .fill(selectedSection == .notAttended ? .primaryNormal : .clear)
+                        .frame(height: 2)
                 }
+                .frame(maxWidth: .infinity)
+                .frame(height: 48)
+                .background(selectedSection == .notAttended ? Color.primaryNormal.opacity(0.1) : Color.clear)
+                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 8, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 8))
+                .animation(.easeInOut(duration: 0.2), value: selectedSection)
             }
-            .frame(maxWidth: .infinity)
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 16)
+        .frame(maxWidth: .infinity)
+        .padding(.top, 12)
+        .padding(.bottom, 4)
     }
 }
 
@@ -449,7 +481,7 @@ struct RecordCellView: View {
 
                     Spacer()
 
-                    Text(formatDate(event.eventInfo.eventDate))
+                    Text(event.eventInfo.eventDate.DateFormat())
                         .captionRegular12()
                         .foregroundColor(.gray400)
                 }

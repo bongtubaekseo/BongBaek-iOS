@@ -23,12 +23,14 @@ struct AccountDeletionConfirmView: View {
                     .foregroundStyle(.gray400)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 20.adjustedH)
+            .padding(.top, 40.adjustedH)
             .padding(.leading, 20)
             
             Image("image_gift")
                 .frame(width: 335.adjusted,height: 335.adjustedH)
                 .padding(.top,80.adjustedH)
+            
+            Spacer()
             
             Button {
                 AuthManager.shared.completeWithdrawal()
@@ -45,9 +47,8 @@ struct AccountDeletionConfirmView: View {
                 .cornerRadius(12)
             }
             .padding(.horizontal, 20)
-            .padding(.top, 40.adjustedH)
+            .padding(.bottom, 60.adjustedH)
 
-            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)

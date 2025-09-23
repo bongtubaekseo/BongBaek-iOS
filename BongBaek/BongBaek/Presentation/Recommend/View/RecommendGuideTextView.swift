@@ -49,9 +49,9 @@ struct RecommendGuideTextView: View {
         subtitle2: String,
         title1Style: TextStyle = .headBold26,
         title2Style: TextStyle = .headBold26,  
-        titleColor: Color = .white,
-        subtitleColor: Color = .gray300,
-        spacing: CGFloat = 16
+        titleColor: Color = .gray100,
+        subtitleColor: Color = .gray400,
+        spacing: CGFloat = 12
     ) {
         self.title1 = title1
         self.title2 = title2

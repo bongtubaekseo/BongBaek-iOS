@@ -41,26 +41,31 @@ struct EventLocationView: View {
                     searchSection
                     
                     // 지도 섹션을 ZStack으로 감싸서 dropdown 오버레이
-                    ZStack(alignment: .bottom) {
+                    ZStack {
                         mapSection
-                            .padding(.top, 16)
+                            .padding(.top, 30)
                         
-                        // 드롭다운 오버레이 - 지도 위에만 표시 (조건 단순화)
-                        if !searchText.isEmpty &&
-                           !keywordSearch.searchResults.isEmpty &&
-                           isSearchFieldFocused {
-                            
-                            searchResultsOverlay
+                        VStack {
+                            if !searchText.isEmpty && isSearchFieldFocused {
+                                if keywordSearch.searchResults.isEmpty {
+                                    emptySearchResultsOverlay
+                                } else {
+                                    searchResultsOverlay
+                                }
+                            }
+                            Spacer()
                         }
                         
-                        // 선택된 위치 정보를 지도 하단에 표시
-                        if let selectedLocation = eventManager.selectedLocation {
-                            selectedLocationOverlay(selectedLocation)
+                        VStack {
+                            Spacer()
+                            if let selectedLocation = eventManager.selectedLocation {
+                                selectedLocationOverlay(selectedLocation)
+                            }
                         }
                     }
                     
                     submitButton
-                        .padding(.top,20)
+                        .padding(.top,60)
                 }
                 .padding(.top, 20)
             }
@@ -90,20 +95,20 @@ struct EventLocationView: View {
     
     // 선택된 위치 정보를 지도 하단에 표시하는 오버레이
     private func selectedLocationOverlay(_ location: KLDocument) -> some View {
-       VStack(alignment: .leading, spacing: 8) {
+       VStack(alignment: .leading, spacing: 4) {
            Text(location.placeName)
-               .font(.system(size: 18, weight: .semibold))
+               .titleSemiBold18()
                .foregroundColor(.white)
            
            Text(location.addressName)
-               .font(.system(size: 14))
-               .foregroundColor(.gray300)
+               .bodyRegular14()
+               .foregroundColor(.gray400)
            
        }
        .frame(maxWidth: .infinity, alignment: .leading)
        .padding(.horizontal, 16)
        .padding(.vertical, 12)
-       .background(Color.black.opacity(0.8))
+       .background(Color.gray750)
        .overlay(
            RoundedRectangle(cornerRadius: 12)
             .stroke(.gray750, lineWidth: 1)
@@ -121,11 +126,11 @@ struct EventLocationView: View {
     // MARK: - View Components
     
     private var titleSection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading,spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
                 Text("어디서 열리나요?")
                     .headBold24()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.gray100)
                 
                 Spacer()
                 
@@ -134,14 +139,14 @@ struct EventLocationView: View {
                 }) {
                     Text("건너뛰기")
                         .bodyRegular14()
-                        .foregroundColor(.gray300)
+                        .foregroundColor(.gray500)
                 }
             }
             
             Text("주소를 검색하면 더 빨리 찾을 수 있어요!")
                 .bodyRegular14()
-                .foregroundStyle(.gray300)
-                .padding(.top, 8)
+                .foregroundStyle(.gray400)
+                .padding(.top, 12)
         }
         .padding(.horizontal, 20)
     }
@@ -149,12 +154,15 @@ struct EventLocationView: View {
     private var searchSection: some View {
         HStack(spacing: 12) {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.gray)
+                .foregroundColor(.white)
                 .font(.system(size: 20))
             
-            TextField("장소를 검색하세요", text: $searchText)
-                .font(.system(size: 16))
+            TextField("기타 사유를 입력해주세요",
+                      text: $searchText,
+                      prompt: Text("주소를 검색하면 더 빨리 찾을 수 있어요")
+                .foregroundColor(.gray500))
                 .foregroundColor(.white)
+                .font(.body2_regular_16)
                 .focused($isSearchFieldFocused)
                 .onChange(of: searchText) { _, newValue in
                     keywordSearch.query = newValue
@@ -169,7 +177,7 @@ struct EventLocationView: View {
                     isSearchFieldFocused = false
                 }) {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.gray500)
                         .font(.system(size: 16))
                 }
                 .transition(.scale.combined(with: .opacity))
@@ -177,10 +185,10 @@ struct EventLocationView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.gray.opacity(0.2))
+        .background(Color.gray750)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                .stroke(Color.gray750.opacity(0.5), lineWidth: 1)
         )
         .cornerRadius(8)
         .padding(.horizontal, 20)
@@ -268,21 +276,50 @@ struct EventLocationView: View {
         ))
     }
     
+    private var emptySearchResultsOverlay: some View {
+         VStack(spacing: 12) {
+             Image("icon_caution 1")
+                 .font(.system(size: 24))
+                 .foregroundColor(.orange)
+             
+             Text("검색 결과가 없습니다")
+                 .bodyMedium16()
+                 .foregroundColor(.white)
+         }
+         .frame(maxWidth: .infinity)
+         .padding(.vertical, 32)
+         .background(Color.gray750)
+         .overlay(
+             RoundedRectangle(cornerRadius: 8)
+                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+         )
+         .cornerRadius(12)
+         .padding(.horizontal, 20)
+         .padding(.top, 4)
+         .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+         .zIndex(1)
+         .transition(.asymmetric(
+             insertion: .scale(scale: 0.95, anchor: .top).combined(with: .opacity),
+             removal: .scale(scale: 0.95, anchor: .top).combined(with: .opacity)
+         ))
+     }
+    
     private var submitButton: some View {
         Button {
             handleFormSubmission()
         } label: {
             Text("금액 추천 받기")
                 .titleSemiBold18()
-                .foregroundColor(isNextButtonEnabled ? .white : .gray400)
+                .foregroundColor(isNextButtonEnabled ? .white : .gray500)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
         .frame(height: 55)
-        .background(isNextButtonEnabled ? .primaryNormal : .gray600)
+        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .padding(.top, 8)
+        .padding(.bottom, 36)
         .animation(.easeInOut(duration: 0.2), value: isNextButtonEnabled)
     }
     

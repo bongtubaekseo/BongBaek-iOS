@@ -16,13 +16,15 @@ struct RecommendLottie: View {
     @State private var category: String = "경조사"
     @State private var eventLocation: String = "없음"
     @State private var eventCategory: String = "해당없음"
+    @State private var progressScale: CGFloat = 0
+    
+    @State private var isSubmitting = false
 
     @EnvironmentObject var router: NavigationRouter
     @EnvironmentObject var eventManager: EventCreationManager
 
     var body: some View {
         VStack(spacing: 30) {
-            Spacer()
 
             if !showRectangle {
                 LottieView(
@@ -38,38 +40,54 @@ struct RecommendLottie: View {
 
                 VStack(spacing: 24) {
                     VStack(spacing: 40) {
-                        amountLottieSection
+                        amountRangeSection
                         categorySection
                     }
                     .padding(.horizontal, 20)
                 }
+                .offset(y: -40)
                 .padding(.bottom, 40)
             }
 
             if showRectangle {
-                ScrollView {
-                    VStack(spacing: 24) {
-                        headerSection
+                VStack(spacing: 0) {
+                    HStack {
+                        Spacer()
+                        Text("추천 금액")
+                            .titleSemiBold18()
+                            .foregroundStyle(.white)
                         
-                        VStack(spacing: 40) {
-                            amountRangeSection
-                            categorySection
-                        }
-                        .padding(.horizontal, 20)
-                        
-                        noticeSection
-                            .padding(.horizontal, 20)
-                        
-                        participationSection
-                            .padding(.horizontal, 20)
-                        
-                        bottomButtons
+                        Spacer()
                     }
-                    .padding(.bottom, 40)
+                    .padding(.top, 10)
+                    .padding(.bottom, 16)
+                    .background(Color.gray900)
+                    
+                    ScrollView {
+                        VStack(spacing: 24) {
+                            headerSection
+                            
+                            VStack(spacing: 40) {
+                                amountLottieSection
+                                categorySection
+                            }
+                            .padding(.horizontal, 20)
+                            
+                            noticeSection
+                                .padding(.horizontal, 20)
+                            
+                            participationSection
+                                .padding(.horizontal, 20)
+                                .padding(.top, -10)
+                            
+                            bottomButtons
+                                .padding(.top, 60)
+                        }
+                        .padding(.bottom, 40)
+                    }
                 }
             }
 
-            Spacer()
         }
         .onAppear {
             if let data = eventManager.recommendationResponse?.data {
@@ -80,11 +98,17 @@ struct RecommendLottie: View {
                 print("장소: \(data.location)")
                 
                 recommendedAmount = data.cost
-                 minAmount = data.range.min
-                 maxAmount = data.range.max
+                minAmount = data.range.min
+                maxAmount = data.range.max
                 category = data.category
-                eventLocation = data.location
+                eventLocation = data.location == "미정" ? "-" : data.location
                 eventCategory = data.category
+                
+                lottieviewModel.updateFromServerData(
+                    recommended: data.cost,
+                    min: data.range.min,
+                    max: data.range.max
+                )
 
             } else {
                 print("추천 데이터 없음")
@@ -101,8 +125,6 @@ struct RecommendLottie: View {
     var headerSection: some View {
         VStack {
             VStack(spacing: 20) {
-
-
                 Text(eventCategory)
                     .bodyMedium14()
                     .foregroundColor(.white)
@@ -114,12 +136,12 @@ struct RecommendLottie: View {
                             .background(.gray750)
                     )
 
-                VStack(spacing: 24) {
+                VStack(spacing: 0) {
                     Text("추천 금액")
                         .captionRegular12()
                         .foregroundColor(.white)
                         .padding(.horizontal, 8)
-                        .padding(.vertical, 2)
+                        .padding(.vertical, 4)
                         .background(
                             RoundedRectangle(cornerRadius: 4)
                                 .fill(.primaryNormal)
@@ -131,7 +153,7 @@ struct RecommendLottie: View {
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [
-                                        Color(hex: "#4E62FF"), //TODO: location확인
+                                        Color(hex: "#4E62FF"),
                                         Color(hex: "#502EFF"),
                                     ],
                                     startPoint: .leading,
@@ -144,6 +166,7 @@ struct RecommendLottie: View {
                             .foregroundColor(.gray600)
                             .padding(.bottom, 8)
                     }
+                    .padding(.top, 6)
 
                     VStack(spacing: 6) {
                         Text("적절한 금액이에요!")
@@ -154,15 +177,18 @@ struct RecommendLottie: View {
                             .bodyRegular14()
                             .foregroundColor(.gray200)
                     }
-                    .padding(.horizontal, 24)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 30)
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
                             .fill(.gray750.opacity(0.6))
                     )
+                    .padding(.top, 20)
                 }
                 .padding(.horizontal, 30)
                 .padding(.vertical, 30)
+                .frame(maxWidth: .infinity)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(
@@ -177,23 +203,26 @@ struct RecommendLottie: View {
                         )
                 )
             }
+            .padding(.horizontal, 20)
+            .padding(.top, 20) // 고정 헤더와의 간격
             .transition(.opacity.combined(with: .scale))
         }
     }
     
     var amountLottieSection: some View {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("적정 범위")
-                    .titleSemiBold18()
-                    .foregroundColor(.white)
+        VStack(alignment: .leading, spacing: 16) {
+            Text("적정 범위")
+                .titleSemiBold18()
+                .foregroundColor(.white)
 
-                VStack(spacing: 8) {
+            VStack(spacing: 8) {
+                GeometryReader { geometry in
                     ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 4)
+                        Capsule()
                             .fill(Color(hex: "#292929"))
-                            .frame(width: 300, height: 12)
+                            .frame(height: 12)
 
-                        RoundedRectangle(cornerRadius: 4)
+                        Capsule()
                             .fill(
                                 LinearGradient(
                                     colors: [
@@ -204,57 +233,11 @@ struct RecommendLottie: View {
                                     endPoint: .trailing
                                 )
                             )
-                            .frame(width: 5, height: 12)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                    HStack {
-                        Text("\(lottieviewModel.formattedMinAmount)원")
-                            .captionRegular12()
-                            .foregroundColor(.gray400)
-
-                        Spacer()
-
-                        Text("\(lottieviewModel.formattedMaxAmount)원")
-                            .captionRegular12()
-                            .foregroundColor(.gray400)
+                            .frame(width: geometry.size.width * progressScale, height: 12)
+                            .animation(.easeInOut(duration: 1.5), value: progressScale)
                     }
                 }
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.black)
-            )
-        }
-
-    var amountRangeSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("적정 범위")
-                .titleSemiBold18()
-                .foregroundColor(.white)
-
-            VStack(spacing: 8) {
-                ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(Color(hex: "#292929"))
-                        .frame(width: 300, height: 12)
-
-                    RoundedRectangle(cornerRadius: 4)
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    Color(hex: "#502EFF"),
-                                    Color(hex: "#807FFF"),
-                                ],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .frame(width: progressWidth, height: 12)
-                        .animation(.easeInOut(duration: 1.5), value: progressWidth)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(height: 12)
 
                 HStack {
                     Text("\(minAmount)원")
@@ -269,14 +252,67 @@ struct RecommendLottie: View {
                 }
             }
         }
-        .padding(16)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 20)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.black)
+        )
+    }
+    
+    var amountRangeSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("적정 범위")
+                .titleSemiBold18()
+                .foregroundColor(.white)
+
+            VStack(spacing: 8) {
+                GeometryReader { geometry in
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color(hex: "#292929"))
+                            .frame(height: 12)
+
+                        Capsule()
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color(hex: "#502EFF"),
+                                        Color(hex: "#807FFF"),
+                                    ],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .frame(width: geometry.size.width * progressScale, height: 12)
+                            .animation(.easeInOut(duration: 1.5), value: progressScale)
+                    }
+                }
+                .frame(height: 12)
+
+                HStack {
+                    Text("\(minAmount)원")
+                        .captionRegular12()
+                        .foregroundColor(.gray400)
+
+                    Spacer()
+
+                    Text("\(maxAmount)원")
+                        .captionRegular12()
+                        .foregroundColor(.gray400)
+                }
+            }
+        }
+        .padding(.vertical, 16)
+        .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.black)
         )
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now()) {
-                progressWidth = 150 //추천받은 금액을 서버에서 받아올 값
+                let progress = Double(recommendedAmount - minAmount) / Double(maxAmount - minAmount)
+                progressScale = progress
             }
         }
     }
@@ -293,9 +329,6 @@ struct RecommendLottie: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("• 월 수입 고려")
-                    .bodyRegular16()
-                    .foregroundColor(.gray400)
-                Text("• 친구 관계 (친밀도 보통)")
                     .bodyRegular16()
                     .foregroundColor(.gray400)
                 Text("• 식사 참석 여부")
@@ -315,7 +348,7 @@ struct RecommendLottie: View {
             HStack {
                 Image("icon_colorcheck")
                 Text("참고해주세요!")
-                    .bodyRegular16()
+                    .titleSemiBold18()
                     .foregroundColor(.white)
                 Spacer()
             }
@@ -339,56 +372,62 @@ struct RecommendLottie: View {
         )
     }
 
-        var bottomButtons: some View {
-            VStack(spacing: 12) {
-                Button("이 금액으로 결정하기") {
-                    Task {
-                        // 추천받은 금액으로 이벤트 생성
-                        let success = await eventManager.submitEventWithRecommendedAmount()
-                        
-                        if success {
-                            // 성공하면 성공 화면으로 이동
-                            await MainActor.run {
-                                router.push(to: .recommendSuccessView)
-                            }
-                        } else {
-                            // 실패 시 에러 처리 (예: 알럿 표시)
-                            print("이벤트 생성 실패: \(eventManager.submitError ?? "알 수 없는 오류")")
-                            // TODO: 에러 알럿 표시 로직 추가
+    var bottomButtons: some View {
+        VStack(spacing: 12) {
+            Button {
+                guard !isSubmitting else { return }
+                isSubmitting = true
+                
+                Task {
+                    let success = await eventManager.submitEventWithRecommendedAmount()
+                    
+                    if success {
+                        await MainActor.run {
+                            router.push(to: .recommendSuccessView)
                         }
+                    } else {
+                        print("이벤트 생성 실패: \(eventManager.submitError ?? "알 수 없는 오류")")
                     }
+                    
+                    await MainActor.run {
+                                isSubmitting = false
+                            }
                 }
-                .frame(maxWidth: .infinity) //TODO: 크기조절
-                .padding(.vertical, 14)
-                .background(Color("primary_normal"))
-                .foregroundColor(.white)
-                .font(.title_semibold_18)
-                .cornerRadius(10)
-
-                Button("추천받은 금액 수정하기") {
-                    // EventCreationManager에서 추천 데이터 가져와서 전달
-                    router.push(to: .modifyEventView(
-                        mode: .edit, eventDetailData: nil
-                    ))
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(Color("gray700"))
-                .foregroundColor(.gray200)
-                .font(.title_semibold_18)
-                .cornerRadius(10)
+            } label: {
+                Text("이 금액으로 결정하기")
+                    .font(.title_semibold_18)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18)
             }
-            .padding(.horizontal, 20)
+            .background(Color("primary_normal"))
+            .cornerRadius(10)
+            .disabled(isSubmitting)
+
+            Button {
+                router.push(to: .modifyEventView(
+                    mode: .edit, eventDetailData: nil
+                ))
+            } label: {
+                Text("추천받은 금액 수정하기")
+                    .font(.title_semibold_18)
+                    .foregroundColor(.gray200)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18)
+            }
+            .background(Color("gray700"))
+            .cornerRadius(10)
         }
+        .padding(.horizontal, 20)
+    }
 
     var categorySection: some View {
-        HStack(spacing: 12) {
-            HStack(spacing: 12) {
+        HStack(spacing: 8) {
+            HStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(.gray900)
                         .frame(width: 40, height: 40)
-
                     Image("icon_star")
                 }
                 VStack(alignment: .leading, spacing: 2) {
@@ -399,18 +438,17 @@ struct RecommendLottie: View {
                         .bodyMedium16()
                         .foregroundColor(.white)
                 }
-
                 Spacer()
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
-            .frame(width: 163, height: 70)
+            .frame(maxWidth: .infinity, minHeight: 70)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color("gray750"))
             )
 
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(.gray900)
@@ -429,11 +467,14 @@ struct RecommendLottie: View {
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
-            .frame(width: 164, height: 70)
+            .frame(maxWidth: .infinity)
+            .frame(height: 70)
+
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color("gray750"))
             )
         }
+        .frame(maxWidth: .infinity)
     }
 }

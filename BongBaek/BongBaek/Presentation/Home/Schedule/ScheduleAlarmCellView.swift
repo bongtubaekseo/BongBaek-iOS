@@ -52,20 +52,21 @@ struct ScheduleIndicatorCellView: View {
                 Image(.iconCalendar)
                     .resizable()
                     .frame(width: 14, height: 14)
+                    .padding(.leading, 8)
                 
-                Text(event.eventInfo.eventDate)
+                Text(event.eventInfo.eventDate.DateFormat())
                     .font(.caption_regular_12)
                     .foregroundColor(.gray100)
             }
             .padding(.vertical, 4)
-            .padding(.horizontal, 4)
+            .padding(.trailing, 10)
             .background(.gray750)
             .cornerRadius(4)
             .offset(y: -65)
         }
-        .padding(.top, 40)
+        .padding(.top, 32)
         .padding(.horizontal, 20)
-        .padding(.bottom, 30)
+        .padding(.bottom, 32)
         .background(
             LinearGradient(
                 stops: [

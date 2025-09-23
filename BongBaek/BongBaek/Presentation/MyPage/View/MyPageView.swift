@@ -12,12 +12,20 @@ struct ServiceItem: Identifiable {
     let title: String
     let subtitle: String?
     let showChevron: Bool
+    let url: String?
     
-    init(icon: String, title: String, subtitle: String? = nil, showChevron: Bool = false) {
+    init(
+        icon: String,
+        title: String,
+        subtitle: String? = nil,
+        showChevron: Bool = false,
+        url: String? = nil
+    ) {
         self.icon = icon
         self.title = title
         self.subtitle = subtitle
         self.showChevron = showChevron
+        self.url = url
     }
 }
 
@@ -26,88 +34,113 @@ struct MyPageView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var router: NavigationRouter
     @StateObject private var mypageViewModel = MyPageViewModel()
+    @State private var showLogoutAlert = false
     
     private let serviceItems: [ServiceItem] = [
         ServiceItem(icon: "icon_intersect", title: "앱 버전", subtitle: "v 1.0.0", showChevron: false),
-        ServiceItem(icon: "icon_information", title: "문의하기", showChevron: true),
-        ServiceItem(icon: "icon_book", title: "서비스 이용약관", showChevron: true),
-        ServiceItem(icon: "icon_key", title: "개인정보 처리방침", showChevron: true)
+        ServiceItem(icon: "icon_information", title: "문의하기", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480aa8badeba07a68b944"),
+        ServiceItem(icon: "icon_book", title: "서비스 이용약관", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d348036b260f175a236ec7c"),
+        ServiceItem(icon: "icon_key", title: "개인정보 처리방침", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480d0b1eafa217b306105")
     ]
+    
+   
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
-            
-            ScrollView {
-                VStack(spacing: 0) {
-                    HStack {
-                        Button(action: {
-                            router.pop()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("마이페이지")
-                            .titleSemiBold18()
-                            .foregroundColor(.white)
-                        
-                        Spacer()
+            VStack(spacing : 0){
+                Color.gray900
+                    //.frame(height: 300)
+                    .ignoresSafeArea(edges: .top)
+                Color.gray800
+                    .frame(maxWidth: .infinity)
+                    .ignoresSafeArea(edges: .bottom)
+            }
+            //Color.black.ignoresSafeArea()
+            VStack(spacing: 0) {
+                HStack {
+                    Button(action: {
+                        router.pop()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.gray300)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 10)
+                    .frame(width: 44, height: 44)
                     
-                    VStack(spacing: 32) {
-                        VStack(spacing: 16) {
-                            Image(.myPageLogo)
-                                .frame(width: 110, height: 110)
-                                .padding(.top, 40)
-                            
-                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서의겸손한야수")
-                                .headBold24()
-                                .foregroundStyle(.gray100)
-                            
-                            Button(action: {
-                                router.push(to: .ModifyView(profileData: mypageViewModel.profileData))
-                            }) {
-                                Text("내 정보 수정")
-                                    .captionRegular12()
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 8)
-                                    .background(.primaryNormal)
-                                    .cornerRadius(20)
-                            }
-                        }
-                        
-                        HStack {
-                            VStack(alignment: .leading, spacing: 20) {
-                                Text("생년월일")
-                                    .bodyMedium14()
-                                    .foregroundStyle(.gray200)
-                                Text("수입")
-                                    .bodyMedium14()
-                                    .foregroundStyle(.gray200)
-                            }
-                            
-                            Spacer()
-                            
-                            VStack(alignment: .trailing, spacing: 20) {
-                                Text(formatBirthday(mypageViewModel.profileData?.memberBirthday) ?? "2000년 01월 05일")
-                                    .bodyMedium14()
+                    Spacer()
+                    
+                    Text("마이페이지")
+                        .titleSemiBold18()
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Color.clear
+                        .frame(width: 44, height: 44)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+                .padding(.bottom, 16)
+                .background(Color.gray900)
+                ScrollView {
+                    VStack(spacing : 0) {
+                        VStack(spacing: 32) {
+                            VStack(spacing: 16) {
+                                Image(.myPageLogo)
+                                    .frame(width: 110, height: 110)
+                                    .padding(.top, 40)
+                                
+                                Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
+                                    .headBold24()
                                     .foregroundStyle(.gray100)
-                                Text(formatIncome(mypageViewModel.profileData?.memberIncome) ?? "없음")
-                                    .bodyMedium14()
-                                    .foregroundStyle(.gray100)
+                                
+                                Button(action: {
+                                    router.push(to: .ModifyView(profileData: mypageViewModel.profileData))
+                                }) {
+                                    Text("내 정보 수정")
+                                        .captionRegular12()
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal, 16)
+                                        .padding(.vertical, 8)
+                                        .background(.primaryNormal)
+                                        .cornerRadius(20)
+                                }
                             }
+                            
+                            HStack {
+                                VStack(alignment: .leading, spacing: 20) {
+                                    Text("생년월일")
+                                        .bodyMedium14()
+                                        .foregroundStyle(.gray200)
+                                    Text("수입")
+                                        .bodyMedium14()
+                                        .foregroundStyle(.gray200)
+                                }
+                                
+                                Spacer()
+                                
+                                VStack(alignment: .trailing, spacing: 20) {
+                                    Text(formatBirthday(mypageViewModel.profileData?.memberBirthday) ?? "2000년 01월 05일")
+                                        .bodyMedium14()
+                                        .foregroundStyle(.gray100)
+                                    Text(formatIncome(mypageViewModel.profileData?.memberIncome) ?? "없음")
+                                        .bodyMedium14()
+                                        .foregroundStyle(.gray100)
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 20)
+                            .background(.gray750)
+                            .cornerRadius(20)
+                            .padding(.horizontal, 20)
+                            .padding(.bottom, 20)
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 20)
-                        .background(.gray750)
-                        .cornerRadius(20)
-                        .padding(.horizontal, 20)
+                        .background(Color.gray900)
+                        .clipShape(
+                            .rect(
+                                bottomLeadingRadius : 20,
+                                bottomTrailingRadius : 20
+                            )
+                        )
 
                         VStack(alignment: .leading, spacing: 0) {
                             HStack {
@@ -117,6 +150,7 @@ struct MyPageView: View {
                                 Spacer()
                             }
                             .padding(.horizontal, 20)
+                            .padding(.top, 24)
                             .padding(.bottom, 16)
                             
                             VStack(spacing: 0) {
@@ -125,7 +159,8 @@ struct MyPageView: View {
                                         icon: item.icon,
                                         title: item.title,
                                         subtitle: item.subtitle,
-                                        showChevron: item.showChevron
+                                        showChevron: item.showChevron,
+                                        url: item.url
                                     )
                                 }
                             }
@@ -133,8 +168,7 @@ struct MyPageView: View {
 
                         HStack {
                             Button(action: {
-                                AuthManager.shared.logout()
-//                                print("로그아웃 버튼 눌림")
+                                showLogoutAlert = true
                             }) {
                                 Text("로그아웃")
                                     .foregroundColor(.gray400)
@@ -157,14 +191,25 @@ struct MyPageView: View {
                         .padding(.top, 12)
                         .padding(.bottom, 40)
                     }
+                    .background(Color.gray800)
                 }
             }
         }
+        .background(Color.gray900)
         .onAppear {
             print("MyPageView 나타남 - 데이터 로드 시작")
             mypageViewModel.loadprofile()
         }
         .navigationBarHidden(true)
+        .alert("로그아웃하시겠습니까?", isPresented: $showLogoutAlert) {
+            Button("취소", role: .cancel) {
+            }
+            Button("로그아웃", role: .destructive) {
+                AuthManager.shared.logout()
+            }
+        } message: {
+            Text("로그아웃 시 서비스 이용을 위해\n다시 로그인해야 합니다.")
+        }
     }
     
     private func formatBirthday(_ birthday: String?) -> String? {
@@ -193,16 +238,22 @@ struct ServiceRow: View {
     let title: String
     let subtitle: String?
     let showChevron: Bool
+    let url: String?
     
-    init(icon: String, title: String, subtitle: String? = nil, showChevron: Bool = false) {
+    @Environment(\.openURL) private var openURL
+    
+    init(icon: String, title: String, subtitle: String? = nil, showChevron: Bool = false, url: String? = nil) {
         self.icon = icon
         self.title = title
         self.subtitle = subtitle
         self.showChevron = showChevron
+        self.url = url
     }
     
     var body: some View {
-        Button(action: {}) {
+        Button(action: {
+            handleServiceItemTap(url: url)
+        }) {
             HStack(spacing: 16) {
                 Image(icon)
                     .frame(width: 24, height: 24)
@@ -226,7 +277,18 @@ struct ServiceRow: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
+            .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
+    }
+    
+    private func handleServiceItemTap(url: String?) {
+        guard let urlString = url,
+              let url = URL(string: urlString) else {
+            print("유효하지 않은 URL: \(url ?? "nil")")
+            return
+        }
+        
+        openURL(url)
     }
 }
