@@ -78,9 +78,9 @@ struct ProfileSettingView: View {
     private var textFieldSection: some View {
         VStack(spacing: 16) {
             CustomTextField(
-                title: "이름",
+                title: "닉네임",
                 icon: "icon_person_16",
-                placeholder: "이름을 입력해주세요",
+                placeholder: "닉네임을 입력해주세요",
                 text: $viewModel.nickname,
                 isValid: $viewModel.isNicknameValid,
                 validationRule: ValidationRule(
