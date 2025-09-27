@@ -27,4 +27,39 @@ final class LoginViewModelTests: XCTestCase {
     func testViewModelFailedInitialization() async {
         XCTAssertNil(viewModel, "viewModel이 초기화가 되었는가?- 이 테스트 실패하면 viewModel 초기화 된것")
     }
+    
+    /// 개인정보처리방침 URL 값이 올바른 값인지 검증하는 함수
+    func testPersonaInformationURL_ShouldReturnValidURL() {
+        //Given
+        let urlString = PrivacyUrls.personalInformationURL.rawValue
+        
+        //When
+        let url = URL(string: urlString)
+        
+        //Then
+        XCTAssertNotNil(url, "개인정보처리방침 URL이 올바르게 생성되지 않았습니다.")
+        XCTAssertTrue(isValidURL(url: urlString), "개인정보처리방침 URL은 올바른 포맷이어야합니다.")
+    }
+    
+    /// 이용약관 URL 값이 올바른 값인지 검증하는 함수
+    
+    func testTermsOfUseURL_ShouldReturnValidURL() {
+        //Given
+        let urlString = PrivacyUrls.termsOfUseURL.rawValue
+        
+        //When
+        let url = URL(string: urlString)
+        
+        //Then
+        XCTAssertNotNil(url, "이용약관 URL이 올바르게 생성되지 않았습니다.")
+        XCTAssertTrue(isValidURL(url: urlString), "이용약관 URL은 올바른 포맷이어야합니다.")
+    }
+}
+
+extension LoginViewModelTests {
+    func isValidURL(url: String) -> Bool {
+        guard let url = URL(string: url) else {return false}
+        
+        return url.scheme?.lowercased() == "https" && url.host(percentEncoded: false) != nil
+    }
 }
