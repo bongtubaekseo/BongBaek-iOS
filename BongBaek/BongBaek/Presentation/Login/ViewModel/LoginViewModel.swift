@@ -25,8 +25,11 @@ class LoginViewModel: ObservableObject {
     private var authCode: String = ""
     private var idToken: String = ""
     
-    init(authService: AuthServiceProtocol = DIContainer.shared.authService) {
+    private let urlOpener: URLOpenProtocol
+    
+    init(authService: AuthServiceProtocol = DIContainer.shared.authService,urlOpener:URLOpenProtocol = URLOpener() ) {
         self.authService = authService
+        self.urlOpener = urlOpener
     }
     
     func signUp(memberInfo: MemberInfo) {
@@ -178,5 +181,18 @@ extension LoginViewModel {
                 }
             }
         )
+    }
+}
+
+extension LoginViewModel {
+    
+    func openPrivacyPolicy() {
+        guard let url = URL(string: PrivacyUrls.personalInformationURL.rawValue) else {return}
+        urlOpener.openLink(url: url)
+    }
+    
+    func openTermsOfUse() {
+        guard let url = URL(string: PrivacyUrls.termsOfUseURL.rawValue) else {return}
+        urlOpener.openLink(url: url)
     }
 }
