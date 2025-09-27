@@ -26,3 +26,20 @@ struct URLOpener: URLOpenProtocol {
         UIApplication.shared.open(url)
     }
 }
+
+class MockURLOpener: URLOpenProtocol {
+    
+    var openLinkCalled: Bool = false
+    var lastOpenURL: URL?
+    
+     func openLink(url: URL) {
+        self.openLinkCalled = true
+        self.lastOpenURL = url
+    }
+    
+     func reset() {
+        self.openLinkCalled = false
+        self.lastOpenURL = nil
+
+     }
+}

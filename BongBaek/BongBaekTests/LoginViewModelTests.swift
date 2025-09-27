@@ -54,6 +54,24 @@ final class LoginViewModelTests: XCTestCase {
         XCTAssertNotNil(url, "이용약관 URL이 올바르게 생성되지 않았습니다.")
         XCTAssertTrue(isValidURL(url: urlString), "이용약관 URL은 올바른 포맷이어야합니다.")
     }
+    
+    
+    // URLOpenr 가 주입이 제대로 되었는지 검증하는 함수
+    @MainActor
+    func testURLOpener_isInjectedWithDefaultValue() async {
+        //Given
+        let mockOpener = MockURLOpener()
+        let viewModel = LoginViewModel(urlOpener: mockOpener)
+        
+        //When
+        viewModel.openPrivacyPolicy()
+        
+        //Then
+        XCTAssertTrue(mockOpener.openLinkCalled, "openURL 이 호출되었는가")
+        XCTAssertEqual(mockOpener.lastOpenURL?.absoluteString,
+                       PrivacyUrls.personalInformationURL.rawValue,
+                       "openURL 이 올바른지 검증")
+    }
 }
 
 extension LoginViewModelTests {
