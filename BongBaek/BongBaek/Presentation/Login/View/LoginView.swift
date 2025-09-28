@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import _AuthenticationServices_SwiftUI
 
 struct LoginView: View {
     @State var isPresented = false
@@ -13,9 +14,7 @@ struct LoginView: View {
     @EnvironmentObject var appStateManager: AppStateManager
     @StateObject private var loginViewModel = LoginViewModel()
     @State private var test = false
-//    @Environment(\.openURL) private var openURL
-    
-    
+
    var body: some View {
        
        NavigationStack {
@@ -51,12 +50,8 @@ struct LoginView: View {
                            ProgressView().tint(.white) : nil
                        )
                        .overlay {
-                           loginViewModel.requestAppleOauth()
-                               .frame(maxWidth: 375)
-                               .frame(height: 44)
-                               .blendMode(.hue)
+                           appleLoginButton
                        }
-                       
                        
                        Button(action: {
                            appStateManager.loginWithKakao()
@@ -141,5 +136,33 @@ struct LoginView: View {
            .presentationDragIndicator(.visible)
        }
    }
+    
+    private var appleLoginButton: some View {
+        SignInWithAppleButton(
+            onRequest: { request in
+                request.requestedScopes = [.fullName, .email]
+                
+            },
+            onCompletion: { result in
+                switch result {
+                    
+                case .success(let authResults):
+                    if let appleIDCredential = authResults.credential as? ASAuthorizationAppleIDCredential {
+                        let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8) ?? ""
+                        let authorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) ?? ""
+                        print("애플 인증 성공 - idToken: \(identityToken), authCode: \(authorizationCode)")
+                        loginViewModel.handleAppleLoginSuccess(identityToken: identityToken, authorizationCode: authorizationCode)
+                        
+                    }
+                case .failure(let error):
+                    print("error")
+                    loginViewModel.handleAppleLoginFailure(error: error)
+                }
+            }
+        )
+        .frame(maxWidth: 375)
+        .frame(height: 44)
+        .blendMode(.hue)
+    }
 }
 
