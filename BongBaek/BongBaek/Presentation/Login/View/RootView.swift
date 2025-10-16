@@ -9,7 +9,6 @@ import SwiftUI
 import FirebaseRemoteConfig
 
 struct RootView: View {
-    @State private var showLoginView = false
     @StateObject private var appStateManager = AppStateManager()
     @State private var showForceUpdateAlert = false
     @State private var forceUpdateMessage = ""
