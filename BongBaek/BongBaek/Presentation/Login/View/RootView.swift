@@ -37,7 +37,7 @@ struct RootView: View {
             SignUpBottomSheetView {
                 print("hi")
             }
-                .environmentObject(appStateManager)
+            .environmentObject(appStateManager)
         }
         
         .alert("업데이트 필요", isPresented: $showForceUpdateAlert) {
@@ -78,7 +78,7 @@ struct RootView: View {
     }
     
     private func openAppStore() {
-         if let url = URL(string: "https://naver.com") {
+         if let url = URL(string: "https://apps.apple.com/kr/app/%EB%B4%89%ED%88%AC%EB%B0%B1%EC%84%9C-bongtubaekseo/id6751378524") {
              UIApplication.shared.open(url)
          }
      }
