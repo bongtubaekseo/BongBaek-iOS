@@ -69,7 +69,7 @@ struct RootView: View {
 
                 } else {
                     // 정상 플로우 진행
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         appStateManager.checkAuthStatus()
                     }
                 }
