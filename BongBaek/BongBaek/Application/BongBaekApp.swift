@@ -15,16 +15,12 @@ import Firebase
 @main
 struct BongBaekApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @State private var showLoginView = false
-    @StateObject private var router = NavigationRouter()
-    @StateObject private var eventManager = EventCreationManager()
 
     init() {
         let API_KEY = AppConfig.shared.kakaoAppKey
         KakaoSDK.initSDK(appKey: API_KEY)
         FirebaseApp.configure()
     }
-    
     
     var body: some Scene {
         WindowGroup {
@@ -33,17 +29,16 @@ struct BongBaekApp: App {
                     if(AuthApi.isKakaoTalkLoginUrl(url)){
                         _ = AuthController.handleOpenUrl(url:url)
                     }
-                })
+                }
+            )
         }
     }
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     
-    
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
         
        if let APIKEY = Bundle.main.infoDictionary?["KAKAO_NATIVE_APPKEY"] as? String {
            SDKInitializer.InitSDK(appKey: APIKEY)
