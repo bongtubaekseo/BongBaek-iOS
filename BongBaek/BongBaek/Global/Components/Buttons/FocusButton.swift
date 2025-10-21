@@ -8,6 +8,7 @@ import SwiftUI
 
 struct FocusButton: View {
     let title: String
+    let isFocuesed : Bool
     let action: () -> Void
     
     var body: some View {
@@ -16,11 +17,12 @@ struct FocusButton: View {
         } label: {
             Text(title)
                 .font(.title_semibold_16)
-                .foregroundColor(.white)
+                .foregroundColor(isFocuesed ? .white : .gray500)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(.buttonBack)
+                .background(isFocuesed ? .buttonBack: .primaryBg)
                 .cornerRadius(10)
         }
+        .disabled(!isFocuesed)
     }
 }
