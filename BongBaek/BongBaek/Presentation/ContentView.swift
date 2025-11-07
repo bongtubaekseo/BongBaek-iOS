@@ -29,8 +29,26 @@ struct ContentView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, -8)
             
-            emptyView
-                .background(.bgDisplayPrimary)
+            ScrollView {
+                LazyVStack(alignment: .center, spacing: 30) {
+                    if viewModel.isLoading {
+                        loadingView
+                    } else if viewModel.hasError {
+                        errorView
+                    } else if viewModel.hasData {
+//                        eventContentView
+                    } else {
+                        emptyView
+                            .background(.bgDisplayPrimary)
+                    }
+                    
+                    if viewModel.isLoadingMore {
+                        loadingMoreView
+                    }
+                }
+                .padding(.horizontal)
+
+            }
             
             Spacer()
         }
@@ -100,13 +118,55 @@ struct ContentView: View {
                 .frame(width: 120,height: 120)
                 .foregroundStyle(.red)
                 .padding(.top, 32)
-            
-            
         }
     }
     
+    private var loadingMoreView: some View {
+        HStack(spacing: 12) {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle(tint: .primaryNormal))
+                .scaleEffect(0.8)
+            
+            Text("더 많은 일정을 불러오는 중...")
+                .bodyRegular14()
+                .foregroundColor(.gray400)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 20)
+    }
     
+    private var errorView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 40))
+                .foregroundColor(.red)
+            
+            Text(viewModel.errorMessage ?? "알 수 없는 오류가 발생했습니다")
+                .bodyRegular14()
+                .foregroundColor(.gray400)
+                .multilineTextAlignment(.center)
+            
+            Button("다시 시도") {
+                Task {
+                    await viewModel.loadAllEvents()
+                }
+            }
+            .foregroundColor(.primaryNormal)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 50)
+    }
     
-
+    private var loadingView: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .tint(.primaryNormal)
+            Text("이벤트 정보를 불러오는 중...")
+                .bodyRegular14()
+                .foregroundColor(.gray400)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 100)
+    }
 }
 
