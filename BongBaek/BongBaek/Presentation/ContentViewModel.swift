@@ -11,11 +11,12 @@ import Combine
 @MainActor
 class ContentViewModel: ObservableObject {
     
-    @Published var events: [AttendedEvent] = []
+    @Published var guides: [Guide] = Guide.mockGuides
     @Published var isLoading: Bool = false
     @Published var isLoadingMore: Bool = false
     @Published var errorMessage: String?
     @Published var selectedCategory: ScheduleCategory = .all
+    @Published var hasMoreData = false
     
     // 페이지네이션 관련 상태
     private var currentPage: Int = 0
@@ -32,46 +33,11 @@ class ContentViewModel: ObservableObject {
     // MARK: - Computed Properties
     
     var hasData: Bool {
-        !events.isEmpty
+        !guides.isEmpty
     }
     
     var hasError: Bool {
         errorMessage != nil
-    }
-    
-    /// 년/월별로 그룹핑된 이벤트들
-    var eventsGrouped: [String: [String: [AttendedEvent]]] {
-        let grouped = Dictionary(grouping: events) { event in
-            // eventDate: "2025-01-18" → "2025/01"
-            let dateComponents = event.eventInfo.eventDate.split(separator: "-")
-            let year = dateComponents.count > 0 ? String(dateComponents[0]) : "기타"
-            let month = dateComponents.count > 1 ? String(dateComponents[1]) : "기타"
-            return "\(year)/\(month)"
-        }
-        
-        return grouped.reduce(into: [String: [String: [AttendedEvent]]]()) { result, pair in
-            let parts = pair.key.split(separator: "/")
-            guard parts.count == 2 else { return }
-            let year = String(parts[0])
-            let month = String(parts[1])
-            result[year, default: [:]][month, default: []] += pair.value
-        }
-    }
-    
-    /// 정렬된 년도 목록
-    var sortedYears: [String] {
-        eventsGrouped.keys.sorted(by: >)
-    }
-    
-    /// 특정 년도의 월별 이벤트
-    func monthsForYear(_ year: String) -> [String: [AttendedEvent]] {
-        return eventsGrouped[year] ?? [:]
-    }
-    
-    /// 특정 년도의 정렬된 월 목록
-    func sortedMonthsForYear(_ year: String) -> [String] {
-        let months = eventsGrouped[year] ?? [:]
-        return months.keys.sorted(by: >)
     }
     
     // MARK: - API Methods
@@ -87,7 +53,7 @@ class ContentViewModel: ObservableObject {
         // 페이지네이션 상태 초기화
         currentPage = 0
         isLastPage = false
-        events.removeAll()
+        guides.removeAll()
         
         await loadEvents(isRefresh: true)
         
@@ -113,42 +79,42 @@ class ContentViewModel: ObservableObject {
     
     /// 실제 API 호출 메서드
     private func loadEvents(isRefresh: Bool) async {
-        do {
-            let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
-            
-            print("이벤트 로드 - 페이지: \(currentPage), 카테고리: \(categoryParam ?? "전체")")
-            
-            let response = try await eventService.getUpcomingEvents(page: currentPage, category: categoryParam)
-                .async()
-            
-            if response.isSuccess, let data = response.data {
-                let newEvents = data.events
-                
-                if isRefresh {
-                    events = newEvents
-                } else {
-                    events.append(contentsOf: newEvents)
-                }
-                
-                isLastPage = data.isLast
-                
-                print(events)
-                
-                print("이벤트 로드 성공:")
-                print("  - 새로 로드된 이벤트: \(newEvents.count)개")
-                print("  - 전체 이벤트: \(events.count)개")
-                print("  - 현재 페이지: \(currentPage)")
-                print("  - 마지막 페이지: \(isLastPage)")
-                
-            } else {
-                errorMessage = response.message
-                print("이벤트 로드 실패: \(response.message)")
-            }
-            
-        } catch {
-            errorMessage = "이벤트를 불러오는데 실패했습니다: \(error.localizedDescription)"
-            print("이벤트 로드 에러: \(error)")
-        }
+//        do {
+//            let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
+//            
+//            print("이벤트 로드 - 페이지: \(currentPage), 카테고리: \(categoryParam ?? "전체")")
+//            
+//            let response = try await eventService.getUpcomingEvents(page: currentPage, category: categoryParam)
+//                .async()
+//            
+//            if response.isSuccess, let data = response.data {
+//                let newEvents = data.events
+//                
+//                if isRefresh {
+//                    guides = newEvents
+//                } else {
+//                    guides.append(contentsOf: newEvents)
+//                }
+//                
+//                isLastPage = data.isLast
+//                
+//                print(guides)
+//                
+//                print("이벤트 로드 성공:")
+//                print("  - 새로 로드된 이벤트: \(newEvents.count)개")
+//                print("  - 전체 이벤트: \(guides.count)개")
+//                print("  - 현재 페이지: \(currentPage)")
+//                print("  - 마지막 페이지: \(isLastPage)")
+//                
+//            } else {
+//                errorMessage = response.message
+//                print("이벤트 로드 실패: \(response.message)")
+//            }
+//            
+//        } catch {
+//            errorMessage = "이벤트를 불러오는데 실패했습니다: \(error.localizedDescription)"
+//            print("이벤트 로드 에러: \(error)")
+//        }
         
         
     }
@@ -173,8 +139,9 @@ class ContentViewModel: ObservableObject {
     
     /// 무한스크롤 트리거 확인
     func shouldLoadMore(for event: AttendedEvent) -> Bool {
-        guard let lastEvent = events.last else { return false }
-        return event.eventId == lastEvent.eventId && !isLastPage && !isLoadingMore
+//        guard let lastEvent = guides.last else { return false }
+//        return event.eventId == lastEvent.eventId && !isLastPage && !isLoadingMore
+        return false
     }
     
     func clearError() {

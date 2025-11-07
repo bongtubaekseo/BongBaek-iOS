@@ -13,7 +13,7 @@ struct ContentView: View {
     @State private var selectedCategory: ScheduleCategory = .all
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 0) {
             HStack {
                 Spacer()
                 Text("경조사 가이드")
@@ -22,21 +22,23 @@ struct ContentView: View {
                 
                 Spacer()
             }
-
+            .padding(.vertical, 12)
+            
             categoryScrollView
             
             articleCountView
                 .padding(.horizontal, 20)
-                .padding(.top, -8)
+                .padding(.top, 8)
+                .padding(.bottom, 12)
             
-            ScrollView {
-                LazyVStack(alignment: .center, spacing: 30) {
+            ScrollView(showsIndicators: false) {
+                LazyVStack(alignment: .center, spacing: 12) {
                     if viewModel.isLoading {
                         loadingView
                     } else if viewModel.hasError {
                         errorView
                     } else if viewModel.hasData {
-//                        eventContentView
+                        guideContentView
                     } else {
                         emptyView
                             .background(.bgDisplayPrimary)
@@ -46,14 +48,15 @@ struct ContentView: View {
                         loadingMoreView
                     }
                 }
+                
                 .padding(.horizontal)
-
+                .padding(.top, 20)
+                .padding(.bottom, 20)
             }
             
-            Spacer()
         }
         .background(Color.bgDisplayPrimary)
-       
+        
     }
     
     private var categoryScrollView: some View {
@@ -94,7 +97,7 @@ struct ContentView: View {
             
             Spacer()
             
-            Text("0개")
+            Text("\(viewModel.guides.count)개")
                 .bodyRegular16()
                 .foregroundStyle(.txtDisplaySecondary)
             
@@ -168,5 +171,72 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.top, 100)
     }
+    
+    @ViewBuilder
+    private var guideContentView: some View {
+        ForEach(viewModel.guides) { guide in
+            GuideCell(guide: guide)
+                .onTapGesture {
+                    // 셀 탭 액션
+                }
+                .onAppear {
+                    // 페이지네이션 처리
+                }
+        }
+        
+        if !viewModel.hasMoreData {
+            VStack(spacing: 12) {
+                Text("더 이상 아티클이 없어요!")
+                    .bodyRegular14()
+                    .foregroundStyle(.txtDisplayTierary)
+            }
+        }
+    }
+
 }
 
+struct GuideCell: View {
+    let guide: Guide
+    
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            Image(guide.backgroundImage)
+                .resizable()
+                .scaledToFill()
+                .frame(height: 251)
+                .clipped()
+                .overlay(
+                    LinearGradient(
+                        gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text(guide.category.displayName)
+                    .captionRegular12()
+                    .foregroundStyle(.txtDisplayPrimary)
+                    .padding(.vertical, 2)
+                    .padding(.horizontal, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color.bgDisplayCard)
+                    )
+                
+                Text(guide.title)
+                    .titleSemiBold18()
+                    .foregroundStyle(.txtInteractiveInverse)
+                
+                Text(guide.date)
+                    .captionRegular12()
+                    .foregroundStyle(.txtDisplayTierary)
+            }
+            .padding(16)
+        }
+        .frame(height: 251)
+        .background(Color.bgDisplayCard)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+    }
+}
