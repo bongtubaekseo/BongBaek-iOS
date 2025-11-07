@@ -43,7 +43,7 @@ struct MainTabView: View {
                                      }
                                  }
                         case .content:
-                            LoginView()
+                            ContentView()
                                 .environmentObject(router)
                         case .setting:
                             MyPageView()
