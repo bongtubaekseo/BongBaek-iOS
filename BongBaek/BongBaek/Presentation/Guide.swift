@@ -39,7 +39,7 @@ extension Guide {
             backgroundImage: "ios_article"
         ),
         Guide(
-            category: .funeral,
+            category: .wedding,
             title: "故 박진수님 장례식",
             date: "2025.11.10",
             backgroundImage: "ios_article"

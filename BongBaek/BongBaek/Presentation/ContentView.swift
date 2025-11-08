@@ -97,7 +97,7 @@ struct ContentView: View {
             
             Spacer()
             
-            Text("\(viewModel.guides.count)개")
+            Text("\(viewModel.filteredGuides.count)개")
                 .bodyRegular16()
                 .foregroundStyle(.txtDisplaySecondary)
             
@@ -174,7 +174,7 @@ struct ContentView: View {
     
     @ViewBuilder
     private var guideContentView: some View {
-        ForEach(viewModel.guides) { guide in
+        ForEach(viewModel.filteredGuides) { guide in
             GuideCell(guide: guide)
                 .onTapGesture {
                     router.push(to: .contentDetailView)

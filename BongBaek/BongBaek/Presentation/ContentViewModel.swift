@@ -11,7 +11,8 @@ import Combine
 @MainActor
 class ContentViewModel: ObservableObject {
     
-    @Published var guides: [Guide] = Guide.mockGuides
+    @Published var guides: [Guide] = []
+    @Published var filteredGuides: [Guide] = []
     @Published var isLoading: Bool = false
     @Published var isLoadingMore: Bool = false
     @Published var errorMessage: String?
@@ -28,12 +29,14 @@ class ContentViewModel: ObservableObject {
     
     init() {
         self.eventService = DIContainer.shared.eventService
+        self.guides = Guide.mockGuides
+        self.filteredGuides = Guide.mockGuides
     }
     
     // MARK: - Computed Properties
     
     var hasData: Bool {
-        !guides.isEmpty
+        !filteredGuides.isEmpty
     }
     
     var hasError: Bool {
@@ -127,15 +130,20 @@ class ContentViewModel: ObservableObject {
     
     /// 카테고리 변경 (새로 로드)
     func updateCategory(_ category: ScheduleCategory) {
-        guard selectedCategory != category else { return }
-        
-        selectedCategory = category
-        print("카테고리 변경: \(category.displayName)")
-        
-//        Task {
-//            await loadAllEvents()
-//        }
-    }
+         guard selectedCategory != category else { return }
+         
+         selectedCategory = category
+         print("카테고리 변경: \(category.displayName)")
+         
+         // 카테고리별 필터링
+         if category == .all {
+             filteredGuides = guides
+         } else {
+             filteredGuides = guides.filter { $0.category == category }
+         }
+         
+         print("필터링된 가이드 수: \(filteredGuides.count)개")
+     }
     
     /// 무한스크롤 트리거 확인
     func shouldLoadMore(for event: AttendedEvent) -> Bool {
