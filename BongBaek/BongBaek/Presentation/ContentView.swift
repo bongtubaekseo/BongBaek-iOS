@@ -177,7 +177,7 @@ struct ContentView: View {
         ForEach(viewModel.guides) { guide in
             GuideCell(guide: guide)
                 .onTapGesture {
-                    // 셀 탭 액션
+                    router.push(to: .contentDetailView)
                 }
                 .onAppear {
                     // 페이지네이션 처리
