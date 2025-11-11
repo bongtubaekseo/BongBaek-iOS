@@ -30,17 +30,10 @@ struct RecommendsView: View {
                     .frame(width: 57, height: 54)
             }
             
-            Button {
+            FocusButton(title : "경조사비 추천 받기"){
                 router.push(to: .recommendStartView)
-            } label: {
-                Text("경조사비 추천 받기")
-                    .font(.title_semibold_16)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.buttonBack)
-                    .cornerRadius(8)
             }
+            
         }
         .padding()
         .background(
