@@ -28,10 +28,10 @@ struct SignUpBottomSheetView: View {
             VStack(alignment: .leading){
                 Text("앱 사용을 위해 권한을 허용해주세요.")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
                 Text("서비스 이용에 필수적인 약관들이에요.")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top,40.adjustedH)

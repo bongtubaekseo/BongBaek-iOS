@@ -39,11 +39,12 @@ struct CheckButton: View {
         HStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(isChecked ? Color.primaryNormal : Color.gray.opacity(0.5), lineWidth: 1.5)
+                    .stroke(.borderFieldDefault, lineWidth: 1.5)
                     .frame(width: 20, height: 20)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(isChecked ? Color.primaryNormal : Color.clear)
+//                            .fill(.bgStatusFocused)
+                            .fill(isChecked ? .bgStatusFocused : Color.clear)
                     )
                 
                 if isChecked {
@@ -61,11 +62,11 @@ struct CheckButton: View {
                         if isRequired {
                             Text("[필수]")
                                 .bodyRegular16()
-                                .foregroundColor(.gray300)
+                                .foregroundColor(.txtDisplayTierary)
                         } else {
                             Text("[선택]")
                                 .bodyRegular16()
-                                .foregroundColor(.gray300)
+                                .foregroundColor(.txtDisplayTierary)
                         }
                     }
                     
@@ -73,11 +74,11 @@ struct CheckButton: View {
                     if isHighlighted {
                         Text(title)
                             .titleSemiBold16()
-                            .foregroundColor(.white)
+                            .foregroundColor(.txtDisplaySecondary)
                     } else {
                         Text(title)
                             .bodyRegular16()
-                            .foregroundColor(.gray300)
+                            .foregroundColor(.txtDisplayTierary)
                     }
                 }
                 
@@ -89,7 +90,7 @@ struct CheckButton: View {
                     } label: {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(.gray300)
+                           // .foregroundColor(.int)
                     }
                 }
             }
