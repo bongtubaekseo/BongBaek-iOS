@@ -43,14 +43,13 @@ struct CheckButton: View {
                     .frame(width: 20, height: 20)
                     .background(
                         RoundedRectangle(cornerRadius: 4)
-//                            .fill(.bgStatusFocused)
                             .fill(isChecked ? .bgStatusFocused : Color.clear)
                     )
                 
                 if isChecked {
                     Image(systemName: "checkmark")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.gray750)
+                        .foregroundColor(.bgDisplayCard)
                         .scaleEffect(isChecked ? 1.0 : 0.5)
                         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isChecked)
                 }
@@ -90,7 +89,7 @@ struct CheckButton: View {
                     } label: {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 18, weight: .medium))
-                           // .foregroundColor(.int)
+                            .foregroundColor(.iconInteractiveDefault)
                     }
                 }
             }
