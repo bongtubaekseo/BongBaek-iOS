@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileSettingView: View {
+    @EnvironmentObject var router: NavigationRouter
     @StateObject private var viewModel = ProfileSettingViewModel()
     @State private var showDatePicker = false
     @FocusState private var focusedField: FocusField?
@@ -20,8 +21,16 @@ struct ProfileSettingView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomNavigationBar(title: "프로필 설정") {
-                dismiss()
+//            CustomNavigationBar(title: "프로필 설정") {
+//                dismiss()
+//            }
+            
+            HStack {
+                Spacer()
+                Text("설정")
+                    .titleSemiBold18()
+                    .foregroundStyle(.white)
+                Spacer()
             }
             
             ScrollView {
@@ -48,9 +57,9 @@ struct ProfileSettingView: View {
                 hideKeyboard()
             }
         }
-        .navigationDestination(isPresented: $viewModel.navigateToMain) {
-            MainTabView()
-        }
+//        .navigationDestination(isPresented: $viewModel.navigateToMain) {
+//            MainTabView()
+//        }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.gray900)

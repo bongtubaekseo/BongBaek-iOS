@@ -42,7 +42,12 @@ struct MainTabView: View {
                                          }
                                      }
                                  }
-                            
+                        case .contents:
+                            ContentsView()
+                                .environmentObject(router)
+                        case .setting:
+                            MyPageView()
+                                .environmentObject(router)
                         }
                     }
                 }
@@ -188,6 +193,13 @@ struct MainTabView: View {
             ModifyView(initialProfileData: profileData)
                 .environmentObject(router)
                 .environmentObject(eventManager)
+        case .profileSettingView:
+            ProfileSettingView()
+                .environmentObject(router)
+        case .contentsView:
+            ContentsView()
+                .environmentObject(router)
+            
         }
     }
 }

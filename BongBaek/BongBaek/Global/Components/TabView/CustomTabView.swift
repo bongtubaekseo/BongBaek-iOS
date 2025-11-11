@@ -32,6 +32,20 @@ struct CustomTabView: View {
                 imageName: "Property 1=selected",
                 title: "기록하기"
             )
+            
+            TabBarItem(
+                tab: .contents,
+                selectedTab: $selectedTab,
+                imageName: "icon=icon_contents, status=off",
+                title: "콘텐츠"
+            )
+            
+            TabBarItem(
+                tab: .setting,
+                selectedTab: $selectedTab,
+                imageName: "icon=icon_setting, status=on",
+                title: "설정"
+            )
         }
         .padding(.bottom, 8)
         .frame(width: UIScreen.main.bounds.width, height: 91)

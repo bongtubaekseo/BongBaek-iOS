@@ -68,7 +68,7 @@ struct MyPageView: View {
                     
                     Spacer()
                     
-                    Text("마이페이지")
+                    Text("설정")
                         .titleSemiBold18()
                         .foregroundColor(.white)
                     
