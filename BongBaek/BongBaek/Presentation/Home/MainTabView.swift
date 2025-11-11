@@ -200,6 +200,9 @@ struct MainTabView: View {
             ContentsView()
                 .environmentObject(router)
             
+        case .contentDetailView:
+            ContentDetailView()
+                .environmentObject(router)
         }
     }
 }
