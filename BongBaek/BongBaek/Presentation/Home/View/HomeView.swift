@@ -17,21 +17,16 @@ struct HomeView: View {
         VStack(spacing: 0) {
             ScrollView {
                 HStack {
+                    Image(.logoSymbol)
+                        .frame(width: 20, height: 20)
+                    
                     Text("봉투백서")
                         .brandBold24()
                         .foregroundColor(.white)
-                        .padding(.leading, 20)
-                    Spacer()
-                    
-                    Image(.homeLogo)
-                        .frame(width: 40, height: 40)
-                        .scaledToFit()
-                        .padding(.trailing, 20)
-                        .onTapGesture {
-                            router.push(to : .MyPageView)
-                        }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 30)
+                .padding(.leading, 20)
 
                 if homeViewModel.hasData {
                     ScheduleAlarmView(homeData: $homeViewModel.homeData)
