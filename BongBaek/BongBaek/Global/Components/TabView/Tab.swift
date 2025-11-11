@@ -11,4 +11,6 @@ enum Tab {
     case home
     case recommend
     case record
+    case contents
+    case setting
 }
