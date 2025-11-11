@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ContentsView: View {
     @EnvironmentObject var router: NavigationRouter
     var body: some View {
         VStack {
