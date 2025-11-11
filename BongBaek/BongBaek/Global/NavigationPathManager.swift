@@ -29,7 +29,7 @@ enum RecommendRoute: Hashable {
     case MyPageView
     case ModifyView(profileData: UpdateProfileData?)
     case profileSettingView
-    case contentView
+    case contentsView
     case contentDetailView
     
     var displayName: String {
@@ -59,7 +59,7 @@ enum RecommendRoute: Hashable {
         case .MyPageView : return "MyPageView"
             
         case .profileSettingView: return "profileSettingView"
-        case .contentView:  return "contentView"
+        case .contentsView:  return "contentsView"
             
         case .contentDetailView: return "contentDetailView"
             

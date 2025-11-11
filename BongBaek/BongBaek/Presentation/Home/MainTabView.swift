@@ -42,8 +42,8 @@ struct MainTabView: View {
                                          }
                                      }
                                  }
-                        case .content:
-                            ContentView()
+                        case .contents:
+                            ContentsView()
                                 .environmentObject(router)
                         case .setting:
                             MyPageView()
@@ -196,8 +196,8 @@ struct MainTabView: View {
         case .profileSettingView:
             ProfileSettingView()
                 .environmentObject(router)
-        case .contentView:
-            ContentView()
+        case .contentsView:
+            ContentsView()
                 .environmentObject(router)
             
         case .contentDetailView:

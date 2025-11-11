@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ContentsView: View {
     @EnvironmentObject var router: NavigationRouter
     @StateObject private var viewModel = ContentViewModel()
     @State private var selectedCategory: ScheduleCategory = .all

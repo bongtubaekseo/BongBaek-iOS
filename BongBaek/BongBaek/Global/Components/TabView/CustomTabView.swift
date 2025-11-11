@@ -34,7 +34,7 @@ struct CustomTabView: View {
             )
             
             TabBarItem(
-                tab: .content,
+                tab: .contents,
                 selectedTab: $selectedTab,
                 imageName: "icon=icon_contents, status=off",
                 title: "콘텐츠"
