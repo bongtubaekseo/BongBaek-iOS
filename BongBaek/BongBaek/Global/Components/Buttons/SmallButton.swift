@@ -17,14 +17,14 @@ struct SmallButton: View {
         } label: {
             Text(title)
                 .font(.body1_medium_16)
-                .foregroundStyle(isselected ? .white : .gray500)
+                .foregroundStyle(isselected ? .txtInteractiveInverse : .gray500)
                 .frame(maxWidth: .infinity)
                 .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(isselected ? Color(.primaryNormal) : .gray800)
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(isselected ? Color(.bgStatusFocused) : .gray800)
                         )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12)
+                    RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.lineNormal, lineWidth:
                                     isselected ? 0 : 1)
                 )

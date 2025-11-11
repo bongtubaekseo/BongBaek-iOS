@@ -1,12 +1,13 @@
 //
-//  SecondaryButton.swift
+//  Untitled.swift
 //  BongBaek
 //
-//  Created by hyunwoo on 10/21/25.
+//  Created by hyunwoo on 11/11/25.
 //
+
 import SwiftUI
 
-struct SecondaryButton : View {
+struct SmallButton_cts: View {
     let title : String
     let action : () -> Void
     
@@ -15,13 +16,12 @@ struct SecondaryButton : View {
             action()
         } label: {
             Text(title)
-                .font(.title_semibold_18)
-                .foregroundStyle(.txtInteractiveSecondary)
+                .font(.title_semibold_16)
+                .foregroundStyle(.txtInteractiveInverse)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(.btnInteractiveSecondary)
-                .cornerRadius(10)
+                .background(.bgStatusFocused)
+                .cornerRadius(6)
         }
     }
 }
-

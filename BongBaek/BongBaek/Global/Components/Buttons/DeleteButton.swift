@@ -16,14 +16,14 @@ struct DeleteButton: View {
         } label : {
             Text(title)
                 .font(.title_semibold_18)
-                .foregroundStyle(.secondaryRed)
+                .foregroundStyle(.borderStatusError)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background()
                 .cornerRadius(10)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.secondaryRed, lineWidth : 1)
+                        .stroke(Color.borderStatusError, lineWidth : 1)
                 )
         }
     }

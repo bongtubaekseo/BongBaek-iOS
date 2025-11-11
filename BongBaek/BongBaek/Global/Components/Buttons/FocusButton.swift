@@ -17,10 +17,10 @@ struct FocusButton: View {
         } label: {
             Text(title)
                 .font(.title_semibold_16)
-                .foregroundColor(isFocuesed ? .white : .gray500)
+                .foregroundColor(isFocuesed ? .txtInteractiveInverse : .txtStatusDisabled)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(isFocuesed ? .buttonBack: .primaryBg)
+                .background(isFocuesed ? .bgStatusFocused: .btnInteractiveDisabled)
                 .cornerRadius(10)
         }
         .disabled(!isFocuesed)
