@@ -59,6 +59,8 @@ struct HomeView: View {
                         .padding(.top, 32)
                 }
                 
+                HomeContentsView()
+                
                 if homeViewModel.hasData {
                     ScheduleView(events: homeViewModel.homeData?.events ?? [])
                         .padding(.top, 32)

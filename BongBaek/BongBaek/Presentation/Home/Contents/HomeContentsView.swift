@@ -36,6 +36,23 @@ struct HomeContentsView: View{
                     }
                 }
             }
+            .padding(.bottom, 16)
+            
+            ScrollView(.horizontal, showsIndicators: false){
+                HStack(spacing : 8){
+                    ContentsCardView(
+                        image: "ContentsEx1",
+                        category: "결혼식",
+                        title: "이제는 알아야 하는 결혼식 식사 예절"
+                    )
+                    ContentsCardView(
+                        image: "ContentsEx2",
+                        category: "장례식",
+                        title: "이제는 알아야 하는 장례식 예절"
+                    )
+                }
+                .padding(.horizontal, 20)
+            }
         }
     }
 }
