@@ -13,36 +13,41 @@ struct ContentsCardView: View {
     let title: String
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Image(image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 220, height: 160)
-                .clipped()
-
-            VStack(alignment: .leading, spacing: 8) {
-                Text(category)
-                    .font(.caption_regular_12)
-                    .foregroundStyle(.txtStatusFocused)
+        ZStack(alignment: .topLeading){
+            RoundedRectangle(cornerRadius: 6)
+                .fill(Color.btnInteractiveSecondary)
+                .frame(width: 220, height: 256)
+            
+            VStack(alignment: .leading, spacing: 0) {
+                Image(image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 220, height: 160)
+                    .clipped()
                 
-                HStack {
-                    Text(title)
-                        .font(.body1_medium_16)
-                        .foregroundStyle(.txtDisplayPrimary)
-                        .lineLimit(2)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(category)
+                        .font(.caption_regular_12)
+                        .foregroundStyle(.txtStatusFocused)
                     
-                    Spacer()
-                    
-                    Image("icon_left")
-                        .frame(width: 20, height: 20)
+                    HStack {
+                        Text(title)
+                            .font(.body1_medium_16)
+                            .foregroundStyle(.txtDisplayPrimary)
+                            .lineLimit(2)
+                        
+                        Spacer()
+                        
+                        Image("icon_left")
+                            .frame(width: 20, height: 20)
+                    }
                 }
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(12)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(.btnInteractiveSecondary)
+            .frame(width: 220)
         }
         .frame(width: 220, height: 256)
-        .background(.btnInteractiveSecondary)
-        .cornerRadius(6)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
     }
 }
