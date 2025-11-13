@@ -10,9 +10,9 @@ struct HomeContentsView: View{
     @EnvironmentObject var router: NavigationRouter
     
     var body : some View{
-        VStack(alignment: .leading, spacing: 12){
+        VStack(alignment: .leading, spacing: 16){
             HStack{
-                VStack(alignment: .leading, spacing: 2){
+                VStack(alignment: .leading, spacing : 2){
                     Text("경조사 콘텐츠")
                         .font(.title_semibold_20)
                         .foregroundStyle(.txtDisplayPrimary)
@@ -20,12 +20,13 @@ struct HomeContentsView: View{
                         .font(.caption_regular_12)
                         .foregroundStyle(.txtDisplayTierary)
                 }
+                .padding(.horizontal, 20)
                 Spacer()
                 
                 Button(action : {
                     router.push(to: .contentsView)
                 }){
-                    HStack(spacing: 4) {
+                    HStack{
                         Text("더보기")
                             .bodyRegular14()
                             .foregroundColor(.txtDisplaySecondary)
@@ -34,6 +35,7 @@ struct HomeContentsView: View{
                             .foregroundColor(.gray400)
                             .frame(width: 14, height: 14)
                     }
+                    .padding(.horizontal, 20)
                 }
             }
             .padding(.bottom, 16)
@@ -55,4 +57,8 @@ struct HomeContentsView: View{
             }
         }
     }
+}
+
+#Preview{
+    HomeContentsView()
 }
