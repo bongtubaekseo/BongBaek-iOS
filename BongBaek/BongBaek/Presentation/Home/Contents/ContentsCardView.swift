@@ -22,13 +22,13 @@ struct ContentsCardView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(category)
-                    .font(.body1_medium_16)
-                    .foregroundStyle(.txtDisplayPrimary)
+                    .font(.caption_regular_12)
+                    .foregroundStyle(.txtStatusFocused)
                 
                 HStack {
                     Text(title)
-                        .font(.caption_regular_12)
-                        .foregroundStyle(.txtStatusFocused)
+                        .font(.body1_medium_16)
+                        .foregroundStyle(.txtDisplayPrimary)
                         .lineLimit(2)
                     
                     Spacer()
