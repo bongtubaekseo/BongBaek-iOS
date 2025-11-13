@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentsCardView: View {
+    @EnvironmentObject var router : NavigationRouter
     let image : String
     let category: String
     let title: String
@@ -30,16 +31,20 @@ struct ContentsCardView: View {
                         .font(.caption_regular_12)
                         .foregroundStyle(.txtStatusFocused)
                     
-                    HStack {
-                        Text(title)
-                            .font(.body1_medium_16)
-                            .foregroundStyle(.txtDisplayPrimary)
-                            .lineLimit(2)
-                        
-                        Spacer()
-                        
-                        Image("icon_left")
-                            .frame(width: 20, height: 20)
+                    Button(action : {
+                        router.push(to : .contentDetailView)
+                    }){
+                        HStack {
+                            Text(title)
+                                .font(.body1_medium_16)
+                                .foregroundStyle(.txtDisplayPrimary)
+                                .lineLimit(2)
+                            
+                            Spacer()
+                            
+                            Image("icon_left")
+                                .frame(width: 20, height: 20)
+                        }
                     }
                 }
                 .padding(12)

@@ -58,7 +58,3 @@ struct HomeContentsView: View{
         }
     }
 }
-
-#Preview{
-    HomeContentsView()
-}
