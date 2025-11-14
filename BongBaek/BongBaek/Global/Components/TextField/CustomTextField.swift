@@ -68,7 +68,7 @@ struct CustomTextField: View {
                     .resizable()
                     .renderingMode(.template)
                     .frame(width: 20,height: 20)
-                    .foregroundColor(.gray400)
+                    .foregroundColor(.iconFocusedPrimary)
                 
                 HStack(spacing: 2) {
                     
@@ -79,7 +79,7 @@ struct CustomTextField: View {
                     } else {
                         Text(title)
                             .bodyMedium16()
-                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
+                            .foregroundColor(isRecommendationEdit ? .gray400 : .txtDisplaySecondary)
                     }
 
                     
@@ -88,7 +88,7 @@ struct CustomTextField: View {
                         VStack {
                             Text("*")
                                 .bodyMedium16()
-                                .foregroundColor(.primaryNormal)
+                                .foregroundColor(.txtStatusFocused)
                                 .padding(.top, 4)
                                 .padding(.leading, 1)
                             
@@ -114,7 +114,7 @@ struct CustomTextField: View {
                             if displayText.isEmpty {
                                 Text(placeholder)
                                     .font(.system(size: 16))
-                                    .foregroundColor(.gray.opacity(0.6))
+                                    .foregroundColor(.txtFieldPlaceholder)
                             }
                             
                             TextField("", text: $displayText)

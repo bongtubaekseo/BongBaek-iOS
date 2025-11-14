@@ -27,9 +27,9 @@ struct ProfileSettingView: View {
             
             HStack {
                 Spacer()
-                Text("설정")
+                Text("프로필 설정")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
                 Spacer()
             }
             
@@ -62,7 +62,7 @@ struct ProfileSettingView: View {
 //        }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .ignoresSafeArea(.container, edges: .bottom)
         .sheet(isPresented: $showDatePicker, onDismiss: {
             focusedField = nil
@@ -124,13 +124,13 @@ struct ProfileSettingView: View {
         HStack {
             Text("현재 수입 있음")
                 .bodyMedium16()
-                .foregroundColor(.white)
+                .foregroundColor(.txtDisplayPrimary)
             
             Spacer()
             
             Toggle("", isOn: $viewModel.hasIncome)
                 .labelsHidden()
-                .tint(.primaryNormal)
+                .tint(.bgStatusFocused)
                 .onChange(of: viewModel.hasIncome) { _, newValue in
                     if !newValue {
                         viewModel.selectIncome(.none)
@@ -142,7 +142,7 @@ struct ProfileSettingView: View {
         .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
+                .fill(.bgDisplayCard)
         )
         .padding(.top, 20)
     }
@@ -151,7 +151,7 @@ struct ProfileSettingView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
                 .titleSemiBold16()
-                .foregroundStyle(.gray100)
+                .foregroundStyle(.txtDisplaySecondary)
                 .padding(.bottom, 20)
             
             VStack(spacing: 12) {
@@ -165,7 +165,7 @@ struct ProfileSettingView: View {
         .padding(.bottom, 20)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
+                .fill(.bgDisplayCard)
         )
         .transition(.asymmetric(
             insertion: .move(edge: .top).combined(with: .opacity),
@@ -183,13 +183,13 @@ struct ProfileSettingView: View {
             HStack {
                 Text(selection.displayText)
                     .bodyRegular14()
-                    .foregroundStyle(.gray100)
+                    .foregroundStyle(.txtInteractivePrimary)
                 
                 Spacer()
                 
                 if viewModel.isSelected(selection) {
                     Image(systemName: "checkmark")
-                        .foregroundStyle(.primaryNormal)
+                        .foregroundStyle(.txtStatusFocused)
                         .font(.system(size: 12, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
@@ -204,7 +204,7 @@ struct ProfileSettingView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        viewModel.isSelected(selection) ? .primaryNormal : .commonLineNormal,
+                        viewModel.isSelected(selection) ? .borderStatusFocused : .borderFieldDefault,
                         lineWidth: viewModel.isSelected(selection) ? 2 : 1
                     )
             )
@@ -227,12 +227,12 @@ struct ProfileSettingView: View {
                 
                 Text("봉투백서 시작하기")
                     .titleSemiBold18()
-                    .foregroundColor(viewModel.isStartButtonEnabled ? .white : .gray500)
+                    .foregroundColor(viewModel.isStartButtonEnabled ? .txtInteractiveInverse : .txtStatusDisabled)
             }
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(viewModel.isStartButtonEnabled ? .primaryNormal : .primaryBg)
+        .background(viewModel.isStartButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
         .cornerRadius(12)
         .padding(.top, 20)
         .disabled(!viewModel.isStartButtonEnabled || viewModel.isSigningUp)
