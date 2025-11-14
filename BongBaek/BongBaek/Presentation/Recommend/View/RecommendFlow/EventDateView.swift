@@ -396,7 +396,7 @@ struct DatePickerBottomSheet: View {
                     displayedComponents: .date
                 )
                 .datePickerStyle(.wheel)
-                .colorScheme(.dark)
+//                .colorScheme(.dark)
                 .environment(\.locale, Locale(identifier: "ko_KR"))
                 .background(
                     RoundedRectangle(cornerRadius: 12)
@@ -434,7 +434,7 @@ struct DatePickerBottomSheet: View {
             )
             .navigationBarTitleDisplayMode(.inline)
         }
-        .preferredColorScheme(.dark)
+//        .preferredColorScheme(.dark)
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
     }
