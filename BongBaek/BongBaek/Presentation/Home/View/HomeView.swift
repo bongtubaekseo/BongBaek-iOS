@@ -37,8 +37,8 @@ struct HomeView: View {
                         ProgressView("일정을 불러오는 중…")
                             .foregroundColor(.white)
                     }
-                    .frame(height: 120)
                     .padding(.top, 20)
+                    .padding(.horizontal, 20)
                 }
                 
                 if homeViewModel.hasData {

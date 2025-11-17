@@ -63,6 +63,6 @@ struct NewScheduleView: View{
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.borderFieldDefault, lineWidth: 1)
         )
-        
+        .padding(.horizontal, 20)
     }
 }
