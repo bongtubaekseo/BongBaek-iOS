@@ -25,10 +25,7 @@ struct NewScheduleView: View{
                             .titleSemiBold16()
                             .foregroundStyle(.txtDisplayPrimary)
                     } else {
-                        Text("\(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)이")
-                            .titleSemiBold16()
-                            .foregroundStyle(.txtDisplayPrimary)
-                        Text("\(event.eventInfo.dDay)일 남았어요!")
+                        Text("\(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)이 \(event.eventInfo.dDay)일 남았어요!")
                             .titleSemiBold16()
                             .foregroundStyle(.txtDisplayPrimary)
                     }
