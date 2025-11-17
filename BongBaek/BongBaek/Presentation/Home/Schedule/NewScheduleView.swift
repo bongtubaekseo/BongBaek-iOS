@@ -34,7 +34,38 @@ struct NewScheduleView: View{
                     }
                 }
                 .padding(.leading, 16)
+                
+                Spacer()
+                
+                Image("icon_alarm")
+                    .frame(width: 94, height: 82)
+                    .padding(.trailing, 12)
             }
+            .padding(.top, 6)
+            
+            HStack(spacing: 4) {
+                Image(.iconCalendar)
+                    .resizable()
+                    .frame(width: 14, height: 14)
+                    .padding(.leading, 8)
+                
+                Text(event.eventInfo.eventDate.DateFormat())
+                    .font(.caption_regular_12)
+                    .foregroundColor(.gray100)
+            }
+            .padding(.vertical, 4)
+            .padding(.trailing, 8)
+            .background(.bgDisplayPrimary)
+            .cornerRadius(2)
+            .padding(.leading, 16)
+            .padding(.bottom, 14)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.bgDisplaySecondary)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.borderFieldDefault, lineWidth: 1)
+        )
+        
     }
 }

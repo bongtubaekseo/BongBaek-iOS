@@ -28,6 +28,19 @@ struct HomeView: View {
                 .padding(.top, 30)
                 .padding(.leading, 20)
 
+                if homeViewModel.hasData,
+                   let firstEvent = homeViewModel.homeData?.events.first {
+                    NewScheduleView(event: firstEvent)
+                        .padding(.top, 20)
+                } else if homeViewModel.isLoading {
+                    VStack {
+                        ProgressView("일정을 불러오는 중…")
+                            .foregroundColor(.white)
+                    }
+                    .frame(height: 120)
+                    .padding(.top, 20)
+                }
+                
                 if homeViewModel.hasData {
                     ScheduleAlarmView(homeData: $homeViewModel.homeData)
                         .frame(height: 276)
