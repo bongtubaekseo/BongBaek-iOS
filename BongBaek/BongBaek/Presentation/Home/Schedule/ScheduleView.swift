@@ -50,7 +50,7 @@ struct ScheduleView: View {
                 EmptyCardView()
             } else {
                 ForEach(sortedEvents, id: \.eventId) { event in
-                    ScheduleCellView(event: event)
+                    NewScheduleCellView(event: event)
                 }
             }
         }

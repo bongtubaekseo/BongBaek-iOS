@@ -14,10 +14,10 @@ struct NewScheduleCellView: View {
         HStack(spacing: 12) {
             VStack(spacing: 4) {
                 Text("\(extractDay(from: event.eventInfo.eventDate))")
-                    .font(.title_semibold_20)
+                    .font(.title_semibold_18)
                     .foregroundColor(.txtDisplayPrimary)
                 
-                Text("(월요일)")
+                Text("(월요일)") //바꿀예정
                     .font(.caption_regular_12)
                     .foregroundColor(.txtDisplaySecondary)
             }
@@ -39,27 +39,25 @@ struct NewScheduleCellView: View {
                 
                 HStack(spacing: 8) {
                     HStack(spacing: 4) {
-                        Image(systemName: "calendar")
-                            .font(.system(size: 12))
-                            .foregroundColor(.txtDisplaySubtle)
+                        Image("icon_newcalendar1")
+                            .frame(width: 12, height: 12)
                         Text(event.eventInfo.eventDate.DateFormat())
                             .font(.caption_regular_12)
-                            .foregroundColor(.txtDisplaySubtle)
+                            .foregroundColor(.txtDisplayTierary)
                     }
                     
                     HStack(spacing: 4) {
-                        Image(systemName: "person")
-                            .font(.system(size: 12))
-                            .foregroundColor(.txtDisplaySubtle)
+                        Image("icon_relation2")
+                            .frame(width: 12, height: 12)
                         Text(event.eventInfo.relationship)
                             .font(.caption_regular_12)
-                            .foregroundColor(.txtDisplaySubtle)
+                            .foregroundColor(.txtDisplayTierary)
+
                     }
                     
                     HStack(spacing: 4) {
-                        Image(systemName: "mappin")
-                            .font(.system(size: 12))
-                            .foregroundColor(.txtDisplaySubtle)
+                        Image("icon_newlocation")
+                            .frame(width: 12, height: 12)
                         Text({
                             let location = event.locationInfo.location
                             if location == "미정" || location.isEmpty {
@@ -68,7 +66,15 @@ struct NewScheduleCellView: View {
                             return location
                         }())
                             .font(.caption_regular_12)
-                            .foregroundColor(.txtDisplaySubtle)
+                            .foregroundColor(.txtDisplayTierary)
+                    }
+                    
+                    HStack(spacing : 4){
+                        Image("icon_nickname")
+                            .frame(width: 12, height: 12)
+                        Text(event.hostInfo.hostNickname)
+                            .font(.caption_regular_12)
+                            .foregroundColor(.txtDisplayTierary)
                     }
                 }
             }
