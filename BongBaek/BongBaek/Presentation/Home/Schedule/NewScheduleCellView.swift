@@ -47,7 +47,7 @@ struct NewScheduleCellView: View {
                     }
                     
                     HStack(spacing: 4) {
-                        Image("icon_relation2")
+                        Image("icon_newrelation")
                             .frame(width: 12, height: 12)
                         Text(event.eventInfo.relationship)
                             .font(.caption_regular_12)
