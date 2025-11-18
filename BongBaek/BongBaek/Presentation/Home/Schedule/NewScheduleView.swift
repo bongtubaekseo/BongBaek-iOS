@@ -6,57 +6,54 @@
 //
 import SwiftUI
 
-struct NewScheduleView: View{
-    let event : Event
-    
+struct NewScheduleView: View {
+    let event: Event
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 0){
-            HStack(alignment: .top){
-                VStack(alignment: .leading){
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .top, spacing: 0) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("경조사 알림")
                         .font(.caption_regular_12)
                         .foregroundColor(.txtDisplaySubtle)
-                    
+                        .padding(.top, 6)
+
                     if event.eventInfo.dDay == 0 {
-                        Text("오늘은 \(event.hostInfo.hostName)님의")
+                        Text("오늘은 \(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)입니다!")
                             .titleSemiBold16()
                             .foregroundStyle(.txtDisplayPrimary)
-                        Text("\(event.eventInfo.eventCategory)입니다!")
-                            .titleSemiBold16()
-                            .foregroundStyle(.txtDisplayPrimary)
+                            .lineLimit(2)
                     } else {
                         Text("\(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)이 \(event.eventInfo.dDay)일 남았어요!")
                             .titleSemiBold16()
                             .foregroundStyle(.txtDisplayPrimary)
+                            .lineLimit(2)
                     }
                 }
-                .padding(.leading, 16)
-                
+
                 Spacer()
-                
+
                 Image("icon_alarm")
+                    .resizable()
                     .frame(width: 94, height: 82)
-                    .padding(.trailing, 12)
             }
-            .padding(.top, 6)
-            
+
             HStack(spacing: 4) {
                 Image(.iconCalendar)
                     .resizable()
                     .frame(width: 14, height: 14)
-                    .padding(.leading, 8)
-                
+
                 Text(event.eventInfo.eventDate.DateFormat())
                     .font(.caption_regular_12)
                     .foregroundColor(.gray100)
             }
+            .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .padding(.trailing, 8)
             .background(.bgDisplayPrimary)
             .cornerRadius(2)
-            .padding(.leading, 16)
-            .padding(.bottom, 14)
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(.bgDisplaySecondary)
         .overlay(
