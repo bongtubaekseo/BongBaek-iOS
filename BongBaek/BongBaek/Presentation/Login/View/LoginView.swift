@@ -79,12 +79,12 @@ struct LoginView: View {
                    VStack(alignment: .leading,spacing: 0) {
                        Text("로그인하시면 아래 내용에 동의하는 것으로 간주됩니다.")
                            .captionRegular12()
-                           .foregroundStyle(.txtDisplaySecondary)
+                           .foregroundStyle(.txtDisplayTierary)
 
                        HStack {
                            Text("개인정보 처리방침")
                                .captionRegular12()
-                               .foregroundStyle(.txtInteractiveSecondary)
+                               .foregroundStyle(.txtInteractiveInverse)
                                .underline()
                                .onTapGesture {
                                    loginViewModel.openPrivacyPolicy()
@@ -92,7 +92,7 @@ struct LoginView: View {
 
                            Text("이용약관")
                                .captionRegular12()
-                               .foregroundStyle(.txtInteractiveSecondary)
+                               .foregroundStyle(.txtInteractiveInverse)
                                .underline()
                                .padding(.leading, 12)
                                .onTapGesture {
