@@ -34,7 +34,7 @@ struct NewScheduleCellView: View {
                     
                     Text(event.eventInfo.eventCategory)
                         .font(.body2_regular_14)
-                        .foregroundColor(.txtDisplaySecondary)
+                        .foregroundColor(.txtDisplaySubtle)
                 }
                 
                 HStack(spacing: 8) {
@@ -94,10 +94,6 @@ struct NewScheduleCellView: View {
         .padding(16)
         .background(.bgDisplayCard)
         .clipShape(RoundedRectangle(cornerRadius: 8))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.borderDisplayDivider, lineWidth: 1)
-        )
     }
 
     private func extractDay(from dateString: String) -> String {
