@@ -21,8 +21,8 @@ struct HomeView: View {
                         .frame(width: 20, height: 20)
                     
                     Text("봉투백서")
-                        .brandBold24()
-                        .foregroundColor(.white)
+                        .brandBold18()
+                        .foregroundColor(.txtDisplayPrimary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 30)
