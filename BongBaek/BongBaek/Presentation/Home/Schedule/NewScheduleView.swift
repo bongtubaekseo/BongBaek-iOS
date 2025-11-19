@@ -6,6 +6,28 @@
 //
 import SwiftUI
 
+enum EventCategory : String {
+    case wedding = "결혼"
+    case birthday = "생일"
+    case stoneparty = "돌잔치"
+    case funeral = "장례식"
+    
+    var iconImage: String {
+        switch self{
+        case .wedding :
+            return "icon_alarm"
+        case .birthday :
+            return "icon_birthday"
+        case .stoneparty :
+            return "icon_stoneparty"
+        case .funeral :
+            return "icon_funeral"
+        }
+    }
+}
+
+
+
 struct NewScheduleView: View {
     let event: Event
 
@@ -33,8 +55,9 @@ struct NewScheduleView: View {
 
                 Spacer()
 
-                Image("icon_alarm")
+                Image(getCategoryIcon())
                     .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 94, height: 82)
             }
 
@@ -62,4 +85,7 @@ struct NewScheduleView: View {
         )
         .padding(.horizontal, 20)
     }
+    private func getCategoryIcon() -> String {
+            EventCategory(rawValue: event.eventInfo.eventCategory)?.iconImage ?? "icon_alarm"
+        }
 }
