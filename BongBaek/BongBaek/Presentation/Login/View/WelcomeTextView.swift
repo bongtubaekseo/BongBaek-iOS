@@ -26,7 +26,7 @@ struct WelcomeTextView: View {
                 
                 HStack(spacing: 0) {
                     Text("봉투백서")
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.txtDisplaySecondary)
                         .headBold26()
                     
                     Text("에 오신 것을")
@@ -44,8 +44,8 @@ struct WelcomeTextView: View {
             }
             
             Text("3초 가입으로 바로 시작해보세요")
-                .foregroundStyle(.gray100)
-                .bodyMedium16()
+                .foregroundStyle(.txtDisplaySecondary)
+                .bodyRegular16()
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
