@@ -124,10 +124,11 @@ struct SignUpBottomSheetView: View {
             .disabled(!canProceed)
             .buttonStyle(PlainButtonStyle())
             .padding(.horizontal,20)
-            .padding(.bottom,39.adjustedH)
+            .padding(.bottom,60.adjustedH)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.bgDisplayCard)
+        .ignoresSafeArea(.container, edges: .bottom) 
     }
     
     private func toggleAllAgree() {
