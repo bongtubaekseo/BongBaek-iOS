@@ -68,7 +68,7 @@ struct CustomTextField: View {
                     .resizable()
                     .renderingMode(.template)
                     .frame(width: 20,height: 20)
-                    .foregroundColor(.gray400)
+                    .foregroundColor(.iconFocusedPrimary)
                 
                 HStack(spacing: 2) {
                     
@@ -79,7 +79,7 @@ struct CustomTextField: View {
                     } else {
                         Text(title)
                             .bodyMedium16()
-                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
+                            .foregroundColor(isRecommendationEdit ? .gray400 : .txtDisplaySecondary)
                     }
 
                     
@@ -88,7 +88,7 @@ struct CustomTextField: View {
                         VStack {
                             Text("*")
                                 .bodyMedium16()
-                                .foregroundColor(.primaryNormal)
+                                .foregroundColor(.txtStatusFocused)
                                 .padding(.top, 4)
                                 .padding(.leading, 1)
                             
@@ -114,7 +114,7 @@ struct CustomTextField: View {
                             if displayText.isEmpty {
                                 Text(placeholder)
                                     .font(.system(size: 16))
-                                    .foregroundColor(.gray.opacity(0.6))
+                                    .foregroundColor(.txtFieldPlaceholder)
                             }
                             
                             TextField("", text: $displayText)
@@ -122,8 +122,8 @@ struct CustomTextField: View {
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .focused($isFocused)
                                 .disabled(isReadOnly)
-                                .foregroundColor(isRecommendationEdit ? .gray400 : .gray100)
-                                .tint(.white)
+                                .foregroundColor(isRecommendationEdit ? .gray400 : .txtFieldValue)
+                                .tint(.txtFieldValue)
                                 .keyboardType(keyboardType) // 키보드 타입 적용
                                 .onChange(of: displayText) { _, newValue in
                                     handleTextChange(newValue)
@@ -333,18 +333,18 @@ enum ValidationState {
     func color(isReadOnly: Bool = false, isRecommendationEdit: Bool = false) -> Color {
         switch self {
         case .normal:
-            return .gray500
+            return .borderFieldDefault
         case .valid:
-            return .primaryNormal
+            return .borderStatusFocused
         case .invalid:
-            return .secondaryRed
+            return .borderStatusError
         case .focused:
-            return .primaryNormal
+            return .borderStatusFocused
         case .completed:
             if isReadOnly && isRecommendationEdit {
                 return .lineNormal
             } else {
-                return .white
+                return .borderFieldFilled
             }
         }
     }

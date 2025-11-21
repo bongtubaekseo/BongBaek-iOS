@@ -76,7 +76,7 @@ struct DatePickerBottomSheetView: View {
             .datePickerStyle(.wheel)
             .labelsHidden()
             .environment(\.locale, Locale(identifier: "ko_KR"))
-            .preferredColorScheme(.dark)
+//            .preferredColorScheme(.dark)
             .accentColor(.blue)
             .padding(.horizontal, 20)
             
@@ -90,16 +90,16 @@ struct DatePickerBottomSheetView: View {
             } label: {
                 Text("선택완료")
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtInteractiveInverse)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(.primaryNormal)
+                    .background(.bgStatusFocused)
                     .cornerRadius(12)
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
         }
-        .background(.gray750)
+        .background(.bgDisplayCard)
         .onAppear {
             setInitialDate()
         }

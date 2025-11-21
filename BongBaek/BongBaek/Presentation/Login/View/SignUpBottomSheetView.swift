@@ -28,10 +28,10 @@ struct SignUpBottomSheetView: View {
             VStack(alignment: .leading){
                 Text("앱 사용을 위해 권한을 허용해주세요.")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
                 Text("서비스 이용에 필수적인 약관들이에요.")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top,40.adjustedH)
@@ -53,7 +53,7 @@ struct SignUpBottomSheetView: View {
                 )
                 
                 Divider()
-                    .background(Color.gray.opacity(0.3))
+                    .background(.borderDisplayDivider)
                 
                 VStack(alignment: .leading, spacing: 16.adjustedH) {
                     CheckButton(
@@ -114,11 +114,11 @@ struct SignUpBottomSheetView: View {
                     Spacer()
                     Text("다음")
                         .titleSemiBold18()
-                        .foregroundColor(canProceed ? .white : .gray500)
+                        .foregroundColor(canProceed ? .txtInteractiveInverse : .txtStatusDisabled)
                     Spacer()
                 }
                 .frame(height: 55.adjustedH)
-                .background(canProceed ? .primaryNormal : Color.primaryBg)
+                .background(canProceed ? .bgStatusFocused : .btnInteractiveDisabled)
                 .cornerRadius(12)
             }
             .disabled(!canProceed)
@@ -127,7 +127,7 @@ struct SignUpBottomSheetView: View {
             .padding(.bottom,60.adjustedH)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray750)
+        .background(.bgDisplayCard)
     }
     
     private func toggleAllAgree() {
