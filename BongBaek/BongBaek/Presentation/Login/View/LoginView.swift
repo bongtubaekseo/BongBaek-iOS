@@ -126,7 +126,7 @@ struct LoginView: View {
                    showProfileSetting = true
                }
            )
-           .presentationDetents([.height(439.adjustedH)])
+           .presentationDetents([.height(433.adjustedH)])
            .presentationDragIndicator(.visible)
        }
    }
