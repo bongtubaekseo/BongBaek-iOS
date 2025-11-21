@@ -11,6 +11,14 @@ struct WelcomeTextView: View {
     var body: some View {
         
         VStack(alignment: .leading,spacing: 16) {
+            
+            Image("bong2_logo")
+                .resizable()
+                .scaledToFill()
+                .frame(width: 48,height: 48)
+                .padding(.bottom, 8)
+            
+            
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 0) {
                     Text("경조사비 고민 끝,")

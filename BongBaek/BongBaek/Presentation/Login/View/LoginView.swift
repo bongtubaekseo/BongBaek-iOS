@@ -22,22 +22,21 @@ struct LoginView: View {
                
                VStack {
                    WelcomeTextView()
-                       .padding(.top, 144.adjustedH)
+                       .padding(.top, 133.adjustedH)
                        .padding(.leading, 20)
                }
                
                Spacer()
                
                VStack(spacing: 0) {
-                   
-                   VStack(spacing: 20) {
+                   VStack(spacing: 12) {
                        Button(action: {
 
                        }) {
                            Image("btn_login_apple")
                                .resizable()
                                .scaledToFill()
-                               .frame(height: 55.adjustedH)
+                               .frame(height: 54.adjustedH)
                                .clipped()
                                .cornerRadius(8)
 
@@ -100,10 +99,10 @@ struct LoginView: View {
                                }
                        }
                        .padding(.leading, 50)
-                       .padding(.top,12)
+                       .padding(.top,4)
                    }
                    .padding(.horizontal, 20)
-                   .padding(.top,12.adjustedH)
+                   .padding(.top,20.adjustedH)
                }
                
                Rectangle()
