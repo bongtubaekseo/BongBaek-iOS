@@ -30,7 +30,7 @@ struct RecommendsView: View {
                     .frame(width: 57, height: 54)
             }
             
-            FocusButton(title : "경조사비 추천 받기"){
+            FocusButton(title : "경조사비 추천 받기", isFocuesed: false){
                 router.push(to: .recommendStartView)
             }
             
