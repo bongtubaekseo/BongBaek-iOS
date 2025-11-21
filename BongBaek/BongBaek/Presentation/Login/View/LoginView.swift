@@ -111,12 +111,7 @@ struct LoginView: View {
                    .foregroundStyle(.clear)
 
            }
-           .background(
-               Image("onboarding_ios")
-                   .resizable()
-                   .scaledToFill()
-                   .ignoresSafeArea()
-           )
+           .background(.bgDisplaySecondary)
            .navigationDestination(isPresented: $showProfileSetting) {
                ProfileSettingView()
            }
