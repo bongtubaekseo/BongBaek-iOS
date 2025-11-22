@@ -58,7 +58,7 @@ struct NewScheduleView: View {
 
                     Text(event.eventInfo.eventDate.DateFormat())
                         .font(.caption_regular_12)
-                        .foregroundColor(.gray100)
+                        .foregroundColor(.txtDisplaySecondary)
                 }
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)

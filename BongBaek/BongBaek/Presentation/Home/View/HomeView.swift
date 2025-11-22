@@ -53,7 +53,7 @@ struct HomeView: View {
                 }
                 
                 Rectangle()
-                    .fill(Color.black)
+                    .fill(.borderDisplayTitle)
                     .frame(maxWidth: .infinity)
                     .frame(height: 10)
                 
@@ -101,7 +101,7 @@ struct HomeView: View {
         .navigationBarHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
-        .background(Color.gray900.ignoresSafeArea())
+        .background(.bgDisplayPrimary)
     }
 }
 

@@ -55,6 +55,6 @@ struct ScheduleView: View {
             }
         }
         .padding(.horizontal)
-        .background(Color.gray900)
+        .background(.bgDisplayPrimary)
     }
 }
