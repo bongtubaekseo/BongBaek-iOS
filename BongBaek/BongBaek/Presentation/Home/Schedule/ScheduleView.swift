@@ -16,7 +16,7 @@ struct ScheduleView: View {
        }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 2){
                     Text("\(UserDefaults.standard.memberName.isEmpty ? "봉백" : UserDefaults.standard.memberName)님의 일정")
