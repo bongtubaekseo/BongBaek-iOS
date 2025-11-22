@@ -40,7 +40,7 @@ struct NewScheduleCellView: View {
                         .font(.body2_regular_14)
                         .foregroundColor(.txtDisplaySubtle)
                     
-                    Spacer()
+                    Spacer(minLength: 0)
                     
                     HStack(alignment: .firstTextBaseline, spacing: 0) {
                         Text("\(event.eventInfo.cost.formatted())")
@@ -51,6 +51,7 @@ struct NewScheduleCellView: View {
                             .bodyMedium16()
                             .foregroundColor(.txtDisplayPrimary)
                     }
+                    //.padding(.trailing, 16)
                     
                 }
                 
