@@ -76,21 +76,13 @@ struct SliderSection: View {
                 fillBackground: .gray.opacity(0.3),
                 fillTrack: .primaryNormal,
                 thumbView: {
-                    Image(knobImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
-                        .padding(.all, 12)
-                        .frame(width: 84, height: 84)
-                        .offset(y: 6)
-                        .padding(.horizontal, 2)
+                    Circle()
+                        .foregroundStyle(.bgStatusFocused)
+                        .frame(width: 20, height: 20)
                 }
                 
             )
-            .padding(.horizontal, 2)
-            
-            
+
             HStack {
                 Text(leftLabel)
                     .captionRegular12()
@@ -102,7 +94,7 @@ struct SliderSection: View {
                     .captionRegular12()
                     .foregroundStyle(.txtDisplayTierary)
             }
-            .padding(.top, 24)
+            .padding(.top, 20)
             .padding(.horizontal, 2)
         }
     }

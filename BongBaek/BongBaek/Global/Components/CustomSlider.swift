@@ -37,8 +37,8 @@ import SwiftUI
     
     private var defaultThumb: some View {
         Circle()
-            .fill(Color.white)
-            .frame(width: 24, height: 24)
+            .fill(.bgStatusFocused)
+            .frame(width: 20, height: 20)
             .shadow(color: .black.opacity(0.3), radius: 3, x: 1, y: 1)
     }
 
