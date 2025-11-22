@@ -266,11 +266,11 @@ struct EventDatePickerView: View {
                 if eventManager.hasSelectedEventDate {
                     Text(DateFormatter.displayFormatter.string(from: eventManager.eventDate))
                         .bodyRegular16()
-                        .foregroundColor(isPastDate ? .secondaryRed : .white)
+                        .foregroundColor(isPastDate ? .secondaryRed : .txtFieldValue)
                 } else {
                     Text("날짜를 입력해주세요")
                         .bodyRegular16()
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtFieldPlaceholder)
                 }
                 
                 Spacer()
