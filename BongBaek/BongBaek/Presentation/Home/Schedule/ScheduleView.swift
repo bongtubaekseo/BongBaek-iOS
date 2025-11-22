@@ -32,10 +32,14 @@ struct ScheduleView: View {
                     Button(action: {
                         router.push(to: .fullScheduleView)
                     }) {
-                        HStack(spacing: 4) {
+                        HStack{
                             Text("더보기")
                                 .bodyRegular14()
                                 .foregroundColor(.txtDisplaySecondary)
+                            
+                            Image("icon_left")
+                                .foregroundColor(.iconInteractiveInverse)
+                                .frame(width: 14, height: 14)
                         }
                     }
                 }
