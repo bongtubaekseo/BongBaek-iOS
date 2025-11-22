@@ -44,13 +44,18 @@ struct HomeView: View {
                 if homeViewModel.hasData {
                     ScheduleView(events: homeViewModel.homeData?.events ?? [])
                         .padding(.top, 32)
-                        .padding(.bottom, 60)
+                        .padding(.bottom, 10)
                 } else {
 
                     ScheduleView(events: [])
                         .padding(.top, 32)
-                        .padding(.bottom, 60)
+                        .padding(.bottom, 10)
                 }
+                
+                Rectangle()
+                    .fill(Color.black)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 10)
                 
 //                if homeViewModel.hasData {
 //                    ScheduleAlarmView(homeData: $homeViewModel.homeData)
@@ -75,12 +80,10 @@ struct HomeView: View {
                     RecommendsView(homeData: homeViewModel.homeData)
                             .environmentObject(stepManager)
                         .environmentObject(router)
-                        .padding(.top, 10)
                 } else {
                     RecommendsView(homeData: nil)
                         .environmentObject(stepManager)
                         .environmentObject(router)
-                        .padding(.top, 10)
                 }
                 
                 HomeContentsView()
