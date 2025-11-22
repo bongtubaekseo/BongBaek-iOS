@@ -22,7 +22,7 @@ import SwiftUI
         GeometryReader { geometry in
             let frame = geometry.frame(in: .local)
             RoundedRectangle(cornerRadius: barStyle.cornerRadius)
-                .fill(fillBackground)
+                .fill(.bgDisplayRange)
             
             ThumbView(value: $value, in: bounds, step: step, maxWidth: frame.width, cornerRadius: barStyle.cornerRadius, fill: fillTrack, thumbView: {
                 if let thumbView = thumbView {

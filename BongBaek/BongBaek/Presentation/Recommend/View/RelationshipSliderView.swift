@@ -16,7 +16,7 @@ struct RelationshipSliderView: View {
             SliderSection(
                 value: $eventManager.contactFrequency, 
                 range: range,
-                icon: "icon_message",
+                icon: "icon_contact",
                 title: "얼마나 자주 연락하나요?",
                 knobImage: "Knob",
                 leftLabel: "가끔",
@@ -27,7 +27,7 @@ struct RelationshipSliderView: View {
             SliderSection(
                 value: $eventManager.meetFrequency,
                 range: range,
-                icon: "icon_handshake",
+                icon: "icon_meet",
                 title: "얼마나 자주 만나나요?",
                 knobImage: "Knob 1",
                 leftLabel: "가끔",
@@ -38,7 +38,7 @@ struct RelationshipSliderView: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 20)
-        .background(.gray750)
+        .background(.bgDisplayCard)
         .cornerRadius(10)
         .padding(.horizontal, 20)
         .padding(.top, 8) // 상단 패딩을 8로 설정
@@ -60,11 +60,11 @@ struct SliderSection: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Image(icon)
-                    .frame(width: 20,height: 20)
+                    .frame(width: 24,height: 24)
                 
                 Text(title)
                     .bodyMedium16()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplaySecondary)
             }
             .padding(.bottom, 40)
             
@@ -94,13 +94,13 @@ struct SliderSection: View {
             HStack {
                 Text(leftLabel)
                     .captionRegular12()
-                    .foregroundStyle(.gray400)
+                    .foregroundStyle(.txtDisplayTierary)
                 
                 Spacer()
                 
                 Text(rightLabel)
                     .captionRegular12()
-                    .foregroundStyle(.gray400)
+                    .foregroundStyle(.txtDisplayTierary)
             }
             .padding(.top, 24)
             .padding(.horizontal, 2)

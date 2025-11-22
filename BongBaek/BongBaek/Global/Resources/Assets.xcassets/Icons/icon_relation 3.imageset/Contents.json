@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "icon_family.png",
+      "filename" : "icon_relation.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon_family@2x.png",
+      "filename" : "icon_relation@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon_family@3x.png",
+      "filename" : "icon_relation@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
