@@ -14,14 +14,14 @@ struct RecommendSuccessView: View {
     
     var body: some View {
         ZStack {
-            Color.gray900
+            Color.bgDisplayPrimary
                 .ignoresSafeArea(.all)
             VStack(spacing: 0) {
 
                 HStack {
                     Text("기록 완료")
                         .titleSemiBold18()
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.txtDisplayPrimary)
                 }
                 .padding(.top, 30)
                 
@@ -34,18 +34,18 @@ struct RecommendSuccessView: View {
                     
                     Text("기록이 완료됐어요!")
                         .headBold26()
-                        .foregroundColor(.white)
+                        .foregroundColor(.txtDisplaySecondary)
                                     
                     Text("경조사 기록이 저장되었습니다.\n[기록하기]에서 확인할 수 있어요.")
                         .bodyRegular14()
                         .multilineTextAlignment(.center)
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtDisplayTierary)
                         .fixedSize(horizontal: false, vertical: true)
                     
                     Spacer()
                         .frame(height: 40)
                     
-                    VStack(spacing: 10) {
+                    VStack(spacing: 14) {
                         Button(action: {
                             guard !isNavigating else { return }
                             isNavigating = true
@@ -58,10 +58,10 @@ struct RecommendSuccessView: View {
                         }) {
                             Text("홈으로 가기")
                                 .titleSemiBold18()
-                                .foregroundColor(.white)
+                                .foregroundColor(.txtInteractiveInverse)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 55)
-                                .background(isNavigating ? Color.gray : .primaryNormal)
+                                .background(isNavigating ? Color.gray : .bgStatusFocused)
                                 .cornerRadius(10)
                         }
                         .disabled(isNavigating)
@@ -75,10 +75,10 @@ struct RecommendSuccessView: View {
                         }) {
                             Text("내 기록 보기")
                                 .titleSemiBold18()
-                                .foregroundColor(.gray100)
+                                .foregroundColor(.txtInteractiveSecondary)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 55)
-                                .background(isNavigating ? Color.gray500 : Color.gray700)
+                                .background(isNavigating ? Color.gray500 : .btnInteractiveSecondary)
                                 .cornerRadius(10)
                         }
                         .disabled(isNavigating)
