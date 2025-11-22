@@ -21,12 +21,11 @@ struct NewScheduleCellView: View {
                     .font(.caption_regular_12)
                     .foregroundColor(.txtDisplaySecondary)
             }
-            .frame(width: 60)
+            .frame(width: 29)
             
             Rectangle()
-                .fill(Color.borderDisplayDivider)
+                .fill(.borderFieldDefault)
                 .frame(width: 1)
-                .padding(.vertical, 8)
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {
@@ -65,6 +64,10 @@ struct NewScheduleCellView: View {
                             .foregroundColor(.txtDisplayTierary)
                     }
                     
+                    Rectangle()
+                        .fill(.borderFieldDefault)
+                        .frame(width: 1)
+                    
                     HStack(spacing: 4) {
                         Image("icon_newlocation")
                             .resizable()
@@ -92,6 +95,9 @@ struct NewScheduleCellView: View {
                             .foregroundColor(.txtDisplayTierary)
                     }
                     
+                    Rectangle()
+                        .fill(.borderFieldDefault)
+                        .frame(width: 1)
                     
                     HStack(spacing: 4) {
                         Image("icon_nickname")
@@ -104,7 +110,8 @@ struct NewScheduleCellView: View {
                 }
             }
         }
-        .padding(16)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 16)
         .background(.bgDisplayCard)
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
