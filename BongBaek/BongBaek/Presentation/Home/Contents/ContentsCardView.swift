@@ -50,8 +50,9 @@ struct ContentsCardView: View {
                 .padding(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(width: 220)
         }
+        .buttonStyle(PlainButtonStyle())
+        .background(Color.btnInteractiveSecondary)
         .frame(width: 220, height: 256)
         .clipShape(RoundedRectangle(cornerRadius: 6))
     }
