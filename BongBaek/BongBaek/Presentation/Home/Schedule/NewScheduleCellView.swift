@@ -40,6 +40,19 @@ struct NewScheduleCellView: View {
                     Text(event.eventInfo.eventCategory)
                         .font(.body2_regular_14)
                         .foregroundColor(.txtDisplaySubtle)
+                    
+                    Spacer()
+                    
+                    HStack(alignment: .firstTextBaseline, spacing: 0) {
+                        Text("\(event.eventInfo.cost.formatted())")
+                            .titleSemiBold16()
+                            .foregroundColor(.txtDisplayPrimary)
+
+                        Text("원")
+                            .bodyMedium16()
+                            .foregroundColor(.txtDisplayPrimary)
+                    }
+                    
                 }
                 
                 HStack(spacing: 8) {
@@ -89,18 +102,6 @@ struct NewScheduleCellView: View {
                             .foregroundColor(.txtDisplayTierary)
                     }
                 }
-            }
-            
-            Spacer()
-
-            HStack(alignment: .firstTextBaseline, spacing: 0) {
-                Text("\(event.eventInfo.cost.formatted())")
-                    .titleSemiBold16()
-                    .foregroundColor(.txtDisplayPrimary)
-
-                Text("원")
-                    .bodyMedium16()
-                    .foregroundColor(.txtDisplayPrimary)
             }
         }
         .padding(16)
