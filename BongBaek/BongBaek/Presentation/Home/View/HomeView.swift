@@ -75,12 +75,12 @@ struct HomeView: View {
                     RecommendsView(homeData: homeViewModel.homeData)
                             .environmentObject(stepManager)
                         .environmentObject(router)
-                        .padding(.top, 32)
+                        .padding(.top, 10)
                 } else {
                     RecommendsView(homeData: nil)
                         .environmentObject(stepManager)
                         .environmentObject(router)
-                        .padding(.top, 32)
+                        .padding(.top, 10)
                 }
                 
                 HomeContentsView()

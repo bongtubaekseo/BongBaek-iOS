@@ -11,7 +11,7 @@ struct HomeContentsView: View{
     
     var body : some View{
         VStack(alignment: .leading, spacing: 16){
-            HStack{
+            HStack(spacing: 0){
                 VStack(alignment: .leading, spacing : 2){
                     Text("경조사 콘텐츠")
                         .font(.title_semibold_20)
@@ -56,5 +56,6 @@ struct HomeContentsView: View{
                 .padding(.horizontal, 20)
             }
         }
+        .padding(.vertical, 20)
     }
 }

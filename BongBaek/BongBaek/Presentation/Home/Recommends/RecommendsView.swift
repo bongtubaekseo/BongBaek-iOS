@@ -44,7 +44,8 @@ struct RecommendsView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.borderDisplayDivider, lineWidth: 1)
         )
-        .padding(.horizontal)
+        .padding(.horizontal,20)
+        .padding(.vertical,20)
     }
 }
 
