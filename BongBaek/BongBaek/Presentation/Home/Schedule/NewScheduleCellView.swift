@@ -17,13 +17,18 @@ struct NewScheduleCellView: View {
                     .font(.title_semibold_18)
                     .foregroundColor(.txtDisplayPrimary)
                 
-                Text("(월요일)") //바꿀예정
+                Text("일")
                     .font(.caption_regular_12)
                     .foregroundColor(.txtDisplaySecondary)
             }
             .frame(width: 60)
+            
+            Rectangle()
+                .fill(Color.borderDisplayDivider)
+                .frame(width: 1)
+                .padding(.vertical, 8)
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {
                     Text(event.hostInfo.hostName)
                         .font(.body1_medium_16)
@@ -40,6 +45,7 @@ struct NewScheduleCellView: View {
                 HStack(spacing: 8) {
                     HStack(spacing: 4) {
                         Image("icon_newcalendar1")
+                            .resizable()
                             .frame(width: 12, height: 12)
                         Text(event.eventInfo.eventDate.DateFormat())
                             .font(.caption_regular_12)
@@ -47,16 +53,8 @@ struct NewScheduleCellView: View {
                     }
                     
                     HStack(spacing: 4) {
-                        Image("icon_newrelation")
-                            .frame(width: 12, height: 12)
-                        Text(event.eventInfo.relationship)
-                            .font(.caption_regular_12)
-                            .foregroundColor(.txtDisplayTierary)
-
-                    }
-                    
-                    HStack(spacing: 4) {
                         Image("icon_newlocation")
+                            .resizable()
                             .frame(width: 12, height: 12)
                         Text({
                             let location = event.locationInfo.location
@@ -65,12 +63,26 @@ struct NewScheduleCellView: View {
                             }
                             return location
                         }())
+                        .font(.caption_regular_12)
+                        .foregroundColor(.txtDisplayTierary)
+                        .lineLimit(1)
+                    }
+                }
+                
+                HStack(spacing: 8) {
+                    HStack(spacing: 4) {
+                        Image("icon_newrelation")
+                            .resizable()
+                            .frame(width: 12, height: 12)
+                        Text(event.eventInfo.relationship)
                             .font(.caption_regular_12)
                             .foregroundColor(.txtDisplayTierary)
                     }
                     
-                    HStack(spacing : 4){
+                    
+                    HStack(spacing: 4) {
                         Image("icon_nickname")
+                            .resizable()
                             .frame(width: 12, height: 12)
                         Text(event.hostInfo.hostNickname)
                             .font(.caption_regular_12)
@@ -104,4 +116,3 @@ struct NewScheduleCellView: View {
         return ""
     }
 }
-
