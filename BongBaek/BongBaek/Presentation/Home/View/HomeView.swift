@@ -15,7 +15,7 @@ struct HomeView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 HStack {
                     Image(.logoSymbol)
                         .frame(width: 20, height: 20)
