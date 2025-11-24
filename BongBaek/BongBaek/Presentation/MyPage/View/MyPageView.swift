@@ -70,7 +70,7 @@ struct MyPageView: View {
                     
                     Text("설정")
                         .titleSemiBold18()
-                        .foregroundColor(.white)
+                        .foregroundColor(.txtDisplayPrimary)
                     
                     Spacer()
                     
@@ -80,7 +80,7 @@ struct MyPageView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 10)
                 .padding(.bottom, 16)
-                .background(Color.gray900)
+                .background(Color.bgDisplayPrimary)
                 ScrollView {
                     VStack(spacing : 0) {
                         VStack(spacing: 32) {
@@ -91,17 +91,17 @@ struct MyPageView: View {
                                 
                                 Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
                                     .headBold24()
-                                    .foregroundStyle(.gray100)
+                                    .foregroundStyle(.txtDisplaySecondary)
                                 
                                 Button(action: {
                                     router.push(to: .ModifyView(profileData: mypageViewModel.profileData))
                                 }) {
                                     Text("내 정보 수정")
                                         .captionRegular12()
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.txtInteractiveInverse)
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 8)
-                                        .background(.primaryNormal)
+                                        .background(.bgStatusFocused)
                                         .cornerRadius(20)
                                 }
                             }
@@ -110,10 +110,10 @@ struct MyPageView: View {
                                 VStack(alignment: .leading, spacing: 20) {
                                     Text("생년월일")
                                         .bodyMedium14()
-                                        .foregroundStyle(.gray200)
+                                        .foregroundStyle(.txtDisplayTierary)
                                     Text("수입")
                                         .bodyMedium14()
-                                        .foregroundStyle(.gray200)
+                                        .foregroundStyle(.txtDisplayTierary)
                                 }
                                 
                                 Spacer()
@@ -121,20 +121,20 @@ struct MyPageView: View {
                                 VStack(alignment: .trailing, spacing: 20) {
                                     Text(formatBirthday(mypageViewModel.profileData?.memberBirthday) ?? "2000년 01월 05일")
                                         .bodyMedium14()
-                                        .foregroundStyle(.gray100)
+                                        .foregroundStyle(.txtDisplaySecondary)
                                     Text(formatIncome(mypageViewModel.profileData?.memberIncome) ?? "없음")
                                         .bodyMedium14()
-                                        .foregroundStyle(.gray100)
+                                        .foregroundStyle(.txtDisplaySecondary)
                                 }
                             }
                             .padding(.horizontal, 20)
                             .padding(.vertical, 20)
-                            .background(.gray750)
+                            .background(.bgDisplayCard)
                             .cornerRadius(20)
                             .padding(.horizontal, 20)
                             .padding(.bottom, 20)
                         }
-                        .background(Color.gray900)
+                        .background(Color.bgDisplayPrimary)
                         .clipShape(
                             .rect(
                                 bottomLeadingRadius : 20,
@@ -146,7 +146,7 @@ struct MyPageView: View {
                             HStack {
                                 Text("서비스")
                                     .titleSemiBold18()
-                                    .foregroundStyle(.white)
+                                    .foregroundStyle(.txtDisplayPrimary)
                                 Spacer()
                             }
                             .padding(.horizontal, 20)
@@ -171,7 +171,7 @@ struct MyPageView: View {
                                 showLogoutAlert = true
                             }) {
                                 Text("로그아웃")
-                                    .foregroundColor(.gray400)
+                                    .foregroundColor(.txtDisplayTierary)
                                     .bodyRegular14()
                                     .padding(.leading, 68)
                             }
@@ -182,7 +182,7 @@ struct MyPageView: View {
                                 router.push(to: .accountDeletionView)
                             }) {
                                 Text("서비스 탈퇴")
-                                    .foregroundColor(.gray400)
+                                    .foregroundColor(.txtDisplayTierary)
                                     .bodyRegular14()
                                     .padding(.trailing, 68)
                             }
@@ -191,7 +191,7 @@ struct MyPageView: View {
                         .padding(.top, 12)
                         .padding(.bottom, 40)
                     }
-                    .background(Color.gray800)
+                    .background(Color.bgDisplayPrimary)
                 }
             }
         }
@@ -259,20 +259,20 @@ struct ServiceRow: View {
                     .frame(width: 24, height: 24)
                 
                 Text(title)
-                    .foregroundColor(.gray400)
+                    .foregroundColor(.txtInteractiveSecondary)
                     .font(.body1_medium_16)
                 
                 Spacer()
                 
                 if let subtitle = subtitle {
                     Text(subtitle)
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtDisplayTierary)
                         .font(.body1_medium_16)
                 }
                 
                 if showChevron {
                     Image(systemName: "chevron.right")
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.iconInteractiveDefault)
                 }
             }
             .padding(.horizontal, 20)
