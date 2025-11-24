@@ -37,10 +37,10 @@ struct MyPageView: View {
     @State private var showLogoutAlert = false
     
     private let serviceItems: [ServiceItem] = [
-        ServiceItem(icon: "icon_intersect", title: "앱 버전", subtitle: "v 1.0.0", showChevron: false),
-        ServiceItem(icon: "icon_information", title: "문의하기", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480aa8badeba07a68b944"),
-        ServiceItem(icon: "icon_book", title: "서비스 이용약관", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d348036b260f175a236ec7c"),
-        ServiceItem(icon: "icon_key", title: "개인정보 처리방침", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480d0b1eafa217b306105")
+        ServiceItem(icon: "icon_version", title: "앱 버전", subtitle: "v 1.0.0", showChevron: false),
+        ServiceItem(icon: "icon_ask", title: "문의하기", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480aa8badeba07a68b944"),
+        ServiceItem(icon: "icon_terms", title: "서비스 이용약관", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d348036b260f175a236ec7c"),
+        ServiceItem(icon: "icon_lock", title: "개인정보 처리방침", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480d0b1eafa217b306105")
     ]
     
    
