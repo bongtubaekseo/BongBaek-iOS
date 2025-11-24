@@ -81,7 +81,7 @@ struct MyPageView: View {
                 .padding(.top, 10)
                 .padding(.bottom, 16)
                 .background(Color.bgDisplayPrimary)
-                ScrollView {
+                ScrollView(showsIndicators: false) {
                     VStack(spacing : 0) {
                         VStack(spacing: 32) {
                             VStack(spacing: 16) {
