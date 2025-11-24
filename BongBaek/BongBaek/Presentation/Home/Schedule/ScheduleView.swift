@@ -16,24 +16,31 @@ struct ScheduleView: View {
        }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("\(UserDefaults.standard.memberName.isEmpty ? "봉백" : UserDefaults.standard.memberName)님의 일정")
-                    .font(.title_semibold_20)
-                    .foregroundStyle(.white)
-                
+                VStack(alignment: .leading, spacing: 2){
+                    Text("\(UserDefaults.standard.memberName.isEmpty ? "봉백" : UserDefaults.standard.memberName)님의 일정")
+                        .font(.title_semibold_20)
+                        .foregroundStyle(.txtDisplayPrimary)
+                    Text("나의 경조사 일정을 관리해보세요!")
+                        .font(.caption_regular_12)
+                        .foregroundStyle(.txtDisplayTierary)
+                }
                 Spacer()
 
                 if !events.isEmpty {
                     Button(action: {
                         router.push(to: .fullScheduleView)
                     }) {
-                        Text("더보기")
-                            .bodyRegular14()
-                            .foregroundColor(.gray)
-                            .padding(.vertical, 4)
-                            .padding(.horizontal, 8)
-                            .background(Color.clear)
+                        HStack{
+                            Text("더보기")
+                                .bodyRegular14()
+                                .foregroundColor(.txtDisplaySecondary)
+                            
+                            Image("icon_left")
+                                .foregroundColor(.iconInteractiveInverse)
+                                .frame(width: 14, height: 14)
+                        }
                     }
                 }
             }
@@ -43,11 +50,11 @@ struct ScheduleView: View {
                 EmptyCardView()
             } else {
                 ForEach(sortedEvents, id: \.eventId) { event in
-                    ScheduleCellView(event: event)
+                    NewScheduleCellView(event: event)
                 }
             }
         }
         .padding(.horizontal)
-        .background(Color.gray900)
+        .background(.bgDisplayPrimary)
     }
 }

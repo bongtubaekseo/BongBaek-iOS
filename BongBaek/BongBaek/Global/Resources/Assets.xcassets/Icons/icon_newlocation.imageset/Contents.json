@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "대표 이미지 가이드.png",
+      "filename" : "icon_newlocation3.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "icon_newlocation2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "icon_newlocation.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
