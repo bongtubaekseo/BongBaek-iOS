@@ -47,11 +47,11 @@ struct AccountDeletionView: View {
             VStack(alignment: .leading,spacing: 12.adjustedH) {
                 Text("탈퇴를 도와드릴게요")
                     .font(.head_bold_24)
-                    .foregroundStyle(.gray100)
+                    .foregroundStyle(.txtDisplaySecondary)
                 
                 Text("더 나은 서비스를 위해 탈퇴 이유를 알려주세요")
                     .font(.body2_regular_14)
-                    .foregroundStyle(.gray400)
+                    .foregroundStyle(.txtDisplayTierary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, 10.adjustedH)
@@ -73,7 +73,7 @@ struct AccountDeletionView: View {
                     }
                 }
                 .padding(20)
-                .background(.gray800)
+                .background(.bgDisplaySecondary)
                 .cornerRadius(12)
                 .padding(.horizontal, 20)
                 .padding(.top, 20.adjustedH)
@@ -105,12 +105,12 @@ struct AccountDeletionView: View {
             }) {
                 Text("탈퇴하기")
                     .font(.title_semibold_18)
-                    .foregroundColor(isDeleteButtonEnabled ? .white : .gray500) // 수정
+                    .foregroundColor(isDeleteButtonEnabled ? .txtInteractiveInverse : .txtStatusDisabled)
                     .frame(maxWidth: .infinity)
                     .frame(height: 55)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(isDeleteButtonEnabled ? .primaryNormal : .primaryBg) // 수정
+                            .fill(isDeleteButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
                     )
             }
             .disabled(!isDeleteButtonEnabled)
@@ -121,7 +121,7 @@ struct AccountDeletionView: View {
              
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .alert("봉투백서를 탈퇴하시겠습니까?", isPresented: $showDeleteAlert) {
             Button("취소", role: .cancel) {
                 
@@ -275,7 +275,7 @@ struct DeletionReasonButton: View {
                         
                         Text("기타")
                             .font(.body1_medium_16)
-                            .foregroundColor(.gray100)
+                            .foregroundColor(.txtInteractivePrimary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
                         Spacer()
@@ -294,7 +294,7 @@ struct DeletionReasonButton: View {
                         TextField("기타 사유를 입력해주세요",
                                   text: $otherReasonText,
                                   prompt: Text("기타 사유를 입력해주세요")
-                            .foregroundColor(.gray500),
+                            .foregroundColor(.txtDisplayTierary),
                                   axis: .vertical)
                               
                             .font(.body1_medium_16)
@@ -319,17 +319,17 @@ struct DeletionReasonButton: View {
                         HStack {
                             Spacer()
                             Text("\(otherReasonText.count)/50")
-                                .font(.caption)
-                                .foregroundColor(.gray500)
+                                .font(.caption_regular_12)
+                                .foregroundColor(.txtDisplaySecondary)
                         }
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 16)
                 }
-                .background(.gray750)
+                .background(.btnInteractiveDisabled)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.primaryNormal, lineWidth: 1)
+                        .stroke(Color.borderStatusFocused, lineWidth: 1)
                 )
                 .cornerRadius(8)
             } else {
@@ -354,7 +354,7 @@ struct DeletionReasonButton: View {
                         
                         Text(otherReasonText.isEmpty ? "기타" : otherReasonText)
                             .font(.body1_medium_16)
-                            .foregroundColor(.gray100)
+                            .foregroundColor(.txtInteractivePrimary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .lineLimit(1)
                         
@@ -362,13 +362,14 @@ struct DeletionReasonButton: View {
                     }
                     .padding(.vertical, 16)
                     .padding(.horizontal, 16)
-                    .background(.gray750)
+                    .background(isSelected ? Color.btnInteractiveDisabled : Color.btnInteractiveTierary)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(
-                                isSelected ? Color.primaryNormal : Color.gray750,
-                                lineWidth: 1
-                            )
+                        Group {
+                            if isSelected {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.borderStatusFocused, lineWidth: 1)
+                            }
+                        }
                     )
                     .cornerRadius(8)
                 }
@@ -385,20 +386,21 @@ struct DeletionReasonButton: View {
                     
                     Text(title)
                         .font(.body1_medium_16)
-                        .foregroundColor(.gray100)
+                        .foregroundColor(.txtInteractivePrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Spacer()
                 }
                 .padding(.vertical, 16)
                 .padding(.horizontal, 16)
-                .background(.gray750)
+                .background(isSelected ? Color.btnInteractiveDisabled : Color.btnInteractiveTierary)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(
-                            isSelected ? Color.primaryNormal : Color.gray750,
-                            lineWidth: 1
-                        )
+                    Group {
+                        if isSelected {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.borderStatusFocused, lineWidth: 1)
+                        }
+                    }
                 )
                 .cornerRadius(8)
             }
