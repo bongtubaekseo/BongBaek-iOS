@@ -115,6 +115,7 @@ struct NewScheduleCellView: View {
         .padding(.vertical, 16)
         .background(.bgDisplayCard)
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.bottom, 12)
     }
 
     private func extractDay(from dateString: String) -> String {
