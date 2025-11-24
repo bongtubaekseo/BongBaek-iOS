@@ -56,25 +56,7 @@ struct HomeView: View {
                     .fill(.borderDisplayTitle)
                     .frame(maxWidth: .infinity)
                     .frame(height: 10)
-                
-//                if homeViewModel.hasData {
-//                    ScheduleAlarmView(homeData: $homeViewModel.homeData)
-//                        .frame(height: 276)
-//                        .padding(.top, 30)
-//                } else if homeViewModel.isLoading {
-//                    // 로딩 중일 때 ScheduleAlarmView 자리
-//                    VStack {
-//                        ProgressView("일정을 불러오는 중…")
-//                            .foregroundColor(.white)
-//                    }
-//                    .frame(height: 276)
-//                    .padding(.top, 30)
-//                } else {
-//                    // 데이터가 없거나 에러일 때 더미 데이터 또는 빈 뷰
-//                    ScheduleAlarmView(homeData: .constant(nil))
-//                        .frame(height: 276)
-//                        .padding(.top, 30)
-//                }
+
         
                 if homeViewModel.hasData {
                     RecommendsView(homeData: homeViewModel.homeData)
