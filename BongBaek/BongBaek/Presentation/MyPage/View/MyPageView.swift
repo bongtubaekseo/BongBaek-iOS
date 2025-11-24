@@ -85,9 +85,10 @@ struct MyPageView: View {
                     VStack(spacing : 0) {
                         VStack(spacing: 32) {
                             VStack(spacing: 16) {
-                                Image(.myPageLogo)
-                                    .frame(width: 110, height: 110)
-                                    .padding(.top, 40)
+                                Image("icon_profile")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+                                    .padding(.top, 20)
                                 
                                 Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
                                     .headBold24()
