@@ -128,6 +128,7 @@ struct SignUpBottomSheetView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.bgDisplayCard)
+        .ignoresSafeArea(.container, edges: .bottom) 
     }
     
     private func toggleAllAgree() {

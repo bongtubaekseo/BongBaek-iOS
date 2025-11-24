@@ -21,10 +21,6 @@ struct ProfileSettingView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-//            CustomNavigationBar(title: "프로필 설정") {
-//                dismiss()
-//            }
-            
             HStack {
                 Spacer()
                 Text("프로필 설정")
@@ -42,11 +38,6 @@ struct ProfileSettingView: View {
                         .opacity(viewModel.hasIncome ? 1.0 : 0.0)
                         .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
                         .padding(.bottom, 60)
-                    
-                    startButton
-                        .padding(.bottom, 36)
-                    
-                    Spacer()
                 }
             }
             .scrollIndicators(.hidden)
@@ -56,10 +47,11 @@ struct ProfileSettingView: View {
             .onTapGesture {
                 hideKeyboard()
             }
+            
+            startButton
+                .padding(.bottom, 60)
+                .padding(.horizontal, 20)
         }
-//        .navigationDestination(isPresented: $viewModel.navigateToMain) {
-//            MainTabView()
-//        }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.bgDisplayPrimary)
