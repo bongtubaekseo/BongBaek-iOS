@@ -17,9 +17,8 @@ struct EmptyCardView: View {
             VStack(spacing: 20) {
                 VStack {
                     Image("icon_plus")
-                        .foregroundColor(.black)
-                        .frame(width: 34, height: 34)
-                        .background(Circle().fill(Color(hex:"#6E7FFF")))
+                        .frame(width: 24, height: 24)
+                        
                 }
                 .padding(.top, 14)
 
