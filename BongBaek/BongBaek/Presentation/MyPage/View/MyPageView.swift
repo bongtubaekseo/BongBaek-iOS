@@ -48,10 +48,10 @@ struct MyPageView: View {
     var body: some View {
         ZStack {
             VStack(spacing : 0){
-                Color.gray900
+                Color.bgDisplayPrimary
                     //.frame(height: 300)
                     .ignoresSafeArea(edges: .top)
-                Color.gray800
+                Color.bgDisplayPrimary
                     .frame(maxWidth: .infinity)
                     .ignoresSafeArea(edges: .bottom)
             }
