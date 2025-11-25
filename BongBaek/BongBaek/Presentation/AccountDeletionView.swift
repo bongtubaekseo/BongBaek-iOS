@@ -43,19 +43,20 @@ struct AccountDeletionView: View {
                 print("123")
                 router.pop()
             }
-            
-            VStack(alignment: .leading,spacing: 12.adjustedH) {
-                Text("탈퇴를 도와드릴게요")
-                    .font(.head_bold_24)
-                    .foregroundStyle(.txtDisplaySecondary)
-                
-                Text("더 나은 서비스를 위해 탈퇴 이유를 알려주세요")
-                    .font(.body2_regular_14)
-                    .foregroundStyle(.txtDisplayTierary)
+            if !(selectedReason == "기타" && isOtherReasonExpanded){
+                VStack(alignment: .leading,spacing: 12.adjustedH) {
+                    Text("탈퇴를 도와드릴게요")
+                        .font(.head_bold_24)
+                        .foregroundStyle(.txtDisplaySecondary)
+                    
+                    Text("더 나은 서비스를 위해 탈퇴 이유를 알려주세요")
+                        .font(.body2_regular_14)
+                        .foregroundStyle(.txtDisplayTierary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 10.adjustedH)
+                .padding(.leading, 20)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 10.adjustedH)
-            .padding(.leading, 20)
             
             ScrollViewReader { proxy in
                 VStack(spacing: 12.adjustedH) {
@@ -285,8 +286,7 @@ struct DeletionReasonButton: View {
         if title == "기타" {
             if isSelected && isOtherReasonExpanded {
                 VStack(spacing: 0) {
-                    HStack(spacing: 12) {
-                        
+                    HStack(alignment: .top, spacing: 12) {
                         Image(getImageName())
                             .resizable()
                             .renderingMode(.template)
@@ -294,59 +294,47 @@ struct DeletionReasonButton: View {
                             .frame(width: 20, height: 20)
                             .clipped()
                             .foregroundColor(iconColor)
+                            .padding(.top, 16)
                         
-                        Text("기타")
+                        VStack(alignment: .leading, spacing: 0) {
+                            TextField("기타 사유를 입력해주세요",
+                                      text: $otherReasonText,
+                                      prompt: Text("기타 사유를 입력해주세요")
+                                .foregroundColor(.txtDisplayTierary),
+                                      axis: .vertical)
+                            
                             .font(.body1_medium_16)
-                            .foregroundColor(textColor)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Spacer()
-                    }
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 16)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            isOtherReasonExpanded = false
-                        }
-                        isTextFieldFocused = false
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        TextField("기타 사유를 입력해주세요",
-                                  text: $otherReasonText,
-                                  prompt: Text("기타 사유를 입력해주세요")
-                            .foregroundColor(.txtDisplayTierary),
-                                  axis: .vertical)
-                        
-                        .font(.body1_medium_16)
-                        .foregroundColor(.txtInteractivePrimary)
-                        .focused($isTextFieldFocused)
-                        .lineLimit(3...6)
-                        .onSubmit {
-                            isTextFieldFocused = false
-                        }
-                        .onChange(of: otherReasonText) { oldValue, newValue in
-                            if newValue.contains("\n") {
-                                otherReasonText = newValue.replacingOccurrences(of: "\n", with: "")
+                            .foregroundColor(.txtInteractivePrimary)
+                            .focused($isTextFieldFocused)
+                            .lineLimit(3...6)
+                            .padding(.vertical, 16)
+                            .onSubmit {
                                 isTextFieldFocused = false
-                                return
+                            }
+                            .onChange(of: otherReasonText) { oldValue, newValue in
+                                if newValue.contains("\n") {
+                                    otherReasonText = newValue.replacingOccurrences(of: "\n", with: "")
+                                    isTextFieldFocused = false
+                                    return
+                                }
+                                
+                                if newValue.count > 50 {
+                                    otherReasonText = String(newValue.prefix(50))
+                                }
                             }
                             
-                            if newValue.count > 50 {
-                                otherReasonText = String(newValue.prefix(50))
+                            HStack {
+                                Spacer()
+                                Text("\(otherReasonText.count)/50")
+                                    .font(.caption_regular_12)
+                                    .foregroundColor(.txtDisplaySecondary)
+                                    .padding(.trailing, 12)
+                                    .padding(.bottom, 12)
                             }
                         }
-                        
-                        HStack {
-                            Spacer()
-                            Text("\(otherReasonText.count)/50")
-                                .font(.caption_regular_12)
-                                .foregroundColor(.txtDisplaySecondary)
-                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 16)
+                    .padding(.leading, 16)
                 }
                 .background(.btnInteractiveDisabled)
                 .overlay(
@@ -431,7 +419,6 @@ struct DeletionReasonButton: View {
                 .cornerRadius(8)
             }
             .buttonStyle(PlainButtonStyle())
-            //            .animation(.easeInOut(duration: 0.2), value: isSelected)
         }
     }
     
