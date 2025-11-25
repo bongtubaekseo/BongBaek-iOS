@@ -320,7 +320,7 @@ struct DeletionReasonButton: View {
                                   axis: .vertical)
                         
                         .font(.body1_medium_16)
-                        .foregroundColor(.white)
+                        .foregroundColor(.txtInteractivePrimary)
                         .focused($isTextFieldFocused)
                         .lineLimit(3...6)
                         .onSubmit {
