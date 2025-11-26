@@ -30,7 +30,10 @@ struct ScheduleView: View {
 
                 if !events.isEmpty {
                     Button(action: {
-                        router.push(to: .fullScheduleView)
+                        NotificationCenter.default.post(
+                            name: .selectTab,
+                            object: Tab.record
+                        )
                     }) {
                         HStack{
                             Text("더보기")
