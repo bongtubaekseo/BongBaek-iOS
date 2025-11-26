@@ -75,7 +75,7 @@ struct CustomTextField: View {
                     if isSmallText {
                         Text(title)
                             .bodyMedium14()
-                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
+                            .foregroundColor(isRecommendationEdit ? .gray400 : .txtDisplaySecondary)
                     } else {
                         Text(title)
                             .bodyMedium16()
@@ -360,13 +360,13 @@ enum ValidationState2 {
     var color: Color {
         switch self {
         case .normal:
-            return .gray500
+            return .borderFieldDefault
         case .valid:
-            return .primaryNormal
+            return .borderStatusFocused
         case .invalid:
-            return .secondaryRed
+            return .borderStatusError
         case .focused:
-            return .primaryNormal
+            return .borderStatusFocused
         case .completed:
             return .lineNormal
         }

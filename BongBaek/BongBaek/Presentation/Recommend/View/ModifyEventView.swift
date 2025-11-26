@@ -112,7 +112,7 @@ struct ModifyEventView: View {
                 }) {
                     Text("취소")
                         .bodyRegular16()
-                        .foregroundStyle(.gray200)
+                        .foregroundStyle(.txtInteractiveSecondary)
                 }
                 .frame(width: 44, height: 44)
                 .padding(.leading, -8)
@@ -121,7 +121,7 @@ struct ModifyEventView: View {
                 
                 Text(mode == .create ? "경조사 기록하기" : "경조사 수정하기")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplayPrimary)
                 
                 Spacer()
                 
@@ -131,7 +131,7 @@ struct ModifyEventView: View {
             .padding(.horizontal, 20)
             .padding(.top, 4)
             .padding(.bottom, 16)
-            .background(.gray900)
+            .background(.bgDisplayPrimary)
             
             // 스크롤 가능한 콘텐츠
             ScrollView {
@@ -257,7 +257,7 @@ struct ModifyEventView: View {
                         .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
-                    .background(.gray800)
+                    .background(.bgDisplaySecondary)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -285,9 +285,9 @@ struct ModifyEventView: View {
                                     .foregroundColor(.white)
                             }
                         } else {
-                            Text(mode == .create ? "기록하기" : "수정하기")
+                            Text(mode == .create ? "기록 저장하기" : "수정하기")
                                 .titleSemiBold18()
-                                .foregroundColor(isFormValid ? .white : .gray500)
+                                .foregroundColor(isFormValid ? .txtInteractiveInverse : .gray500)
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -312,7 +312,7 @@ struct ModifyEventView: View {
                 hideKeyboard()
             }
         }
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)

@@ -6,12 +6,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "icon_funeral2.png",
+      "filename" : "icon_funeral@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon_funeral3.png",
+      "filename" : "icon_funeral@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

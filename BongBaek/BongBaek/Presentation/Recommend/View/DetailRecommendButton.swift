@@ -19,15 +19,15 @@ struct DetailRecommendButton: View {
                     HStack {
                         Text("선택")
                             .captionRegular12()
-                            .foregroundColor(.primaryNormal)
+                            .foregroundColor(.txtStatusFocused)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
-                            .background(isSelected ? .gray750 : .primaryBg)
+                            .background(isSelected ? .bgDisplayCard : .btnInteractiveDisabled)
                             .cornerRadius(4)
                         
                         Text("더 정확한 추천을 받고 싶다면?")
                             .titleSemiBold16()
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.txtDisplaySecondary)
                         
                         Spacer()
                     }
@@ -36,11 +36,11 @@ struct DetailRecommendButton: View {
                     VStack(alignment: .leading,spacing:4) {
                         Text("관계의 친밀도를 알려주시면")
                             .bodyRegular14()
-                            .foregroundColor(isSelected ? .gray100 : .gray400)
+                            .foregroundColor(isSelected ? .txtDisplaySecondary : .txtDisplayTierary)
                         
                         Text("더 정확한 정보를 받을 수 있어요")
                             .bodyRegular14()
-                            .foregroundColor(isSelected ? .gray100 : .gray400)
+                            .foregroundColor(isSelected ? .txtDisplaySecondary : .txtDisplayTierary)
                     }
                     
 
@@ -49,7 +49,8 @@ struct DetailRecommendButton: View {
                 Spacer()
                 
                 Image(isSelected ? "checkbox 1" : "checkbox")
-                    .foregroundColor(isSelected ? .red : .blue)
+                    .renderingMode(.template)
+                    .foregroundColor(isSelected ? .btnInteractiveTierary : .borderFieldDefault)
                     .frame(width:30,height: 30)
             }
             .padding()
@@ -58,8 +59,8 @@ struct DetailRecommendButton: View {
             .frame(maxWidth: .infinity, minHeight: 83)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? .primaryNormal : .gray750)
-                    .stroke(.lineNormal, lineWidth: 1)
+                    .fill(isSelected ? .bgStatusFocused : .bgDisplayCard)
+                    .stroke(.borderFieldDefault, lineWidth: 1)
             )
             .contentShape(Rectangle())
         }

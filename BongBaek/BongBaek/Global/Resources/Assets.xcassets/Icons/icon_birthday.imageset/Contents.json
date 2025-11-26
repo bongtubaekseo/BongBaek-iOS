@@ -6,12 +6,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "icon_birthday2.png",
+      "filename" : "icon_birthday@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon_birthday3.png",
+      "filename" : "icon_birthday@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

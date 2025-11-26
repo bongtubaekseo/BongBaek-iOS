@@ -55,18 +55,18 @@ struct CustomDropdown<T: DropdownItem>: View {
                             .resizable()
                             .renderingMode(.template)
                             .frame(width: 20, height: 20)
-                            .foregroundColor(.gray400)
+                            .foregroundColor(.iconDisabledPrimary)
                     }
 
                     HStack(spacing: 2) {
                         Text(title)
                             .bodyMedium14()
-                            .foregroundColor(isDisabled ? .gray400 : .white)
+                            .foregroundColor(isDisabled ? .txtDisplayTierary : .txtDisplaySecondary)
                         
                         VStack {
                             Text("*")
                                 .bodyMedium14()
-                                .foregroundColor(.primaryNormal)
+                                .foregroundColor(.txtStatusFocused)
                                 .padding(.top, 4)
                                 .padding(.leading, 1)
 
@@ -103,20 +103,20 @@ struct CustomDropdown<T: DropdownItem>: View {
                     Text(selectedItem.displayText)
                         .bodyMedium16()
                         .foregroundColor(
-                            isDisabled ? .gray300 : // isDisabled일 때 gray300
+                            isDisabled ? .txtStatusDisabled : // isDisabled일 때 gray300
                                 (isExpanded ? Color("primary_normal") : .white)
                         )
                 } else {
                     Text(placeholder)
                         .bodyRegular16()
-                        .foregroundColor(isDisabled ? .gray600 : .gray)
+                        .foregroundColor(isDisabled ? .txtStatusDisabled : .gray)
                 }
 
                 Spacer()
 
                 Image(systemName: "chevron.down")
                     .foregroundColor(
-                        isDisabled ? .gray400 : // isDisabled일 때 gray400
+                        isDisabled ? .iconDisabledSecondary : // isDisabled일 때 gray400
                             (isExpanded ? .primaryNormal :
                                 (selectedItem != nil ? .white : .gray400))
                     )
@@ -125,11 +125,11 @@ struct CustomDropdown<T: DropdownItem>: View {
             }
             .frame(height: 50)
             .padding(.horizontal, 16)
-            .background(Color.gray750)
+            .background(.bgFieldSecondary)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        isDisabled ? Color.gray750 :
+                        isDisabled ? .bgFieldSecondary :
                             (isExpanded ? Color("primary_normal") : Color.gray750),
                         lineWidth: 1
                     )

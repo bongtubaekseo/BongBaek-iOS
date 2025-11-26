@@ -49,8 +49,8 @@ struct RecommendGuideTextView: View {
         subtitle2: String,
         title1Style: TextStyle = .headBold26,
         title2Style: TextStyle = .headBold26,  
-        titleColor: Color = .gray100,
-        subtitleColor: Color = .gray400,
+        titleColor: Color = .txtDisplaySecondary,
+        subtitleColor: Color = .txtDisplayTierary,
         spacing: CGFloat = 12
     ) {
         self.title1 = title1
@@ -65,7 +65,7 @@ struct RecommendGuideTextView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading,spacing: 20) {
             
             VStack(alignment: .leading, spacing: 4) {
                 title1Style.apply(to: Text(title1), color: titleColor)

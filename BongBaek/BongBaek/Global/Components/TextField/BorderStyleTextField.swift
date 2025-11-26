@@ -49,15 +49,15 @@ struct BorderTextField: View {
                         if text.isEmpty {
                             Text(placeholder)
                                 .font(.system(size: 16))
-                                .foregroundColor(.gray.opacity(0.6))
+                                .foregroundColor(.txtFieldPlaceholder)
                         }
                         
                         TextField("", text: $text)
                             .font(.system(size: 16))
                             .textFieldStyle(PlainTextFieldStyle())
                             .focused($isFocused)
-                            .foregroundColor(.white)
-                            .tint(.white)
+                            .foregroundColor(.txtFieldValue)
+                            .tint(.txtDisplayPrimary)
                     }
                 }
                 
@@ -90,7 +90,7 @@ struct BorderTextField: View {
             }
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
-            .background(.gray800)
+            .background(.bgFieldPrimary)
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)

@@ -18,22 +18,22 @@ struct RelationshipButton: View {
             VStack(spacing: 4) {
                 Image(image)
                     .renderingMode(.template)
-                    .foregroundColor(isSelected ? .white : .primaryNormal)
-                    .frame(width: 48, height: 40) 
+                    .foregroundColor(isSelected ? .iconInteractiveInverse : .iconFocusedSecondary)
+                    .frame(width: 48, height: 40)
                     .scaledToFit()
                 
                 Text(text)
                     .bodyMedium14()
-                    .foregroundColor(isSelected ? .white : .gray200)
+                    .foregroundColor(isSelected ? .txtInteractiveInverse : .txtInteractivePrimary)
             }
             .frame(maxWidth: .infinity, minHeight: 83)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? .primaryNormal : .gray750)
+                    .fill(isSelected ? .bgStatusFocused : .btnInteractiveTierary)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(.lineNormal, lineWidth: 1)
+                    .stroke(.borderFieldDefault, lineWidth: 1)
             )
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .contentShape(Rectangle())
