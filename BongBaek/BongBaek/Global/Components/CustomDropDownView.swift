@@ -55,7 +55,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                             .resizable()
                             .renderingMode(.template)
                             .frame(width: 20, height: 20)
-                            .foregroundColor(.iconDisabledPrimary)
+                            .foregroundColor(isDisabled ? .iconDisabledPrimary : .iconFocusedPrimary)
                     }
 
                     HStack(spacing: 2) {
