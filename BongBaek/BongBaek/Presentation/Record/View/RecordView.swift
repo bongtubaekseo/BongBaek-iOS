@@ -63,6 +63,7 @@ struct RecordView: View {
                 RecordContentView(
                     viewModel: viewModel
                 )
+                .background(.red)
             }
             .refreshable {
                 Task {
@@ -295,6 +296,7 @@ struct RecordContentView: View {
                 LoadingView2()
             } else if viewModel.isCurrentSectionEmpty {
                 RecordsEmptyView(message: viewModel.emptyMessage)
+                    .padding(.top, 40)
             } else {
                 //년도/월별 그루핑 표시
                 eventContentView
@@ -423,7 +425,6 @@ struct RecordsEmptyView: View {
             .padding(.top, 32)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 80)
     }
 }
 
