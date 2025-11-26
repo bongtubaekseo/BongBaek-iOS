@@ -17,37 +17,36 @@ struct EmptyCardView: View {
             VStack(spacing: 20) {
                 VStack {
                     Image("icon_plus")
-                        .foregroundColor(.black)
-                        .frame(width: 34, height: 34)
-                        .background(Circle().fill(Color(hex:"#6E7FFF")))
+                        .frame(width: 24, height: 24)
+                        
                 }
                 .padding(.top, 14)
 
                 Text("예정된 일정이 없습니다")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplaySecondary)
                     .padding(.bottom, -12)
                    
 
                 HStack(spacing: 4) {
                     Text("일정추가하기")
                         .captionRegular12()
-                        .foregroundColor(.gray300)
+                        .foregroundColor(.txtDisplayTierary)
                     
                     Image("icon_left")
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.iconDisabledSecondary)
                         .frame(width: 5, height: 10)
                 }
                 .padding(.vertical, 6)
                 .padding(.horizontal, 10)
-                .background(.gray900)
+                .background(.bgDisplayPrimary)
                 .cornerRadius(6)
                 .padding(.bottom, 14)
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
-            .background(.gray800)
+            .background(.bgFieldPrimary)
             .cornerRadius(10)
         }
         .buttonStyle(PlainButtonStyle())  // 기본 버튼 스타일 제거

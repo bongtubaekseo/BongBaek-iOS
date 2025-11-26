@@ -83,7 +83,7 @@ struct ModifyView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .ignoresSafeArea(.container, edges: .bottom)
         .sheet(isPresented: $showDatePicker, onDismiss: {
             focusedField = nil
@@ -137,13 +137,13 @@ struct ModifyView: View {
         HStack {
             Text("현재 수입 있음")
                 .bodyMedium16()
-                .foregroundColor(.white)
+                .foregroundColor(.txtDisplayPrimary)
             
             Spacer()
             
             Toggle("", isOn: $viewModel.hasIncome)
                 .labelsHidden()
-                .tint(.primaryNormal)
+                .tint(.bgStatusFocused)
                 .onChange(of: viewModel.hasIncome) { _, newValue in
                     if !newValue {
                         viewModel.selectIncome(.none)
@@ -155,7 +155,7 @@ struct ModifyView: View {
         .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
+                .fill(.bgDisplayCard)
         )
         .padding(.top, 20)
     }
@@ -164,7 +164,7 @@ struct ModifyView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
                 .titleSemiBold16()
-                .foregroundStyle(.gray100)
+                .foregroundStyle(.txtDisplaySecondary)
                 .padding(.bottom, 20)
             
             VStack(spacing: 12) {
@@ -178,7 +178,7 @@ struct ModifyView: View {
         .padding(.bottom, 20)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
+                .fill(.bgDisplayCard)
         )
         .transition(.asymmetric(
             insertion: .move(edge: .top).combined(with: .opacity),
@@ -196,13 +196,13 @@ struct ModifyView: View {
             HStack {
                 Text(selection.displayText)
                     .bodyRegular14()
-                    .foregroundStyle(.gray100)
+                    .foregroundStyle(.txtStatusFocused)
                 
                 Spacer()
                 
                 if viewModel.isSelected(selection) {
                     Image(systemName: "checkmark")
-                        .foregroundStyle(.primaryNormal)
+                        .foregroundStyle(.txtStatusFocused)
                         .font(.system(size: 12, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
@@ -217,8 +217,8 @@ struct ModifyView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        viewModel.isSelected(selection) ? .primaryNormal : .commonLineNormal,
-                        lineWidth: viewModel.isSelected(selection) ? 2 : 1
+                        viewModel.isSelected(selection) ? .borderStatusFocused : .borderFieldDefault,
+                        lineWidth: viewModel.isSelected(selection) ? 1 : 1
                     )
             )
         }
@@ -241,14 +241,14 @@ struct ModifyView: View {
                 }
                 Text("수정하기")
                     .titleSemiBold18()
-                    .foregroundColor(viewModel.isUpdateButtonEnabled ? .white : .gray500)
+                    .foregroundColor(viewModel.isUpdateButtonEnabled ? .txtInteractiveInverse : .txtStatusDisabled)
                 
 
             }
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(viewModel.isUpdateButtonEnabled ? .primaryNormal : .primaryBg)
+        .background(viewModel.isUpdateButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
         .cornerRadius(12)
         .disabled(!viewModel.isUpdateButtonEnabled)
         .animation(.easeInOut(duration: 0.2), value: viewModel.isUpdateButtonEnabled)

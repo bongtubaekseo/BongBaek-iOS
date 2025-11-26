@@ -87,7 +87,7 @@ struct CustomTextField: View {
                         
                         VStack {
                             Text("*")
-                                .bodyMedium16()
+                                .bodyMedium14()
                                 .foregroundColor(.txtStatusFocused)
                                 .padding(.top, 4)
                                 .padding(.leading, 1)

@@ -22,7 +22,7 @@ struct CustomNavigationBar: View {
                 onBackTap()
             }) {
                 Image(systemName: "chevron.left")
-                    .foregroundColor(.white)
+                    .foregroundColor(.iconInteractiveDefault)
                     .frame(width: 24, height: 24)
             }
             .contentShape(Rectangle())
@@ -32,11 +32,11 @@ struct CustomNavigationBar: View {
         .padding(.horizontal, 20)
         .padding(.top, 8)
         .padding(.bottom, 16)
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .overlay(
             Text(title)
                 .titleSemiBold18()
-                .foregroundColor(.white)
+                .foregroundColor(.txtDisplayPrimary)
         )
     }
 }
