@@ -61,7 +61,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                     HStack(spacing: 2) {
                         Text(title)
                             .bodyMedium14()
-                            .foregroundColor(isDisabled ? .txtDisplayTierary : .white)
+                            .foregroundColor(isDisabled ? .txtDisplayTierary : .txtDisplaySecondary)
                         
                         VStack {
                             Text("*")
