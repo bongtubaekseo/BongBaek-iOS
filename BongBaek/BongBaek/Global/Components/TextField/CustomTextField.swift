@@ -75,7 +75,7 @@ struct CustomTextField: View {
                     if isSmallText {
                         Text(title)
                             .bodyMedium14()
-                            .foregroundColor(isRecommendationEdit ? .gray400 : .white)
+                            .foregroundColor(isRecommendationEdit ? .txtDisplayTierary : .txtDisplaySecondary)
                     } else {
                         Text(title)
                             .bodyMedium16()

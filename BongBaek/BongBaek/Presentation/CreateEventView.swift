@@ -59,7 +59,7 @@ struct CreateEventView: View {
                 }) {
                     Text("취소")
                         .bodyRegular16()
-                        .foregroundStyle(.gray200)
+                        .foregroundStyle(.txtInteractiveSecondary)
                 }
                 .frame(width: 44, height: 44)
                 .padding(.leading, -8)
@@ -68,7 +68,7 @@ struct CreateEventView: View {
                 
                 Text("경조사 기록하기")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplayPrimary)
                 
                 Spacer()
                 
@@ -78,7 +78,7 @@ struct CreateEventView: View {
             .padding(.horizontal, 20)
             .padding(.top, 4)
             .padding(.bottom, 16)
-            .background(.gray900)
+            .background(.bgDisplayPrimary)
             
             // 스크롤 가능한 콘텐츠
             ScrollView {
@@ -188,7 +188,7 @@ struct CreateEventView: View {
                         .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
-                    .background(.gray800)
+                    .background(.bgDisplaySecondary)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -237,7 +237,7 @@ struct CreateEventView: View {
                 hideKeyboard()
             }
         }
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)

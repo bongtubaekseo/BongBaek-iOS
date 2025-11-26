@@ -404,7 +404,7 @@ struct RecordsEmptyView: View {
                 .bodyRegular14()
                 .foregroundColor(.txtDisplayTierary)
             
-            Image("Mask Group 5")
+            Image("img_write_empty(160_160)")
                 .font(.system(size: 60))
                 .foregroundColor(.gray)
                 .padding(.top, 16)
