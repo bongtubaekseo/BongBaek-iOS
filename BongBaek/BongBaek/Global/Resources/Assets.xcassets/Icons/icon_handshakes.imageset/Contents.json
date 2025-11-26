@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "icon_handshakes.svg",
+      "filename" : "icon_relation_btn 48_40.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "icon_relation_btn 48_40@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "icon_relation_btn 48_40@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -73,7 +73,7 @@ struct EventDateView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color("background"))
+        .background(.bgDisplayPrimary)
         .sheet(isPresented: $isDatePickerVisible) {
             DatePickerBottomSheet(
                 selectedDate: $eventManager.eventDate,
@@ -149,15 +149,15 @@ struct EventDateTitleView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("행사 날짜와 참석여부를")
                 .headBold24()
-                .foregroundColor(.gray100)
+                .foregroundColor(.txtDisplaySecondary)
             
             Text("알려주세요")
                 .headBold24()
-                .foregroundColor(.gray100)
+                .foregroundColor(.txtDisplaySecondary)
             
             Text("봉투백서가 경조사 일정을 관리해드릴게요!")
                 .bodyRegular14()
-                .foregroundColor(.gray400)
+                .foregroundColor(.txtDisplayTierary)
                 .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -175,14 +175,15 @@ struct EventDateFormView: View {
             // 날짜 선택 섹션
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 8) {
-                    Image("icon_calendar")
+                    Image("icon_calendar 1")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 22, height: 22)
+                        .frame(width: 24, height: 24)
+                        .tint(.iconFocusedPrimary)
                     
                     Text("행사 날짜를 알려주세요")
                         .titleSemiBold18()
-                        .foregroundColor(.white)
+                        .foregroundColor(.txtDisplaySecondary)
                 }
                 
                 EventDatePickerView()
@@ -202,7 +203,7 @@ struct EventDateFormView: View {
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(.gray750)
+                    .fill(.bgDisplayCard)
             )
             
             // 참석 여부 섹션
@@ -215,7 +216,7 @@ struct EventDateFormView: View {
                     
                     Text("참석 여부")
                         .titleSemiBold18()
-                        .foregroundColor(.white)
+                        .foregroundColor(.txtDisplaySecondary)
                 }
                 
                 HStack(spacing: 12) {
@@ -235,7 +236,7 @@ struct EventDateFormView: View {
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(.gray750)
+                    .fill(.bgDisplayCard)
             )
         }
         .onChange(of: eventManager.eventDate) { _, newDate in
@@ -265,11 +266,11 @@ struct EventDatePickerView: View {
                 if eventManager.hasSelectedEventDate {
                     Text(DateFormatter.displayFormatter.string(from: eventManager.eventDate))
                         .bodyRegular16()
-                        .foregroundColor(isPastDate ? .secondaryRed : .white)
+                        .foregroundColor(isPastDate ? .secondaryRed : .txtFieldValue)
                 } else {
                     Text("날짜를 입력해주세요")
                         .bodyRegular16()
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtFieldPlaceholder)
                 }
                 
                 Spacer()
@@ -279,7 +280,7 @@ struct EventDatePickerView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(.gray800)
+                    .fill(.bgDisplayCard)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
@@ -325,16 +326,16 @@ struct AttendanceButton: View {
         Button(action: action) {
             Text(attendanceType.rawValue)
                 .bodyMedium16()
-                .foregroundColor(isSelected ? .white : .gray500)
+                .foregroundColor(isSelected ? .txtInteractiveInverse : .txtInteractivePrimary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(isSelected ? Color("primary_normal") : .gray800)
+                        .fill(isSelected ? .bgStatusFocused : .btnInteractivePrimary)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.lineNormal, lineWidth: isSelected ? 0 : 1)
+                        .stroke(.borderFieldDefault, lineWidth: isSelected ? 0 : 1)
                 )
                 .contentShape(Rectangle())
         }
@@ -379,7 +380,6 @@ struct DatePickerBottomSheet: View {
     }
     
     var body: some View {
-        NavigationView {
             VStack(spacing: 20) {
                 RoundedRectangle(cornerRadius: 2.5)
                     .fill(Color.gray)
@@ -388,7 +388,7 @@ struct DatePickerBottomSheet: View {
                 
                 Text("날짜 선택")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplaySecondary)
                 
                 DatePicker(
                     "날짜를 선택해주세요",
@@ -396,11 +396,10 @@ struct DatePickerBottomSheet: View {
                     displayedComponents: .date
                 )
                 .datePickerStyle(.wheel)
-//                .colorScheme(.dark)
                 .environment(\.locale, Locale(identifier: "ko_KR"))
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(.gray750)
+                        .fill(.bgDisplayCard)
                 )
                 .labelsHidden()
                 
@@ -415,14 +414,14 @@ struct DatePickerBottomSheet: View {
                         Spacer()
                         Text("선택 완료")
                             .font(.title_semibold_18)
-                            .foregroundColor(.white)
+                            .foregroundColor(.txtInteractiveInverse)
                         Spacer()
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color("primary_normal"))
+                            .fill(.bgStatusFocused)
                     )
                 }
                 .buttonStyle(PlainButtonStyle())
@@ -430,12 +429,10 @@ struct DatePickerBottomSheet: View {
                 .padding(.bottom, 34)            }
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(.gray750)
+                    .fill(.bgDisplayCard)
             )
             .navigationBarTitleDisplayMode(.inline)
-        }
-//        .preferredColorScheme(.dark)
+        .background(.bgDisplayCard)
         .presentationDetents([.medium])
-        .presentationDragIndicator(.visible)
     }
 }

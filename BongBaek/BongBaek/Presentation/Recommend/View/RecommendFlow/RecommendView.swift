@@ -64,7 +64,8 @@ struct RecommendView: View {
                 title2: "정보를 적어주세요",
                 subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
                 subtitle2: "더 정확한 추천을 해드릴게요",
-                titleColor: .gray100
+                titleColor: .txtDisplaySecondary,
+                subtitleColor: .txtDisplayTierary
             )
             .padding(.leading, 20)
             .padding(.top, 32)
@@ -126,7 +127,7 @@ struct RecommendView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.background)
+        .background(Color.bgDisplayPrimary)
         .onTapGesture {
             hideKeyboard() // 전체 화면 터치 시 키보드 해제
         }
@@ -149,12 +150,13 @@ struct RecommendView: View {
             HStack {
                 Image("icon_person_16")
                     .renderingMode(.template)
-                    .foregroundColor(.primaryNormal)
-                    .frame(width: 22,height: 22)
+                    .resizable()
+                    .foregroundColor(.iconFocusedPrimary)
+                    .frame(width: 24,height: 24)
                 
                 Text("상대방의 이름과 별명을 알려주세요")
                     .titleSemiBold18()
-                    .foregroundStyle(.gray100)
+                    .foregroundStyle(.txtDisplaySecondary)
             }
             .padding(.bottom, 20)
             
@@ -188,7 +190,7 @@ struct RecommendView: View {
         .frame(maxWidth: .infinity, minHeight: 183)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
+                .fill(.bgDisplayCard)
                 .padding(.horizontal, 20)
         )
 //        .padding(.top, 32)
@@ -196,12 +198,12 @@ struct RecommendView: View {
     
     private var relationshipHeaderSection: some View {
         HStack {
-            Image("icon_relation")
+            Image("icon_relation 3")
                 .frame(width: 20,height: 20)
             
             Text("관계를 선택해주세요")
                 .titleSemiBold18()
-                .foregroundStyle(.gray100)
+                .foregroundStyle(.txtDisplaySecondary)
             
             Spacer()
         }

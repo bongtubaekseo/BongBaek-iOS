@@ -16,17 +16,17 @@ struct AccountDeletionConfirmView: View {
             VStack(alignment: .leading,spacing: 12) {
                 Text("소중한 의견 감사합니다")
                     .font(.head_bold_24)
-                    .foregroundStyle(.gray100)
+                    .foregroundStyle(.txtDisplaySecondary)
                 
                 Text("봉투백서는 다시 만나는 날을 기원해요")
                     .font(.body2_regular_14)
-                    .foregroundStyle(.gray400)
+                    .foregroundStyle(.txtDisplayTierary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, 40.adjustedH)
             .padding(.leading, 20)
             
-            Image("image_gift")
+            Image("img_leave")
                 .frame(width: 335.adjusted,height: 335.adjustedH)
                 .padding(.top,80.adjustedH)
             
@@ -39,11 +39,11 @@ struct AccountDeletionConfirmView: View {
                     Spacer()
                     Text("종료")
                         .titleSemiBold18()
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.txtInteractiveInverse)
                     Spacer()
                 }
                 .frame(height: 55)
-                .background(.primaryNormal)
+                .background(.bgStatusFocused)
                 .cornerRadius(12)
             }
             .padding(.horizontal, 20)
@@ -51,7 +51,7 @@ struct AccountDeletionConfirmView: View {
 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)

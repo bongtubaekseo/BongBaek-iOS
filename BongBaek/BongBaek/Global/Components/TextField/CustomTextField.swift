@@ -87,7 +87,7 @@ struct CustomTextField: View {
                         
                         VStack {
                             Text("*")
-                                .bodyMedium16()
+                                .bodyMedium14()
                                 .foregroundColor(.txtStatusFocused)
                                 .padding(.top, 4)
                                 .padding(.leading, 1)
@@ -360,13 +360,13 @@ enum ValidationState2 {
     var color: Color {
         switch self {
         case .normal:
-            return .gray500
+            return .borderFieldDefault
         case .valid:
-            return .primaryNormal
+            return .borderStatusFocused
         case .invalid:
-            return .secondaryRed
+            return .borderStatusError
         case .focused:
-            return .primaryNormal
+            return .borderStatusFocused
         case .completed:
             return .lineNormal
         }

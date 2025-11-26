@@ -86,7 +86,7 @@ struct EventLocationView: View {
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .background(Color.background)
+        .background(.bgDisplayPrimary)
         .animation(.easeInOut(duration: 0.3), value: isSearchFieldFocused)
         .onTapGesture {
             isSearchFieldFocused = false
@@ -98,20 +98,20 @@ struct EventLocationView: View {
        VStack(alignment: .leading, spacing: 4) {
            Text(location.placeName)
                .titleSemiBold18()
-               .foregroundColor(.white)
+               .foregroundColor(.txtDisplayPrimary)
            
            Text(location.addressName)
                .bodyRegular14()
-               .foregroundColor(.gray400)
+               .foregroundColor(.txtDisplayTierary)
            
        }
        .frame(maxWidth: .infinity, alignment: .leading)
        .padding(.horizontal, 16)
        .padding(.vertical, 12)
-       .background(Color.gray750)
+       .background(.bgDisplayCard)
        .overlay(
            RoundedRectangle(cornerRadius: 12)
-            .stroke(.gray750, lineWidth: 1)
+            .stroke(.bgDisplayCard, lineWidth: 1)
        )
        .cornerRadius(12)
        .padding(.horizontal, 40)
@@ -130,7 +130,7 @@ struct EventLocationView: View {
             HStack(alignment: .firstTextBaseline) {
                 Text("어디서 열리나요?")
                     .headBold24()
-                    .foregroundStyle(.gray100)
+                    .foregroundStyle(.txtDisplaySecondary)
                 
                 Spacer()
                 
@@ -139,13 +139,13 @@ struct EventLocationView: View {
                 }) {
                     Text("건너뛰기")
                         .bodyRegular14()
-                        .foregroundColor(.gray500)
+                        .foregroundColor(.txtStatusDisabled)
                 }
             }
             
             Text("주소를 검색하면 더 빨리 찾을 수 있어요!")
                 .bodyRegular14()
-                .foregroundStyle(.gray400)
+                .foregroundStyle(.txtDisplayTierary)
                 .padding(.top, 12)
         }
         .padding(.horizontal, 20)
@@ -160,8 +160,8 @@ struct EventLocationView: View {
             TextField("기타 사유를 입력해주세요",
                       text: $searchText,
                       prompt: Text("주소를 검색하면 더 빨리 찾을 수 있어요")
-                .foregroundColor(.gray500))
-                .foregroundColor(.white)
+                .foregroundColor(.txtFieldPlaceholder))
+                .foregroundColor(.txtFieldValue)
                 .font(.body2_regular_16)
                 .focused($isSearchFieldFocused)
                 .onChange(of: searchText) { _, newValue in
@@ -185,10 +185,10 @@ struct EventLocationView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.gray750)
+        .background(.bgFieldSecondary)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray750.opacity(0.5), lineWidth: 1)
+                .stroke(.borderFieldDefault, lineWidth: 1)
         )
         .cornerRadius(8)
         .padding(.horizontal, 20)
@@ -225,12 +225,12 @@ struct EventLocationView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(document.placeName)
                                 .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.white)
+                                .foregroundColor(.txtDisplayPrimary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Text(document.addressName)
                                 .font(.system(size: 14))
-                                .foregroundColor(.gray)
+                                .foregroundColor(.txtDisplayPrimary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             if !document.roadAddressName.isEmpty {
@@ -260,7 +260,7 @@ struct EventLocationView: View {
                 }
             }
         }
-        .background(Color.gray750)
+        .background(.bgDisplayCard)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
@@ -284,14 +284,14 @@ struct EventLocationView: View {
              
              Text("검색 결과가 없습니다")
                  .bodyMedium16()
-                 .foregroundColor(.white)
+                 .foregroundColor(.txtDisplayPrimary)
          }
          .frame(maxWidth: .infinity)
          .padding(.vertical, 32)
-         .background(Color.gray750)
+         .background(.bgDisplayCard)
          .overlay(
              RoundedRectangle(cornerRadius: 8)
-                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                 .stroke(.bgDisplayCard, lineWidth: 1)
          )
          .cornerRadius(12)
          .padding(.horizontal, 20)
@@ -310,12 +310,12 @@ struct EventLocationView: View {
         } label: {
             Text("금액 추천 받기")
                 .titleSemiBold18()
-                .foregroundColor(isNextButtonEnabled ? .white : .gray500)
+                .foregroundColor(isNextButtonEnabled ? .txtInteractiveInverse : .txtStatusDisabled)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
         .frame(height: 55)
-        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
+        .background(isNextButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .padding(.top, 8)
