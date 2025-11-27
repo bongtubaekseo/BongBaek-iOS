@@ -183,7 +183,7 @@ struct RecordsHeaderView: View {
                         if isDeleteMode {
                             Text("삭제")
                                 .titleSemiBold16()
-                                .foregroundStyle(hasSelectedRecords ? .secondaryRed : .gray400)
+                                .foregroundStyle(hasSelectedRecords ? .secondaryRed : .txtStatusDisabled)
                         } else {
                             Image("icon_delete 2")
                                 .resizable()

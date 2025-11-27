@@ -145,7 +145,7 @@ struct CreateEventView: View {
                                 
                                 Text("원")
                                     .bodyRegular16()
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.txtDisplayPrimary)
                                     .padding(.top, 24)
                             }
                             
@@ -678,7 +678,7 @@ struct CreateEventViewAfterEvent: View {
                                 
                                 Text("원")
                                     .bodyRegular16()
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.txtDisplayPrimary)
                                     .padding(.top, 24)
                             }
                             
