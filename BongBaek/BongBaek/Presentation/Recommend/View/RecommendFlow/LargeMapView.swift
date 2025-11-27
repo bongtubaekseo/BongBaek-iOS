@@ -33,7 +33,7 @@ struct LargeMapView: View {
                      }) {
                          Image(systemName: "xmark")
                              .font(.system(size: 18, weight: .medium))
-                             .foregroundColor(.white)
+                             .foregroundColor(.borderFieldFilled)
                      }
                      .frame(width: 44, height: 44)
                      .padding(.leading, -8)
@@ -42,7 +42,7 @@ struct LargeMapView: View {
                      
                      Text("행사장 검색")
                          .titleSemiBold18()
-                         .foregroundColor(.white)
+                         .foregroundColor(.txtDisplayPrimary)
                      
                      Spacer()
                      
@@ -52,7 +52,7 @@ struct LargeMapView: View {
                  .padding(.horizontal, 20)
                  .padding(.top, 8)
                  .padding(.bottom, 16)
-                 .background(.gray900)
+                 .background(.bgFieldPrimary)
                 
                 VStack(alignment: .leading) {
                     // 검색 섹션
@@ -103,7 +103,7 @@ struct LargeMapView: View {
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .background(Color.background)
+        .background(Color.bgFieldPrimary)
         .animation(.easeInOut(duration: 0.3), value: isSearchFieldFocused)
         .onTapGesture {
             isSearchFieldFocused = false
@@ -115,20 +115,20 @@ struct LargeMapView: View {
        VStack(alignment: .leading, spacing: 4) {
            Text(location.placeName)
                .titleSemiBold18()
-               .foregroundColor(.white)
+               .foregroundColor(.txtDisplayPrimary)
            
            Text(location.addressName)
                .bodyRegular14()
-               .foregroundColor(.gray400)
+               .foregroundColor(.txtDisplayTierary)
            
        }
        .frame(maxWidth: .infinity, alignment: .leading)
        .padding(.horizontal, 16)
        .padding(.vertical, 12)
-       .background(Color.gray750)
+       .background(.bgDisplayCard)
        .overlay(
            RoundedRectangle(cornerRadius: 12)
-            .stroke(.gray750, lineWidth: 1)
+            .stroke(.bgDisplayCard, lineWidth: 1)
        )
        .cornerRadius(12)
        .padding(.horizontal, 40)
@@ -145,14 +145,14 @@ struct LargeMapView: View {
     private var searchSection: some View {
         HStack(spacing: 12) {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.gray)
+                .foregroundColor(.iconFocusedPrimary)
                 .font(.system(size: 20))
             
             TextField("기타 사유를 입력해주세요",
                       text: $searchText,
                       prompt: Text("주소를 검색하면 더 빨리 찾을 수 있어요")
-                .foregroundColor(.gray500))
-                .foregroundColor(.white)
+                .foregroundColor(.txtFieldPlaceholder))
+                .foregroundColor(.txtFieldValue)
                 .font(.body2_regular_16)
                 .focused($isSearchFieldFocused)
                 .onChange(of: searchText) { _, newValue in
@@ -168,7 +168,7 @@ struct LargeMapView: View {
                     isSearchFieldFocused = false
                 }) {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray500)
+                        .foregroundColor(.iconDisabledPrimary)
                         .font(.system(size: 16))
                 }
                 .transition(.scale.combined(with: .opacity))
@@ -176,10 +176,10 @@ struct LargeMapView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.gray750)
+        .background(Color.bgFieldSecondary)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray750.opacity(0.5), lineWidth: 1)
+                .stroke(.borderFieldDefault, lineWidth: 1)
         )
         .cornerRadius(8)
         .padding(.horizontal, 20)
@@ -222,12 +222,12 @@ struct LargeMapView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(document.placeName)
                                 .titleSemiBold18()
-                                .foregroundColor(.white)
+                                .foregroundColor(.txtDisplayPrimary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Text(document.addressName)
                                 .bodyRegular14()
-                                .foregroundColor(.gray400)
+                                .foregroundColor(.txtDisplayTierary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             if !document.roadAddressName.isEmpty {
@@ -258,10 +258,10 @@ struct LargeMapView: View {
                 }
             }
         }
-        .background(Color.gray750)
+        .background(Color.bgDisplayCard)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray750.opacity(1.0), lineWidth: 1)
+                .stroke(.bgDisplayCard, lineWidth: 1)
         )
         .cornerRadius(10)
         .padding(.horizontal, 20)
@@ -276,20 +276,20 @@ struct LargeMapView: View {
     
     private var emptySearchResultsOverlay: some View {
          VStack(spacing: 12) {
-             Image("icon_caution 1")
+             Image("Exclude 3")
                  .font(.system(size: 24))
-                 .foregroundColor(.orange)
+                 .foregroundColor(.iconStatusError)
              
              Text("검색 결과가 없습니다")
                  .bodyMedium16()
-                 .foregroundColor(.white)
+                 .foregroundColor(.txtDisplaySecondary)
          }
          .frame(maxWidth: .infinity)
          .padding(.vertical, 32)
-         .background(Color.gray750)
+         .background(.bgDisplayCard)
          .overlay(
              RoundedRectangle(cornerRadius: 8)
-                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                 .stroke(.bgDisplayCard, lineWidth: 1)
          )
          .cornerRadius(12)
          .padding(.horizontal, 20)
@@ -308,12 +308,12 @@ struct LargeMapView: View {
         } label: {
             Text("위치 저장")
                 .titleSemiBold18()
-                .foregroundColor(isNextButtonEnabled ? .white : .gray500)
+                .foregroundColor(isNextButtonEnabled ? .txtInteractiveInverse : .gray500)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
         .frame(height: 55)
-        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
+        .background(isNextButtonEnabled ? .bgStatusFocused : .primaryBg)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .padding(.top, 8)
