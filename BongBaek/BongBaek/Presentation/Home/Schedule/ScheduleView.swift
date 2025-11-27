@@ -19,7 +19,7 @@ struct ScheduleView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 2){
-                    Text("\(UserDefaults.standard.memberName.isEmpty ? "봉백" : UserDefaults.standard.memberName)님의 일정")
+                    Text("내 일정")
                         .font(.title_semibold_20)
                         .foregroundStyle(.txtDisplayPrimary)
                     Text("나의 경조사 일정을 관리해보세요!")
