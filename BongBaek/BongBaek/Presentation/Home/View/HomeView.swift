@@ -28,12 +28,22 @@ struct HomeView: View {
                 .padding(.top, 30)
                 .padding(.leading, 20)
 
-                if homeViewModel.hasData {
-                    NewScheduleView(event: homeViewModel.homeData?.events.first)
+                if homeViewModel.hasData,
+                   let firstEvent = homeViewModel.homeData?.events.first {
+                    NewScheduleView(event: firstEvent)
                         .padding(.top, 20)
+                } else if homeViewModel.isLoading {
+                    VStack {
+                        ProgressView("일정을 불러오는 중…")
+                            .foregroundColor(.white)
+                    }
+                    .padding(.top, 20)
+                    .padding(.horizontal, 20)
                 } else {
                     EmptyNewScheduleView()
+                        .padding(.top, 20)
                 }
+
                 
                 if homeViewModel.hasData {
                     ScheduleView(events: homeViewModel.homeData?.events ?? [])
