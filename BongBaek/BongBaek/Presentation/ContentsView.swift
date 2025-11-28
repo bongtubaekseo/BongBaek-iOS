@@ -53,7 +53,13 @@ struct ContentsView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 20)
             }
+            .refreshable {  
+                await viewModel.refreshContents()
+            }
             
+        }
+        .task {
+            await viewModel.loadAllContents()
         }
         .background(Color.bgDisplayPrimary)
         
@@ -97,7 +103,7 @@ struct ContentsView: View {
             
             Spacer()
             
-            Text("\(viewModel.filteredGuides.count)개")
+            Text("\(viewModel.filteredContents.count)개")
                 .bodyRegular16()
                 .foregroundStyle(.txtDisplaySecondary)
             
@@ -130,7 +136,7 @@ struct ContentsView: View {
                 .progressViewStyle(CircularProgressViewStyle(tint: .primaryNormal))
                 .scaleEffect(0.8)
             
-            Text("더 많은 일정을 불러오는 중...")
+            Text("더 많은 콘텐츠를 불러오는 중...")
                 .bodyRegular14()
                 .foregroundColor(.gray400)
         }
@@ -164,7 +170,7 @@ struct ContentsView: View {
         VStack(spacing: 16) {
             ProgressView()
                 .tint(.primaryNormal)
-            Text("이벤트 정보를 불러오는 중...")
+            Text("콘텐츠 정보를 불러오는 중...")
                 .bodyRegular14()
                 .foregroundColor(.gray400)
         }
@@ -174,13 +180,17 @@ struct ContentsView: View {
     
     @ViewBuilder
     private var guideContentView: some View {
-        ForEach(viewModel.filteredGuides) { guide in
-            GuideCell(guide: guide)
+        ForEach(viewModel.filteredContents, id: \.contentId) { content in
+            ContentCell(content: content)
                 .onTapGesture {
                     router.push(to: .contentDetailView)
                 }
                 .onAppear {
-                    // 페이지네이션 처리
+                    if viewModel.shouldLoadMore(for: content) {
+                        Task {
+                            await viewModel.loadMoreContents()
+                        }
+                    }
                 }
         }
         
