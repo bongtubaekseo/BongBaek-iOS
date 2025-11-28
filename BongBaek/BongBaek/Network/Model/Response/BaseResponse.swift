@@ -17,3 +17,14 @@ struct BaseResponse<T: Codable>: Codable {
         return success && status < 400
     }
 }
+
+struct BaseResponseV2<T: Codable>: Codable {
+    let status: Int
+    let code: String
+    let message: String
+    let data: T?
+    
+    var isSuccess: Bool {
+        return status >= 200 && status < 300
+    }
+}
