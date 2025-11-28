@@ -151,7 +151,7 @@ struct ContentsView: View {
             
             Button("다시 시도") {
                 Task {
-                    await viewModel.loadAllEvents()
+                    await viewModel.loadAllContents()
                 }
             }
             .foregroundColor(.primaryNormal)
@@ -195,26 +195,29 @@ struct ContentsView: View {
 
 }
 
-struct GuideCell: View {
-    let guide: Guide
+struct ContentCell: View {
+    let content: ContentHomeItem
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            Image(guide.backgroundImage)
-                .resizable()
-                .scaledToFill()
-                .frame(height: 251)
-                .clipped()
-                .overlay(
-                    LinearGradient(
-                        gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
+            AsyncImage(url: URL(string: content.thumbnailUrl)) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+            } placeholder: {
+                Color.gray300
+            }
+            .frame(height: 251)
+            .clipped()
+            .overlay(
+                LinearGradient(
+                    gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
+                    startPoint: .top,
+                    endPoint: .bottom
                 )
-            
+            )
             VStack(alignment: .leading, spacing: 8) {
-                Text(guide.category.displayName)
+                Text(content.contentCategory)
                     .captionRegular12()
                     .foregroundStyle(.txtDisplayPrimary)
                     .padding(.vertical, 2)
@@ -224,11 +227,11 @@ struct GuideCell: View {
                             .fill(Color.bgDisplayCard)
                     )
                 
-                Text(guide.title)
+                Text(content.contentTitle)
                     .titleSemiBold18()
                     .foregroundStyle(.txtInteractiveInverse)
                 
-                Text(guide.date)
+                Text("0000년 00월 00일")
                     .captionRegular12()
                     .foregroundStyle(.txtDisplayTierary)
             }
