@@ -405,7 +405,8 @@ struct RecordsEmptyView: View {
                 .foregroundColor(.txtDisplayTierary)
             
             Image("img_write_empty(160_160)")
-                .font(.system(size: 60))
+                .resizable()
+                .frame(width: 60, height: 60)
                 .foregroundColor(.gray)
                 .padding(.top, 16)
             
