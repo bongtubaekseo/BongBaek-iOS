@@ -11,8 +11,8 @@ import Combine
 @MainActor
 class ContentViewModel: ObservableObject {
     
-    @Published var guides: [Guide] = []
-    @Published var filteredGuides: [Guide] = []
+    @Published var contents: [ContentHomeItem] = []
+    @Published var filteredContents: [ContentHomeItem] = []
     @Published var isLoading: Bool = false
     @Published var isLoadingMore: Bool = false
     @Published var errorMessage: String?
@@ -24,19 +24,17 @@ class ContentViewModel: ObservableObject {
     private var isLastPage: Bool = false
     private var isLoadingData: Bool = false
     
-    private let eventService: EventServiceProtocol
+    private let contentsService: ContentsServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        self.eventService = DIContainer.shared.eventService
-        self.guides = Guide.mockGuides
-        self.filteredGuides = Guide.mockGuides
+        self.contentsService = DIContainer.shared.contentsService
     }
     
     // MARK: - Computed Properties
     
     var hasData: Bool {
-        !filteredGuides.isEmpty
+        !filteredContents.isEmpty
     }
     
     var hasError: Bool {
@@ -46,7 +44,7 @@ class ContentViewModel: ObservableObject {
     // MARK: - API Methods
     
     /// 첫 페이지 로드 (새로고침/카테고리 변경 시)
-    func loadAllEvents() async {
+    func loadAllContents() async {
         guard !isLoadingData else { return }
         
         isLoading = true
@@ -56,16 +54,16 @@ class ContentViewModel: ObservableObject {
         // 페이지네이션 상태 초기화
         currentPage = 0
         isLastPage = false
-        guides.removeAll()
+        contents.removeAll()
         
-        await loadEvents(isRefresh: true)
+        await loadContents(isRefresh: true)
         
         isLoading = false
         isLoadingData = false
     }
     
     /// 다음 페이지 로드 (무한스크롤)
-    func loadMoreEvents() async {
+    func loadMoreContents() async {
         guard !isLoadingData && !isLastPage else { return }
         
         print("더 많은 이벤트 로드 - 페이지: \(currentPage + 1)")
@@ -74,82 +72,71 @@ class ContentViewModel: ObservableObject {
         isLoadingData = true
         
         currentPage += 1
-        await loadEvents(isRefresh: false)
+        await loadContents(isRefresh: false)
         
         isLoadingMore = false
         isLoadingData = false
     }
     
     /// 실제 API 호출 메서드
-    private func loadEvents(isRefresh: Bool) async {
-//        do {
-//            let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
-//            
-//            print("이벤트 로드 - 페이지: \(currentPage), 카테고리: \(categoryParam ?? "전체")")
-//            
-//            let response = try await eventService.getUpcomingEvents(page: currentPage, category: categoryParam)
-//                .async()
-//            
-//            if response.isSuccess, let data = response.data {
-//                let newEvents = data.events
-//                
-//                if isRefresh {
-//                    guides = newEvents
-//                } else {
-//                    guides.append(contentsOf: newEvents)
-//                }
-//                
-//                isLastPage = data.isLast
-//                
-//                print(guides)
-//                
-//                print("이벤트 로드 성공:")
-//                print("  - 새로 로드된 이벤트: \(newEvents.count)개")
-//                print("  - 전체 이벤트: \(guides.count)개")
-//                print("  - 현재 페이지: \(currentPage)")
-//                print("  - 마지막 페이지: \(isLastPage)")
-//                
-//            } else {
-//                errorMessage = response.message
-//                print("이벤트 로드 실패: \(response.message)")
-//            }
-//            
-//        } catch {
-//            errorMessage = "이벤트를 불러오는데 실패했습니다: \(error.localizedDescription)"
-//            print("이벤트 로드 에러: \(error)")
-//        }
-        
-        
+    private func loadContents(isRefresh: Bool) async {
+        do {
+            let response = try await contentsService.getHomeContents()
+            
+            if response.isSuccess, let data = response.data {
+                let newContents = data.contents
+                
+                if isRefresh {
+                    self.contents = newContents
+                } else {
+                    self.contents.append(contentsOf: newContents)
+                }
+                
+                applyFilter()
+                
+                print("콘텐츠 로드 성공: \(newContents.count)개")
+            } else {
+                errorMessage = response.message
+                print("콘텐츠 로드 실패: \(response.message)")
+            }
+        } catch {
+            errorMessage = "콘텐츠를 불러오는데 실패했습니다: \(error.localizedDescription)"
+            print("콘텐츠 로드 에러: \(error)")
+        }
     }
+    /// 카테고리 필터 적용'
+    private func applyFilter() {
+        if selectedCategory == .all {
+            filteredContents = contents
+        } else {
+            filteredContents = contents.filter {
+                $0.contentCategory == selectedCategory.rawValue
+            }
+        }
+        print("필터링된 콘텐츠 수: \(filteredContents.count)개")
+    }
+
     
     /// 새로고침
-    func refreshEvents() async {
-        print(" 이벤트 새로고침")
-        await loadAllEvents()
+    func refreshContents() async {
+        print(" 콘텐츠 새로고침")
+        await loadAllContents()
     }
     
     /// 카테고리 변경 (새로 로드)
     func updateCategory(_ category: ScheduleCategory) {
-         guard selectedCategory != category else { return }
-         
-         selectedCategory = category
-         print("카테고리 변경: \(category.displayName)")
-         
-         // 카테고리별 필터링
-         if category == .all {
-             filteredGuides = guides
-         } else {
-             filteredGuides = guides.filter { $0.category == category }
-         }
-         
-         print("필터링된 가이드 수: \(filteredGuides.count)개")
-     }
+        guard selectedCategory != category else { return }
+        
+        selectedCategory = category
+        print("카테고리 변경: \(category.displayName)")
+        
+        applyFilter()
+    }
     
     /// 무한스크롤 트리거 확인
-    func shouldLoadMore(for event: AttendedEvent) -> Bool {
-//        guard let lastEvent = guides.last else { return false }
-//        return event.eventId == lastEvent.eventId && !isLastPage && !isLoadingMore
-        return false
+    func shouldLoadMore(for content: ContentHomeItem) -> Bool {
+        guard let lastContent = filteredContents.last else { return false }
+        return content.contentId == lastContent.contentId && !isLastPage && !isLoadingMore
     }
     
     func clearError() {

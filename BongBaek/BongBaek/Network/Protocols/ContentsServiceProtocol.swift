@@ -9,5 +9,5 @@ import Foundation
 import Combine
 
 protocol ContentsServiceProtocol {
-    func getHomeContents() -> AnyPublisher<ContentsHomeResponse, Error>
+    func getHomeContents() async throws -> ContentsHomeResponse
 }

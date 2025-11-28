@@ -63,5 +63,7 @@ class DIContainer {
         networkService: userNetworkService
     )
     
-  //  lazy var contentsService: ContentsServiceProtocol =
+    lazy var contentsService: ContentsServiceProtocol = ContentsService(
+        networkService: contentsNetworkService
+    )
 }

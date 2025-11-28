@@ -16,10 +16,11 @@ class ContentsService: ContentsServiceProtocol {
         self.networkService = networkService
     }
     
-    func getHomeContents() -> AnyPublisher<ContentsHomeResponse, Error> {
-        return networkService.request(
+    func getHomeContents() async throws -> ContentsHomeResponse {
+        return try await networkService.request(
             .getContentsHome,
             responseType: ContentsHomeResponse.self
         )
+        .async() 
     }
 }
