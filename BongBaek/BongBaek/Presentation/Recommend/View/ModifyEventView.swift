@@ -356,12 +356,12 @@ struct ModifyEventView: View {
                     Image("icon_location 6")
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
-                        .foregroundStyle(.gray400)
+                        .foregroundStyle(.iconDisabledPrimary)
                     
                     Text("행사장")
                         .bodyMedium14()
                         .foregroundStyle(
-                            (isAttending && !isRecommendationEdit) ? .gray100 : .gray400
+                            (isAttending && !isRecommendationEdit) ? .txtDisplaySecondary : .gray400
                         )
 
                 }
@@ -374,7 +374,7 @@ struct ModifyEventView: View {
                     Text("수정하기")
                         .bodyRegular14()
                         .foregroundStyle(
-                            (isAttending && !isRecommendationEdit) ? .gray300 : .gray600
+                            (isAttending && !isRecommendationEdit) ? .txtInteractiveSecondary : .gray600
                         )
                 }
                 .disabled(!isAttending || isRecommendationEdit)
@@ -393,16 +393,16 @@ struct ModifyEventView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(locationName)
                                 .bodyMedium16()
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.txtDisplayPrimary)
                             
                             Text(locationAddress)
                                 .bodyRegular14()
-                                .foregroundStyle(.gray400)
+                                .foregroundStyle(.txtDisplayTierary)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 16)
-                        .background(.gray700)
+                        .background(.btnInteractiveSecondary)
                         .clipShape(
                             .rect(
                                 bottomLeadingRadius: 10,

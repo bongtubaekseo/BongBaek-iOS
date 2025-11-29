@@ -115,17 +115,17 @@ class RecordViewModel: ObservableObject {
         case .attended:
             switch selectedCategory {
             case .babyParty:
-                return "참석한 돌잔치가 없습니다"
+                return "기록한 돌잔치가 없습니다"
             case .wedding:
-                return "참석한 결혼식이 없습니다"
+                return "기록한 결혼식이 없습니다"
             case .birthday:
-                return "참석한 생일이 없습니다"
+                return "기록한 생일이 없습니다"
             case .funeral:
-                return "참석한 장례식이 없습니다"
+                return "기록한 장례식이 없습니다"
             case .all:
-                return "참석한 경조사가 없습니다"
+                return "기록한 경조사가 없습니다"
             default:
-                return "참석한 경조사가 없습니다"
+                return "기록한 경조사가 없습니다"
             }
         case .notAttended:
             switch selectedCategory {

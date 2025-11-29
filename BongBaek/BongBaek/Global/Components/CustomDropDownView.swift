@@ -55,7 +55,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                             .resizable()
                             .renderingMode(.template)
                             .frame(width: 20, height: 20)
-                            .foregroundColor(.iconDisabledPrimary)
+                            .foregroundColor(isDisabled ? .iconDisabledPrimary : .iconFocusedPrimary)
                     }
 
                     HStack(spacing: 2) {
@@ -104,12 +104,12 @@ struct CustomDropdown<T: DropdownItem>: View {
                         .bodyMedium16()
                         .foregroundColor(
                             isDisabled ? .txtStatusDisabled : // isDisabled일 때 gray300
-                                (isExpanded ? Color("primary_normal") : .white)
+                            (isExpanded ?.txtStatusFocused : .txtFieldValue)
                         )
                 } else {
                     Text(placeholder)
                         .bodyRegular16()
-                        .foregroundColor(isDisabled ? .txtStatusDisabled : .gray)
+                        .foregroundColor(isDisabled ? .txtStatusDisabled : .txtFieldValue)
                 }
 
                 Spacer()
@@ -117,8 +117,8 @@ struct CustomDropdown<T: DropdownItem>: View {
                 Image(systemName: "chevron.down")
                     .foregroundColor(
                         isDisabled ? .iconDisabledSecondary : // isDisabled일 때 gray400
-                            (isExpanded ? .primaryNormal :
-                                (selectedItem != nil ? .white : .gray400))
+                            (isExpanded ? .iconFocusedPrimary :
+                                (selectedItem != nil ? .iconInteractiveDefault : .iconInteractiveDefault))
                     )
                     .rotationEffect(.degrees(isExpanded ? 180 : 0))
                     .animation(.easeInOut(duration: 0.2), value: isExpanded)
@@ -130,7 +130,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
                         isDisabled ? .bgFieldSecondary :
-                            (isExpanded ? Color("primary_normal") : Color.gray750),
+                            (isExpanded ? .borderStatusFocused : Color.bgFieldSecondary),
                         lineWidth: 1
                     )
             )
@@ -160,7 +160,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                         }
                             .foregroundColor(
                                 selectedItem?.id == item.id
-                                    ? Color("primary_normal") : .white
+                                ? .txtStatusFocused : .txtDisplayPrimary
                             )
 
                         Spacer()
@@ -172,7 +172,7 @@ struct CustomDropdown<T: DropdownItem>: View {
                         Group {
                             if selectedItem?.id == item.id {
                                 RoundedRectangle(cornerRadius: 6)
-                                    .fill(Color("primary_normal").opacity(0.1))
+                                    .fill(.btnInteractiveDisabled)
 //                                    .padding(.vertical, 4)
                                 // horizontal padding 제거
                             }
@@ -186,7 +186,7 @@ struct CustomDropdown<T: DropdownItem>: View {
         }
         .padding(.horizontal, 12) // VStack 자체에 horizontal padding 적용
         .padding(.vertical, 12) // VStack 자체에 vertical padding 적용
-        .background(.gray750)
+        .background(.bgDisplayCard)
         .cornerRadius(8)
         .transition(
             .asymmetric(

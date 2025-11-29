@@ -28,13 +28,18 @@ struct ScheduleView: View {
                 }
                 Spacer()
 
-                Button(action: {
-                    router.push(to: .fullScheduleView)
-                }) {
-                    HStack{
-                        Text("더보기")
-                            .bodyRegular14()
-                            .foregroundColor(.txtDisplaySecondary)
+                if !events.isEmpty {
+                    Button(action: {
+                        NotificationCenter.default.post(
+                            name: .selectTab,
+                            object: Tab.record
+                        )
+                    }) {
+                        HStack{
+                            Text("더보기")
+                                .bodyRegular14()
+                                .foregroundColor(.txtDisplaySecondary)
+
                             
                         Image("icon_left")
                             .foregroundColor(.iconInteractiveInverse)

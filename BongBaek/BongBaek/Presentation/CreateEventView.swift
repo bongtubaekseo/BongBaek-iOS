@@ -59,7 +59,7 @@ struct CreateEventView: View {
                 }) {
                     Text("취소")
                         .bodyRegular16()
-                        .foregroundStyle(.gray200)
+                        .foregroundStyle(.txtInteractiveSecondary)
                 }
                 .frame(width: 44, height: 44)
                 .padding(.leading, -8)
@@ -68,7 +68,7 @@ struct CreateEventView: View {
                 
                 Text("경조사 기록하기")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplayPrimary)
                 
                 Spacer()
                 
@@ -78,7 +78,7 @@ struct CreateEventView: View {
             .padding(.horizontal, 20)
             .padding(.top, 4)
             .padding(.bottom, 16)
-            .background(.gray900)
+            .background(.bgDisplayPrimary)
             
             // 스크롤 가능한 콘텐츠
             ScrollView {
@@ -145,13 +145,13 @@ struct CreateEventView: View {
                                 
                                 Text("원")
                                     .bodyRegular16()
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.txtDisplayPrimary)
                                     .padding(.top, 24)
                             }
                             
                             CustomDropdown(
                                 title: "참석여부",
-                                icon: "icon_check 1",
+                                icon: "icon_write_20_20",
                                 placeholder: "참석여부를 선택하세요",
                                 items: attendItems,
                                 selectedItem: $selectedAttend
@@ -188,7 +188,7 @@ struct CreateEventView: View {
                         .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
-                    .background(.gray800)
+                    .background(.bgDisplaySecondary)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -237,7 +237,7 @@ struct CreateEventView: View {
                 hideKeyboard()
             }
         }
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
@@ -259,14 +259,15 @@ struct CreateEventView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 6")
+                    Image("icon_write_20_20 2")
+                        .resizable()
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
-                        .foregroundStyle(.gray400)
+                        .foregroundStyle(.iconFocusedPrimary)
 
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray100)
+                        .foregroundStyle(.txtDisplaySecondary)
                 }
                 
                 Spacer()
@@ -276,7 +277,7 @@ struct CreateEventView: View {
                 } label: {
                     Text(selectedLocation != nil ? "수정하기" : "추가하기")
                         .bodyRegular14()
-                        .foregroundStyle(isAttending ? .gray300 : .gray600) // 참석시에만 활성화
+                        .foregroundStyle(isAttending ? .txtInteractiveSecondary : .txtStatusDisabled) // 참석시에만 활성화
                 }
                 .disabled(!isAttending) // 참석시에만 클릭 가능
             }
@@ -677,13 +678,13 @@ struct CreateEventViewAfterEvent: View {
                                 
                                 Text("원")
                                     .bodyRegular16()
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.txtDisplayPrimary)
                                     .padding(.top, 24)
                             }
                             
                             CustomDropdown(
                                 title: "참석여부",
-                                icon: "icon_check 1",
+                                icon: "icon_write_20_20",
                                 placeholder: "참석여부를 선택하세요",
                                 items: attendItems,
                                 selectedItem: $selectedAttend
@@ -791,14 +792,14 @@ struct CreateEventViewAfterEvent: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 6")
+                    Image("icon_write_20_20 2")
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
-                        .foregroundStyle(.gray400)
+                        .foregroundStyle(.iconFocusedPrimary)
                     
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray100)
+                        .foregroundStyle(.txtDisplaySecondary)
                 }
                 
                 Spacer()
@@ -808,7 +809,7 @@ struct CreateEventViewAfterEvent: View {
                 } label: {
                     Text(selectedLocation != nil ? "수정하기" : "추가하기")
                         .bodyRegular14()
-                        .foregroundStyle(isAttending ? .gray300 : .gray600) // 참석시에만 활성화
+                        .foregroundStyle(isAttending ? .txtInteractiveSecondary : .txtStatusDisabled) // 참석시에만 활성화
                 }
                 .disabled(!isAttending) // 참석시에만 클릭 가능
             }

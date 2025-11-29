@@ -22,13 +22,13 @@ struct AllRecordsView: View {
                     dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.white)
+                        .foregroundColor(.iconInteractiveDefault)
                 }
                 .contentShape(Rectangle())
                 
-                Text("경조사 전체기록")
+                Text("경조사 상세 기록")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplayPrimary)
                     .padding(.leading, 8)
                 
                 Spacer()
@@ -37,8 +37,8 @@ struct AllRecordsView: View {
                     // 편집 액션
                     router.push(to: .modifyEventView(mode: .edit, eventDetailData: viewModel.eventDetail))
                 }) {
-                    Image("icon_edit")
-                        .foregroundColor(.white)
+                    Image("icon_edit 1")
+//                        .foregroundColor(.)
                 }
                 .contentShape(Rectangle())
                 .padding(.trailing, 20)
@@ -47,7 +47,7 @@ struct AllRecordsView: View {
             .padding(.horizontal, 12)
             .padding(.vertical, 4)
             .padding(.bottom, 10)
-            .background(Color.background) // 헤더 배경색 명시
+            .background(.bgDisplayPrimary) // 헤더 배경색 명시
             
             // 스크롤 가능한 콘텐츠
             ScrollView {
@@ -63,7 +63,7 @@ struct AllRecordsView: View {
                 .padding(.top, 16) // 헤더와의 간격
             }
         }
-        .background(Color.background)
+        .background(.bgDisplayPrimary)
         .navigationBarHidden(true)
         .onTapGesture {
             hideKeyboard()
@@ -119,15 +119,15 @@ struct AllRecordsView: View {
             VStack(alignment:.leading,spacing: 10) {
                 Text("\(eventDetail.hostInfo.hostName)의 \(eventDetail.eventInfo.eventCategory)")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
                     
                 Text(eventDetail.eventInfo.eventDate.DateFormat())
                     .bodyRegular14()
-                    .foregroundStyle(.gray400)
+                    .foregroundStyle(.txtDisplayTierary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(20)
-            .background(.gray750)
+            .background(.bgDisplayCard)
             .cornerRadius(10)
             .padding(.horizontal, 20)
             .padding(.top, -12)
@@ -135,13 +135,13 @@ struct AllRecordsView: View {
             HStack {
                 Text("경조사비")
                     .titleSemiBold16()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtInteractiveInverse)
                 
                 Spacer()
                 
                 Text("\(eventDetail.eventInfo.cost.formatted())원")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtInteractiveInverse)
             }
             .padding(20)
             .background(
@@ -186,15 +186,15 @@ struct AllRecordsView: View {
             HStack {
                 Text("상세정보")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
                 
                 Spacer()
                 
                 Image(systemName: isDetailExpanded ? "chevron.up" : "chevron.down")
-                    .foregroundColor(.white)
+                    .foregroundColor(.iconInteractiveDefault)
                     .animation(.easeInOut(duration: 0.3), value: isDetailExpanded)
             }
-            .background(Color.background)
+            .background(Color.bgDisplayPrimary)
         }
         .padding(.horizontal, 20)
         .buttonStyle(PlainButtonStyle())
@@ -204,11 +204,11 @@ struct AllRecordsView: View {
         VStack(alignment: .leading, spacing: 36) {
             DetailRow(image: "icon_person_16", title: "이름", value: eventDetail.hostInfo.hostName, useMediumFont: true)
             DetailRow(image: "icon_nickname_16", title: "별명", value: eventDetail.hostInfo.hostNickname, useMediumFont: true)
-            DetailRow(image: "icon_relation 2", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
-            DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_relation 2", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
             DetailRow(image: "icon_coin_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원", useMediumFont: true)
-            DetailRow(image: "icon_check 1", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
-            DetailRow(image: "icon_calendar_16", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
+            DetailRow(image: "icon_check 1", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_calendar_16", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
             DetailRow(image: "icon_location_16",
                       title: "장소",
                       value: {
@@ -221,7 +221,7 @@ struct AllRecordsView: View {
             //DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
         }
         .padding(20)
-        .background(.gray800)
+        .background(.bgDisplaySecondary)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .transition(.asymmetric(
@@ -235,7 +235,7 @@ struct AllRecordsView: View {
             HStack {
                 Text("메모")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
                 
                 Spacer()
 
@@ -263,10 +263,10 @@ struct AllRecordsView: View {
                 }
             }
             .padding(16)
-            .background(.gray800)
+            .background(.bgFieldPrimary)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray800.opacity(0.5), lineWidth: 1)
+                    .stroke(.bgFieldPrimary, lineWidth: 1)
             )
             .cornerRadius(8)
             .padding(.horizontal, 20)
@@ -284,12 +284,12 @@ struct AllRecordsView: View {
                         .scaleEffect(0.8)
                     Text("삭제 중...")
                         .titleSemiBold18()
-                        .foregroundColor(.red)
+                        .foregroundColor(.txtStatusError)
                 }
             } else {
                 Text("기록 삭제하기")
                     .titleSemiBold18()
-                    .foregroundColor(.secondaryRed)
+                    .foregroundColor(.txtStatusError)
             }
         }
         .frame(maxWidth: .infinity)
@@ -297,7 +297,7 @@ struct AllRecordsView: View {
         .background(.clear)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(.secondaryRed, lineWidth: 1)
+                .stroke(.borderStatusError, lineWidth: 1)
         )
         .cornerRadius(12)
         .padding(.horizontal, 20)
@@ -368,11 +368,11 @@ struct DetailRow: View {
                 Image(image)
                     .resizable()
                     .renderingMode(.template)
-                    .foregroundColor(.gray400)
+                    .foregroundColor(.iconDisabledPrimary)
                     .frame(width: 16,height: 16)
                 Text(title)
                     .bodyMedium14()
-                    .foregroundColor(.gray100)
+                    .foregroundColor(.txtDisplaySecondary)
             }
             
             Spacer()
@@ -386,7 +386,7 @@ struct DetailRow: View {
                         .bodyRegular14()
                 }
             }
-                .foregroundColor(valueTextColor ?? .white)
+                .foregroundColor(valueTextColor ?? .txtDisplayPrimary)
                 .padding(.horizontal, valueBackgroundColor != nil ? 8 : 0)
                 .padding(.vertical, valueBackgroundColor != nil ? 4 : 0)
                 .background(valueBackgroundColor ?? .clear)

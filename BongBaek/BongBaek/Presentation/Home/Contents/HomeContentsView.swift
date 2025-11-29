@@ -24,7 +24,10 @@ struct HomeContentsView: View{
                 Spacer()
                 
                 Button(action : {
-                    router.push(to: .contentsView)
+                    NotificationCenter.default.post(
+                        name: .selectTab,
+                        object: Tab.contents
+                    )
                 }){
                     HStack{
                         Text("더보기")
