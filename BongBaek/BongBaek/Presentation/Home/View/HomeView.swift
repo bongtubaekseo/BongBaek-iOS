@@ -39,7 +39,11 @@ struct HomeView: View {
                     }
                     .padding(.top, 20)
                     .padding(.horizontal, 20)
+                } else {
+                    EmptyNewScheduleView()
+                        .padding(.top, 20)
                 }
+
                 
                 if homeViewModel.hasData {
                     ScheduleView(events: homeViewModel.homeData?.events ?? [])
