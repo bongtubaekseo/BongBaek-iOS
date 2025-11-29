@@ -19,7 +19,7 @@ struct ScheduleView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 VStack(alignment: .leading, spacing: 2){
-                    Text("\(UserDefaults.standard.memberName.isEmpty ? "봉백" : UserDefaults.standard.memberName)님의 일정")
+                    Text("내 일정")
                         .font(.title_semibold_20)
                         .foregroundStyle(.txtDisplayPrimary)
                     Text("나의 경조사 일정을 관리해보세요!")
@@ -28,19 +28,17 @@ struct ScheduleView: View {
                 }
                 Spacer()
 
-                if !events.isEmpty {
-                    Button(action: {
-                        router.push(to: .fullScheduleView)
-                    }) {
-                        HStack{
-                            Text("더보기")
-                                .bodyRegular14()
-                                .foregroundColor(.txtDisplaySecondary)
+                Button(action: {
+                    router.push(to: .fullScheduleView)
+                }) {
+                    HStack{
+                        Text("더보기")
+                            .bodyRegular14()
+                            .foregroundColor(.txtDisplaySecondary)
                             
-                            Image("icon_left")
-                                .foregroundColor(.iconInteractiveInverse)
-                                .frame(width: 14, height: 14)
-                        }
+                        Image("icon_left")
+                            .foregroundColor(.iconInteractiveInverse)
+                            .frame(width: 14, height: 14)
                     }
                 }
             }
