@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ContentDetailView: View {
     @EnvironmentObject var router: NavigationRouter
+    @StateObject private var viewModel = ContentDetailViewModel()
+    let contentId: String
+        
     
     let cardImages = ["image1", "image2"]
     
@@ -51,6 +54,9 @@ struct ContentDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 20)
                 .padding(.bottom, 20)
+            }
+            .task {
+                await viewModel.loadContentDetail(contentId: contentId)
             }
         }
         .navigationBarBackButtonHidden(true)

@@ -15,7 +15,7 @@ struct ContentsCardView: View {
     
     var body: some View {
         Button(action : {
-            router.push(to : .contentDetailView)
+            router.push(to : .contentDetailView(contentId: ""))
         }){
             ZStack(alignment: .topLeading){
                 RoundedRectangle(cornerRadius: 6)

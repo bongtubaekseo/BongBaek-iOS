@@ -185,7 +185,7 @@ struct ContentsView: View {
         ForEach(viewModel.filteredContents, id: \.contentId) { content in
             ContentCell(content: content)
                 .onTapGesture {
-                    router.push(to: .contentDetailView)
+                    router.push(to: .contentDetailView(contentId: content.contentId))
                 }
                 .onAppear {
                     if viewModel.shouldLoadMore(for: content) {

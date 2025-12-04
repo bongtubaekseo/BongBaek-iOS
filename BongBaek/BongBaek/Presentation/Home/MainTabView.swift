@@ -200,8 +200,8 @@ struct MainTabView: View {
             ContentsView()
                 .environmentObject(router)
             
-        case .contentDetailView:
-            ContentDetailView()
+        case .contentDetailView(let contentId):
+            ContentDetailView(contentId: contentId)
                 .environmentObject(router)
         }
     }
