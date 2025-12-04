@@ -31,4 +31,13 @@ class ContentsService: ContentsServiceProtocol {
         )
         .async()
     }
+    
+    func getMoreContentsDetail(contentId: String) async throws -> MoreContentsDetailResponse {
+        return try await networkService.request(
+            .getContentsDetail(contentId: contentId),
+            responseType: MoreContentsDetailResponse.self
+        )
+        .async()
+    }
+        
 }
