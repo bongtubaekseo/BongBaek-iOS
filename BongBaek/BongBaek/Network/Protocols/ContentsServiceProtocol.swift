@@ -10,4 +10,5 @@ import Combine
 
 protocol ContentsServiceProtocol {
     func getHomeContents() async throws -> ContentsHomeResponse
+    func getMoreContents(page: Int, category: String?) async throws -> MoreContentsResponse
 }

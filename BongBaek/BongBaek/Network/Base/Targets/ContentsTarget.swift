@@ -28,11 +28,11 @@ extension ContentsTarget: TargetType {
         case .getContentsHome:
             return "/api/v1/content/home"
         case .getContentsCategory(let page, let category):
-            var path = "/api/v1/content/list/\(page)"
-            if let category = category {
-                path += "?category=\(category)"
-            }
-            return path
+            return "/api/v1/content/list/\(page)"
+//            if let category = category {
+//                path += "?category=\(category)"
+//            }
+//            return path
         case .getContentsDetail(let contentId):
             return "/api/v1/content/\(contentId)"
         }
@@ -47,8 +47,14 @@ extension ContentsTarget: TargetType {
     
     var task: Moya.Task {
         switch self {
-        case .getContentsHome,.getContentsCategory ,.getContentsDetail:
+        case .getContentsHome,.getContentsDetail:
             return .requestPlain
+        case .getContentsCategory(_, let category):
+            var params: [String: Any] = [:]
+            if let category = category {
+                params["category"] = category
+            }
+            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
         }
     }
     

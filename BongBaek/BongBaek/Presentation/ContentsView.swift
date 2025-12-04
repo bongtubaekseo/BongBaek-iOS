@@ -81,7 +81,9 @@ struct ContentsView: View {
     private func categoryButton(for category: ScheduleCategory) -> some View {
         Button(action: {
             selectedCategory = category
-            viewModel.updateCategory(category)
+            Task {
+                await viewModel.updateCategory(category)
+            }
         }) {
             Text(category.displayName)
                 .bodyMedium16()
@@ -206,7 +208,7 @@ struct ContentsView: View {
 }
 
 struct ContentCell: View {
-    let content: ContentHomeItem
+    let content: MoreContentItem
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {

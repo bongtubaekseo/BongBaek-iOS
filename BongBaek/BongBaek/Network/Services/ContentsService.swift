@@ -23,4 +23,12 @@ class ContentsService: ContentsServiceProtocol {
         )
         .async() 
     }
+    
+    func getMoreContents(page: Int, category: String?) async throws -> MoreContentsResponse {
+        return try await networkService.request(
+            .getContentsCategory(page: page, category: category),
+            responseType: MoreContentsResponse.self
+        )
+        .async()
+    }
 }

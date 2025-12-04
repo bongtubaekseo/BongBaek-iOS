@@ -11,8 +11,8 @@ import Combine
 @MainActor
 class ContentViewModel: ObservableObject {
     
-    @Published var contents: [ContentHomeItem] = []
-    @Published var filteredContents: [ContentHomeItem] = []
+    @Published var contents: [MoreContentItem] = []
+    @Published var filteredContents: [MoreContentItem] = []
     @Published var isLoading: Bool = false
     @Published var isLoadingMore: Bool = false
     @Published var errorMessage: String?
@@ -55,6 +55,7 @@ class ContentViewModel: ObservableObject {
         currentPage = 0
         isLastPage = false
         contents.removeAll()
+        filteredContents.removeAll()
         
         await loadContents(isRefresh: true)
         
@@ -81,27 +82,41 @@ class ContentViewModel: ObservableObject {
     /// 실제 API 호출 메서드
     private func loadContents(isRefresh: Bool) async {
         do {
-            let response = try await contentsService.getHomeContents()
+            let categoryParam = selectedCategory == .all ? nil : selectedCategory.rawValue
+            let response = try await contentsService.getMoreContents(
+                page: currentPage,
+                category: categoryParam
+            )
             
             if response.isSuccess, let data = response.data {
                 let newContents = data.contents
                 
+                isLastPage = data.isLast
+                hasMoreData = !data.isLast
+                
                 if isRefresh {
                     self.contents = newContents
+                    self.filteredContents = newContents
                 } else {
                     self.contents.append(contentsOf: newContents)
+                    self.filteredContents.append(contentsOf: newContents)
                 }
                 
-                applyFilter()
+//                applyFilter()
                 
-                print("콘텐츠 로드 성공: \(newContents.count)개")
+                print("콘텐츠 로드 성공: \(newContents.count)개, 마지막페이지: \(data.isLast)")
             } else {
                 errorMessage = response.message
+                isLastPage = true
+                hasMoreData = false
                 print("콘텐츠 로드 실패: \(response.message)")
+                
             }
         } catch {
             errorMessage = "콘텐츠를 불러오는데 실패했습니다: \(error.localizedDescription)"
             print("콘텐츠 로드 에러: \(error)")
+            isLastPage = true
+            hasMoreData = false
         }
     }
     /// 카테고리 필터 적용'
@@ -124,17 +139,17 @@ class ContentViewModel: ObservableObject {
     }
     
     /// 카테고리 변경 (새로 로드)
-    func updateCategory(_ category: ScheduleCategory) {
+    func updateCategory(_ category: ScheduleCategory) async {
         guard selectedCategory != category else { return }
         
         selectedCategory = category
         print("카테고리 변경: \(category.displayName)")
-        
-        applyFilter()
+        await loadAllContents()
+       // applyFilter()
     }
     
     /// 무한스크롤 트리거 확인
-    func shouldLoadMore(for content: ContentHomeItem) -> Bool {
+    func shouldLoadMore(for content: MoreContentItem) -> Bool {
         guard let lastContent = filteredContents.last else { return false }
         return content.contentId == lastContent.contentId && !isLastPage && !isLoadingMore
     }
