@@ -10,10 +10,10 @@ import SwiftUI
 struct ScheduleView: View {
     let events: [Event]
     @EnvironmentObject var router: NavigationRouter
-
+    
     private var sortedEvents: [Event] {
-           return events.sorted { $0.eventInfo.dDay > $1.eventInfo.dDay }
-       }
+        return events.sorted { $0.eventInfo.dDay > $1.eventInfo.dDay }
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -27,7 +27,7 @@ struct ScheduleView: View {
                         .foregroundStyle(.txtDisplayTierary)
                 }
                 Spacer()
-
+                
                 if !events.isEmpty {
                     Button(action: {
                         NotificationCenter.default.post(
@@ -39,25 +39,28 @@ struct ScheduleView: View {
                             Text("더보기")
                                 .bodyRegular14()
                                 .foregroundColor(.txtDisplaySecondary)
-
                             
-                        Image("icon_left")
-                            .foregroundColor(.iconInteractiveInverse)
-                            .frame(width: 14, height: 14)
+                            
+                            Image("icon_left")
+                                .foregroundColor(.iconInteractiveInverse)
+                                .frame(width: 14, height: 14)
+                        }
+                    }
+                    .padding(.bottom, 20)
+                }
+            }
+                
+                
+                if events.isEmpty {
+                    EmptyCardView()
+                } else {
+                    ForEach(sortedEvents, id: \.eventId) { event in
+                        NewScheduleCellView(event: event)
                     }
                 }
             }
-            .padding(.bottom, 20)
-            
-            if events.isEmpty {
-                EmptyCardView()
-            } else {
-                ForEach(sortedEvents, id: \.eventId) { event in
-                    NewScheduleCellView(event: event)
-                }
-            }
+            .padding(.horizontal)
+            .background(.bgDisplayPrimary)
         }
-        .padding(.horizontal)
-        .background(.bgDisplayPrimary)
     }
-}
+
