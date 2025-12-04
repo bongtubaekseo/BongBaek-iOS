@@ -8,8 +8,8 @@
 import Foundation
 
 typealias SignUpResponse = BaseResponse<AuthResponseData>
-typealias KaKaoLoginResponse = BaseResponse<AuthData>
-typealias AppleLoginResponse = BaseResponse<AppleAuthData>
+typealias KaKaoLoginResponse = BaseResponse<OAuthData>
+typealias AppleLoginResponse = BaseResponse<OAuthData>
 typealias RefreshTokenResponse = BaseResponse<TokenInfo>
 typealias LogoutResponse = BaseResponse<EmptyData>
 typealias WithdrawResponse = BaseResponse<EmptyData>
@@ -22,11 +22,21 @@ struct AuthData: Codable {
     let apiKey: String?
 }
 
+struct OAuthData: Codable {
+    let name: String?
+    let token: TokenInfo?
+    let isCompletedSignUp: Bool
+    let oauthId: String?
+    let oauthProvider: String?
+    let apiKey: String?
+    let kakaoAccessToken: String?
+}
+
 struct AppleAuthData: Codable {
     let name: String?
     let token: TokenInfo?
     let isCompletedSignUp: Bool
-    let appleId: String
+    let appleId: String?
     let apiKey: String?
 }
 

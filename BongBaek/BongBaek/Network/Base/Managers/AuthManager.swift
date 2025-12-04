@@ -314,7 +314,7 @@ class AuthManager: ObservableObject {
             return
         }
         
-        currentKakaoId = authData.kakaoId
+        currentKakaoId = authData.oauthId
         loginType = .kakao
         
         if let apiKey = authData.apiKey {
@@ -332,7 +332,7 @@ class AuthManager: ObservableObject {
             return
         }
         
-        currentAppleId = authData.appleId
+        currentAppleId = authData.oauthId
         loginType = .apple
         
         if let apiKey = authData.apiKey {
@@ -344,7 +344,7 @@ class AuthManager: ObservableObject {
     }
     
     /// 공통 AuthData 처리 (카카오용)
-    private func handleAuthData(_ authData: AuthData) {
+    private func handleAuthData(_ authData: OAuthData) {
         if authData.isCompletedSignUp {
             // 기존 회원
             guard let tokenInfo = authData.token else {
@@ -371,7 +371,7 @@ class AuthManager: ObservableObject {
     }
     
     /// 애플 AuthData 처리
-    private func handleAppleAuthData(_ authData: AppleAuthData) {
+    private func handleAppleAuthData(_ authData: OAuthData) {
         if authData.isCompletedSignUp {
             // 기존 회원
             guard let tokenInfo = authData.token else {

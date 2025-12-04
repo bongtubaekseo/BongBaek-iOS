@@ -188,20 +188,24 @@ class ProfileSettingViewModel: ObservableObject {
         switch authManager.loginType {
         case .kakao:
             return MemberInfo(
-                kakaoId: authManager.currentKakaoId,
+                kakaoId: nil,
                 appleId: nil,
+                oauthId: authManager.currentKakaoId,
                 memberName: nickname,
                 memberBirthday: formattedBirthday,
-                memberIncome: incomeValue
+                memberIncome: incomeValue,
+                oauthProvider: "kakao"
             )
             
         case .apple:
             return MemberInfo(
                 kakaoId: nil,
-                appleId: authManager.currentAppleId,
+                appleId: nil,
+                oauthId: authManager.currentAppleId,
                 memberName: nickname,
                 memberBirthday: formattedBirthday,
-                memberIncome: incomeValue
+                memberIncome: incomeValue,
+                oauthProvider: "apple"
             )
             
         case .none:
@@ -209,9 +213,11 @@ class ProfileSettingViewModel: ObservableObject {
             return MemberInfo(
                 kakaoId: nil,
                 appleId: nil,
+                oauthId: nil,
                 memberName: nickname,
                 memberBirthday: formattedBirthday,
-                memberIncome: incomeValue
+                memberIncome: incomeValue,
+                oauthProvider: "none"
             )
         }
     }
@@ -228,10 +234,12 @@ class ProfileSettingViewModel: ObservableObject {
         let formattedBirthday = convertDateFormat(selectedDate)
         return MemberInfo(
             kakaoId: nil,
-            appleId: apple,
+            appleId: nil,
+            oauthId: apple,
             memberName: nickname,
             memberBirthday: formattedBirthday,
-            memberIncome: incomeValue
+            memberIncome: incomeValue,
+            oauthProvider: "apple"
         )
     }
     

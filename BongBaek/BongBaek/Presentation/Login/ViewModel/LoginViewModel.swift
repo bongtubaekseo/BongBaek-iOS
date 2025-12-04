@@ -78,7 +78,7 @@ class LoginViewModel: ObservableObject {
                             }
                         } else {
                             // ToDo: - 신규 회원/회원가입 필요
-                            self?.navigateToSignUp(kakaoId: data.kakaoId, kakaoAccessToken: data.kakaoAccessToken)
+                            self?.navigateToSignUp(kakaoId: data.oauthId ?? "", kakaoAccessToken: data.kakaoAccessToken)
                         }
                     } else {
                         self?.errorMessage = response.message

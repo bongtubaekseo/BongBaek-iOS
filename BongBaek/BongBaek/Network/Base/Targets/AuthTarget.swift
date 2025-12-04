@@ -10,7 +10,7 @@ import Foundation
 
 
 struct LoginRequest: Codable {
-    let accessToken: String
+    let idToken: String
 }
 
 enum AuthTarget {
@@ -57,7 +57,7 @@ extension AuthTarget: TargetType {
     var task: Moya.Task {
         switch self {
         case .kakaoLogin(let accessToken):
-            let loginRequest = LoginRequest(accessToken: accessToken)
+            let loginRequest = LoginRequest(idToken: accessToken)
             return .requestJSONEncodable(loginRequest)
             
         case .signUp(let memberInfo):
@@ -67,7 +67,7 @@ extension AuthTarget: TargetType {
             return .requestPlain
             
         case .appleLogin(let idToken):
-            let loginRequest = LoginRequest(accessToken: idToken)
+            let loginRequest = LoginRequest(idToken: idToken)
             return .requestJSONEncodable(loginRequest)
         case .withdraw(let reason):
             return .requestJSONEncodable(reason)

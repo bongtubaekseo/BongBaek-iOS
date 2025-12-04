@@ -7,14 +7,25 @@
 
 import Foundation
 
+//struct BaseResponse<T: Codable>: Codable {
+//    let success: Bool
+//    let status: Int
+//    let message: String
+//    let data: T?
+//    
+//    var isSuccess: Bool {
+//        return success && status < 400
+//    }
+//}
+
 struct BaseResponse<T: Codable>: Codable {
-    let success: Bool
     let status: Int
+    let code: String
     let message: String
     let data: T?
     
     var isSuccess: Bool {
-        return success && status < 400
+        return status >= 200 && status < 300
     }
 }
 
