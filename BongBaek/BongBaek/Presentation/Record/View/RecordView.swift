@@ -21,6 +21,7 @@ enum EventsCategory: String, CaseIterable {
 
 struct RecordView: View {
     @StateObject private var viewModel = RecordViewModel()
+    @State private var selectedDate = Date()
     @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
@@ -40,10 +41,18 @@ struct RecordView: View {
                 
                 RecordSectionHeaderView(
                     selectedSection: $viewModel.selectedSection,
+                    selectedDate: $selectedDate,
                     attendedCount: viewModel.attendedCount,
                     notAttendedCount: viewModel.notAttendedCount,
                     onSectionChange: { section in
                         viewModel.changeSection(to: section)
+                    },
+                    onDateChange: { isNext in
+                        if isNext {
+                            selectedDate = Calendar.current.date(byAdding: .month, value: 1, to: selectedDate) ?? selectedDate
+                        } else {
+                            selectedDate = Calendar.current.date(byAdding: .month, value: -1, to: selectedDate) ?? selectedDate
+                        }
                     }
                 )
                 .padding(.bottom, 20)
@@ -232,9 +241,11 @@ struct RecordsHeaderView: View {
 
 struct RecordSectionHeaderView: View {
     @Binding var selectedSection: RecordSection
+    @Binding var selectedDate: Date
     let attendedCount: Int
     let notAttendedCount: Int
     let onSectionChange: (RecordSection) -> Void
+    let onDateChange : (Bool) -> Void
     
     var body: some View {
         HStack(spacing: 0) {
@@ -284,10 +295,35 @@ struct RecordSectionHeaderView: View {
         .padding(.top, 12)
         .padding(.bottom, 4)
         
-        HStack(spacing : 16){
+        HStack(spacing : 0){
+            Text(dateString(from: selectedDate))
+                .headBold24()
+                .foregroundColor(.txtDisplayPrimary)
             
+            Spacer()
+            
+            Button(action: {
+                onDateChange(false)
+            }) {
+            Image("icon_left 1")
+                .foregroundColor(.iconInteractiveDefault)
+                .frame(width: 24, height: 24)
+            }
+            
+            Spacer()
+                .frame(width: 24)
+            
+            Button(action: {
+                onDateChange(true)
+            }) {
+            Image("icon_right")
+                .foregroundColor(.iconInteractiveDefault)
+                .frame(width: 24, height: 24)
+            }
         }
+        .padding(.horizontal, 20)
     }
+        
     private func dateString(from date : Date) -> String{
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy년 MM월"
