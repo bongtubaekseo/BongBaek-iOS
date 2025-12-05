@@ -283,6 +283,16 @@ struct RecordSectionHeaderView: View {
         .frame(maxWidth: .infinity)
         .padding(.top, 12)
         .padding(.bottom, 4)
+        
+        HStack(spacing : 16){
+            
+        }
+    }
+    private func dateString(from date : Date) -> String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월"
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter.string(from: date)
     }
 }
 
@@ -406,8 +416,8 @@ struct RecordsEmptyView: View {
             
             Image("img_write_empty(160_160)")
                 .resizable()
-                .frame(width: 60, height: 60)
-                .foregroundColor(.gray)
+                .frame(width: 160, height: 160)
+                //.foregroundColor(.gray)
                 .padding(.top, 16)
             
             Button(action: {
