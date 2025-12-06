@@ -116,8 +116,8 @@ struct ContentDetailView: View {
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 12)
-            .background(Color.primaryNormal)
-            .foregroundColor(.white)
+            .background(.bgStatusFocused)
+            .foregroundColor(.txtInteractiveInverse)
             .cornerRadius(8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
