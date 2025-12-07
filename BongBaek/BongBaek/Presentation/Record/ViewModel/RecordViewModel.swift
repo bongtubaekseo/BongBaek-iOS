@@ -75,6 +75,10 @@ class RecordViewModel: ObservableObject {
         } else {
             selectedMonth -= 1
         }
+        
+        Task {
+            await loadAllRecords()
+        }
     }
     
     // 다음 달로 이동
@@ -84,6 +88,10 @@ class RecordViewModel: ObservableObject {
             selectedMonth = 1
         } else {
             selectedMonth += 1
+        }
+        
+        Task {
+            await loadAllRecords()
         }
     }
     
