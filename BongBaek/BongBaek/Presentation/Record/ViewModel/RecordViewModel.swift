@@ -340,11 +340,14 @@ class RecordViewModel: ObservableObject {
             let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
             
             print(" 참석 이벤트 로드 - 페이지: \(attendedCurrentPage), 카테고리: \(categoryParam ?? "전체")")
+            print("월별 이벤트 로드 - \(selectedYear)년 \(selectedMonth)월")
             
             let response = try await eventService.getAttendedEvents(
                 page: attendedCurrentPage,
                 attended: true,  // 참석한 이벤트
-                category: categoryParam
+                category: categoryParam,
+                year: selectedYear,
+                month: selectedMonth
             ).async()
             
             if response.isSuccess, let data = response.data {
@@ -382,11 +385,14 @@ class RecordViewModel: ObservableObject {
             let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
             
             print("불참 이벤트 로드 - 페이지: \(notAttendedCurrentPage), 카테고리: \(categoryParam ?? "전체")")
+            print("월별 이벤트 로드 - \(selectedYear)년 \(selectedMonth)월")
             
             let response = try await eventService.getAttendedEvents(
                 page: notAttendedCurrentPage,
                 attended: false,  // 불참한 이벤트
-                category: categoryParam
+                category: categoryParam,
+                year: selectedYear,
+                month: selectedMonth
             ).async()
             
             if response.isSuccess, let data = response.data {

@@ -10,7 +10,7 @@ import Combine
 
 protocol EventServiceProtocol {
     func getHome() -> AnyPublisher<EventHomeResponse, Error>
-    func getAttendedEvents(page: Int, attended: Bool, category: String?) -> AnyPublisher<AttendedEventsResponse, Error>
+    func getAttendedEvents(page: Int, attended: Bool, category: String?,year: Int?, month: Int?) -> AnyPublisher<AttendedEventsResponse, Error>
     func getUpcomingEvents(page: Int, category: String?) -> AnyPublisher<UpcomingEventsResponse, Error>
     func getEventDetail(eventId: String) -> AnyPublisher<EventDetailResponse, Error>
     func createEvent(eventData: CreateEventData) -> AnyPublisher<CreateEventResponse, Error>
