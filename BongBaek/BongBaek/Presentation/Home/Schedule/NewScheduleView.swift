@@ -17,7 +17,7 @@ enum EventCategory: String {
         case .wedding:
             return "icon_alarm"
         case .birthday:
-            return "icon_birthday"
+            return "icon_birthday 1"
         case .stoneparty:
             return "icon_stoneparty"
         case .funeral:
@@ -71,7 +71,7 @@ struct NewScheduleView: View {
                 
                 Spacer()
 
-                Image("icon_alarm")
+                Image(getCategoryIcon(for: event))
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 94, height: 82)
