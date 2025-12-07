@@ -71,7 +71,7 @@ struct NewScheduleView: View {
                 
                 Spacer()
 
-                Image(getCategoryIcon(for: event))
+                Image("icon_alarm")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 94, height: 82)
