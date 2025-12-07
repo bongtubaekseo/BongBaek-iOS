@@ -306,7 +306,6 @@ struct RecordContentView: View {
                 LoadingView2()
             } else if viewModel.isCurrentSectionEmpty {
                 RecordsEmptyView(message: viewModel.emptyMessage)
-                    .padding(.top, 40)
             } else {
                 eventListView
                 
@@ -372,7 +371,7 @@ struct RecordsEmptyView: View {
             
             Image("img_write_empty(160_160)")
                 .resizable()
-                .frame(width: 60, height: 60)
+                .frame(width: 160, height: 160)
                 .foregroundColor(.gray)
                 .padding(.top, 16)
             
