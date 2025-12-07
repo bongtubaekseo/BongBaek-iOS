@@ -53,7 +53,13 @@ struct ContentsView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 20)
             }
+            .refreshable {  
+                await viewModel.refreshContents()
+            }
             
+        }
+        .task {
+            await viewModel.loadAllContents()
         }
         .background(Color.bgDisplayPrimary)
         
@@ -75,7 +81,9 @@ struct ContentsView: View {
     private func categoryButton(for category: ScheduleCategory) -> some View {
         Button(action: {
             selectedCategory = category
-            viewModel.updateCategory(category)
+            Task {
+                await viewModel.updateCategory(category)
+            }
         }) {
             Text(category.displayName)
                 .bodyMedium16()
@@ -97,7 +105,7 @@ struct ContentsView: View {
             
             Spacer()
             
-            Text("\(viewModel.filteredGuides.count)개")
+            Text("\(viewModel.filteredContents.count)개")
                 .bodyRegular16()
                 .foregroundStyle(.txtDisplaySecondary)
             
@@ -130,7 +138,7 @@ struct ContentsView: View {
                 .progressViewStyle(CircularProgressViewStyle(tint: .primaryNormal))
                 .scaleEffect(0.8)
             
-            Text("더 많은 일정을 불러오는 중...")
+            Text("더 많은 콘텐츠를 불러오는 중...")
                 .bodyRegular14()
                 .foregroundColor(.gray400)
         }
@@ -151,7 +159,7 @@ struct ContentsView: View {
             
             Button("다시 시도") {
                 Task {
-                    await viewModel.loadAllEvents()
+                    await viewModel.loadAllContents()
                 }
             }
             .foregroundColor(.primaryNormal)
@@ -164,7 +172,7 @@ struct ContentsView: View {
         VStack(spacing: 16) {
             ProgressView()
                 .tint(.primaryNormal)
-            Text("이벤트 정보를 불러오는 중...")
+            Text("콘텐츠 정보를 불러오는 중...")
                 .bodyRegular14()
                 .foregroundColor(.gray400)
         }
@@ -174,13 +182,17 @@ struct ContentsView: View {
     
     @ViewBuilder
     private var guideContentView: some View {
-        ForEach(viewModel.filteredGuides) { guide in
-            GuideCell(guide: guide)
+        ForEach(viewModel.filteredContents, id: \.contentId) { content in
+            ContentCell(content: content)
                 .onTapGesture {
-                    router.push(to: .contentDetailView)
+                    router.push(to: .contentDetailView(contentId: content.contentId))
                 }
                 .onAppear {
-                    // 페이지네이션 처리
+                    if viewModel.shouldLoadMore(for: content) {
+                        Task {
+                            await viewModel.loadMoreContents()
+                        }
+                    }
                 }
         }
         
@@ -195,26 +207,29 @@ struct ContentsView: View {
 
 }
 
-struct GuideCell: View {
-    let guide: Guide
+struct ContentCell: View {
+    let content: MoreContentItem
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            Image(guide.backgroundImage)
-                .resizable()
-                .scaledToFill()
-                .frame(height: 251)
-                .clipped()
-                .overlay(
-                    LinearGradient(
-                        gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
+            AsyncImage(url: URL(string: content.thumbnailUrl)) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+            } placeholder: {
+                Color.gray300
+            }
+            .frame(height: 251)
+            .clipped()
+            .overlay(
+                LinearGradient(
+                    gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
+                    startPoint: .top,
+                    endPoint: .bottom
                 )
-            
+            )
             VStack(alignment: .leading, spacing: 8) {
-                Text(guide.category.displayName)
+                Text(content.contentCategory)
                     .captionRegular12()
                     .foregroundStyle(.txtDisplayPrimary)
                     .padding(.vertical, 2)
@@ -224,11 +239,11 @@ struct GuideCell: View {
                             .fill(Color.bgDisplayCard)
                     )
                 
-                Text(guide.title)
+                Text(content.contentTitle)
                     .titleSemiBold18()
                     .foregroundStyle(.txtInteractiveInverse)
                 
-                Text(guide.date)
+                Text("0000년 00월 00일")
                     .captionRegular12()
                     .foregroundStyle(.txtDisplayTierary)
             }

@@ -30,7 +30,7 @@ enum RecommendRoute: Hashable {
     case ModifyView(profileData: UpdateProfileData?)
     case profileSettingView
     case contentsView
-    case contentDetailView
+    case contentDetailView(contentId: String)
     
     var displayName: String {
         switch self {
