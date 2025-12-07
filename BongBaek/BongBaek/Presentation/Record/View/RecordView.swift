@@ -308,10 +308,8 @@ struct RecordContentView: View {
                 RecordsEmptyView(message: viewModel.emptyMessage)
                     .padding(.top, 40)
             } else {
-                //년도/월별 그루핑 표시
-                eventContentView
+                eventListView
                 
-                //추가 로딩 인디케이터
                 if viewModel.isLoadingMore {
                     HStack(spacing: 12) {
                         ProgressView()
@@ -331,68 +329,25 @@ struct RecordContentView: View {
         .animation(.easeInOut(duration: 0.2), value: viewModel.selectedSection)
     }
     
-    private var eventContentView: some View {
-        ForEach(viewModel.sortedYears, id: \.self) { year in
-            yearSectionView(for: year)
-        }
-    }
-    
-    private func yearSectionView(for year: String) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("\(year)년")
-                .headBold24()
-                .foregroundColor(.txtDisplayPrimary)
-                .padding(.horizontal, 20)
-            
-            monthsView(for: year)
-        }
-    }
-    
-    private func monthsView(for year: String) -> some View {
-        let months = viewModel.monthsForYear(year)
-        let sortedMonths = viewModel.sortedMonthsForYear(year)
-        
-        return ForEach(sortedMonths, id: \.self) { month in
-            if let events = months[month], !events.isEmpty {
-                monthSectionView(month: month, events: events)
-            }
-        }
-    }
-    
-    private func monthSectionView(month: String, events: [AttendedEvent]) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 12) {
-                Text("\(Int(month) ?? 0)월")
-                    .titleSemiBold16()
-                    .foregroundColor(.txtDisplaySecondary)
-                
-                Rectangle()
-                    .foregroundColor(.borderFieldDefault)
-                    .frame(height: 2)
-            }
-            .padding(.horizontal, 20)
-            .padding(.trailing, 20)
-            
-            ForEach(events, id: \.eventId) { event in
-                RecordCellView(
-                    event: event,
-                    isDeleteMode: viewModel.isDeleteMode,
-                    isSelected: viewModel.selectedRecordIDs.contains(event.eventId),
-                    onSelectionToggle: {
-                        viewModel.toggleRecordSelection(event.eventId)
-                    }
-                )
-                .onAppear {
-                    // 무한스크롤
-                    if viewModel.shouldLoadMore(for: event) {
-                        Task {
-                            await viewModel.loadMoreEvents()
-                        }
+    private var eventListView: some View {
+        ForEach(viewModel.currentEvents, id: \.eventId) { event in
+            RecordCellView(
+                event: event,
+                isDeleteMode: viewModel.isDeleteMode,
+                isSelected: viewModel.selectedRecordIDs.contains(event.eventId),
+                onSelectionToggle: {
+                    viewModel.toggleRecordSelection(event.eventId)
+                }
+            )
+            .onAppear {
+                // 무한스크롤
+                if viewModel.shouldLoadMore(for: event) {
+                    Task {
+                        await viewModel.loadMoreEvents()
                     }
                 }
             }
         }
-        .padding(.bottom, 20)
     }
 }
 
