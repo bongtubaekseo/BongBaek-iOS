@@ -20,6 +20,9 @@ enum Category: String, CaseIterable {
 @MainActor
 class RecordViewModel: ObservableObject {
     
+    @Published var selectedYear: Int = Calendar.current.component(.year, from: Date())
+    @Published var selectedMonth: Int = Calendar.current.component(.month, from: Date())
+    
     @Published var isDeleteMode = false
     @Published var selectedSection: RecordSection = .attended
     @Published var selectedCategory: EventsCategory = .all
@@ -62,6 +65,31 @@ class RecordViewModel: ObservableObject {
         case .notAttended:
             return notAttendedEvents
         }
+    }
+    
+    // 이전 달로 이동
+    func moveToPreviousMonth() {
+        if selectedMonth == 1 {
+            selectedYear -= 1
+            selectedMonth = 12
+        } else {
+            selectedMonth -= 1
+        }
+    }
+    
+    // 다음 달로 이동
+    func moveToNextMonth() {
+        if selectedMonth == 12 {
+            selectedYear += 1
+            selectedMonth = 1
+        } else {
+            selectedMonth += 1
+        }
+    }
+    
+    // 연월 문자열 반환 (예: "2025년 12월")
+    var currentYearMonthText: String {
+        return "\(selectedYear)년 \(selectedMonth)월"
     }
     
     var currentEventsGrouped: [String: [String: [AttendedEvent]]] {

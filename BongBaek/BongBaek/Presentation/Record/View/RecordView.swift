@@ -48,6 +48,17 @@ struct RecordView: View {
                 )
                 .padding(.bottom, 20)
                 
+                MonthNavigationView(
+                    currentYearMonth: viewModel.currentYearMonthText,
+                    onPreviousMonth: {
+                        viewModel.moveToPreviousMonth()
+                    },
+                    onNextMonth: {
+                        viewModel.moveToNextMonth()
+                    }
+                )
+                .padding(.bottom, 12)
+                
                 CategoryFilterView(
                     selectedCategory: $viewModel.selectedCategory,
                     onCategoryChange: { category in
