@@ -72,13 +72,17 @@ struct HomeView: View {
                         .environmentObject(router)
                 }
                 
-                HomeContentsView()
+                HomeContentsView(homeContents: homeViewModel.homeContents)
                 
             }
         }
         .onAppear {
             print("HomeView 나타남 - 데이터 로드 시작")
             homeViewModel.loadData()
+            
+            Task {
+                await homeViewModel.loadHomeContents()
+            }
         }
         .refreshable {
             print("HomeView 새로고침")

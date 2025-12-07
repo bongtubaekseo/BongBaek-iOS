@@ -12,7 +12,8 @@ struct EmptyCardView: View {
     
     var body: some View {
         Button(action: {
-            router.push(to: .createEventViewAfterEvent)
+//            router.push(to: .createEventViewAfterEvent)
+            router.push(to: .createEventView)
         }) {
             VStack(spacing: 20) {
                 VStack {

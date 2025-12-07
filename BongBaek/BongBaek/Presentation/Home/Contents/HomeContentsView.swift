@@ -6,13 +6,14 @@
 //
 import SwiftUI
 
-struct HomeContentsView: View{
+struct HomeContentsView: View {
     @EnvironmentObject var router: NavigationRouter
+    let homeContents: ContentsHomeResponseData?
     
-    var body : some View{
-        VStack(alignment: .leading, spacing: 16){
-            HStack(spacing: 0){
-                VStack(alignment: .leading, spacing : 2){
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text("경조사 콘텐츠")
                         .font(.title_semibold_20)
                         .foregroundStyle(.txtDisplayPrimary)
@@ -23,13 +24,13 @@ struct HomeContentsView: View{
                 .padding(.horizontal, 20)
                 Spacer()
                 
-                Button(action : {
+                Button(action: {
                     NotificationCenter.default.post(
                         name: .selectTab,
                         object: Tab.contents
                     )
-                }){
-                    HStack{
+                }) {
+                    HStack {
                         Text("더보기")
                             .bodyRegular14()
                             .foregroundColor(.txtDisplaySecondary)
@@ -42,20 +43,30 @@ struct HomeContentsView: View{
                 }
             }
             
-            ScrollView(.horizontal, showsIndicators: false){
-                HStack(spacing : 8){
-                    ContentsCardView(
-                        image: "ContentsEx1",
-                        category: "결혼식",
-                        title: "이제는 알아야 하는 결혼식 식사 예절"
-                    )
-                    ContentsCardView(
-                        image: "ContentsEx2",
-                        category: "장례식",
-                        title: "이제는 알아야 하는 장례식 예절"
-                    )
+            if let contents = homeContents?.contents, !contents.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(contents, id: \.contentId) { content in
+                            ContentsCardView(
+                                contentId: content.contentId,
+                                image: content.thumbnailUrl,
+                                category: content.contentCategory,
+                                title: content.contentTitle
+                            )
+                        }
+                    }
+                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal, 20)
+            } else {
+                // 로딩 중이거나 데이터가 없을 때
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        // 스켈레톤 UI 또는 빈 상태
+                        Text("콘텐츠를 불러오는 중...")
+                            .foregroundColor(.txtDisplaySecondary)
+                    }
+                    .padding(.horizontal, 20)
+                }
             }
         }
         .padding(.vertical, 20)
