@@ -41,7 +41,6 @@ struct HomeContentsView: View{
                     .padding(.horizontal, 20)
                 }
             }
-            .padding(.bottom, 16)
             
             ScrollView(.horizontal, showsIndicators: false){
                 HStack(spacing : 8){

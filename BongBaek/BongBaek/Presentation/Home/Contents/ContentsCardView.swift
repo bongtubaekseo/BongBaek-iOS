@@ -39,6 +39,7 @@ struct ContentsCardView: View {
                                 .font(.body1_medium_16)
                                 .foregroundStyle(.txtDisplayPrimary)
                                 .lineLimit(2)
+                                .multilineTextAlignment(.leading)
                             
                             Spacer()
                             
