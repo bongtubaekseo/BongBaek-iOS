@@ -29,7 +29,12 @@ class ContentViewModel: ObservableObject {
     
     init() {
         self.contentsService = DIContainer.shared.contentsService
+        print("ViewModel 생성됨")
     }
+    
+    deinit {
+            print("ViewModel 해제됨")
+        }
     
     // MARK: - Computed Properties
     
