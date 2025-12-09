@@ -22,21 +22,29 @@ class EventService: EventServiceProtocol {
         )
     }
     
-    func getAttendedEvents(page: Int, attended: Bool, category: String?) -> AnyPublisher<AttendedEventsResponse, Error> {
+    func getAttendedEvents(page: Int, attended: Bool, category: String?, year: Int? = nil, month: Int? = nil ) -> AnyPublisher<AttendedEventsResponse, Error> {
         
-        return getAttendedEventsDirectly(page: page, attended: attended, category: category)
+        return getAttendedEventsDirectly(page: page, attended: attended, category: category, year: year, month: month)
 //        return networkService.request(
 //            .getAttendedEvents(page: page, attended: attended, category: category),
 //            responseType: AttendedEventsResponse.self
 //        )
     }
     
-    private func getAttendedEventsDirectly(page: Int, attended: Bool, category: String?) -> AnyPublisher<AttendedEventsResponse, Error> {
+    private func getAttendedEventsDirectly(page: Int, attended: Bool, category: String?, year: Int?, month: Int?) -> AnyPublisher<AttendedEventsResponse, Error> {
         
         // URL 직접 생성 (인코딩 없이)
-        var urlString = "\(EnvironmentSetting.baseURL)/api/v1/events/history/\(page)?attended=\(attended)"
+        var urlString = "\(EnvironmentSetting.baseURL)/api/v1/events/monthly/\(page)?attended=\(attended)"
         if let category = category, !category.isEmpty {
             urlString += "&category=\(category)"
+        }
+        
+        if let year = year {
+            urlString += "&year=\(year)"
+        }
+                
+        if let month = month {
+            urlString += "&month=\(month)"
         }
         
         guard let url = URL(string: urlString) else {

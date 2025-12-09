@@ -9,13 +9,14 @@ import SwiftUI
 
 struct ContentsCardView: View {
     @EnvironmentObject var router : NavigationRouter
+    let contentId: String
     let image : String
     let category: String
     let title: String
     
     var body: some View {
         Button(action : {
-            router.push(to : .contentDetailView(contentId: ""))
+            router.push(to : .contentDetailView(contentId: contentId))
         }){
             ZStack(alignment: .topLeading){
                 RoundedRectangle(cornerRadius: 6)
@@ -23,11 +24,36 @@ struct ContentsCardView: View {
                     .frame(width: 220, height: 256)
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Image(image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 220, height: 160)
-                        .clipped()
+                    AsyncImage(url: URL(string: image)) { phase in
+                        switch phase {
+                        case .empty:
+                            // 로딩 중
+                            Rectangle()
+                                .fill(Color.gray200)
+                                .frame(width: 220, height: 160)
+                                .overlay {
+                                    ProgressView()
+                                }
+                        case .success(let image):
+                            // 이미지 로드 성공
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 220, height: 160)
+                                .clipped()
+                        case .failure:
+                            // 로드 실패
+                            Rectangle()
+                                .fill(Color.gray200)
+                                .frame(width: 220, height: 160)
+                                .overlay {
+                                    Image(systemName: "photo")
+                                        .foregroundColor(.gray400)
+                                }
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text(category)
@@ -39,6 +65,7 @@ struct ContentsCardView: View {
                                 .font(.body1_medium_16)
                                 .foregroundStyle(.txtDisplayPrimary)
                                 .lineLimit(2)
+                                .multilineTextAlignment(.leading)
                             
                             Spacer()
                             

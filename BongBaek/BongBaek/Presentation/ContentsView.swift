@@ -59,7 +59,9 @@ struct ContentsView: View {
             
         }
         .task {
-            await viewModel.loadAllContents()
+            if viewModel.contents.isEmpty {
+                await viewModel.loadAllContents()
+            }
         }
         .background(Color.bgDisplayPrimary)
         

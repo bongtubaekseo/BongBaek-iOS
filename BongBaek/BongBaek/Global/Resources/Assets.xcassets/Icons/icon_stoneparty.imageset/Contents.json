@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "graphic_funeral_alarm.png",
+      "filename" : "graphic_stoneparty_alarm.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "graphic_funeral_alarm@2x.png",
+      "filename" : "graphic_stoneparty_alarm@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "graphic_funeral_alarm@3x.png",
+      "filename" : "graphic_stoneparty_alarm@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
