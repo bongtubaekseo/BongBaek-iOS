@@ -47,8 +47,8 @@ struct CustomTabView: View {
                 title: "설정"
             )
         }
-        .padding(.bottom, 8)
-        .frame(width: UIScreen.main.bounds.width, height: 91)
+        .padding(.bottom, 16)
+        .frame(width: UIScreen.main.bounds.width, height: 92)
         .background(.gnbDisplayBase)
         .background(.primaryNormal)
     }
