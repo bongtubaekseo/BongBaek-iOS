@@ -49,13 +49,7 @@ struct CustomTabView: View {
         }
         .padding(.bottom, 8)
         .frame(width: UIScreen.main.bounds.width, height: 91)
-        .background(
-            LinearGradient(
-                colors: [.gray750.opacity(0.8), .gray900],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
+        .background(.gnbDisplayBase)
         .background(.primaryNormal)
     }
 }
