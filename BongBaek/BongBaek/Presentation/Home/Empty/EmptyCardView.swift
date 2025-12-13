@@ -21,7 +21,7 @@ struct EmptyCardView: View {
                         .frame(width: 24, height: 24)
                         
                 }
-                .padding(.top, 14)
+                .padding(.top, 12)
 
                 Text("예정된 일정이 없습니다")
                     .bodyMedium14()
