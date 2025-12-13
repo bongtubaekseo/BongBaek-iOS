@@ -24,7 +24,7 @@ struct EmptyCardView: View {
                 .padding(.top, 14)
 
                 Text("예정된 일정이 없습니다")
-                    .titleSemiBold18()
+                    .bodyMedium14()
                     .foregroundColor(.txtDisplaySecondary)
                     .padding(.bottom, -12)
                    
