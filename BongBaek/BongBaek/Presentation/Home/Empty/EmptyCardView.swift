@@ -30,7 +30,7 @@ struct EmptyCardView: View {
                    
 
                 HStack(spacing: 4) {
-                    Text("일정추가하기")
+                    Text("일정 추가하기")
                         .captionRegular12()
                         .foregroundColor(.txtDisplayTierary)
                     
