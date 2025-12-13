@@ -196,7 +196,9 @@ struct ModifyView: View {
             HStack {
                 Text(selection.displayText)
                     .bodyRegular14()
-                    .foregroundStyle(.txtStatusFocused)
+                    .foregroundStyle(
+                        viewModel.isSelected(selection) ? .txtStatusFocused : .txtStatusDisabled
+                    )
                 
                 Spacer()
                 
