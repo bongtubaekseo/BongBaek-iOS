@@ -165,7 +165,7 @@ struct EventTypeButton: View {
                             .frame(width: 24, height: 24)
                             .tint(.iconFocusedPrimary)
                     case .funeral:
-                        Image("icon_funeral")
+                        Image("icon_funeral1")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
@@ -193,7 +193,7 @@ struct EventTypeButton: View {
                 Spacer()
             }
             .padding(.horizontal, 20)
-            .frame(height: 70.adjustedH)
+            .frame(height: 68.adjustedH)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(isSelected ? .bgStatusFocused : .btnInteractiveTierary)

@@ -209,7 +209,7 @@ struct EventDateFormView: View {
             // 참석 여부 섹션
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 8) {
-                    Image("icon_check2")
+                    Image("icon_check 4")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 22, height: 22)
@@ -284,7 +284,7 @@ struct EventDatePickerView: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isPastDate ? Color.secondaryRed : Color.lineNormal, lineWidth: 1)
+                    .stroke(isPastDate ? Color.secondaryRed : Color.borderFieldDefault, lineWidth: 1)
             )
             .contentShape(Rectangle())
         }
