@@ -14,7 +14,7 @@ struct LaunchView: View {
                 .frame(width: 143,height: 45)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.btnInteractivePrimary)
+        .background(.backgroundLaunch)
         .ignoresSafeArea(.all)
     }
 }
