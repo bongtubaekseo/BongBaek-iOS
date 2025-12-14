@@ -185,17 +185,16 @@ struct ContentsView: View {
     @ViewBuilder
     private var guideContentView: some View {
         ForEach(viewModel.filteredContents, id: \.contentId) { content in
-            ContentCell(content: content)
-                .onTapGesture {
-                    router.push(to: .contentDetailView(contentId: content.contentId))
-                }
-                .onAppear {
-                    if viewModel.shouldLoadMore(for: content) {
-                        Task {
-                            await viewModel.loadMoreContents()
-                        }
+            ContentCell(content: content) {
+                router.push(to: .contentDetailView(contentId: content.contentId))
+            }
+            .onAppear {
+                if viewModel.shouldLoadMore(for: content) {
+                    Task {
+                        await viewModel.loadMoreContents()
                     }
                 }
+            }
         }
         
         if !viewModel.hasMoreData {
@@ -215,6 +214,7 @@ struct ContentsView: View {
 
 struct ContentCell: View {
     let content: MoreContentItem
+    let onTap: () -> Void
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
@@ -259,5 +259,9 @@ struct ContentCell: View {
         .background(Color.bgDisplayCard)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onTap()
+        }
     }
 }
