@@ -368,7 +368,7 @@ enum ValidationState2 {
         case .focused:
             return .borderStatusFocused
         case .completed:
-            return .lineNormal
+            return .borderFieldDefault
         }
     }
 }
