@@ -74,15 +74,15 @@ struct RecommendGuideTextView: View {
             }
             .padding(.bottom, spacing)
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading,spacing: 2) {
                 Text(subtitle1)
-                    .foregroundStyle(subtitleColor)
-                    .bodyMedium14()
+                    .foregroundStyle(.txtDisplayTierary)
+                    .bodyRegular14()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
                 Text(subtitle2)
-                    .foregroundStyle(subtitleColor)
-                    .bodyMedium14()
+                    .foregroundStyle(.txtDisplayTierary)
+                    .bodyRegular14()
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
