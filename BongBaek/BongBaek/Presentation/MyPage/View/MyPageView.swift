@@ -58,14 +58,14 @@ struct MyPageView: View {
             //Color.black.ignoresSafeArea()
             VStack(spacing: 0) {
                 HStack {
-                    Button(action: {
-                        router.pop()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.gray300)
-                    }
-                    .frame(width: 44, height: 44)
-                    
+//                    Button(action: {
+//                        router.pop()
+//                    }) {
+//                        Image(systemName: "chevron.left")
+//                            .foregroundColor(.gray300)
+//                    }
+//                    .frame(width: 44, height: 44)
+//                    
                     Spacer()
                     
                     Text("설정")

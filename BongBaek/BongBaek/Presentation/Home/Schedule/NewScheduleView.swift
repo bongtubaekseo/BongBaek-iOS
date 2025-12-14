@@ -15,7 +15,7 @@ enum EventCategory: String {
     var iconImage: String {
         switch self {
         case .wedding:
-            return "icon_alarm"
+            return "icon_marriage"
         case .birthday:
             return "icon_birthday 1"
         case .stoneparty:
