@@ -245,7 +245,7 @@ struct ContentCell: View {
                     .titleSemiBold18()
                     .foregroundStyle(.txtInteractiveInverse)
                 
-                Text("0000년 00월 00일")
+                Text(content.createdAt.DateFormat())
                     .captionRegular12()
                     .foregroundStyle(.txtDisplayTierary)
             }
