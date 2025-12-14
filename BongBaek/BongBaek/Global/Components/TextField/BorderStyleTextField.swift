@@ -102,7 +102,7 @@ struct BorderTextField: View {
             // 유효성 검사 메시지
             if !validationMessage.isEmpty {
                 HStack(spacing: 4) {
-                    Image(validationState == .invalid ? "icon_caution" : "")
+                    Image(validationState == .invalid ? "icon_caution_14_14" : "")
                         .font(.system(size: 12))
                         .foregroundColor(validationState.color)
                     

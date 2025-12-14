@@ -173,7 +173,7 @@ struct CustomTextField: View {
             
             if !validationMessage.isEmpty {
                 HStack(spacing: 4) {
-                    Image(validationState == .invalid ? "icon_caution" : "")
+                    Image(validationState == .invalid ? "icon_caution_14_14" : "")
                         .font(.system(size: 12))
                         .foregroundColor(validationState.color())
                     
@@ -396,7 +396,7 @@ struct ValidationRule {
     func validate(_ text: String) -> (isValid: Bool, message: String) {
         if text.isEmpty {
             if let minLength = minLength, let maxLength = maxLength {
-                return (false, "\(minLength)자에서 \(maxLength)자 내외 입력해야 합니다")
+                return (false, "\(minLength)자이상 \(maxLength)자 이내만 기입할 수 있어요")
             } else if let minLength = minLength {
                 return (false, "\(minLength)자 이상 입력해야 합니다")
             } else if let maxLength = maxLength {
@@ -407,14 +407,14 @@ struct ValidationRule {
         
         if let minLength = minLength, text.count < minLength {
             if let maxLength = maxLength {
-                return (false, "\(minLength)자에서 \(maxLength)자 내외 입력해야 합니다")
+                return (false, "\(minLength)자이상 \(maxLength)자 이내만 기입할 수 있어요")
             }
             return (false, "\(minLength)자 이상 입력해야 합니다")
         }
         
         if let maxLength = maxLength, text.count > maxLength {
             if let minLength = minLength {
-                return (false, "\(minLength)자에서 \(maxLength)자 내외 입력해야 합니다")
+                return (false, "\(minLength)자이상 \(maxLength)자 이내만 기입할 수 있어요")
             }
             return (false, "\(maxLength)자 이하로 입력해야 합니다")
         }
