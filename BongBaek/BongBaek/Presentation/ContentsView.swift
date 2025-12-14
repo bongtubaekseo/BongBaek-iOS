@@ -200,10 +200,14 @@ struct ContentsView: View {
         
         if !viewModel.hasMoreData {
             VStack(spacing: 12) {
-                Text("더 이상 아티클이 없어요!")
+                Text("더 이상 콘텐츠가 없어요!")
                     .bodyRegular14()
                     .foregroundStyle(.txtDisplayTierary)
             }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(.bgDisplaySecondary)
+            .cornerRadius(12)
         }
     }
 
