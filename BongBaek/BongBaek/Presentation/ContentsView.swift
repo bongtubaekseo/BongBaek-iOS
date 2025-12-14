@@ -248,6 +248,8 @@ struct ContentCell: View {
                 Text(content.contentTitle)
                     .titleSemiBold18()
                     .foregroundStyle(.txtInteractiveInverse)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
                 
                 Text(content.createdAt.DateFormat())
                     .captionRegular12()
