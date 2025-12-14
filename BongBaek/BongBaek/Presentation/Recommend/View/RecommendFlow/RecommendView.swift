@@ -245,13 +245,13 @@ struct RecommendView: View {
         } label: {
             Text("다음")
                 .titleSemiBold18()
-                .foregroundStyle(isNextButtonEnabled ? .white : .gray500)
+                .foregroundStyle(isNextButtonEnabled ? .txtInteractiveInverse : .txtStatusDisabled)
                 .frame(maxWidth: .infinity)
                 .frame(height: 55)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
-        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
+        .background(isNextButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
         .cornerRadius(12)
         .contentShape(Rectangle())
         .padding(.horizontal, 20)
