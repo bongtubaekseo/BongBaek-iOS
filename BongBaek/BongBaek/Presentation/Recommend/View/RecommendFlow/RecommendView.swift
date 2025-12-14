@@ -51,7 +51,7 @@ struct RecommendView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomNavigationBar(title: "관계정보") {
+            CustomNavigationBar(title: "관계 정보") {
                 dismiss()
             }
             
@@ -65,10 +65,11 @@ struct RecommendView: View {
                 subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
                 subtitle2: "더 정확한 추천을 해드릴게요",
                 titleColor: .txtDisplaySecondary,
-                subtitleColor: .txtDisplayTierary
+                subtitleColor: .txtDisplayTierary,
+                titleSubtitleSpacing: 12
             )
             .padding(.leading, 20)
-            .padding(.top, 32)
+            .padding(.top, 22)
             .padding(.bottom,32)
 
             ScrollViewReader { proxy in
@@ -208,7 +209,7 @@ struct RecommendView: View {
             Spacer()
         }
         .padding(.leading, 20)
-        .padding(.top, 20)
+        .padding(.top, 10)
     }
     
     private var relationshipGridSection: some View {

@@ -40,7 +40,7 @@ struct StepProgressBar: View {
     }
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 10) {
             if showStepText {
                 HStack {
                     Text("\(currentStep)/\(totalSteps)")
