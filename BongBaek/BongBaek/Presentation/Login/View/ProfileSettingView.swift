@@ -221,11 +221,12 @@ struct ProfileSettingView: View {
                     .titleSemiBold18()
                     .foregroundColor(viewModel.isStartButtonEnabled ? .txtInteractiveInverse : .txtStatusDisabled)
             }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(viewModel.isStartButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
+            .cornerRadius(12)
+            .contentShape(Rectangle())          
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(viewModel.isStartButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
-        .cornerRadius(12)
         .padding(.top, 20)
         .disabled(!viewModel.isStartButtonEnabled || viewModel.isSigningUp)
         .animation(.easeInOut(duration: 0.2), value: viewModel.isStartButtonEnabled)
