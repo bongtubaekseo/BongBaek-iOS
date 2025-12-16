@@ -16,7 +16,7 @@ struct ContentsView: View {
         VStack(spacing: 0) {
             HStack {
                 Spacer()
-                Text("경조사 가이드")
+                Text("경조사 콘텐츠")
                     .titleSemiBold18()
                     .foregroundStyle(.txtDisplayPrimary)
                 
@@ -90,7 +90,7 @@ struct ContentsView: View {
             Text(category.displayName)
                 .bodyMedium16()
                 .foregroundColor(viewModel.selectedCategory == category ? .txtStatusFocused : .txtStatusDisabled)
-                .frame(height: 36)
+                .padding(.vertical,6)
                 .padding(.horizontal, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)

@@ -54,7 +54,7 @@ struct ContentDetailView: View {
                 .padding(.horizontal, 20)
                 
                 Rectangle()
-                    .fill(Color.borderDisplayTitle) 
+                    .fill(Color.borderDisplayTitle)
                     .frame(height: 10)
                     .padding(.top, 20)
                 
