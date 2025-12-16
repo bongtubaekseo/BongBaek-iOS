@@ -10,6 +10,8 @@ import SwiftUI
 struct LargeMapView: View {
     @Binding var selectedLocation: KLDocument? // 바인딩으로 변경
     
+    @GestureState private var isScrolling = false
+    
     @State private var searchText = ""
     @FocusState private var isSearchFieldFocused: Bool
     @StateObject private var keywordSearch = KeyWordSearch()
@@ -144,15 +146,15 @@ struct LargeMapView: View {
     
     private var searchSection: some View {
         HStack(spacing: 12) {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.iconFocusedPrimary)
+            Image("icon_search")
+                .foregroundColor(.white)
                 .font(.system(size: 20))
             
             TextField("기타 사유를 입력해주세요",
                       text: $searchText,
                       prompt: Text("주소를 검색하면 더 빨리 찾을 수 있어요")
                 .foregroundColor(.txtFieldPlaceholder))
-                .foregroundColor(.txtFieldValue)
+                .foregroundColor(textFieldTextColor)
                 .font(.body2_regular_16)
                 .focused($isSearchFieldFocused)
                 .onChange(of: searchText) { _, newValue in
@@ -167,22 +169,47 @@ struct LargeMapView: View {
                     keywordSearch.searchResults.removeAll()
                     isSearchFieldFocused = false
                 }) {
-                    Image(systemName: "xmark.circle.fill")
+                    Image("icon_delete")
                         .foregroundColor(.iconDisabledPrimary)
-                        .font(.system(size: 16))
+                        .frame(width: 24,height: 24)
                 }
                 .transition(.scale.combined(with: .opacity))
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(Color.bgFieldSecondary)
+        .background(.bgFieldSecondary)
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(.borderFieldDefault, lineWidth: 1)
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(searchFieldBorderColor, lineWidth: 1)
         )
-        .cornerRadius(8)
+        .cornerRadius(10)
         .padding(.horizontal, 20)
+    }
+    
+    private var textFieldTextColor: Color {
+        if isSearchFieldFocused {
+            // 포커스 상태 (입력 중)
+            return .txtFieldValue
+        } else if !searchText.isEmpty {
+            // 장소 선택 완료 상태
+            return .txtStatusFocused
+        } else {
+            // 기본 상태
+            return .txtFieldValue
+        }
+    }
+    private var searchFieldBorderColor: Color {
+        if !searchText.isEmpty && !isSearchFieldFocused {
+            // 장소 선택 완료 상태
+            return .bgFieldSecondary
+        } else if isSearchFieldFocused {
+            // 포커스 상태
+            return .borderStatusFocused
+        } else {
+            // 기본 상태
+            return .borderFieldDefault
+        }
     }
     
     private var mapSection: some View {
@@ -213,65 +240,77 @@ struct LargeMapView: View {
     }
     
     private var searchResultsOverlay: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ForEach(keywordSearch.searchResults, id: \.id) { document in
-                Button(action: {
-                    handleLocationSelection(document)
-                }) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
+        ScrollView(showsIndicators: true) {
+            VStack(alignment: .leading, spacing: 4) {
+                ForEach(keywordSearch.searchResults, id: \.id) { document in
+                    Button(action: {
+                        if !isScrolling {
+                            handleLocationSelection(document)
+                        }
+                    }) {
+                        HStack {
                             Text(document.placeName)
-                                .titleSemiBold18()
+                                .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.txtDisplayPrimary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            Text(document.addressName)
-                                .bodyRegular14()
-                                .foregroundColor(.txtDisplayTierary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            if !document.roadAddressName.isEmpty {
-                                Text(document.roadAddressName)
-                                    .font(.system(size: 12))
-                                    .foregroundColor(.blue)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
                         }
-                        
-                        Spacer()
-                        
-                        Image(systemName: "arrow.up.right")
-                            .font(.system(size: 12))
-                            .foregroundColor(.gray)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(PlainButtonStyle())
-                
-                if document.id != keywordSearch.searchResults.last?.id {
-                    Divider()
-                        .background(Color.gray750.opacity(1.0))
+                        .padding(.vertical, 10)
                         .padding(.horizontal, 16)
+                        .background(.bgDisplayCard)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .disabled(isScrolling)
                 }
             }
+            .padding(.top, 12)
+            .padding(.bottom, 12)
         }
-        .background(Color.bgDisplayCard)
+        .simultaneousGesture(
+            DragGesture()
+                .updating($isScrolling) { _, state, _ in
+                    state = true
+                }
+        )
+        .frame(height: min(calculateDropdownHeight(), 164))
+        .clipped()
+        .background(.bgDisplayCard)
         .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(.bgDisplayCard, lineWidth: 1)
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
         )
         .cornerRadius(10)
         .padding(.horizontal, 20)
         .padding(.top, 8)
-        .shadow(color: .gray750.opacity(1.0), radius: 8, x: 0, y: 4)
-        .zIndex(100)
+        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .zIndex(1)
         .transition(.asymmetric(
             insertion: .scale(scale: 0.95, anchor: .top).combined(with: .opacity),
             removal: .scale(scale: 0.95, anchor: .top).combined(with: .opacity)
         ))
+    }
+    
+    private func calculateDropdownHeight() -> CGFloat {
+        let textHeight: CGFloat = 16 // 텍스트 높이
+        let verticalPadding: CGFloat = 10 + 10 // 상하 패딩
+        let cellHeight = textHeight + verticalPadding // 36
+        let cellSpacing: CGFloat = 4 // 셀 간격
+        let topPadding: CGFloat = 12
+        let bottomPadding: CGFloat = 12
+        
+        let maxItems = 3
+        let resultCount = keywordSearch.searchResults.count
+        
+        if resultCount <= maxItems {
+            // 결과 개수만큼: 셀들 + 간격들 + 상하 여백
+            let totalHeight = (cellHeight * CGFloat(resultCount)) + (cellSpacing * CGFloat(resultCount - 1)) + topPadding + bottomPadding
+            return totalHeight
+        } else {
+            // 3개 고정: 3개 셀 + 2개 간격 + 상하 여백
+            let totalHeight = (cellHeight * 3) + (cellSpacing * 2) + topPadding + bottomPadding
+            return totalHeight
+        }
     }
     
     private var emptySearchResultsOverlay: some View {
