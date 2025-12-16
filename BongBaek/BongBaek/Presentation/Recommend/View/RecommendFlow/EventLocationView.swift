@@ -153,7 +153,7 @@ struct EventLocationView: View {
 
     private var searchSection: some View {
         HStack(spacing: 12) {
-            Image(systemName: "magnifyingglass")
+            Image("icon_search")
                 .foregroundColor(.white)
                 .font(.system(size: 20))
             
