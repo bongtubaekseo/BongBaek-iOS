@@ -46,12 +46,17 @@ struct ContentDetailView: View {
                         .foregroundStyle(.txtDisplayPrimary)
                         .padding(.top, 2)
                         
-                    Text(detail.createdAt)
+                    Text(detail.createdAt.dotDateFormat())
                         .bodyRegular14()
                         .foregroundStyle(.txtDisplayTierary)
                         .padding(.top, 8)
                 }
                 .padding(.horizontal, 20)
+                
+                Rectangle()
+                    .fill(Color.borderDisplayTitle) 
+                    .frame(height: 10)
+                    .padding(.top, 20)
                 
                 VStack(spacing: 8) {
                     ForEach(detail.imageUrls, id: \.self) { imageUrl in
@@ -78,7 +83,7 @@ struct ContentDetailView: View {
                         .frame(maxWidth: .infinity)
                     }
                 }
-                .padding(.top, 24)
+//                .padding(.top, 24)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, 20)
