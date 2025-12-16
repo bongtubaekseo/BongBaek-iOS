@@ -54,7 +54,7 @@ struct AccountDeletionView: View {
                         .foregroundStyle(.txtDisplayTierary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, 10.adjustedH)
+                .padding(.top, 20)
                 .padding(.leading, 20)
             }
             
@@ -416,7 +416,7 @@ struct DeletionReasonButton: View {
                         }
                     }
                 )
-                .cornerRadius(8)
+                .cornerRadius(10)
             }
             .buttonStyle(PlainButtonStyle())
         }
