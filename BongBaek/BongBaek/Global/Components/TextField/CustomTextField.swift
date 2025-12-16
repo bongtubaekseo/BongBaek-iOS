@@ -68,7 +68,7 @@ struct CustomTextField: View {
                     .resizable()
                     .renderingMode(.template)
                     .frame(width: 20,height: 20)
-                    .foregroundColor(.iconFocusedPrimary)
+                    .foregroundColor(isRecommendationEdit ? .iconDisabledPrimary : .iconFocusedPrimary)
                 
                 HStack(spacing: 2) {
                     
@@ -79,7 +79,7 @@ struct CustomTextField: View {
                     } else {
                         Text(title)
                             .bodyMedium16()
-                            .foregroundColor(isRecommendationEdit ? .gray400 : .txtDisplaySecondary)
+                            .foregroundColor(isRecommendationEdit ? .txtDisplayTierary : .txtDisplaySecondary)
                     }
 
                     
@@ -88,7 +88,7 @@ struct CustomTextField: View {
                         VStack {
                             Text("*")
                                 .bodyMedium14()
-                                .foregroundColor(.txtStatusFocused)
+                                .foregroundColor(isRecommendationEdit ? .txtDisplayTierary :.txtStatusFocused)
                                 .padding(.top, 4)
                                 .padding(.leading, 1)
                             
@@ -122,7 +122,7 @@ struct CustomTextField: View {
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .focused($isFocused)
                                 .disabled(isReadOnly)
-                                .foregroundColor(isRecommendationEdit ? .gray400 : .txtFieldValue)
+                                .foregroundColor(isRecommendationEdit ? .txtStatusDisabled : .txtFieldValue)
                                 .tint(.txtFieldValue)
                                 .keyboardType(keyboardType) // 키보드 타입 적용
                                 .onChange(of: displayText) { _, newValue in
@@ -342,7 +342,7 @@ enum ValidationState {
             return .borderStatusFocused
         case .completed:
             if isReadOnly && isRecommendationEdit {
-                return .lineNormal
+                return .borderFieldFilled
             } else {
                 return .borderFieldFilled
             }

@@ -203,7 +203,7 @@ struct ModifyEventView: View {
                                 
                                 Text("원")
                                     .bodyRegular16()
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.txtDisplayPrimary)
                                     .padding(.top, 24)
                             }
                             
@@ -374,7 +374,7 @@ struct ModifyEventView: View {
                     Text("수정하기")
                         .bodyRegular14()
                         .foregroundStyle(
-                            (isAttending && !isRecommendationEdit) ? .txtInteractiveSecondary : .gray600
+                            (isAttending && !isRecommendationEdit) ? .txtInteractiveSecondary : .txtStatusDisabled
                         )
                 }
                 .disabled(!isAttending || isRecommendationEdit)
