@@ -361,14 +361,11 @@ struct RecordsEmptyView: View {
                 .headBold24()
                 .foregroundColor(.txtDisplaySecondary)
             
-            Text("지금 경조사를 기록하고")
+            Text("지금 경조사를 기록하고\n상황에 어울리는 경조사비까지 추천받으세요")
                 .bodyRegular14()
                 .foregroundColor(.txtDisplayTierary)
-                .padding(.top, 16)
-            
-            Text("상황에 어울리는 경조사비까지 추천받으세요")
-                .bodyRegular14()
-                .foregroundColor(.txtDisplayTierary)
+                .multilineTextAlignment(.center)
+                .padding(.top, 4)
             
             Image("img_write_empty(160_160)")
                 .resizable()
