@@ -34,10 +34,12 @@ struct HomeContentsView: View {
                         Text("더보기")
                             .bodyRegular14()
                             .foregroundColor(.txtDisplaySecondary)
+                            //.padding(.trailing, 4)
                         
-                        Image("icon_left")
-                            .foregroundColor(.gray400)
+                        Image("icon_arrow")
+                            .foregroundColor(.txtDisplayTierary)
                             .frame(width: 14, height: 14)
+                            .padding(.trailing, 4)
                     }
                     .padding(.horizontal, 20)
                 }

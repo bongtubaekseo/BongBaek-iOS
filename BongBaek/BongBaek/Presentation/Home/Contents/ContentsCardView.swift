@@ -69,8 +69,9 @@ struct ContentsCardView: View {
                             
                             Spacer()
                             
-                            Image("icon_left")
+                            Image("icon_arrow")
                                 .frame(width: 20, height: 20)
+                                .foregroundColor(.iconInteractiveDefault)
                         }
                     }
                     .padding(12)
