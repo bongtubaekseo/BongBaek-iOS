@@ -382,7 +382,7 @@ struct RecordsEmptyView: View {
                 Text("지금 기록하기")
                     .titleSemiBold16()
                     .foregroundColor(.white)
-                    .frame(width: 145)
+                    .frame(width: 116)
                     .frame(height: 40)
             }
             .background(.primaryNormal)
