@@ -107,7 +107,7 @@ struct CategoryFilterView: View {
                             .frame(height: 36)
                             .padding(.horizontal, 16)
                             .background(
-                                RoundedRectangle(cornerRadius: 8)
+                                RoundedRectangle(cornerRadius: 6)
                                     .fill(selectedCategory == category ? .btnInteractiveDisabled : .btnInteractiveSecondary)
                             )
                     }
@@ -203,6 +203,7 @@ struct RecordsHeaderView: View {
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
+                    .padding(.trailing, -12)
                     .disabled(isDeleteMode && !hasSelectedRecords)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
                     .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
