@@ -24,6 +24,10 @@ struct CreateEventView: View {
     @State private var selectedDate: String = ""
     @State private var showLargeMapView = false // Sheet 제어용
     
+    @State private var isNicknameValid = false
+    @State private var isAliasValid = false
+    @State private var isMoneyValid = false
+    
     // API 상태
     @State private var isSubmitting = false
     @State private var submitError: String?
@@ -90,11 +94,12 @@ struct CreateEventView: View {
                                 icon: "icon_person_16",
                                 placeholder: "이름을 입력하세요",
                                 text: $nickname,
+                                isValid: $isNicknameValid,
                                 validationRule: ValidationRule(
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
@@ -105,11 +110,12 @@ struct CreateEventView: View {
                                 icon: "icon_nickname",
                                 placeholder: "별명을 입력하세요",
                                 text: $alias,
+                                isValid: $isAliasValid,
                                 validationRule: ValidationRule(
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
@@ -129,6 +135,7 @@ struct CreateEventView: View {
                                     icon: "icon_coin_16",
                                     placeholder: "금액을 입력하세요",
                                     text: $money,
+                                    isValid: $isMoneyValid,
                                     validationRule: ValidationRule(
                                         customRule: { input in
                                             guard let amount = Int(input), amount > 0 else {
@@ -209,16 +216,19 @@ struct CreateEventView: View {
                                     .titleSemiBold18()
                                     .foregroundColor(.white)
                             }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 55)
                         } else {
                             Text("기록하기")
                                 .titleSemiBold18()
                                 .foregroundColor(isFormValid ? .white : .gray500)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 55)
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 55)
                     .background(isFormValid ? .primaryNormal : .primaryBg)
                     .cornerRadius(12)
+                    .contentShape(Rectangle())
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
                     .disabled(!isFormValid || isSubmitting)
@@ -399,14 +409,17 @@ struct CreateEventView: View {
     
     // 폼 유효성 검사
     private var isFormValid: Bool {
-        let isMoneyValid: Bool = {
-            guard !money.isEmpty,
-                  let amount = Int(money) else { return false }
-            return amount >= 1 && amount <= 99_999_999
-        }()
+        print("=== isFormValid 체크 ===")
+        print("isNicknameValid: \(isNicknameValid)")
+        print("isAliasValid: \(isAliasValid)")
+        print("isMoneyValid: \(isMoneyValid)")
+        print("selectedAttend: \(selectedAttend?.title ?? "nil")")
+        print("selectedEvent: \(selectedEvent?.title ?? "nil")")
+        print("selectedRelation: \(selectedRelation?.title ?? "nil")")
+        print("selectedDate: \(selectedDate)")
         
-        return !nickname.isEmpty &&
-               !alias.isEmpty &&
+        return isNicknameValid &&
+               isAliasValid &&
                isMoneyValid &&
                selectedAttend != nil &&
                selectedEvent != nil &&
@@ -627,7 +640,7 @@ struct CreateEventViewAfterEvent: View {
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
@@ -642,7 +655,7 @@ struct CreateEventViewAfterEvent: View {
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
