@@ -429,18 +429,18 @@ struct RecordCellView: View {
                 }
 
                 HStack {
-                    HStack(spacing: 8) {
+                    HStack(spacing: 4) {
                         Text(event.eventInfo.eventCategory)
                             .captionRegular12()
                             .foregroundColor(.txtStatusFocused)
-                            .padding(.horizontal, 6)
+                            .padding(.horizontal, 8)
                             .padding(.vertical, 2)
                             .background(.btnInteractiveDisabled)
                             .cornerRadius(4)
                         Text(event.eventInfo.relationship)
                             .captionRegular12()
                             .foregroundColor(.txtStatusFocused)
-                            .padding(.horizontal, 6)
+                            .padding(.horizontal, 8)
                             .padding(.vertical, 2)
                             .background(.btnInteractiveDisabled)
                             .cornerRadius(4)
