@@ -261,8 +261,8 @@ struct RecordSectionHeaderView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     Rectangle()
-                        .fill(selectedSection == .attended ? .borderStatusFocused : .clear)
-                        .frame(height: 2)
+                        .fill(selectedSection == .attended ? .borderStatusFocused : .borderFieldDefault)
+                        .frame(height: 1)
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
@@ -282,8 +282,8 @@ struct RecordSectionHeaderView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     Rectangle()
-                        .fill(selectedSection == .notAttended ? .borderStatusFocused : .clear)
-                        .frame(height: 2)
+                        .fill(selectedSection == .notAttended ? .borderStatusFocused : .borderFieldDefault)
+                        .frame(height: 1)
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
