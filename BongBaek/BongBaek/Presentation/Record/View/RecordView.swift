@@ -277,7 +277,7 @@ struct RecordSectionHeaderView: View {
             }) {
                 VStack(spacing: 0) {
                     Text("불참했어요")
-                        .titleSemiBold16()
+                        .bodyRegular16()
                         .foregroundColor(selectedSection == .notAttended ? .txtInteractivePrimary : .txtStatusDisabled)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
