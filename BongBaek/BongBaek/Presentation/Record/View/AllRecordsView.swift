@@ -17,37 +17,32 @@ struct AllRecordsView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.iconInteractiveDefault)
-                }
-                .contentShape(Rectangle())
-                
+            ZStack {
                 Text("경조사 상세 기록")
                     .titleSemiBold18()
                     .foregroundColor(.txtDisplayPrimary)
-                    .padding(.leading, 8)
-                
-                Spacer()
-                
-                Button(action: {
-                    // 편집 액션
-                    router.push(to: .modifyEventView(mode: .edit, eventDetailData: viewModel.eventDetail))
-                }) {
-                    Image("icon_edit 1")
-//                        .foregroundColor(.)
+
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.iconInteractiveDefault)
+                    }
+                    .contentShape(Rectangle())
+
+                    Spacer()
+
+                    Button(action: {
+                        router.push(to: .modifyEventView(mode: .edit, eventDetailData: viewModel.eventDetail))
+                    }) {
+                        Image("icon_edit 1")
+                    }
+                    .contentShape(Rectangle())
                 }
-                .contentShape(Rectangle())
-                .padding(.trailing, 20)
             }
             .padding(.top, 20)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 4)
+            .padding(.horizontal, 20)
             .padding(.bottom, 10)
-            .background(.bgDisplayPrimary) // 헤더 배경색 명시
+            .background(.bgDisplayPrimary)
             
             // 스크롤 가능한 콘텐츠
             ScrollView {

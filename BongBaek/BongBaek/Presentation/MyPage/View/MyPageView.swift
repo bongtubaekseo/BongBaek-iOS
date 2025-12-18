@@ -46,153 +46,137 @@ struct MyPageView: View {
    
     
     var body: some View {
-        ZStack {
-            VStack(spacing : 0){
-                Color.bgDisplayPrimary
-                    //.frame(height: 300)
-                    .ignoresSafeArea(edges: .top)
-                Color.bgDisplayPrimary
-                    .frame(maxWidth: .infinity)
-                    .ignoresSafeArea(edges: .bottom)
+        VStack(spacing: 0) {
+            // 헤더
+            HStack {
+                Spacer()
+                
+                Text("설정")
+                    .titleSemiBold18()
+                    .foregroundColor(.txtDisplayPrimary)
+                
+                Spacer()
             }
-            //Color.black.ignoresSafeArea()
-            VStack(spacing: 0) {
-                HStack {
-                    Color.clear
-                    .frame(width: 44, height: 44)
-//
-                    Spacer()
-                    
-                    Text("설정")
-                        .titleSemiBold18()
-                        .foregroundColor(.txtDisplayPrimary)
-                    
-                    Spacer()
-                    
-                    Color.clear
-                        .frame(width: 44, height: 44)
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 10)
-                .padding(.bottom, 16)
-                .background(Color.bgDisplayPrimary)
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing : 0) {
-                        VStack(spacing: 0) {
-                            VStack(spacing: 12) {
-                                Image("icon_profile")
-                                    .resizable()
-                                    .frame(width: 80, height: 80)
-                                    .padding(.top, 20)
-                                
-                                Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
-                                    .headBold24()
-                                    .foregroundStyle(.txtDisplaySecondary)
-                                
-                                Button(action: {
-                                    router.push(to: .ModifyView(profileData: mypageViewModel.profileData))
-                                }) {
-                                    Text("내 정보 수정")
-                                        .captionRegular12()
-                                        .foregroundColor(.txtInteractiveInverse)
-                                        .padding(.horizontal, 16)
-                                        .padding(.vertical, 8)
-                                        .background(.bgStatusFocused)
-                                        .cornerRadius(20)
-                                }
-                            }
+            .frame(height: 48)
+            .padding(.horizontal, 20)
+            .background(Color.bgDisplayPrimary)
+            
+            // 스크롤 영역
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 0) {
+                    VStack(spacing: 0) {
+                        VStack(spacing: 12) {
+                            Image("icon_profile")
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                                .padding(.top, 20)
                             
-                            HStack {
-                                VStack(alignment: .leading, spacing: 20) {
-                                    Text("생년월일")
-                                        .bodyMedium14()
-                                        .foregroundStyle(.txtDisplayTierary)
-                                    Text("수입")
-                                        .bodyMedium14()
-                                        .foregroundStyle(.txtDisplayTierary)
-                                }
-                                
-                                Spacer()
-                                
-                                VStack(alignment: .trailing, spacing: 20) {
-                                    Text(formatBirthday(mypageViewModel.profileData?.memberBirthday) ?? "2000년 01월 05일")
-                                        .bodyMedium14()
-                                        .foregroundStyle(.txtDisplaySecondary)
-                                    Text(formatIncome(mypageViewModel.profileData?.memberIncome) ?? "없음")
-                                        .bodyMedium14()
-                                        .foregroundStyle(.txtDisplaySecondary)
-                                }
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 20)
-                            .background(.bgDisplayCard)
-                            .cornerRadius(20)
-                            .padding(.horizontal,20)
-                            .padding(.top, 12)
-                            .padding(.bottom, 20)
-                        }
-                        .background(Color.bgDisplayPrimary)
-                        .clipShape(
-                            .rect(
-                                bottomLeadingRadius : 20,
-                                bottomTrailingRadius : 20
-                            )
-                        )
-
-                        VStack(alignment: .leading, spacing: 0) {
-                            HStack {
-                                Text("서비스")
-                                    .titleSemiBold18()
-                                    .foregroundStyle(.txtDisplayPrimary)
-                                Spacer()
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.top, 24)
-                            .padding(.bottom, 16)
+                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
+                                .headBold24()
+                                .foregroundStyle(.txtDisplaySecondary)
                             
-                            VStack(spacing: 0) {
-                                ForEach(serviceItems) { item in
-                                    ServiceRow(
-                                        icon: item.icon,
-                                        title: item.title,
-                                        subtitle: item.subtitle,
-                                        showChevron: item.showChevron,
-                                        url: item.url
-                                    )
-                                }
-                            }
-                        }
-
-                        HStack {
                             Button(action: {
-                                showLogoutAlert = true
+                                router.push(to: .ModifyView(profileData: mypageViewModel.profileData))
                             }) {
-                                Text("로그아웃")
-                                    .foregroundColor(.txtDisplayTierary)
-                                    .bodyRegular14()
-                                    .padding(.leading, 68)
+                                Text("내 정보 수정")
+                                    .captionRegular12()
+                                    .foregroundColor(.txtInteractiveInverse)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(.bgStatusFocused)
+                                    .cornerRadius(20)
+                            }
+                        }
+                        
+                        HStack {
+                            VStack(alignment: .leading, spacing: 20) {
+                                Text("생년월일")
+                                    .bodyMedium14()
+                                    .foregroundStyle(.txtDisplayTierary)
+                                Text("수입")
+                                    .bodyMedium14()
+                                    .foregroundStyle(.txtDisplayTierary)
                             }
                             
                             Spacer()
                             
-                            Button(action: {
-                                router.push(to: .accountDeletionView)
-                            }) {
-                                Text("서비스 탈퇴")
-                                    .foregroundColor(.txtDisplayTierary)
-                                    .bodyRegular14()
-                                    .padding(.trailing, 68)
+                            VStack(alignment: .trailing, spacing: 20) {
+                                Text(formatBirthday(mypageViewModel.profileData?.memberBirthday) ?? "2000년 01월 05일")
+                                    .bodyMedium14()
+                                    .foregroundStyle(.txtDisplaySecondary)
+                                Text(formatIncome(mypageViewModel.profileData?.memberIncome) ?? "없음")
+                                    .bodyMedium14()
+                                    .foregroundStyle(.txtDisplaySecondary)
                             }
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 12)
-                        .padding(.bottom, 40)
+                        .padding(.vertical, 20)
+                        .background(.bgDisplayCard)
+                        .cornerRadius(20)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+                        .padding(.bottom, 20)
                     }
                     .background(Color.bgDisplayPrimary)
+                    .clipShape(
+                        .rect(
+                            bottomLeadingRadius: 20,
+                            bottomTrailingRadius: 20
+                        )
+                    )
+
+                    VStack(alignment: .leading, spacing: 0) {
+                        HStack {
+                            Text("서비스")
+                                .titleSemiBold18()
+                                .foregroundStyle(.txtDisplayPrimary)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 24)
+                        .padding(.bottom, 16)
+                        
+                        VStack(spacing: 0) {
+                            ForEach(serviceItems) { item in
+                                ServiceRow(
+                                    icon: item.icon,
+                                    title: item.title,
+                                    subtitle: item.subtitle,
+                                    showChevron: item.showChevron,
+                                    url: item.url
+                                )
+                            }
+                        }
+                    }
+
+                    HStack {
+                        Button(action: {
+                            showLogoutAlert = true
+                        }) {
+                            Text("로그아웃")
+                                .foregroundColor(.txtDisplayTierary)
+                                .bodyRegular14()
+                                .padding(.leading, 68)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            router.push(to: .accountDeletionView)
+                        }) {
+                            Text("서비스 탈퇴")
+                                .foregroundColor(.txtDisplayTierary)
+                                .bodyRegular14()
+                                .padding(.trailing, 68)
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 40)
                 }
             }
         }
-        .background(Color.gray900)
+        .background(Color.bgDisplayPrimary)
         .onAppear {
             print("MyPageView 나타남 - 데이터 로드 시작")
             mypageViewModel.loadprofile()
@@ -273,7 +257,7 @@ struct ServiceRow: View {
                 }
             }
             .padding(.horizontal, 20)
-            .padding(.vertical, 16)
+            .padding(.vertical, 12)
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())

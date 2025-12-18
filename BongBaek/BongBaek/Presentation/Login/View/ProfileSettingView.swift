@@ -28,6 +28,7 @@ struct ProfileSettingView: View {
                     .foregroundStyle(.txtDisplayPrimary)
                 Spacer()
             }
+            .padding(.vertical, 12)
             
             ScrollView {
                 VStack {
@@ -37,7 +38,12 @@ struct ProfileSettingView: View {
                     incomeSelectionSection
                         .opacity(viewModel.hasIncome ? 1.0 : 0.0)
                         .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
-                        .padding(.bottom, 60)
+                        .padding(.bottom, 80)
+                    
+                    Spacer()
+                    
+                    startButton
+                        .padding(.bottom, 36)
                 }
             }
             .scrollIndicators(.hidden)
@@ -48,9 +54,7 @@ struct ProfileSettingView: View {
                 hideKeyboard()
             }
             
-            startButton
-                .padding(.bottom, 60)
-                .padding(.horizontal, 20)
+            
         }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -227,7 +231,6 @@ struct ProfileSettingView: View {
             .cornerRadius(12)
             .contentShape(Rectangle())          
         }
-        .padding(.top, 20)
         .disabled(!viewModel.isStartButtonEnabled || viewModel.isSigningUp)
         .animation(.easeInOut(duration: 0.2), value: viewModel.isStartButtonEnabled)
     }

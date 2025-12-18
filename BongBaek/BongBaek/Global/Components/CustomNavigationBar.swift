@@ -23,7 +23,7 @@ struct CustomNavigationBar: View {
             }) {
                 Image(systemName: "chevron.left")
                     .foregroundColor(.iconInteractiveDefault)
-                    .frame(width: 24, height: 24)
+                    .frame(width: 24, height: 24, alignment: .leading)
             }
             .contentShape(Rectangle())
             
