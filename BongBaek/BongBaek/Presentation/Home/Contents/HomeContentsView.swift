@@ -30,7 +30,7 @@ struct HomeContentsView: View {
                         object: Tab.contents
                     )
                 }) {
-                    HStack {
+                    HStack(spacing: 0) {
                         Text("더보기")
                             .bodyRegular14()
                             .foregroundColor(.txtDisplaySecondary)
@@ -39,7 +39,6 @@ struct HomeContentsView: View {
                         Image("icon_arrow")
                             .foregroundColor(.txtDisplayTierary)
                             .frame(width: 14, height: 14)
-                            .padding(.trailing, 4)
                     }
                     .padding(.horizontal, 20)
                 }
