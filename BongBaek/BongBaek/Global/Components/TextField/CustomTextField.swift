@@ -65,10 +65,14 @@ struct CustomTextField: View {
   
             HStack(spacing: 8) {
                 Image(icon)
-                    .resizable()
-                    .renderingMode(.template)
+                            .resizable()
+//                    .renderingMode(.template)
                     .frame(width: 20,height: 20)
-                    .foregroundColor(isRecommendationEdit ? .iconDisabledPrimary : .iconFocusedPrimary)
+                //    .foregroundColor(isRecommendationEdit ? .iconDisabledPrimary : .iconFocusedPrimary)
+                
+                Image(isRecommendationEdit ? "\(icon)off" : icon)
+                    .resizable()
+                    .frame(width: 20, height: 20)
                 
                 HStack(spacing: 2) {
                     
