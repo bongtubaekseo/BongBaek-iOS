@@ -80,7 +80,7 @@ struct ProfileSettingView: View {
         VStack(spacing: 16) {
             CustomTextField(
                 title: "닉네임",
-                icon: "icon_person_16",
+                icon: "icon_person",
                 placeholder: "닉네임을 입력해주세요",
                 text: $viewModel.nickname,
                 isValid: $viewModel.isNicknameValid,
@@ -96,7 +96,7 @@ struct ProfileSettingView: View {
             
             CustomTextField(
                 title: "생년월일",
-                icon: "icon_calendar_16",
+                icon: "icon_calendar",
                 placeholder: "생년월일을 입력해주세요",
                 text: $viewModel.selectedDate,
                 isReadOnly: true,
