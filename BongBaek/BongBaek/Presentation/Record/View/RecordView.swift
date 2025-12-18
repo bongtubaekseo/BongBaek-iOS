@@ -203,7 +203,7 @@ struct RecordsHeaderView: View {
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
-                    .padding(.trailing, -12)
+                    .padding(.trailing, -16)
                     .disabled(isDeleteMode && !hasSelectedRecords)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
                     .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
