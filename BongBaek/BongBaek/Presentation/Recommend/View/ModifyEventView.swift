@@ -467,28 +467,6 @@ struct ModifyEventView: View {
                         }
                 }
             }
-//            else {
-//                // 위치 정보가 없는 경우 빈 Rectangle 표시
-//                VStack {
-//                    Image(systemName: "location.slash")
-//                        .font(.system(size: 30))
-//                        .foregroundColor(.gray500)
-//                    
-//                    Text("위치 정보가 없습니다")
-//                        .bodyRegular14()
-//                        .foregroundColor(.gray500)
-//                        .padding(.top, 8)
-//                }
-//                .frame(maxWidth: .infinity)
-//                .frame(height: 180)
-//                .background(.gray750)
-//                .clipShape(
-//                    .rect(
-//                        topLeadingRadius: 10,
-//                        topTrailingRadius: 10
-//                    )
-//                )
-//            }
         }
     }
     
