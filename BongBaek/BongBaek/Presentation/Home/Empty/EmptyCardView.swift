@@ -21,16 +21,16 @@ struct EmptyCardView: View {
                         .frame(width: 24, height: 24)
                         
                 }
-                .padding(.top, 14)
+                .padding(.top, 12)
 
                 Text("예정된 일정이 없습니다")
-                    .titleSemiBold18()
+                    .bodyMedium14()
                     .foregroundColor(.txtDisplaySecondary)
                     .padding(.bottom, -12)
                    
 
                 HStack(spacing: 4) {
-                    Text("일정추가하기")
+                    Text("일정 추가하기")
                         .captionRegular12()
                         .foregroundColor(.txtDisplayTierary)
                     

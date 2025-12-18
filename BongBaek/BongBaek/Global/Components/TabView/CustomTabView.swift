@@ -47,15 +47,9 @@ struct CustomTabView: View {
                 title: "설정"
             )
         }
-        .padding(.bottom, 8)
-        .frame(width: UIScreen.main.bounds.width, height: 91)
-        .background(
-            LinearGradient(
-                colors: [.gray750.opacity(0.8), .gray900],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
+        .padding(.bottom, 16)
+        .frame(width: UIScreen.main.bounds.width, height: 92)
+        .background(.gnbDisplayBase)
         .background(.primaryNormal)
     }
 }

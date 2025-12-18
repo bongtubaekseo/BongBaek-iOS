@@ -42,7 +42,7 @@ struct NewScheduleCellView: View {
                     
                     Spacer(minLength: 0)
                     
-                    HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text("\(event.eventInfo.cost.formatted())")
                             .titleSemiBold16()
                             .foregroundColor(.txtDisplayPrimary)
@@ -101,7 +101,7 @@ struct NewScheduleCellView: View {
                         .frame(width: 1)
                     
                     HStack(spacing: 4) {
-                        Image("icon_nickname")
+                        Image("icon_nickname_16")
                             .resizable()
                             .frame(width: 12, height: 12)
                         Text(event.hostInfo.hostNickname)
@@ -113,7 +113,7 @@ struct NewScheduleCellView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 16)
-        .background(.bgDisplayCard)
+        .background(.btnInteractiveSecondary)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .padding(.bottom, 12)
     }

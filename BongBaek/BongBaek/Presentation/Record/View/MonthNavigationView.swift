@@ -23,16 +23,14 @@ struct MonthNavigationView: View {
             HStack(spacing: 12) {
                 Button(action: onPreviousMonth) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.txtDisplayPrimary)
+                        .foregroundColor(.iconInteractiveDefault)
                         .frame(width: 32, height: 32)
 
                 }
                 
                 Button(action: onNextMonth) {
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.txtDisplayPrimary)
+                        .foregroundColor(.iconInteractiveDefault)
                         .frame(width: 32, height: 32)
                 }
             }

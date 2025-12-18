@@ -107,7 +107,7 @@ struct CategoryFilterView: View {
                             .frame(height: 36)
                             .padding(.horizontal, 16)
                             .background(
-                                RoundedRectangle(cornerRadius: 8)
+                                RoundedRectangle(cornerRadius: 6)
                                     .fill(selectedCategory == category ? .btnInteractiveDisabled : .btnInteractiveSecondary)
                             )
                     }
@@ -203,6 +203,7 @@ struct RecordsHeaderView: View {
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
+                    .padding(.trailing, -12)
                     .disabled(isDeleteMode && !hasSelectedRecords)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
                     .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
@@ -260,8 +261,8 @@ struct RecordSectionHeaderView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     Rectangle()
-                        .fill(selectedSection == .attended ? .borderStatusFocused : .clear)
-                        .frame(height: 2)
+                        .fill(selectedSection == .attended ? .borderStatusFocused : .borderFieldDefault)
+                        .frame(height: 1)
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
@@ -276,13 +277,13 @@ struct RecordSectionHeaderView: View {
             }) {
                 VStack(spacing: 0) {
                     Text("불참했어요")
-                        .titleSemiBold16()
+                        .bodyRegular16()
                         .foregroundColor(selectedSection == .notAttended ? .txtInteractivePrimary : .txtStatusDisabled)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                     Rectangle()
-                        .fill(selectedSection == .notAttended ? .borderStatusFocused : .clear)
-                        .frame(height: 2)
+                        .fill(selectedSection == .notAttended ? .borderStatusFocused : .borderFieldDefault)
+                        .frame(height: 1)
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
@@ -360,14 +361,11 @@ struct RecordsEmptyView: View {
                 .headBold24()
                 .foregroundColor(.txtDisplaySecondary)
             
-            Text("지금 경조사를 기록하고")
+            Text("지금 경조사를 기록하고\n상황에 어울리는 경조사비까지 추천받으세요")
                 .bodyRegular14()
                 .foregroundColor(.txtDisplayTierary)
-                .padding(.top, 16)
-            
-            Text("상황에 어울리는 경조사비까지 추천받으세요")
-                .bodyRegular14()
-                .foregroundColor(.txtDisplayTierary)
+                .multilineTextAlignment(.center)
+                .padding(.top, 4)
             
             Image("img_write_empty(160_160)")
                 .resizable()
@@ -381,7 +379,7 @@ struct RecordsEmptyView: View {
                 Text("지금 기록하기")
                     .titleSemiBold16()
                     .foregroundColor(.white)
-                    .frame(width: 145)
+                    .frame(width: 116)
                     .frame(height: 40)
             }
             .background(.primaryNormal)
@@ -428,18 +426,18 @@ struct RecordCellView: View {
                 }
 
                 HStack {
-                    HStack(spacing: 8) {
+                    HStack(spacing: 4) {
                         Text(event.eventInfo.eventCategory)
                             .captionRegular12()
                             .foregroundColor(.txtStatusFocused)
-                            .padding(.horizontal, 6)
+                            .padding(.horizontal, 8)
                             .padding(.vertical, 2)
                             .background(.btnInteractiveDisabled)
                             .cornerRadius(4)
                         Text(event.eventInfo.relationship)
                             .captionRegular12()
                             .foregroundColor(.txtStatusFocused)
-                            .padding(.horizontal, 6)
+                            .padding(.horizontal, 8)
                             .padding(.vertical, 2)
                             .background(.btnInteractiveDisabled)
                             .cornerRadius(4)

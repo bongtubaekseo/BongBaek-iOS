@@ -34,29 +34,25 @@ struct ModifyView: View {
                 router.pop()
             }
             
-            ScrollView {
-                VStack {
-                    textFieldSection
-                    incomeToggleSection
+            VStack {
+                textFieldSection
+                incomeToggleSection
                     
-                    incomeSelectionSection
-                        .opacity(viewModel.hasIncome ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.0), value: viewModel.hasIncome)
-                        .padding(.bottom, 60)
+                incomeSelectionSection
+                    .opacity(viewModel.hasIncome ? 1.0 : 0.0)
+                    .animation(.easeInOut(duration: 0.0), value: viewModel.hasIncome)
+                    .padding(.bottom, 60)
                     
-                    Spacer()
+                Spacer()
                     
-                    updateButton
-                        .padding(.bottom, 36)
+                updateButton
+                    .padding(.bottom, 36)
 
-                }
             }
-            .scrollIndicators(.hidden)
-            .scrollDismissesKeyboard(.interactively)
             .padding(.horizontal, 20)
             .contentShape(Rectangle())
             .onTapGesture {
-                hideKeyboard()
+                    hideKeyboard()
             }
         }
         .onAppear {
@@ -101,8 +97,8 @@ struct ModifyView: View {
     private var textFieldSection: some View {
         VStack(spacing: 16) {
             CustomTextField(
-                title: "닉네임",
-                icon: "icon_person_16",
+                title: "이름",
+                icon: "icon_person",
                 placeholder: "닉네임을 입력하세요",
                 text: $viewModel.nickname,
                 validationRule: ValidationRule(
@@ -117,7 +113,7 @@ struct ModifyView: View {
             
             CustomTextField(
                 title: "생년월일",
-                icon: "icon_calendar_16",
+                icon: "icon_calendar",
                 placeholder: "생년월일을 입력하세요",
                 text: $viewModel.selectedDate,
                 isReadOnly: true,
@@ -196,7 +192,9 @@ struct ModifyView: View {
             HStack {
                 Text(selection.displayText)
                     .bodyRegular14()
-                    .foregroundStyle(.txtStatusFocused)
+                    .foregroundStyle(
+                        viewModel.isSelected(selection) ? .txtStatusFocused : .txtStatusDisabled
+                    )
                 
                 Spacer()
                 

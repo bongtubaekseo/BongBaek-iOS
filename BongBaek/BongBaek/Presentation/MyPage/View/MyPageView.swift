@@ -58,14 +58,9 @@ struct MyPageView: View {
             //Color.black.ignoresSafeArea()
             VStack(spacing: 0) {
                 HStack {
-                    Button(action: {
-                        router.pop()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.gray300)
-                    }
+                    Color.clear
                     .frame(width: 44, height: 44)
-                    
+//
                     Spacer()
                     
                     Text("설정")
@@ -83,8 +78,8 @@ struct MyPageView: View {
                 .background(Color.bgDisplayPrimary)
                 ScrollView(showsIndicators: false) {
                     VStack(spacing : 0) {
-                        VStack(spacing: 32) {
-                            VStack(spacing: 16) {
+                        VStack(spacing: 0) {
+                            VStack(spacing: 12) {
                                 Image("icon_profile")
                                     .resizable()
                                     .frame(width: 80, height: 80)
@@ -132,7 +127,8 @@ struct MyPageView: View {
                             .padding(.vertical, 20)
                             .background(.bgDisplayCard)
                             .cornerRadius(20)
-                            .padding(.horizontal, 20)
+                            .padding(.horizontal,20)
+                            .padding(.top, 12)
                             .padding(.bottom, 20)
                         }
                         .background(Color.bgDisplayPrimary)

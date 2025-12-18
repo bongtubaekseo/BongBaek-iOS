@@ -87,14 +87,14 @@ struct CreateEventView: View {
                         VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
-                                icon: "icon_person_16",
+                                icon: "icon_person",
                                 placeholder: "이름을 입력하세요",
                                 text: $nickname,
                                 validationRule: ValidationRule(
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
@@ -109,7 +109,7 @@ struct CreateEventView: View {
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
@@ -126,7 +126,7 @@ struct CreateEventView: View {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
-                                    icon: "icon_coin_16",
+                                    icon: "icon_money",
                                     placeholder: "금액을 입력하세요",
                                     text: $money,
                                     validationRule: ValidationRule(
@@ -151,7 +151,7 @@ struct CreateEventView: View {
                             
                             CustomDropdown(
                                 title: "참석여부",
-                                icon: "icon_write_20_20",
+                                icon: "icon_event",
                                 placeholder: "참석여부를 선택하세요",
                                 items: attendItems,
                                 selectedItem: $selectedAttend
@@ -166,7 +166,7 @@ struct CreateEventView: View {
                             
                             CustomTextField(
                                 title: "날짜",
-                                icon: "icon_calendar_16",
+                                icon: "icon_calendar 1",
                                 placeholder: "날짜를 선택하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
