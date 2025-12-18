@@ -147,7 +147,6 @@ struct LargeMapView: View {
     private var searchSection: some View {
         HStack(spacing: 12) {
             Image("icon_search")
-                .foregroundColor(.white)
                 .font(.system(size: 20))
             
             TextField("기타 사유를 입력해주세요",
@@ -250,7 +249,7 @@ struct LargeMapView: View {
                     }) {
                         HStack {
                             Text(document.placeName)
-                                .font(.system(size: 16, weight: .medium))
+                                .titleSemiBold18()
                                 .foregroundColor(.txtDisplayPrimary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
@@ -278,7 +277,7 @@ struct LargeMapView: View {
         .background(.bgDisplayCard)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                .stroke(.bgDisplayCard, lineWidth: 1)
         )
         .cornerRadius(10)
         .padding(.horizontal, 20)
