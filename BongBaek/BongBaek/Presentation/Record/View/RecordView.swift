@@ -228,7 +228,6 @@ struct RecordsHeaderView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 16)
         .padding(.bottom, 0)
         .animation(.easeInOut(duration: 0.2), value: isDeleteMode)
         .animation(.easeInOut(duration: 0.2), value: isCurrentSectionEmpty)

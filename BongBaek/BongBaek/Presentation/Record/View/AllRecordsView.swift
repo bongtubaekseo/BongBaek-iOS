@@ -26,7 +26,9 @@ struct AllRecordsView: View {
                     Button(action: { dismiss() }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.iconInteractiveDefault)
+                            .frame(width: 24, height: 24, alignment: .leading)
                     }
+                    .frame(width: 44, height: 44, alignment: .leading)
                     .contentShape(Rectangle())
 
                     Spacer()
@@ -35,11 +37,14 @@ struct AllRecordsView: View {
                         router.push(to: .modifyEventView(mode: .edit, eventDetailData: viewModel.eventDetail))
                     }) {
                         Image("icon_edit 1")
+                            .resizable()
+                            .frame(width: 20, height: 20)
                     }
+                    .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
                 }
             }
-            .padding(.top, 20)
+            .padding(.top, 0)
             .padding(.horizontal, 20)
             .padding(.bottom, 10)
             .background(.bgDisplayPrimary)
