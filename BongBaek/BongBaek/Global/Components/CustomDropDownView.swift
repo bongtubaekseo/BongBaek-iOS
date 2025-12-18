@@ -53,9 +53,13 @@ struct CustomDropdown<T: DropdownItem>: View {
                     if let icon = icon {
                         Image(icon)
                             .resizable()
-                            .renderingMode(.template)
+                          //  .renderingMode(.template)
                             .frame(width: 20, height: 20)
-                            .foregroundColor(isDisabled ? .iconDisabledPrimary : .iconFocusedPrimary)
+                            //.foregroundColor(isDisabled ? .iconDisabledPrimary : .iconFocusedPrimary)
+                        
+                        Image(isDisabled ? "\(icon)off" : icon)
+                            .resizable()
+                            .frame(width: 20, height: 20)
                     }
 
                     HStack(spacing: 2) {

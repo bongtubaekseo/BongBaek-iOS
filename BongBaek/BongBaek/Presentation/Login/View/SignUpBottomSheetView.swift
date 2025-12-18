@@ -79,7 +79,7 @@ struct SignUpBottomSheetView: View {
                         },
                         onDetailTap: {
                             print("서비스 약관 상세보기 클릭됨")
-                            openURL(URL(string: "https://www.notion.so/264f06bb0d3480aa8badeba07a68b944")!)
+                            openURL(URL(string: "https://www.notion.so/bongtubaekseo/264f06bb0d348036b260f175a236ec7c")!)
                         }
                     )
                     

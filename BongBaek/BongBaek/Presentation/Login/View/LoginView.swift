@@ -83,7 +83,7 @@ struct LoginView: View {
                        HStack {
                            Text("개인정보 처리방침")
                                .captionRegular12()
-                               .foregroundStyle(.txtInteractiveInverse)
+                               .foregroundStyle(.txtDisplayTierary)
                                .underline()
                                .onTapGesture {
                                    loginViewModel.openPrivacyPolicy()
@@ -91,7 +91,7 @@ struct LoginView: View {
 
                            Text("이용약관")
                                .captionRegular12()
-                               .foregroundStyle(.txtInteractiveInverse)
+                               .foregroundStyle(.txtDisplayTierary)
                                .underline()
                                .padding(.leading, 12)
                                .onTapGesture {

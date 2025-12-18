@@ -65,10 +65,14 @@ struct CustomTextField: View {
   
             HStack(spacing: 8) {
                 Image(icon)
-                    .resizable()
-                    .renderingMode(.template)
+                            .resizable()
+//                    .renderingMode(.template)
                     .frame(width: 20,height: 20)
-                    .foregroundColor(.iconFocusedPrimary)
+                //    .foregroundColor(isRecommendationEdit ? .iconDisabledPrimary : .iconFocusedPrimary)
+                
+                Image(isRecommendationEdit ? "\(icon)off" : icon)
+                    .resizable()
+                    .frame(width: 20, height: 20)
                 
                 HStack(spacing: 2) {
                     
@@ -79,7 +83,7 @@ struct CustomTextField: View {
                     } else {
                         Text(title)
                             .bodyMedium16()
-                            .foregroundColor(isRecommendationEdit ? .gray400 : .txtDisplaySecondary)
+                            .foregroundColor(isRecommendationEdit ? .txtDisplayTierary : .txtDisplaySecondary)
                     }
 
                     
@@ -88,7 +92,7 @@ struct CustomTextField: View {
                         VStack {
                             Text("*")
                                 .bodyMedium14()
-                                .foregroundColor(.txtStatusFocused)
+                                .foregroundColor(isRecommendationEdit ? .txtDisplayTierary :.txtStatusFocused)
                                 .padding(.top, 4)
                                 .padding(.leading, 1)
                             
@@ -122,7 +126,7 @@ struct CustomTextField: View {
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .focused($isFocused)
                                 .disabled(isReadOnly)
-                                .foregroundColor(isRecommendationEdit ? .gray400 : .txtFieldValue)
+                                .foregroundColor(isRecommendationEdit ? .txtStatusDisabled : .txtFieldValue)
                                 .tint(.txtFieldValue)
                                 .keyboardType(keyboardType) // 키보드 타입 적용
                                 .onChange(of: displayText) { _, newValue in
@@ -173,6 +177,7 @@ struct CustomTextField: View {
             
             if !validationMessage.isEmpty {
                 HStack(spacing: 4) {
+
                     Image(validationState == .invalid ? "Exclude 3" : "")
                         .font(.system(size: 12))
                         .foregroundColor(validationState.color())
@@ -342,7 +347,7 @@ enum ValidationState {
             return .borderStatusFocused
         case .completed:
             if isReadOnly && isRecommendationEdit {
-                return .lineNormal
+                return .borderFieldFilled
             } else {
                 return .borderFieldFilled
             }
@@ -368,7 +373,7 @@ enum ValidationState2 {
         case .focused:
             return .borderStatusFocused
         case .completed:
-            return .lineNormal
+            return .borderFieldDefault
         }
     }
 }
@@ -399,7 +404,7 @@ struct ValidationRule {
     func validate(_ text: String) -> (isValid: Bool, message: String) {
         if text.isEmpty {
             if let minLength = minLength, let maxLength = maxLength {
-                return (false, "\(minLength)자에서 \(maxLength)자 내외 입력해야 합니다")
+                return (false, "\(minLength)자이상 \(maxLength)자 이내만 기입할 수 있어요")
             } else if let minLength = minLength {
                 return (false, "\(minLength)자 이상 입력해야 합니다")
             } else if let maxLength = maxLength {
@@ -420,14 +425,14 @@ struct ValidationRule {
         
         if let minLength = minLength, text.count < minLength {
             if let maxLength = maxLength {
-                return (false, "\(minLength)자에서 \(maxLength)자 내외 입력해야 합니다")
+                return (false, "\(minLength)자이상 \(maxLength)자 이내만 기입할 수 있어요")
             }
             return (false, "\(minLength)자 이상 입력해야 합니다")
         }
         
         if let maxLength = maxLength, text.count > maxLength {
             if let minLength = minLength {
-                return (false, "\(minLength)자에서 \(maxLength)자 내외 입력해야 합니다")
+                return (false, "\(minLength)자이상 \(maxLength)자 이내만 기입할 수 있어요")
             }
             return (false, "\(maxLength)자 이하로 입력해야 합니다")
         }

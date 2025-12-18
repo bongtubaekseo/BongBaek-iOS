@@ -16,7 +16,8 @@ struct RecommendGuideTextView: View {
     let title2Style: TextStyle
     let titleColor: Color
     let subtitleColor: Color
-    let spacing: CGFloat
+    let titleSpacing: CGFloat
+    let titleSubtitleSpacing: CGFloat
     
     enum TextStyle {
         case headBold26
@@ -48,10 +49,11 @@ struct RecommendGuideTextView: View {
         subtitle1: String,
         subtitle2: String,
         title1Style: TextStyle = .headBold26,
-        title2Style: TextStyle = .headBold26,  
+        title2Style: TextStyle = .headBold26,
         titleColor: Color = .txtDisplaySecondary,
         subtitleColor: Color = .txtDisplayTierary,
-        spacing: CGFloat = 12
+        titleSpacing: CGFloat = 4,
+        titleSubtitleSpacing: CGFloat = 20
     ) {
         self.title1 = title1
         self.title2 = title2
@@ -61,28 +63,28 @@ struct RecommendGuideTextView: View {
         self.title2Style = title2Style
         self.titleColor = titleColor
         self.subtitleColor = subtitleColor
-        self.spacing = spacing
+        self.titleSpacing = titleSpacing
+        self.titleSubtitleSpacing = titleSubtitleSpacing
     }
     
     var body: some View {
-        VStack(alignment: .leading,spacing: 20) {
+        VStack(alignment: .leading, spacing: titleSubtitleSpacing) {
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: titleSpacing) { 
                 title1Style.apply(to: Text(title1), color: titleColor)
                         
                 title2Style.apply(to: Text(title2), color: titleColor)
             }
-            .padding(.bottom, spacing)
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(subtitle1)
-                    .foregroundStyle(subtitleColor)
-                    .bodyMedium14()
+                    .foregroundStyle(.txtDisplayTierary)
+                    .bodyRegular14()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
                 Text(subtitle2)
-                    .foregroundStyle(subtitleColor)
-                    .bodyMedium14()
+                    .foregroundStyle(.txtDisplayTierary)
+                    .bodyRegular14()
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

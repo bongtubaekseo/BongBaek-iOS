@@ -16,7 +16,7 @@ struct ContentsView: View {
         VStack(spacing: 0) {
             HStack {
                 Spacer()
-                Text("경조사 가이드")
+                Text("경조사 콘텐츠")
                     .titleSemiBold18()
                     .foregroundStyle(.txtDisplayPrimary)
                 
@@ -90,7 +90,7 @@ struct ContentsView: View {
             Text(category.displayName)
                 .bodyMedium16()
                 .foregroundColor(viewModel.selectedCategory == category ? .txtStatusFocused : .txtStatusDisabled)
-                .frame(height: 36)
+                .padding(.vertical,6)
                 .padding(.horizontal, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
@@ -185,25 +185,28 @@ struct ContentsView: View {
     @ViewBuilder
     private var guideContentView: some View {
         ForEach(viewModel.filteredContents, id: \.contentId) { content in
-            ContentCell(content: content)
-                .onTapGesture {
-                    router.push(to: .contentDetailView(contentId: content.contentId))
-                }
-                .onAppear {
-                    if viewModel.shouldLoadMore(for: content) {
-                        Task {
-                            await viewModel.loadMoreContents()
-                        }
+            ContentCell(content: content) {
+                router.push(to: .contentDetailView(contentId: content.contentId))
+            }
+            .onAppear {
+                if viewModel.shouldLoadMore(for: content) {
+                    Task {
+                        await viewModel.loadMoreContents()
                     }
                 }
+            }
         }
         
         if !viewModel.hasMoreData {
             VStack(spacing: 12) {
-                Text("더 이상 아티클이 없어요!")
+                Text("더 이상 콘텐츠가 없어요!")
                     .bodyRegular14()
                     .foregroundStyle(.txtDisplayTierary)
             }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(.bgDisplaySecondary)
+            .cornerRadius(12)
         }
     }
 
@@ -211,6 +214,7 @@ struct ContentsView: View {
 
 struct ContentCell: View {
     let content: MoreContentItem
+    let onTap: () -> Void
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
@@ -244,8 +248,10 @@ struct ContentCell: View {
                 Text(content.contentTitle)
                     .titleSemiBold18()
                     .foregroundStyle(.txtInteractiveInverse)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
                 
-                Text("0000년 00월 00일")
+                Text(content.createdAt.DateFormat())
                     .captionRegular12()
                     .foregroundStyle(.txtDisplayTierary)
             }
@@ -255,5 +261,9 @@ struct ContentCell: View {
         .background(Color.bgDisplayCard)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onTap()
+        }
     }
 }

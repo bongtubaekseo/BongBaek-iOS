@@ -129,7 +129,7 @@ struct RecommendLottie: View {
                     .bodyMedium14()
                     .foregroundColor(.txtStatusFocused)
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
+                    .padding(.vertical, 6)
                     .background(
                         RoundedRectangle(cornerRadius: 6)
                             .stroke(.bgDisplayCard, lineWidth: 1)
@@ -165,6 +165,7 @@ struct RecommendLottie: View {
                             .titleSemiBold22()
                             .foregroundColor(.txtDisplayTierary)
                             .padding(.bottom, 8)
+                            .offset(y: -8)
                     }
                     .padding(.top, 6)
 
@@ -182,7 +183,7 @@ struct RecommendLottie: View {
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(.bgDisplayCard.opacity(0.4))
+                            .fill(.bgCard.opacity(0.4))
                     )
                     .padding(.top, 20)
                 }
@@ -221,6 +222,14 @@ struct RecommendLottie: View {
                         Capsule()
                             .fill(.bgDisplayRange)
                             .frame(height: 12)
+                            .overlay(
+                                Capsule()
+                                    .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                                    .blur(radius: 2)
+                                    .offset(x: 0, y: 2)
+                                    .mask(Capsule())
+                            )
+                            .clipShape(Capsule())
 
                         Capsule()
                             .fill(
@@ -272,6 +281,14 @@ struct RecommendLottie: View {
                         Capsule()
                             .fill(.bgDisplayRange)
                             .frame(height: 12)
+                            .overlay(
+                                Capsule()
+                                    .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                                    .blur(radius: 2)
+                                    .offset(x: 0, y: 2)
+                                    .mask(Capsule())
+                            )
+                            .clipShape(Capsule())
 
                         Capsule()
                             .fill(
@@ -346,7 +363,7 @@ struct RecommendLottie: View {
     var participationSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Image("icon_colorcheck")
+                Image("icon_check 5")
                 Text("참고해주세요!")
                     .titleSemiBold18()
                     .foregroundColor(.txtDisplaySecondary)
@@ -453,7 +470,7 @@ struct RecommendLottie: View {
                     Circle()
                         .fill(.bgDisplayPrimary)
                         .frame(width: 40, height: 40)
-                    Image("icon_location 2")
+                    Image("icon_location 7")
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text("장소")
