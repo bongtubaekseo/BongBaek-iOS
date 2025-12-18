@@ -13,7 +13,7 @@ struct HomeContentsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("경조사 콘텐츠")
                         .font(.title_semibold_20)
                         .foregroundStyle(.txtDisplayPrimary)
