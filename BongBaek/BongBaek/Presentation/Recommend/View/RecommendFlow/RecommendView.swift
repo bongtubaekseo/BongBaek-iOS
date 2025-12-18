@@ -57,24 +57,27 @@ struct RecommendView: View {
             
             StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                 .padding(.horizontal, 20)
-                .padding(.bottom, 10)
+                .padding(.bottom, 20)
             
-            RecommendGuideTextView(
-                title1: "먼저, 마음을 전하고 싶은 분의",
-                title2: "정보를 적어주세요",
-                subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
-                subtitle2: "더 정확한 추천을 해드릴게요",
-                titleColor: .txtDisplaySecondary,
-                subtitleColor: .txtDisplayTierary,
-                titleSubtitleSpacing: 12
-            )
-            .padding(.leading, 20)
-            .padding(.top, 22)
-            .padding(.bottom,32)
+
 
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack {
+                        
+                        RecommendGuideTextView(
+                            title1: "먼저, 마음을 전하고 싶은 분의",
+                            title2: "정보를 적어주세요",
+                            subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
+                            subtitle2: "더 정확한 추천을 해드릴게요",
+                            titleColor: .txtDisplaySecondary,
+                            subtitleColor: .txtDisplayTierary,
+                            titleSubtitleSpacing: 12
+                        )
+                        .padding(.leading, 20)
+                        .padding(.top, 22)
+                        .padding(.bottom,32)
+                        
                         userInfoSection
                         
                         relationshipHeaderSection
@@ -149,7 +152,7 @@ struct RecommendView: View {
     private var userInfoSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Image("icon_person_16")
+                Image("icon_person")
                     .renderingMode(.template)
                     .resizable()
                     .foregroundColor(.iconFocusedPrimary)
@@ -199,8 +202,8 @@ struct RecommendView: View {
     
     private var relationshipHeaderSection: some View {
         HStack {
-            Image("icon_relation 3")
-                .frame(width: 20,height: 20)
+            Image("icon_relation")
+                .frame(width: 24,height: 24)
             
             Text("관계를 선택해주세요")
                 .titleSemiBold18()

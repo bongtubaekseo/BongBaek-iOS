@@ -204,11 +204,11 @@ struct AllRecordsView: View {
         VStack(alignment: .leading, spacing: 36) {
             DetailRow(image: "icon_person_16", title: "이름", value: eventDetail.hostInfo.hostName, useMediumFont: true)
             DetailRow(image: "icon_nickname_16", title: "별명", value: eventDetail.hostInfo.hostNickname, useMediumFont: true)
-            DetailRow(image: "icon_relation 2", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_relation", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
             DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
             DetailRow(image: "icon_coin_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원", useMediumFont: true)
             DetailRow(image: "icon_check 1", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
-            DetailRow(image: "icon_calendar_16", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_calendar", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
             DetailRow(image: "icon_location_16",
                       title: "장소",
                       value: {
