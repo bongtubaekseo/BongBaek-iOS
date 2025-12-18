@@ -56,7 +56,7 @@ struct MainTabView: View {
                 // 조건부 탭바 표시
                 if !isRecommendFlowActive && !isDeleteModeActive {
                     CustomTabView(selectedTab: $selectedTab)
-                        .background(Color.gray750)
+                        .background(Color.bgDisplayPrimary)
                         .clipShape(
                             .rect(
                                 topLeadingRadius: 10,
@@ -68,7 +68,7 @@ struct MainTabView: View {
             .ignoresSafeArea(.all, edges: .bottom)
             .navigationBarHidden(true)
             .toolbar(.hidden, for: .navigationBar)
-            .background(Color.black.ignoresSafeArea())
+            .background(Color.bgDisplayPrimary.ignoresSafeArea())
             .onChange(of: selectedTab) { oldValue, newValue in
                 if newValue == .recommend {
                     selectedTab = oldValue

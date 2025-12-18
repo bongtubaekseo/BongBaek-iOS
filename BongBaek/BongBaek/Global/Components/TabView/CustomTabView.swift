@@ -15,35 +15,35 @@ struct CustomTabView: View {
             TabBarItem(
                 tab: .home,
                 selectedTab: $selectedTab,
-                imageName: "material-symbols-light_home-rounded",
+                imageName: "tabBar_home",
                 title: "홈"
             )
             
             TabBarItem(
                 tab: .recommend,
                 selectedTab: $selectedTab,
-                imageName: "icon_coin_16",
+                imageName: "tabBar_money",
                 title: "금액 추천"
             )
             
             TabBarItem(
                 tab: .record,
                 selectedTab: $selectedTab,
-                imageName: "Property 1=selected",
+                imageName: "tabBar_write",
                 title: "기록하기"
             )
             
             TabBarItem(
                 tab: .contents,
                 selectedTab: $selectedTab,
-                imageName: "icon=icon_contents, status=off",
+                imageName: "tabBar_article",
                 title: "콘텐츠"
             )
             
             TabBarItem(
                 tab: .setting,
                 selectedTab: $selectedTab,
-                imageName: "icon=icon_setting, status=on",
+                imageName: "tabBar_setting",
                 title: "설정"
             )
         }
