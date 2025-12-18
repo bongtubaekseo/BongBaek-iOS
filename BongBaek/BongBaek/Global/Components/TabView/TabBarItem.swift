@@ -27,11 +27,11 @@ struct TabBarItem: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 30, height: 30)
-                    .foregroundStyle(isSelected ? .white : .gray400)
+                    .foregroundStyle(isSelected ? .iconSelectedMenu : .iconDisabledPrimary)
                 
                 Text(title)
                     .bodyRegular14()
-                    .foregroundStyle(isSelected ? .white : .gray400)
+                    .foregroundStyle(isSelected ? .txtDisplayPrimary : .txtStatusDisabled)
             }
         }
         .frame(maxWidth: .infinity)

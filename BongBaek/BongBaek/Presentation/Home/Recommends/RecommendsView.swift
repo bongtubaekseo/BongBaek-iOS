@@ -13,7 +13,7 @@ struct RecommendsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text("금액 추천")
                         .font(.caption_regular_12)
                         .foregroundColor(.txtStatusFocused)
@@ -22,7 +22,7 @@ struct RecommendsView: View {
                         .font(.title_semibold_18)
                         .foregroundColor(.txtDisplayPrimary)
                 }
-                .padding(.top,8)
+                .padding(.leading,2)
             }
             
 
@@ -33,7 +33,7 @@ struct RecommendsView: View {
                     .font(.body1_medium_16)
                     .foregroundStyle(.txtInteractiveInverse)
                     .frame(maxWidth: .infinity)
-                    .padding()
+                    .padding(.vertical, 10)
                     .background(.btnInteractiveAccent)
                     .cornerRadius(8)
             }

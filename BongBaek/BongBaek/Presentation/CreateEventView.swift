@@ -91,7 +91,9 @@ struct CreateEventView: View {
                         VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
+
                                 icon: "icon_write_20_20 3",
+
                                 placeholder: "이름을 입력하세요",
                                 text: $nickname,
                                 isValid: $isNicknameValid,
@@ -132,7 +134,9 @@ struct CreateEventView: View {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
+
                                     icon: "icon_write_20_20 5",
+
                                     placeholder: "금액을 입력하세요",
                                     text: $money,
                                     isValid: $isMoneyValid,
@@ -158,7 +162,9 @@ struct CreateEventView: View {
                             
                             CustomDropdown(
                                 title: "참석여부",
+
                                 icon: "icon_check 4",
+
                                 placeholder: "참석여부를 선택하세요",
                                 items: attendItems,
                                 selectedItem: $selectedAttend

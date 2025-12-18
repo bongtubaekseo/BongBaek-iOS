@@ -54,7 +54,7 @@ struct AccountDeletionView: View {
                         .foregroundStyle(.txtDisplayTierary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.top, 10.adjustedH)
+                .padding(.top, 20)
                 .padding(.leading, 20)
             }
             
@@ -75,7 +75,7 @@ struct AccountDeletionView: View {
                 }
                 .padding(20)
                 .background(.bgDisplaySecondary)
-                .cornerRadius(12)
+                .cornerRadius(10)
                 .padding(.horizontal, 20)
                 .padding(.top, 20.adjustedH)
                 .animation(.easeInOut(duration: 0.3), value: displayedReasons)
@@ -338,10 +338,10 @@ struct DeletionReasonButton: View {
                 }
                 .background(.btnInteractiveDisabled)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.borderStatusFocused, lineWidth: 1)
                 )
-                .cornerRadius(8)
+                .cornerRadius(10)
             } else {
                 Button(action: {
                     if isSelected {
@@ -378,12 +378,12 @@ struct DeletionReasonButton: View {
                     .overlay(
                         Group {
                             if isSelected {
-                                RoundedRectangle(cornerRadius: 8)
+                                RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.borderStatusFocused, lineWidth: 1)
                             }
                         }
                     )
-                    .cornerRadius(8)
+                    .cornerRadius(10)
                 }
                 .buttonStyle(PlainButtonStyle())
             }
@@ -411,12 +411,12 @@ struct DeletionReasonButton: View {
                 .overlay(
                     Group {
                         if isSelected {
-                            RoundedRectangle(cornerRadius: 8)
+                            RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.borderStatusFocused, lineWidth: 1)
                         }
                     }
                 )
-                .cornerRadius(8)
+                .cornerRadius(10)
             }
             .buttonStyle(PlainButtonStyle())
         }
