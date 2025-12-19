@@ -54,7 +54,13 @@ struct CustomTabView: View {
         }
         .padding(.bottom, 16)
         .frame(width: UIScreen.main.bounds.width, height: 92)
-        .background(.gnbDisplayBase)
+        .background(
+            UnevenRoundedRectangle(
+                topLeadingRadius: 10,
+                topTrailingRadius: 10
+            )
+            .fill(Color.gnbDisplayBase)
+        )
     }
 }
 

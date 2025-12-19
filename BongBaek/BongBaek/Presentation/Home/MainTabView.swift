@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var selectedTab: Tab = .home
-    @State private var previousTab: Tab = .home // 이전 탭 저장
+    @State private var previousTab: Tab = .home
     @State private var isRecommendFlowActive = false
     @StateObject private var stepManager = GlobalStepManager()
     @StateObject private var router = NavigationRouter()
@@ -18,12 +18,13 @@ struct MainTabView: View {
     
     var body: some View {
         NavigationStack(path: $router.path) {
-            VStack(spacing: 0) {
+            ZStack(alignment: .bottom) {
+                // 메인 컨텐츠 (전체 화면)
                 Group {
                     if isRecommendFlowActive {
                         RecommendStartView()
-                        .environmentObject(stepManager)
-                        .environmentObject(router)
+                            .environmentObject(stepManager)
+                            .environmentObject(router)
                     } else {
                         switch selectedTab {
                         case .home:
@@ -36,12 +37,12 @@ struct MainTabView: View {
                             RecordView()
                                 .environmentObject(router)
                                 .onReceive(NotificationCenter.default.publisher(for: .recordDeleteModeChanged)) { notification in
-                                     if let isDeleteMode = notification.object as? Bool {
-                                         withAnimation(.easeInOut(duration: 0.3)) {
-                                             isDeleteModeActive = isDeleteMode
-                                         }
-                                     }
-                                 }
+                                    if let isDeleteMode = notification.object as? Bool {
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            isDeleteModeActive = isDeleteMode
+                                        }
+                                    }
+                                }
                         case .contents:
                             ContentsView()
                                 .environmentObject(router)
@@ -53,16 +54,10 @@ struct MainTabView: View {
                 }
                 .animation(.none, value: isRecommendFlowActive)
                 .animation(.none, value: selectedTab)
-                // 조건부 탭바 표시
+                
+                // 탭바 (위에 떠있음)
                 if !isRecommendFlowActive && !isDeleteModeActive {
                     CustomTabView(selectedTab: $selectedTab)
-                        .background(Color.bgDisplayPrimary)
-                        .clipShape(
-                            .rect(
-                                topLeadingRadius: 10,
-                                topTrailingRadius: 10
-                            )
-                        )
                 }
             }
             .ignoresSafeArea(.all, edges: .bottom)
@@ -72,31 +67,29 @@ struct MainTabView: View {
             .onChange(of: selectedTab) { oldValue, newValue in
                 if newValue == .recommend {
                     selectedTab = oldValue
-                    router.push(to: .recommendStartView)  
+                    router.push(to: .recommendStartView)
                 }
             }
             .onChange(of: router.path) { oldPath, newPath in
-                        // 추천 플로우 중에 mainTab으로 돌아온 경우
-                        if !oldPath.isEmpty && newPath.isEmpty {
-                            print("mainTab으로 복귀 - EventCreationManager 리셋")
-                            eventManager.resetAllData()
-                        }
-                    }
+                if !oldPath.isEmpty && newPath.isEmpty {
+                    print("mainTab으로 복귀 - EventCreationManager 리셋")
+                    eventManager.resetAllData()
+                }
+            }
             .onReceive(NotificationCenter.default.publisher(for: .selectTab)) { notification in
-               print("MainTabView에서 selectTab notification 받음")
-               if let tab = notification.object as? Tab {
-                   print("탭 변경: \(tab)")
-                   
-                   // 추천 플로우 중에 탭 전환 시 데이터 리셋
-                   if !router.path.isEmpty {
-                       print("탭 전환으로 인한 EventCreationManager 리셋")
-                       eventManager.resetAllData()
-                   }
-                   
-                   isRecommendFlowActive = false
-                   selectedTab = tab
-                   router.popToRoot()
-               }
+                print("MainTabView에서 selectTab notification 받음")
+                if let tab = notification.object as? Tab {
+                    print("탭 변경: \(tab)")
+                    
+                    if !router.path.isEmpty {
+                        print("탭 전환으로 인한 EventCreationManager 리셋")
+                        eventManager.resetAllData()
+                    }
+                    
+                    isRecommendFlowActive = false
+                    selectedTab = tab
+                    router.popToRoot()
+                }
             }
             .navigationDestination(for: RecommendRoute.self) { route in
                 routeView(for: route)
@@ -150,21 +143,25 @@ struct MainTabView: View {
             RecommendSuccessView()
                 .environmentObject(router)
                 .environmentObject(eventManager)
+            
         case .modifyEventView(let mode, let eventDetailData):
             ModifyEventView(mode: mode, eventDetailData: eventDetailData)
                 .environmentObject(router)
                 .environmentObject(eventManager)
+                
         case .fullScheduleView:
             FullScheduleView()
                 .environmentObject(router)
+                
         case .allRecordView(let eventId):
             AllRecordsView(eventId: eventId)
                 .environmentObject(router)
             
         case .recommendStartView:
             RecommendStartView()
-            .environmentObject(router)
-            .environmentObject(eventManager)
+                .environmentObject(router)
+                .environmentObject(eventManager)
+            
         case .emptyScheduleView:
             EmptyScheduleView()
                 .environmentObject(router)
@@ -172,9 +169,11 @@ struct MainTabView: View {
         case .emptyCardView:
             EmptyCardView()
                 .environmentObject(router)
+            
         case .createEventView:
             CreateEventView()
                 .environmentObject(router)
+            
         case .createEventViewAfterEvent:
             CreateEventViewAfterEvent()
                 .environmentObject(router)
@@ -182,20 +181,25 @@ struct MainTabView: View {
         case .accountDeletionConfirmView:
             AccountDeletionConfirmView()
                 .environmentObject(router)
+            
         case .accountDeletionView:
             AccountDeletionView()
                 .environmentObject(router)
+            
         case .MyPageView:
             MyPageView()
                 .environmentObject(router)
                 .environmentObject(eventManager)
+            
         case .ModifyView(let profileData):
             ModifyView(initialProfileData: profileData)
                 .environmentObject(router)
                 .environmentObject(eventManager)
+            
         case .profileSettingView:
             ProfileSettingView()
                 .environmentObject(router)
+            
         case .contentsView:
             ContentsView()
                 .environmentObject(router)
