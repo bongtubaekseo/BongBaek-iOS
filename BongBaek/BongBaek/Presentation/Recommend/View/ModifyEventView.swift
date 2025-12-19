@@ -148,7 +148,7 @@ struct ModifyEventView: View {
                         VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
-                                icon: "icon_write_20_20 3",
+                                icon: "icon_person",
                                 placeholder: "이름을 입력하세요",
                                 text: $nickname,
                                 isValid: $isNicknameValid,
@@ -167,7 +167,7 @@ struct ModifyEventView: View {
                                                         
                             CustomTextField(
                                 title: "별명",
-                                icon: "icon_write_20_20 4",
+                                icon: "icon_nickname",
                                 placeholder: "별명을 입력하세요",
                                 text: $alias,
                                 isValid: $isAliasValid,
@@ -194,7 +194,7 @@ struct ModifyEventView: View {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
-                                    icon: "icon_write_20_20 5",
+                                    icon: "icon_coin",
                                     placeholder: "금액을 입력하세요",
                                     text: $money,
                                     isValid: $isMoneyValid,
@@ -244,7 +244,7 @@ struct ModifyEventView: View {
                             
                             CustomTextField(
                                 title: "날짜",
-                                icon: "icon_calendar 1",
+                                icon: "icon_calendar",
                                 placeholder: "생년월일을 입력하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
@@ -367,10 +367,8 @@ struct ModifyEventView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_write_20_20 2")
-                      //  .renderingMode(.template)
+                    Image(isRecommendationEdit ? "icon_eventLocation_off" : "icon_eventLocation")
                         .frame(width: 20,height: 20)
-                    //    .foregroundStyle(.iconDisabledPrimary)
                     
                     Text("행사장")
                         .bodyMedium14()
@@ -482,7 +480,7 @@ struct ModifyEventView: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation 3",
+                icon: "icon_relation",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation,
@@ -491,7 +489,7 @@ struct ModifyEventView: View {
             
             CustomDropdown(
                 title: "경조사",
-                icon: "icon_write_20_20",
+                icon: "icon_star",
                 placeholder: "경조사를 선택하세요",
                 items: eventItems,
                 selectedItem: $selectedEvent,

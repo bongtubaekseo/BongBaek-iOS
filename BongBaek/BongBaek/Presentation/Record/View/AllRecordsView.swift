@@ -17,37 +17,37 @@ struct AllRecordsView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.iconInteractiveDefault)
-                }
-                .contentShape(Rectangle())
-                
+            ZStack {
                 Text("경조사 상세 기록")
                     .titleSemiBold18()
                     .foregroundColor(.txtDisplayPrimary)
-                    .padding(.leading, 8)
-                
-                Spacer()
-                
-                Button(action: {
-                    // 편집 액션
-                    router.push(to: .modifyEventView(mode: .edit, eventDetailData: viewModel.eventDetail))
-                }) {
-                    Image("icon_edit 1")
-//                        .foregroundColor(.)
+
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.iconInteractiveDefault)
+                            .frame(width: 24, height: 24, alignment: .leading)
+                    }
+                    .frame(width: 44, height: 44, alignment: .leading)
+                    .contentShape(Rectangle())
+
+                    Spacer()
+
+                    Button(action: {
+                        router.push(to: .modifyEventView(mode: .edit, eventDetailData: viewModel.eventDetail))
+                    }) {
+                        Image("icon_edit 1")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                    }
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
                 }
-                .contentShape(Rectangle())
-                .padding(.trailing, 20)
             }
-            .padding(.top, 20)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 4)
+            .padding(.top, 0)
+            .padding(.horizontal, 20)
             .padding(.bottom, 10)
-            .background(.bgDisplayPrimary) // 헤더 배경색 명시
+            .background(.bgDisplayPrimary)
             
             // 스크롤 가능한 콘텐츠
             ScrollView {
@@ -204,11 +204,11 @@ struct AllRecordsView: View {
         VStack(alignment: .leading, spacing: 36) {
             DetailRow(image: "icon_person_16", title: "이름", value: eventDetail.hostInfo.hostName, useMediumFont: true)
             DetailRow(image: "icon_nickname_16", title: "별명", value: eventDetail.hostInfo.hostNickname, useMediumFont: true)
-            DetailRow(image: "icon_relation 2", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_relation", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
             DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
             DetailRow(image: "icon_coin_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원", useMediumFont: true)
             DetailRow(image: "icon_check 1", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
-            DetailRow(image: "icon_calendar_16", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_calendar", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
             DetailRow(image: "icon_location_16",
                       title: "장소",
                       value: {

@@ -175,7 +175,7 @@ struct EventDateFormView: View {
             // 날짜 선택 섹션
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 8) {
-                    Image("icon_calendar 1")
+                    Image("icon_calendar")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)

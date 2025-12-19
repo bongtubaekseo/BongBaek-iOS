@@ -15,42 +15,46 @@ struct CustomTabView: View {
             TabBarItem(
                 tab: .home,
                 selectedTab: $selectedTab,
-                imageName: "material-symbols-light_home-rounded",
+                selectedImageName: "tabBar_home_filled",
+                unselectedImageName: "tabBar_home",
                 title: "홈"
             )
             
             TabBarItem(
                 tab: .recommend,
                 selectedTab: $selectedTab,
-                imageName: "icon_coin_16",
+                selectedImageName: "tabBar_money_filled",
+                unselectedImageName: "tabBar_money",
                 title: "금액 추천"
             )
             
             TabBarItem(
                 tab: .record,
                 selectedTab: $selectedTab,
-                imageName: "Property 1=selected",
+                selectedImageName: "tabBar_write_filled",
+                unselectedImageName: "tabBar_write",
                 title: "기록하기"
             )
             
             TabBarItem(
                 tab: .contents,
                 selectedTab: $selectedTab,
-                imageName: "icon=icon_contents, status=off",
+                selectedImageName: "tabBar_article_filled",
+                unselectedImageName: "tabBar_article",
                 title: "콘텐츠"
             )
             
             TabBarItem(
                 tab: .setting,
                 selectedTab: $selectedTab,
-                imageName: "icon=icon_setting, status=on",
+                selectedImageName: "tabBar_setting_filled",
+                unselectedImageName: "tabBar_setting",
                 title: "설정"
             )
         }
         .padding(.bottom, 16)
         .frame(width: UIScreen.main.bounds.width, height: 92)
         .background(.gnbDisplayBase)
-        .background(.primaryNormal)
     }
 }
 

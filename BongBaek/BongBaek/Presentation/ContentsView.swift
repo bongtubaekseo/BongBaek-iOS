@@ -25,10 +25,11 @@ struct ContentsView: View {
             .padding(.vertical, 12)
             
             categoryScrollView
+                .padding(.top,12)
             
             articleCountView
                 .padding(.horizontal, 20)
-                .padding(.top, 8)
+                .padding(.top, 12)
                 .padding(.bottom, 12)
             
             ScrollView(showsIndicators: false) {
@@ -76,7 +77,7 @@ struct ContentsView: View {
             }
             .padding(.horizontal, 20)
         }
-        .frame(height: 50)
+        .frame(height: 60)
         .clipped()
     }
     
@@ -90,12 +91,14 @@ struct ContentsView: View {
             Text(category.displayName)
                 .bodyMedium16()
                 .foregroundColor(viewModel.selectedCategory == category ? .txtStatusFocused : .txtStatusDisabled)
-                .padding(.vertical,6)
+             //   .padding(.vertical,6)
+                .frame(height: 36)
                 .padding(.horizontal, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
                         .fill(viewModel.selectedCategory == category ? .btnInteractiveDisabled : .btnInteractiveSecondary)
                 )
+             
         }
     }
     
@@ -238,7 +241,7 @@ struct ContentCell: View {
                 Text(content.contentCategory)
                     .captionRegular12()
                     .foregroundStyle(.txtDisplayPrimary)
-                    .padding(.vertical, 2)
+                    .padding(.vertical, 5)
                     .padding(.horizontal, 8)
                     .background(
                         RoundedRectangle(cornerRadius: 4)

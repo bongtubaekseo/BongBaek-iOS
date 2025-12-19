@@ -13,7 +13,7 @@ struct HomeContentsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("경조사 콘텐츠")
                         .font(.title_semibold_20)
                         .foregroundStyle(.txtDisplayPrimary)
@@ -30,7 +30,7 @@ struct HomeContentsView: View {
                         object: Tab.contents
                     )
                 }) {
-                    HStack {
+                    HStack(spacing: 0) {
                         Text("더보기")
                             .bodyRegular14()
                             .foregroundColor(.txtDisplaySecondary)
@@ -39,7 +39,6 @@ struct HomeContentsView: View {
                         Image("icon_arrow")
                             .foregroundColor(.txtDisplayTierary)
                             .frame(width: 14, height: 14)
-                            .padding(.trailing, 4)
                     }
                     .padding(.horizontal, 20)
                 }

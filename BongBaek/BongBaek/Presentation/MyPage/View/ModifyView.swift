@@ -34,25 +34,29 @@ struct ModifyView: View {
                 router.pop()
             }
             
-            VStack {
-                textFieldSection
-                incomeToggleSection
+            ScrollView {
+                VStack {
+                    textFieldSection
+                    incomeToggleSection
                     
-                incomeSelectionSection
-                    .opacity(viewModel.hasIncome ? 1.0 : 0.0)
-                    .animation(.easeInOut(duration: 0.0), value: viewModel.hasIncome)
-                    .padding(.bottom, 60)
+                    incomeSelectionSection
+                        .opacity(viewModel.hasIncome ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.0), value: viewModel.hasIncome)
+                        .padding(.bottom, 80)
                     
-                Spacer()
+                    Spacer()
                     
-                updateButton
-                    .padding(.bottom, 36)
+                    updateButton
+                        .padding(.bottom, 36)
 
+                }
             }
+            .scrollIndicators(.hidden)
+            .scrollDismissesKeyboard(.interactively)
             .padding(.horizontal, 20)
             .contentShape(Rectangle())
             .onTapGesture {
-                    hideKeyboard()
+                hideKeyboard()
             }
         }
         .onAppear {
@@ -126,7 +130,7 @@ struct ModifyView: View {
                     }
                 }
         }
-        .padding(.top, 30)
+        .padding(.top, 20)
     }
     
     private var incomeToggleSection: some View {

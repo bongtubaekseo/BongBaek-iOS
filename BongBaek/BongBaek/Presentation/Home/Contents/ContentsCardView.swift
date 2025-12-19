@@ -60,18 +60,18 @@ struct ContentsCardView: View {
                             .font(.caption_regular_12)
                             .foregroundStyle(.txtStatusFocused)
                         
-                        HStack {
+                        HStack(alignment: .top, spacing: 8) {
                             Text(title)
                                 .font(.body1_medium_16)
                                 .foregroundStyle(.txtDisplayPrimary)
                                 .lineLimit(2)
                                 .multilineTextAlignment(.leading)
-                            
-                            Spacer()
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Image("icon_arrow")
                                 .frame(width: 20, height: 20)
                                 .foregroundColor(.iconInteractiveDefault)
+                                .fixedSize()
                         }
                     }
                     .padding(12)

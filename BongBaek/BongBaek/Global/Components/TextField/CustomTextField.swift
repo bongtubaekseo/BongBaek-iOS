@@ -64,13 +64,7 @@ struct CustomTextField: View {
         VStack(alignment: .leading, spacing: 8) {
   
             HStack(spacing: 8) {
-                Image(icon)
-                            .resizable()
-//                    .renderingMode(.template)
-                    .frame(width: 20,height: 20)
-                //    .foregroundColor(isRecommendationEdit ? .iconDisabledPrimary : .iconFocusedPrimary)
-                
-                Image(isRecommendationEdit ? "\(icon)off" : icon)
+                Image(isRecommendationEdit ? "\(icon)_off" : icon)
                     .resizable()
                     .frame(width: 20, height: 20)
                 
@@ -385,20 +379,18 @@ struct ValidationRule {
     let regex: String?
     let customRule: ((String) -> Bool)?
     let customMessage: String?
-    let specialcharacters : Bool
     
     init(minLength: Int? = nil,
          maxLength: Int? = nil,
          regex: String? = nil,
          customRule: ((String) -> Bool)? = nil,
-         customMessage: String? = nil,
-         specialcharacters : Bool = true){
+         customMessage: String? = nil
+    ){
         self.minLength = minLength
         self.maxLength = maxLength
         self.regex = regex
         self.customRule = customRule
         self.customMessage = customMessage
-        self.specialcharacters = specialcharacters
     }
     
     func validate(_ text: String) -> (isValid: Bool, message: String) {
@@ -411,16 +403,6 @@ struct ValidationRule {
                 return (false, "\(maxLength)자 이하로 입력해야 합니다")
             }
             return (false, "입력이 필요합니다")
-        }
-        
-        if specialcharacters {
-            let spcialcharacterpattern = "[^a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ ]"
-            let regex = try? NSRegularExpression(pattern: spcialcharacterpattern)
-            let range = NSRange(location: 0, length: text.utf16.count)
-            
-            if regex?.firstMatch(in: text, range: range) != nil {
-                return (false, "특수문자는 기입할 수 없어요")
-            }
         }
         
         if let minLength = minLength, text.count < minLength {

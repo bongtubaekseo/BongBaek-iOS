@@ -203,7 +203,7 @@ struct RecordsHeaderView: View {
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
-                    .padding(.trailing, -12)
+                    .padding(.trailing, -16)
                     .disabled(isDeleteMode && !hasSelectedRecords)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
                     .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
@@ -228,7 +228,6 @@ struct RecordsHeaderView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.top, 16)
         .padding(.bottom, 0)
         .animation(.easeInOut(duration: 0.2), value: isDeleteMode)
         .animation(.easeInOut(duration: 0.2), value: isCurrentSectionEmpty)
