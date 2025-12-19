@@ -37,7 +37,7 @@ struct MyPageView: View {
     @State private var showLogoutAlert = false
     
     private let serviceItems: [ServiceItem] = [
-        ServiceItem(icon: "icon_version", title: "앱 버전", subtitle: "v 1.0.0", showChevron: false),
+        ServiceItem(icon: "icon_version", title: "앱 버전", subtitle: "v 2.0.0", showChevron: false),
         ServiceItem(icon: "icon_ask", title: "문의하기", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480aa8badeba07a68b944"),
         ServiceItem(icon: "icon_terms", title: "서비스 이용약관", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d348036b260f175a236ec7c"),
         ServiceItem(icon: "icon_lock", title: "개인정보 처리방침", showChevron: true,url: "https://www.notion.so/bongtubaekseo/264f06bb0d3480d0b1eafa217b306105")
@@ -71,7 +71,7 @@ struct MyPageView: View {
                                 .frame(width: 80, height: 80)
                                 .padding(.top, 20)
                             
-                            Text(mypageViewModel.profileData?.memberName ?? "봉투백서 유저")
+                            Text(mypageViewModel.profileData?.memberName ?? "")
                                 .headBold24()
                                 .foregroundStyle(.txtDisplaySecondary)
                             
