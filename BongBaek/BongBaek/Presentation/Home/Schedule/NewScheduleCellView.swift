@@ -30,14 +30,14 @@ struct NewScheduleCellView: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {
                     Text(event.hostInfo.hostName)
-                        .font(.body1_medium_16)
+                        .bodyMedium16()
                         .foregroundColor(.txtDisplayPrimary)
                     
                     Text("·")
                         .foregroundColor(.txtDisplaySecondary)
                     
                     Text(event.eventInfo.eventCategory)
-                        .font(.body2_regular_14)
+                        .bodyMedium16()
                         .foregroundColor(.txtDisplaySubtle)
                     
                     Spacer(minLength: 0)
@@ -57,11 +57,11 @@ struct NewScheduleCellView: View {
                 
                 HStack(spacing: 8) {
                     HStack(spacing: 4) {
-                        Image("icon_newcalendar1")
+                        Image("icon_calendar_off")
                             .resizable()
                             .frame(width: 12, height: 12)
                         Text(event.eventInfo.eventDate.DateFormat())
-                            .font(.caption_regular_12)
+                            .captionRegular12()
                             .foregroundColor(.txtDisplayTierary)
                     }
                     
@@ -70,7 +70,7 @@ struct NewScheduleCellView: View {
                         .frame(width: 1)
                     
                     HStack(spacing: 4) {
-                        Image("icon_newlocation")
+                        Image("icon_eventLocation_off")
                             .resizable()
                             .frame(width: 12, height: 12)
                         Text({
@@ -80,7 +80,7 @@ struct NewScheduleCellView: View {
                             }
                             return location
                         }())
-                        .font(.caption_regular_12)
+                        .captionRegular12()
                         .foregroundColor(.txtDisplayTierary)
                         .lineLimit(1)
                     }
@@ -88,11 +88,11 @@ struct NewScheduleCellView: View {
                 
                 HStack(spacing: 8) {
                     HStack(spacing: 4) {
-                        Image("icon_newrelation")
+                        Image("icon_relation_off")
                             .resizable()
                             .frame(width: 12, height: 12)
                         Text(event.eventInfo.relationship)
-                            .font(.caption_regular_12)
+                            .captionRegular12()
                             .foregroundColor(.txtDisplayTierary)
                     }
                     
@@ -101,11 +101,11 @@ struct NewScheduleCellView: View {
                         .frame(width: 1)
                     
                     HStack(spacing: 4) {
-                        Image("icon_nickname_16")
+                        Image("icon_nickname_off")
                             .resizable()
                             .frame(width: 12, height: 12)
                         Text(event.hostInfo.hostNickname)
-                            .font(.caption_regular_12)
+                            .captionRegular12()
                             .foregroundColor(.txtDisplayTierary)
                     }
                 }
@@ -115,7 +115,6 @@ struct NewScheduleCellView: View {
         .padding(.vertical, 16)
         .background(.btnInteractiveSecondary)
         .clipShape(RoundedRectangle(cornerRadius: 8))
-//        .padding(.bottom, 12)
     }
 
     private func extractDay(from dateString: String) -> String {

@@ -68,7 +68,7 @@ struct EventLocationView: View {
                     submitButton
                         .padding(.top,60)
                 }
-                .padding(.top, 20)
+                .padding(.top, 32)
             }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -176,6 +176,7 @@ struct EventLocationView: View {
                     isSearchFieldFocused = false
                 }) {
                     Image("icon_delete")
+                        .renderingMode(.template)
                         .foregroundColor(.iconDisabledPrimary)
                         .frame(width: 24,height: 24)
                 }

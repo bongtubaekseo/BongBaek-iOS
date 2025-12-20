@@ -44,7 +44,7 @@ struct ContentDetailView: View {
                     Text(detail.contentTitle)
                         .titleSemiBold20()
                         .foregroundStyle(.txtDisplayPrimary)
-                        .padding(.top, 2)
+                        .padding(.top, 4)
                         
                     Text(detail.createdAt.dotDateFormat())
                         .bodyRegular14()

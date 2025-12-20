@@ -97,6 +97,7 @@ struct MyPageView: View {
                                     .bodyMedium14()
                                     .foregroundStyle(.txtDisplayTierary)
                             }
+                            .padding(.leading, 20)
                             
                             Spacer()
                             
@@ -108,8 +109,9 @@ struct MyPageView: View {
                                     .bodyMedium14()
                                     .foregroundStyle(.txtDisplaySecondary)
                             }
+                            .padding(.trailing, 26)
                         }
-                        .padding(.horizontal, 20)
+//                        .padding(.horizontal, 20)
                         .padding(.vertical, 20)
                         .background(.bgDisplayCard)
                         .cornerRadius(20)
@@ -235,25 +237,31 @@ struct ServiceRow: View {
         Button(action: {
             handleServiceItemTap(url: url)
         }) {
-            HStack(spacing: 16) {
-                Image(icon)
-                    .frame(width: 24, height: 24)
-                
-                Text(title)
-                    .foregroundColor(.txtInteractiveSecondary)
-                    .font(.body1_medium_16)
+            HStack(spacing: 0) {
+                HStack(spacing: 7) {
+                    Image(icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 24, height: 24)
+                    
+                    Text(title)
+                        .foregroundColor(.txtInteractiveSecondary)
+                        .bodyMedium16()
+                }
                 
                 Spacer()
                 
-                if let subtitle = subtitle {
-                    Text(subtitle)
-                        .foregroundColor(.txtDisplayTierary)
-                        .font(.body1_medium_16)
-                }
-                
-                if showChevron {
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.iconInteractiveDefault)
+                HStack(spacing: 8) {
+                    if let subtitle = subtitle {
+                        Text(subtitle)
+                            .foregroundColor(.txtDisplayTierary)
+                            .bodyMedium16()
+                    }
+                    
+                    if showChevron {
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.iconInteractiveDefault)
+                    }
                 }
             }
             .padding(.horizontal, 20)

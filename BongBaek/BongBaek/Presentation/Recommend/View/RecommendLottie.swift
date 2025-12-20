@@ -129,12 +129,14 @@ struct RecommendLottie: View {
                     .bodyMedium14()
                     .foregroundColor(.txtStatusFocused)
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 6)
-                    .background(
+                    .padding(.vertical, 8)
+                    .background(Color.bgDisplayCard)
+                    .cornerRadius(6)
+                    .overlay(
                         RoundedRectangle(cornerRadius: 6)
-                            .stroke(.bgDisplayCard, lineWidth: 1)
-                            .background(.bgDisplayCard)
+                            .stroke(Color.bgDisplayCard, lineWidth: 1)
                     )
+                    .padding(.top, -6)
 
                 VStack(spacing: 0) {
                     Text("추천 금액")

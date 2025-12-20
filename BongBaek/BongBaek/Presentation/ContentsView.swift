@@ -27,12 +27,16 @@ struct ContentsView: View {
             categoryScrollView
                 .padding(.top,12)
             
-            articleCountView
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
-                .padding(.bottom, 12)
+            
             
             ScrollView(showsIndicators: false) {
+                
+                articleCountView
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 12)
+                
+                
                 LazyVStack(alignment: .center, spacing: 12) {
                     if viewModel.isLoading {
                         loadingView

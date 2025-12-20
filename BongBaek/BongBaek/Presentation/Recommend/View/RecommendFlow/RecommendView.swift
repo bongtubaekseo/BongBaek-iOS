@@ -212,7 +212,7 @@ struct RecommendView: View {
             Spacer()
         }
         .padding(.leading, 20)
-        .padding(.top, 10)
+        .padding(.top, 30)
     }
     
     private var relationshipGridSection: some View {

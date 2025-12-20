@@ -12,7 +12,7 @@ struct RecommendsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("금액 추천")
                         .captionRegular12()
                         .foregroundColor(.txtStatusFocused)

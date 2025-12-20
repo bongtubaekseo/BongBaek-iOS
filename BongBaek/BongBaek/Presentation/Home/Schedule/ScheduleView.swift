@@ -40,6 +40,7 @@ struct ScheduleView: View {
                                 .foregroundColor(.txtDisplaySecondary)
 
                             Image("icon_arrow")
+                                .renderingMode(.template)
                                 .foregroundColor(.txtDisplayTierary)
                                 .frame(width: 14, height: 14)
                         }

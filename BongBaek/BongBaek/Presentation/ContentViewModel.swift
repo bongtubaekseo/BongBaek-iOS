@@ -124,6 +124,47 @@ class ContentViewModel: ObservableObject {
             hasMoreData = false
         }
     }
+    
+    /// 새로고침 (Pull to Refresh 전용)
+    func refreshContents() async {
+        // 이미 로딩 중이면 중복 실행 방지
+        guard !isLoadingData else { return }
+        isLoadingData = true
+        
+        do {
+            let categoryParam = selectedCategory == .all ? nil : selectedCategory.rawValue
+            // 1. 최신 페이지(0번)만 요청
+            let response = try await contentsService.getMoreContents(
+                page: 0,
+                category: categoryParam
+            )
+            
+            if response.isSuccess, let data = response.data {
+                let fetchedItems = data.contents
+                
+                // 2. 기존에 내 폰에 저장된 데이터(contents)에 없는 ID만 골라냄
+                let trulyNewItems = fetchedItems.filter { newItem in
+                    !self.contents.contains(where: { $0.contentId == newItem.contentId })
+                }
+                
+                // 3. 진짜 새 데이터가 있을 때만 맨 앞에 넣어줌
+                if !trulyNewItems.isEmpty {
+                    self.contents.insert(contentsOf: trulyNewItems, at: 0)
+                    self.filteredContents.insert(contentsOf: trulyNewItems, at: 0)
+                }
+                
+
+                
+                print("새로고침 완료: \(trulyNewItems.count)개의 새 콘텐츠 추가됨")
+            }
+        } catch {
+            print("새로고침 중 에러 발생: \(error)")
+        }
+        
+        isLoadingData = false
+    }
+    
+    
     /// 카테고리 필터 적용'
     private func applyFilter() {
         if selectedCategory == .all {
@@ -138,10 +179,10 @@ class ContentViewModel: ObservableObject {
 
     
     /// 새로고침
-    func refreshContents() async {
-        print(" 콘텐츠 새로고침")
-        await loadAllContents()
-    }
+//    func refreshContents() async {
+//        print(" 콘텐츠 새로고침")
+//        await loadAllContents()
+//    }
     
     /// 카테고리 변경 (새로 로드)
     func updateCategory(_ category: ScheduleCategory) async {

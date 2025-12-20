@@ -15,10 +15,10 @@ struct HomeContentsView: View {
             HStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("경조사 콘텐츠")
-                        .font(.title_semibold_20)
+                        .titleSemiBold20()
                         .foregroundStyle(.txtDisplayPrimary)
                     Text("경조사 가기 전 꼭 확인해야 할 정보")
-                        .font(.caption_regular_12)
+                        .captionRegular12()
                         .foregroundStyle(.txtDisplayTierary)
                 }
                 .padding(.horizontal, 20)
@@ -37,8 +37,9 @@ struct HomeContentsView: View {
                             //.padding(.trailing, 4)
                         
                         Image("icon_arrow")
+                            .renderingMode(.template)
                             .foregroundColor(.txtDisplayTierary)
-                            .frame(width: 14, height: 14)
+                            .frame(width: 20, height: 20)
                     }
                     .padding(.horizontal, 20)
                 }

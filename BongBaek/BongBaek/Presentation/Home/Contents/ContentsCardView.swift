@@ -57,18 +57,19 @@ struct ContentsCardView: View {
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text(category)
-                            .font(.caption_regular_12)
+                            .captionRegular12()
                             .foregroundStyle(.txtStatusFocused)
                         
                         HStack(alignment: .top, spacing: 8) {
                             Text(title)
-                                .font(.body1_medium_16)
+                                .bodyMedium16()
                                 .foregroundStyle(.txtDisplayPrimary)
                                 .lineLimit(2)
                                 .multilineTextAlignment(.leading)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Image("icon_arrow")
+                                .renderingMode(.template)
                                 .frame(width: 20, height: 20)
                                 .foregroundColor(.iconInteractiveDefault)
                                 .fixedSize()

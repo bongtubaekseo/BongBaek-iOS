@@ -116,7 +116,7 @@ struct CustomTextField: View {
                             }
                             
                             TextField("", text: $displayText)
-                                .font(.system(size: 16))
+                                .font(.body1_medium_16)
                                 .textFieldStyle(PlainTextFieldStyle())
                                 .focused($isFocused)
                                 .disabled(isReadOnly)
