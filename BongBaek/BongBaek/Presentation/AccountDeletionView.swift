@@ -46,11 +46,11 @@ struct AccountDeletionView: View {
             if !(selectedReason == "기타" && isOtherReasonExpanded){
                 VStack(alignment: .leading,spacing: 12.adjustedH) {
                     Text("탈퇴를 도와드릴게요")
-                        .font(.head_bold_24)
+                        .headBold24()
                         .foregroundStyle(.txtDisplaySecondary)
                     
                     Text("더 나은 서비스를 위해 탈퇴 이유를 알려주세요")
-                        .font(.body2_regular_14)
+                        .bodyRegular14()
                         .foregroundStyle(.txtDisplayTierary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -339,7 +339,7 @@ struct DeletionReasonButton: View {
                 .background(.btnInteractiveDisabled)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.borderStatusFocused, lineWidth: 1)
+                        .stroke(Color.borderStatusFocused, lineWidth: 2)
                 )
                 .cornerRadius(10)
             } else {
@@ -372,14 +372,14 @@ struct DeletionReasonButton: View {
                         
                         Spacer()
                     }
-                    .padding(.vertical, 16)
+                    .padding(.vertical, 14)
                     .padding(.horizontal, 16)
                     .background(isSelected ? Color.btnInteractiveDisabled : Color.btnInteractiveTierary)
                     .overlay(
                         Group {
                             if isSelected {
                                 RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.borderStatusFocused, lineWidth: 1)
+                                    .stroke(Color.borderStatusFocused, lineWidth: 2)
                             }
                         }
                     )
@@ -405,14 +405,14 @@ struct DeletionReasonButton: View {
                     
                     Spacer()
                 }
-                .padding(.vertical, 16)
+                .padding(.vertical, 14)
                 .padding(.horizontal, 16)
                 .background(isSelected ? Color.btnInteractiveDisabled : Color.btnInteractiveTierary)
                 .overlay(
                     Group {
                         if isSelected {
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.borderStatusFocused, lineWidth: 1)
+                                .stroke(Color.borderStatusFocused, lineWidth: 2)
                         }
                     }
                 )

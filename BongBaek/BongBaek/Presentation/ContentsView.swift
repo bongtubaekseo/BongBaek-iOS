@@ -214,6 +214,8 @@ struct ContentsView: View {
             .padding(.vertical, 12)
             .background(.bgDisplaySecondary)
             .cornerRadius(12)
+            Spacer()
+            .frame(height: 90)
         }
     }
 

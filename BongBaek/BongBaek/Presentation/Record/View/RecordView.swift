@@ -329,23 +329,27 @@ struct RecordContentView: View {
     }
     
     private var eventListView: some View {
-        ForEach(viewModel.currentEvents, id: \.eventId) { event in
-            RecordCellView(
-                event: event,
-                isDeleteMode: viewModel.isDeleteMode,
-                isSelected: viewModel.selectedRecordIDs.contains(event.eventId),
-                onSelectionToggle: {
-                    viewModel.toggleRecordSelection(event.eventId)
-                }
-            )
-            .onAppear {
-                // 무한스크롤
-                if viewModel.shouldLoadMore(for: event) {
-                    Task {
-                        await viewModel.loadMoreEvents()
+        Group {
+            ForEach(viewModel.currentEvents, id: \.eventId) { event in
+                RecordCellView(
+                    event: event,
+                    isDeleteMode: viewModel.isDeleteMode,
+                    isSelected: viewModel.selectedRecordIDs.contains(event.eventId),
+                    onSelectionToggle: {
+                        viewModel.toggleRecordSelection(event.eventId)
+                    }
+                )
+                .onAppear {
+                    if viewModel.shouldLoadMore(for: event) {
+                        Task {
+                            await viewModel.loadMoreEvents()
+                        }
                     }
                 }
             }
+
+            Spacer()
+                .frame(height: 100)
         }
     }
 }
