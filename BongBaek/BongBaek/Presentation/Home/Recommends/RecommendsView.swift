@@ -9,17 +9,16 @@ import SwiftUI
 struct RecommendsView: View {
     @StateObject private var stepManager = GlobalStepManager()
     @EnvironmentObject var router: NavigationRouter
-    let homeData: EventHomeData?
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text("금액 추천")
-                        .font(.caption_regular_12)
+                        .captionRegular12()
                         .foregroundColor(.txtStatusFocused)
                     
                     Text("내 상황에 어울리는 경조사비는?")
-                        .font(.title_semibold_18)
+                        .titleSemiBold18()
                         .foregroundColor(.txtDisplayPrimary)
                 }
                 .padding(.leading,2)
@@ -30,10 +29,10 @@ struct RecommendsView: View {
                 router.push(to: .recommendStartView)
             } label: {
                 Text("경조사비 추천 받기")
-                    .font(.body1_medium_16)
+                    .bodyMedium16()
                     .foregroundStyle(.txtInteractiveInverse)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
+                    .frame(height: 44)
                     .background(.btnInteractiveAccent)
                     .cornerRadius(8)
             }
@@ -46,13 +45,9 @@ struct RecommendsView: View {
                 .stroke(Color.borderDisplayDivider, lineWidth: 1)
         )
         .padding(.horizontal,20)
-        .padding(.vertical,20)
+        .padding(.vertical,30)
     }
 }
 
-//#Preview {
-//    RecommendsView(homeData: nil)
-//        .preferredColorScheme(.dark)
-//}
 
 

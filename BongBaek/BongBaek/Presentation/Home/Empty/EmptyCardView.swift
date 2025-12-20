@@ -29,17 +29,18 @@ struct EmptyCardView: View {
                     .padding(.bottom, -12)
                    
 
-                HStack(spacing: 4) {
+                HStack(spacing: 2) {
                     Text("일정 추가하기")
                         .captionRegular12()
                         .foregroundColor(.txtDisplayTierary)
                     
-                    Image("icon_left")
+                    Image("icon_arrow 1")
                         .foregroundColor(.iconDisabledSecondary)
-                        .frame(width: 5, height: 10)
+                        .frame(width: 14, height: 14)
                 }
-                .padding(.vertical, 6)
-                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .padding(.leading, 10)
+                .padding(.trailing, 4)
                 .background(.bgDisplayPrimary)
                 .cornerRadius(6)
                 .padding(.bottom, 14)

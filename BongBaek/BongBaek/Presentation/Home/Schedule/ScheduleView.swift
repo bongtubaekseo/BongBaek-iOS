@@ -27,31 +27,35 @@ struct ScheduleView: View {
                         .foregroundStyle(.txtDisplayTierary)
                 }
                 Spacer()
-
-                if !events.isEmpty {
+                
                     Button(action: {
                         NotificationCenter.default.post(
                             name: .selectTab,
                             object: Tab.record
                         )
                     }) {
-                        HStack{
+                        HStack(spacing: 0) {
                             Text("더보기")
                                 .bodyRegular14()
                                 .foregroundColor(.txtDisplaySecondary)
+
+                            Image("icon_arrow")
+                                .foregroundColor(.txtDisplayTierary)
+                                .frame(width: 14, height: 14)
                         }
+
                     }
-                  
-                }
             }
             .padding(.bottom, 20)
                 
                 if events.isEmpty {
                     EmptyCardView()
                 } else {
-                    ForEach(sortedEvents, id: \.eventId) { event in
-                        NewScheduleCellView(event: event)
-                    }
+                    LazyVStack(spacing: 12) {
+                         ForEach(sortedEvents, id: \.eventId) { event in
+                             NewScheduleCellView(event: event)
+                         }
+                     }
                 }
             }
             .padding(.horizontal)

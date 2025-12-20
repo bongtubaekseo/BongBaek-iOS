@@ -14,11 +14,11 @@ struct EmptyNewScheduleView: View {
             VStack(alignment: .leading, spacing: 6) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("경조사 알림")
-                        .font(.caption_regular_12)
+                        .captionRegular12()
                         .foregroundColor(.txtDisplaySubtle)
 
                     Text("다가오는 경조사가 없어요")
-                        .font(.title_semibold_16)
+                        .titleSemiBold16()
                         .foregroundColor(.txtDisplayPrimary)
                 }
 
@@ -30,11 +30,11 @@ struct EmptyNewScheduleView: View {
                         .padding(.leading, -2)
 
                     Text("아직 예정된 일정이 없습니다")
-                        .font(.caption_regular_12)
+                        .captionRegular12()
                         .foregroundColor(.txtDisplaySecondary)
                 }
                 .padding(.horizontal, 8)
-                .padding(.vertical, 4)
+                .padding(.vertical, 6)
                 .background(.bgDisplayPrimary)
                 .cornerRadius(2)
             }

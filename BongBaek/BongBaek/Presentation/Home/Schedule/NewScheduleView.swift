@@ -26,29 +26,91 @@ enum EventCategory: String {
     }
 }
 
+//struct NewScheduleView: View {
+//    let event: Event?
+//
+//    var body: some View {
+//        if let event = event {
+//            HStack(alignment: .center, spacing: 0) {
+//                VStack(alignment: .leading, spacing: 6) {
+//                    VStack(alignment: .leading, spacing: 4) {
+//                        Text("경조사 알림")
+//                            .font(.caption_regular_12)
+//                            .foregroundColor(.txtDisplaySubtle)
+//
+//                        Text(event.eventInfo.dDay == 0 ?
+//                             "오늘은 \(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)입니다!" :
+//                             "\(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)이 \(event.eventInfo.dDay)일 남았어요!")
+//                            .titleSemiBold16()
+//                            .foregroundStyle(.txtDisplayPrimary)
+//                            .lineLimit(2)
+//                    }
+//
+//                    HStack(spacing: 4) {
+//                        Image(.iconCalendar)
+//                            .renderingMode(.template)
+//                            .resizable()
+//                            .frame(width: 14, height: 14)
+//                            .foregroundColor(.iconDisabledPrimary)
+//
+//                        Text(event.eventInfo.eventDate.DateFormat())
+//                            .font(.caption_regular_12)
+//                            .foregroundColor(.txtDisplaySecondary)
+//                    }
+//                    .padding(.horizontal, 8)
+//                    .padding(.vertical, 6)
+//                    .background(.bgDisplayPrimary)
+//                    .cornerRadius(2)
+//                }
+//                .padding(.leading, 16)
+//                
+//                Spacer()
+//
+//                Image(getCategoryIcon(for: event))
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//                    .frame(width: 94, height: 82)
+//                    .padding(.trailing, 12)
+//            }
+//            .frame(height: 102)
+//            .background(.bgDisplaySecondary)
+//            .clipShape(RoundedRectangle(cornerRadius: 8))
+//            .overlay(
+//                RoundedRectangle(cornerRadius: 8)
+//                    .stroke(Color.borderFieldDefault, lineWidth: 1)
+//            )
+//            .padding(.horizontal, 20)
+//        } else {
+//            EmptyNewScheduleView()
+//        }
+//    }
+//    
+//    private func getCategoryIcon(for event: Event) -> String {
+//        EventCategory(rawValue: event.eventInfo.eventCategory)?.iconImage ?? "icon_alarm"
+//    }
+//}
+
+
 struct NewScheduleView: View {
     let event: Event?
 
     var body: some View {
         if let event = event {
             HStack(alignment: .center, spacing: 0) {
-                VStack(alignment: .leading, spacing: 6) {
+                // 왼쪽 영역
+                VStack(alignment: .leading, spacing: 8) { // 요소 간 간격 고정
                     VStack(alignment: .leading, spacing: 4) {
                         Text("경조사 알림")
                             .font(.caption_regular_12)
                             .foregroundColor(.txtDisplaySubtle)
 
-                        if event.eventInfo.dDay == 0 {
-                            Text("오늘은 \(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)입니다!")
-                                .titleSemiBold16()
-                                .foregroundStyle(.txtDisplayPrimary)
-                                .lineLimit(2)
-                        } else {
-                            Text("\(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)이 \(event.eventInfo.dDay)일 남았어요!")
-                                .titleSemiBold16()
-                                .foregroundStyle(.txtDisplayPrimary)
-                                .lineLimit(2)
-                        }
+                        Text(event.eventInfo.dDay == 0 ?
+                             "오늘은 \(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)입니다!" :
+                             "\(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)이 \(event.eventInfo.dDay)일 남았어요!")
+                            .titleSemiBold16()
+                            .foregroundStyle(.txtDisplayPrimary)
+                            .lineLimit(nil) // 줄 제한을 풀어 더 유연하게 대응
+                            .fixedSize(horizontal: false, vertical: true)
                     }
 
                     HStack(spacing: 4) {
@@ -63,21 +125,25 @@ struct NewScheduleView: View {
                             .foregroundColor(.txtDisplaySecondary)
                     }
                     .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
+                    .padding(.vertical, 6)
                     .background(.bgDisplayPrimary)
                     .cornerRadius(2)
                 }
                 .padding(.leading, 16)
+                .padding(.vertical, 14) // 상하 패딩으로 여백 확보
                 
                 Spacer()
 
+                // 오른쪽 아이콘
                 Image(getCategoryIcon(for: event))
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 94, height: 82)
                     .padding(.trailing, 12)
             }
-            .padding(.vertical, 10)
+            // 핵심: 고정 frame(height: 102) 대신 minHeight 사용
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 102)
             .background(.bgDisplaySecondary)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .overlay(
