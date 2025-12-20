@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct EmptyNewScheduleView: View {
-    @EnvironmentObject var router : NavigationRouter
+    @EnvironmentObject var router: NavigationRouter
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
@@ -23,11 +23,11 @@ struct EmptyNewScheduleView: View {
                 }
 
                 HStack(spacing: 4) {
-                    Image(.iconCalendar)
-                        .renderingMode(.template)
+                    Image("empty_calender")
                         .resizable()
+                        .renderingMode(.original)
                         .frame(width: 14, height: 14)
-                        .foregroundColor(.iconDisabledPrimary)
+                        .padding(.leading, -2)
 
                     Text("아직 예정된 일정이 없습니다")
                         .font(.caption_regular_12)
@@ -41,9 +41,9 @@ struct EmptyNewScheduleView: View {
             .padding(.leading, 16)
             
             Spacer()
-            
         }
-        .padding(.vertical, 10)
+        .padding(.vertical, 14)
+        .frame(height: 102)
         .background(.bgDisplaySecondary)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(
