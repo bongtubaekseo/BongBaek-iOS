@@ -22,10 +22,11 @@ struct NewScheduleCellView: View {
                     .foregroundColor(.txtDisplaySecondary)
             }
             .frame(width: 29)
+            .padding(.bottom, 25)
             
             Rectangle()
                 .fill(.borderFieldDefault)
-                .frame(width: 1)
+                .frame(width: 1,height: 70)
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {

@@ -18,7 +18,7 @@ struct ScheduleView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                VStack(alignment: .leading, spacing: 2){
+                VStack(alignment: .leading, spacing: 0){
                     Text("내 일정")
                         .font(.title_semibold_20)
                         .foregroundStyle(.txtDisplayPrimary)
@@ -59,7 +59,7 @@ struct ScheduleView: View {
                      }
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 20)
             .background(.bgDisplayPrimary)
         }
     }
