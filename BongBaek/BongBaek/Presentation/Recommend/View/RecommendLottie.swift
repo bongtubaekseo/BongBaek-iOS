@@ -447,7 +447,8 @@ struct RecommendLottie: View {
                     Circle()
                         .fill(.bgDisplayPrimary)
                         .frame(width: 40, height: 40)
-                    Image("icon_star")
+                    Image("icon_event")
+                        .frame(width: 24, height: 24)
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text("경조사 종류")
@@ -473,6 +474,7 @@ struct RecommendLottie: View {
                         .fill(.bgDisplayPrimary)
                         .frame(width: 40, height: 40)
                     Image("icon_location 7")
+                        .frame(width: 24, height: 24)
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text("장소")
