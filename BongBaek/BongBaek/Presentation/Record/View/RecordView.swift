@@ -194,7 +194,7 @@ struct RecordsHeaderView: View {
                         if isDeleteMode {
                             Text("삭제")
                                 .titleSemiBold16()
-                                .foregroundStyle(hasSelectedRecords ? .secondaryRed : .txtStatusDisabled)
+                                .foregroundStyle(hasSelectedRecords ? .txtStatusError : .txtStatusDisabled)
                         } else {
                             Image("icon_delete 2")
                                 .resizable()
@@ -203,7 +203,7 @@ struct RecordsHeaderView: View {
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
-                    .padding(.trailing, -16)
+                    .padding(.trailing, isDeleteMode ? -6 : -16)
                     .disabled(isDeleteMode && !hasSelectedRecords)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
                     .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
@@ -254,10 +254,17 @@ struct RecordSectionHeaderView: View {
                 onSectionChange(.attended)
             }) {
                 VStack(spacing: 0) {
-                    Text("참석했어요")
-                        .titleSemiBold16()
-                        .foregroundColor(selectedSection == .attended ? .txtInteractivePrimary : .txtStatusDisabled)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    if selectedSection == .attended {
+                        Text("참석했어요")
+                            .titleSemiBold16()
+                            .foregroundColor(.txtInteractivePrimary)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        Text("참석했어요")
+                            .bodyRegular16()
+                            .foregroundColor(.txtStatusDisabled)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                     
                     Rectangle()
                         .fill(selectedSection == .attended ? .borderStatusFocused : .borderFieldDefault)
@@ -275,10 +282,17 @@ struct RecordSectionHeaderView: View {
                 onSectionChange(.notAttended)
             }) {
                 VStack(spacing: 0) {
-                    Text("불참했어요")
-                        .bodyRegular16()
-                        .foregroundColor(selectedSection == .notAttended ? .txtInteractivePrimary : .txtStatusDisabled)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    if selectedSection == .notAttended {
+                        Text("불참했어요")
+                            .titleSemiBold16()
+                            .foregroundColor(.txtInteractivePrimary)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        Text("불참했어요")
+                            .bodyRegular16()
+                            .foregroundColor(.txtStatusDisabled)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                     
                     Rectangle()
                         .fill(selectedSection == .notAttended ? .borderStatusFocused : .borderFieldDefault)
@@ -405,9 +419,8 @@ struct RecordCellView: View {
         HStack(spacing: 12) {
             if isDeleteMode {
                 Button(action: onSelectionToggle) {
-                    Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(isSelected ? .secondaryRed : .borderFieldDefault)
-                        .font(.system(size: 20))
+                    Image (isSelected ? "icon_radio_filled" : "icon_radio")
+                        .frame(width: 20,height: 20)
                 }
                 .frame(width: 30)
                 .transition(.move(edge: .leading).combined(with: .opacity))
