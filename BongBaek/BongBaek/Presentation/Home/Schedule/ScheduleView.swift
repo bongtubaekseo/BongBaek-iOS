@@ -20,10 +20,10 @@ struct ScheduleView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 0){
                     Text("내 일정")
-                        .font(.title_semibold_20)
+                        .titleSemiBold20()
                         .foregroundStyle(.txtDisplayPrimary)
                     Text("나의 경조사 일정을 관리해보세요!")
-                        .font(.caption_regular_12)
+                        .captionRegular12()
                         .foregroundStyle(.txtDisplayTierary)
                 }
                 Spacer()

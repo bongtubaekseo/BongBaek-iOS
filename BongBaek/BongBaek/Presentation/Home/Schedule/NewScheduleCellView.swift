@@ -14,11 +14,11 @@ struct NewScheduleCellView: View {
         HStack(spacing: 12) {
             VStack(spacing: 4) {
                 Text("\(extractDay(from: event.eventInfo.eventDate))")
-                    .font(.title_semibold_18)
+                    .titleSemiBold18()
                     .foregroundColor(.txtDisplayPrimary)
                 
                 Text("일")
-                    .font(.caption_regular_12)
+                    .captionRegular12()
                     .foregroundColor(.txtDisplaySecondary)
             }
             .frame(width: 29)
