@@ -206,7 +206,7 @@ class RecordViewModel: ObservableObject {
         
         // 해당 섹션 데이터가 없으면 로드
         Task {
-            await loadSectionDataIfNeeded()
+            await loadAllRecords()
         }
     }
     

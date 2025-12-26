@@ -61,6 +61,7 @@ struct RecommendStartView: View {
         }
         .onAppear {
             print("RecommendStartView 나타남 - path.count: \(router.path.count)")
+            stepManager.reset()
             eventManager.resetAllData()
          }
         .background(.bgDisplayPrimary)

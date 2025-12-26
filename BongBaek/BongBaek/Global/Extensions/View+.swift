@@ -12,3 +12,19 @@ extension View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
+
+extension View {
+    @ViewBuilder
+    func offsetY(completion: @escaping(CGFloat, CGFloat) -> ()) -> some View {
+            self
+            .modifier(OffsetHelper(onChange: completion))
+    }
+}
+
+extension View {
+    func safeArea() -> UIEdgeInsets {
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {return .zero}
+        guard let safeArea =  scene.windows.first?.safeAreaInsets else {return .zero}
+        return  safeArea
+    }
+}

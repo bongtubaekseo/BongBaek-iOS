@@ -23,16 +23,19 @@ struct RecordView: View {
     @StateObject private var viewModel = RecordViewModel()
     @EnvironmentObject var router: NavigationRouter
     
+    @State var collapsibleHeight: CGFloat = 0
+    @State var headerOffset: CGFloat = 0
+    @State var lastHeaderOffset: CGFloat = 0
+    @State var direction: SwipeDirection = .none
+    @State var shiftOffset: CGFloat = 0
+    
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 0) {
                 RecordsHeaderView(
                     isDeleteMode: $viewModel.isDeleteMode,
-                    onDeleteTapped: {
-                        viewModel.deleteSelectedRecords()
-                    }, onCancelTapped: {
-                        viewModel.clearSelectedRecords()
-                    },
+                    onDeleteTapped: { viewModel.deleteSelectedRecords() },
+                    onCancelTapped: { viewModel.clearSelectedRecords() },
                     isCurrentSectionEmpty: viewModel.isCurrentSectionEmpty,
                     hasSelectedRecords: viewModel.hasSelectedRecords
                 )
@@ -42,43 +45,39 @@ struct RecordView: View {
                     selectedSection: $viewModel.selectedSection,
                     attendedCount: viewModel.attendedCount,
                     notAttendedCount: viewModel.notAttendedCount,
-                    onSectionChange: { section in
-                        viewModel.changeSection(to: section)
-                    }
-                )
-                .padding(.bottom, 20)
-                
-                MonthNavigationView(
-                    currentYearMonth: viewModel.currentYearMonthText,
-                    onPreviousMonth: {
-                        viewModel.moveToPreviousMonth()
-                    },
-                    onNextMonth: {
-                        viewModel.moveToNextMonth()
-                    }
-                )
-                .padding(.bottom, 12)
-                
-                CategoryFilterView(
-                    selectedCategory: $viewModel.selectedCategory,
-                    onCategoryChange: { category in
-                        viewModel.changeCategory(to: category)
-                    }
+                    onSectionChange: { section in viewModel.changeSection(to: section) }
                 )
                 .padding(.bottom, 20)
             }
             .background(Color.bgDisplayPrimary)
-
-            ScrollView {
-                RecordContentView(
-                    viewModel: viewModel
-                )
-                .background(.bgDisplayPrimary)
-            }
-            .refreshable {
-                Task {
-                    await viewModel.refreshRecords()
+            .zIndex(10)
+            
+            ZStack(alignment: .top) {
+                collapsibleHeaderView()
+                    .offset(y: headerOffset)
+                    .zIndex(5)
+                    .background(
+                        GeometryReader { proxy in
+                            Color.clear.onAppear {
+                                collapsibleHeight = proxy.size.height
+                            }
+                        }
+                    )
+                
+                ScrollView(.vertical, showsIndicators: false) {
+                    recordCells()
+                        .padding(.top, collapsibleHeight)
+                        .offsetY { previous, current in
+                            handleScroll(previous: previous, current: current)
+                        }
                 }
+                .coordinateSpace(name: "SCROLL")
+                .refreshable {
+                    Task {
+                        await viewModel.refreshRecords()
+                    }
+                }
+                .zIndex(1)
             }
         }
         .background(Color.bgDisplayPrimary)
@@ -88,8 +87,101 @@ struct RecordView: View {
             }
         }
     }
-}
 
+    private func handleScroll(previous: CGFloat, current: CGFloat) {
+        if previous > current {  // Up Scroll
+            if direction != .up && current < 0 {
+                shiftOffset = current - headerOffset
+                direction = .up
+                lastHeaderOffset = headerOffset
+            }
+            let offset = current < 0 ? (current - shiftOffset) : 0
+            headerOffset = (-offset < collapsibleHeight ? (offset < 0 ? offset : 0) : -collapsibleHeight)
+        } else {  // Down Scroll
+            if direction != .down {
+                shiftOffset = current
+                direction = .down
+                lastHeaderOffset = headerOffset
+            }
+            let offset = lastHeaderOffset + (current - shiftOffset)
+            headerOffset = (offset > 0 ? 0 : offset)
+        }
+    }
+    
+    @ViewBuilder
+    func collapsibleHeaderView() -> some View {
+        VStack(spacing: 0) {
+            MonthNavigationView(
+                currentYearMonth: viewModel.currentYearMonthText,
+                onPreviousMonth: {
+                    viewModel.moveToPreviousMonth()
+                },
+                onNextMonth: {
+                    viewModel.moveToNextMonth()
+                }
+            )
+            .padding(.bottom, 12)
+            
+            CategoryFilterView(
+                selectedCategory: $viewModel.selectedCategory,
+                onCategoryChange: { category in
+                    viewModel.changeCategory(to: category)
+                }
+            )
+            .padding(.bottom, 20)
+        }
+        .background(Color.bgDisplayPrimary)
+    }
+    
+    @ViewBuilder
+    func recordCells() -> some View {
+        VStack(spacing: 0) {
+            if viewModel.isLoading {
+                LoadingView2()
+                    .padding(.top, 20)
+            } else if viewModel.isCurrentSectionEmpty {
+                RecordsEmptyView(message: viewModel.emptyMessage)
+                    .padding(.top, 20)
+            } else {
+                ForEach(viewModel.currentEvents, id: \.eventId) { event in
+                    RecordCellView(
+                        event: event,
+                        isDeleteMode: viewModel.isDeleteMode,
+                        isSelected: viewModel.selectedRecordIDs.contains(event.eventId),
+                        onSelectionToggle: {
+                            viewModel.toggleRecordSelection(event.eventId)
+                        }
+                    )
+                    .onAppear {
+                        if viewModel.shouldLoadMore(for: event) {
+                            Task {
+                                await viewModel.loadMoreEvents()
+                            }
+                        }
+                    }
+                }
+                
+                if viewModel.isLoadingMore {
+                    HStack(spacing: 12) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .primaryNormal))
+                            .scaleEffect(0.8)
+                        
+                        Text("더 많은 기록을 불러오는 중...")
+                            .bodyRegular14()
+                            .foregroundColor(.gray400)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
+                }
+                
+                Spacer()
+                    .frame(height: 100)
+            }
+        }
+        .padding(.top, 20)
+    }
+}
 struct CategoryFilterView: View {
     @Binding var selectedCategory: EventsCategory
     let onCategoryChange: (EventsCategory) -> Void
@@ -194,7 +286,7 @@ struct RecordsHeaderView: View {
                         if isDeleteMode {
                             Text("삭제")
                                 .titleSemiBold16()
-                                .foregroundStyle(hasSelectedRecords ? .secondaryRed : .txtStatusDisabled)
+                                .foregroundStyle(hasSelectedRecords ? .txtStatusError : .txtStatusDisabled)
                         } else {
                             Image("icon_delete 2")
                                 .resizable()
@@ -203,7 +295,7 @@ struct RecordsHeaderView: View {
                     }
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
-                    .padding(.trailing, -16)
+                    .padding(.trailing, isDeleteMode ? -6 : -16)
                     .disabled(isDeleteMode && !hasSelectedRecords)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
                     .alert("경조사 기록을 삭제하겠습니까?", isPresented: $showAlert) {
@@ -254,10 +346,17 @@ struct RecordSectionHeaderView: View {
                 onSectionChange(.attended)
             }) {
                 VStack(spacing: 0) {
-                    Text("참석했어요")
-                        .titleSemiBold16()
-                        .foregroundColor(selectedSection == .attended ? .txtInteractivePrimary : .txtStatusDisabled)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    if selectedSection == .attended {
+                        Text("참석했어요")
+                            .titleSemiBold16()
+                            .foregroundColor(.txtInteractivePrimary)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        Text("참석했어요")
+                            .bodyRegular16()
+                            .foregroundColor(.txtStatusDisabled)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                     
                     Rectangle()
                         .fill(selectedSection == .attended ? .borderStatusFocused : .borderFieldDefault)
@@ -275,10 +374,17 @@ struct RecordSectionHeaderView: View {
                 onSectionChange(.notAttended)
             }) {
                 VStack(spacing: 0) {
-                    Text("불참했어요")
-                        .bodyRegular16()
-                        .foregroundColor(selectedSection == .notAttended ? .txtInteractivePrimary : .txtStatusDisabled)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    if selectedSection == .notAttended {
+                        Text("불참했어요")
+                            .titleSemiBold16()
+                            .foregroundColor(.txtInteractivePrimary)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        Text("불참했어요")
+                            .bodyRegular16()
+                            .foregroundColor(.txtStatusDisabled)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
                     
                     Rectangle()
                         .fill(selectedSection == .notAttended ? .borderStatusFocused : .borderFieldDefault)
@@ -405,9 +511,8 @@ struct RecordCellView: View {
         HStack(spacing: 12) {
             if isDeleteMode {
                 Button(action: onSelectionToggle) {
-                    Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(isSelected ? .secondaryRed : .borderFieldDefault)
-                        .font(.system(size: 20))
+                    Image (isSelected ? "icon_radio_filled" : "icon_radio")
+                        .frame(width: 20,height: 20)
                 }
                 .frame(width: 30)
                 .transition(.move(edge: .leading).combined(with: .opacity))
@@ -466,7 +571,7 @@ struct RecordCellView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.bottom, 8)
+        .padding(.bottom, 16)
         .animation(.easeInOut(duration: 0.3), value: isDeleteMode)
     }
     

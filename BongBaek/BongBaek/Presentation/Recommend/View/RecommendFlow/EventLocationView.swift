@@ -31,7 +31,7 @@ struct EventLocationView: View {
                 CustomNavigationBar(title: "행사장 위치") {
                     dismiss()
                 }
-                StepProgressBar(currentStep: 4, totalSteps: 4)
+                StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                     .padding(.horizontal, 20)
                 
                 VStack(alignment: .leading) {
@@ -169,7 +169,7 @@ struct EventLocationView: View {
                 }
             
             // Clear 버튼 추가
-            if !searchText.isEmpty {
+            if !searchText.isEmpty && isSearchFieldFocused {
                 Button(action: {
                     searchText = ""
                     keywordSearch.searchResults.removeAll()
@@ -280,7 +280,7 @@ struct EventLocationView: View {
         .background(.bgDisplayCard)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                .stroke(Color.bgDisplayCard, lineWidth: 1)
         )
         .cornerRadius(10)
         .padding(.horizontal, 20)
