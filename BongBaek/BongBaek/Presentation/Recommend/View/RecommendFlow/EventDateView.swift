@@ -175,11 +175,10 @@ struct EventDateFormView: View {
             // 날짜 선택 섹션
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 8) {
-                    Image("icon_calendar")
+                    Image("icon_calendar24")
                         .resizable()
-                        .scaledToFit()
                         .frame(width: 24, height: 24)
-                        .tint(.iconFocusedPrimary)
+
                     
                     Text("행사 날짜를 알려주세요")
                         .titleSemiBold18()
@@ -200,7 +199,8 @@ struct EventDateFormView: View {
                     .padding(.top, -8)
                 }
             }
-            .padding(20)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(.bgDisplayCard)
@@ -209,10 +209,9 @@ struct EventDateFormView: View {
             // 참석 여부 섹션
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 8) {
-                    Image("icon_check 4")
+                    Image("icon_check24")
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
+                        .frame(width: 24, height: 24)
                     
                     Text("참석 여부")
                         .titleSemiBold18()
@@ -233,7 +232,8 @@ struct EventDateFormView: View {
                     }
                 }
             }
-            .padding(20)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(.bgDisplayCard)
@@ -265,7 +265,7 @@ struct EventDatePickerView: View {
             HStack {
                 if eventManager.hasSelectedEventDate {
                     Text(DateFormatter.displayFormatter.string(from: eventManager.eventDate))
-                        .bodyRegular16()
+                        .bodyMedium16()
                         .foregroundColor(isPastDate ? .secondaryRed : .txtFieldValue)
                 } else {
                     Text("날짜를 입력해주세요")
@@ -280,7 +280,7 @@ struct EventDatePickerView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(.bgDisplayCard)
+                    .fill(.bgFieldPrimary)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
