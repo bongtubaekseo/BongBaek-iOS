@@ -179,6 +179,7 @@ struct RecordView: View {
                     .frame(height: 100)
             }
         }
+        .padding(.top, 20)
     }
 }
 struct CategoryFilterView: View {
