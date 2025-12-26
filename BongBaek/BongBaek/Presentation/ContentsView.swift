@@ -63,11 +63,11 @@ struct ContentsView: View {
             }
             
         }
-        .task {
-            if viewModel.contents.isEmpty {
-                await viewModel.loadAllContents()
-            }
-        }
+//        .task {
+//            if viewModel.contents.isEmpty {
+//                await viewModel.loadAllContents()
+//            }
+//        }
         .background(Color.bgDisplayPrimary)
         
     }
@@ -134,8 +134,8 @@ struct ContentsView: View {
                 .padding(.top,16)
             
             
-            Rectangle()
-                .frame(width: 120,height: 120)
+            Image("img_contents_empty")
+                .frame(width: 160,height: 160)
                 .foregroundStyle(.red)
                 .padding(.top, 32)
         }
