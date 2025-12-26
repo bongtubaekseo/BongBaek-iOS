@@ -188,7 +188,7 @@ struct EventTypeButton: View {
                 
                 Text(eventType.rawValue)
                     .titleSemiBold16()
-                    .foregroundColor(.txtInteractivePrimary)
+                    .foregroundColor(isSelected ? .txtInteractiveInverse : .txtInteractivePrimary)
                 
                 Spacer()
             }

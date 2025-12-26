@@ -12,7 +12,7 @@ struct ScheduleView: View {
     @EnvironmentObject var router: NavigationRouter
 
     private var sortedEvents: [Event] {
-        return events.sorted { $0.eventInfo.dDay > $1.eventInfo.dDay }
+        return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
     }
     
     var body: some View {
@@ -20,10 +20,10 @@ struct ScheduleView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 2){
                     Text("내 일정")
-                        .font(.title_semibold_20)
+                        .titleSemiBold20()
                         .foregroundStyle(.txtDisplayPrimary)
                     Text("나의 경조사 일정을 관리해보세요!")
-                        .font(.caption_regular_12)
+                        .captionRegular12()
                         .foregroundStyle(.txtDisplayTierary)
                 }
                 Spacer()
@@ -59,7 +59,7 @@ struct ScheduleView: View {
                      }
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 20)
             .background(.bgDisplayPrimary)
         }
     }
