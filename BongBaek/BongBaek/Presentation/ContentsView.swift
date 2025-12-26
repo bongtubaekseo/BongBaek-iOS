@@ -63,11 +63,11 @@ struct ContentsView: View {
             }
             
         }
-//        .task {
-//            if viewModel.contents.isEmpty {
-//                await viewModel.loadAllContents()
-//            }
-//        }
+        .task {
+            if viewModel.contents.isEmpty {
+                await viewModel.loadAllContents()
+            }
+        }
         .background(Color.bgDisplayPrimary)
         
     }
