@@ -12,7 +12,7 @@ struct ScheduleView: View {
     @EnvironmentObject var router: NavigationRouter
 
     private var sortedEvents: [Event] {
-        return events.sorted { $0.eventInfo.dDay > $1.eventInfo.dDay }
+        return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
     }
     
     var body: some View {
