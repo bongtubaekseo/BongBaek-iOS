@@ -31,7 +31,7 @@ struct EventLocationView: View {
                 CustomNavigationBar(title: "행사장 위치") {
                     dismiss()
                 }
-                StepProgressBar(currentStep: 4, totalSteps: 4)
+                StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                     .padding(.horizontal, 20)
                 
                 VStack(alignment: .leading) {

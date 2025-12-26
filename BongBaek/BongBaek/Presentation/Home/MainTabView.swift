@@ -161,6 +161,7 @@ struct MainTabView: View {
             RecommendStartView()
                 .environmentObject(router)
                 .environmentObject(eventManager)
+                .environmentObject(stepManager)
             
         case .emptyScheduleView:
             EmptyScheduleView()
