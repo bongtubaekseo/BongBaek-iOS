@@ -79,7 +79,7 @@ struct RootView: View {
     }
     
     private func openAppStore() {
-         if let url = URL(string: "https://naver.com") {
+         if let url = URL(string: " https://apps.apple.com/app/id6751378524") {
              UIApplication.shared.open(url)
          }
      }
