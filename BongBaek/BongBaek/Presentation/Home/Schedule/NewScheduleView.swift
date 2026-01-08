@@ -1,0 +1,94 @@
+//
+//  NewScheduleView.swift
+//  BongBaek
+//
+//  Created by hyunwoo on 11/17/25.
+//
+import SwiftUI
+
+enum EventCategory: String {
+    case wedding = "결혼"
+    case birthday = "생일"
+    case stoneparty = "돌잔치"
+    case funeral = "장례식"
+    
+    var iconImage: String {
+        switch self {
+        case .wedding:
+            return "icon_marriage"
+        case .birthday:
+            return "icon_birthday 1"
+        case .stoneparty:
+            return "icon_stoneparty"
+        case .funeral:
+            return "icon_funeral"
+        }
+    }
+}
+
+struct NewScheduleView: View {
+    let event: Event?
+
+    var body: some View {
+        if let event = event {
+            HStack(alignment: .center, spacing: 0) {
+                VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("경조사 알림")
+                            .font(.caption_regular_12)
+                            .foregroundColor(.txtDisplaySubtle)
+
+                        Text(event.eventInfo.dDay == 0 ?
+                             "오늘은 \(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)입니다!" :
+                             "\(event.hostInfo.hostName)님의 \(event.eventInfo.eventCategory)이 \(event.eventInfo.dDay)일 남았어요!")
+                            .titleSemiBold16()
+                            .foregroundStyle(.txtDisplayPrimary)
+                            .lineLimit(nil) 
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
+                    HStack(spacing: 4) {
+                        Image("empty_calender")
+                            .resizable()
+                            .renderingMode(.original)
+                            .frame(width: 14, height: 14)
+                            .padding(.leading, -2)
+
+                        Text(event.eventInfo.eventDate.DateFormat())
+                            .font(.caption_regular_12)
+                            .foregroundColor(.txtDisplaySecondary)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .background(.bgDisplayPrimary)
+                    .cornerRadius(2)
+                }
+                .padding(.leading, 16)
+                .padding(.vertical, 14)
+                
+                Spacer()
+
+                Image(getCategoryIcon(for: event))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 94, height: 82)
+                    .padding(.trailing, 12)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 102)
+            .background(.bgDisplaySecondary)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.borderFieldDefault, lineWidth: 1)
+            )
+            .padding(.horizontal, 20)
+        } else {
+            EmptyNewScheduleView()
+        }
+    }
+    
+    private func getCategoryIcon(for event: Event) -> String {
+        EventCategory(rawValue: event.eventInfo.eventCategory)?.iconImage ?? "icon_alarm"
+    }
+}

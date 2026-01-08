@@ -66,7 +66,7 @@ struct EventInformationView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color("background"))
+        .background(.bgDisplayPrimary)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
@@ -107,15 +107,15 @@ struct EventInformationTitleView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("어떤 경조사에")
                 .headBold24()
-                .foregroundColor(.gray100)
+                .foregroundColor(.txtDisplaySecondary)
             
             Text("참여하시나요?")
                 .headBold24()
-                .foregroundColor(.gray100)
+                .foregroundColor(.txtDisplaySecondary)
             
             Text("상황에 맞는 봉투를 준비해드릴게요")
                 .bodyRegular14()
-                .foregroundColor(.gray400)
+                .foregroundColor(.txtDisplayTierary)
                 .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -154,49 +154,53 @@ struct EventTypeButton: View {
             HStack(spacing: 16) {
                 ZStack {
                     Circle()
-                        .fill(Color.black)
+                        .fill(.bgFieldPrimary)
                         .frame(width: 40, height: 40)
                     
                     switch eventType {
                     case .wedding:
-                        Image("icon_gift")
+                        Image("icon_wedding")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
+                            .tint(.iconFocusedPrimary)
                     case .funeral:
-                        Image("icon_bookmark")
+                        Image("icon_funeral1")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
+                            .tint(.iconFocusedPrimary)
                     case .birthday:
-                        Image("icon_users")
+                        Image("icon_baby")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
+                            .tint(.iconFocusedPrimary)
+                        
                     case .celebration:
-                        Image("icon_birth")
+                        Image("icon_birthday")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
+                            .tint(.iconFocusedPrimary)
                     }
                 }
                 
                 Text(eventType.rawValue)
                     .titleSemiBold16()
-                    .foregroundColor(.white)
+                    .foregroundColor(isSelected ? .txtInteractiveInverse : .txtInteractivePrimary)
                 
                 Spacer()
             }
             .padding(.horizontal, 20)
-            .frame(height: 70.adjustedH)
-//            .padding(.vertical, 18)
+            .frame(height: 68.adjustedH)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color("primary_normal") : Color.gray750)
+                    .fill(isSelected ? .bgStatusFocused : .btnInteractiveTierary)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color("primary_normal") : Color.gray750, lineWidth: 2)
+                    .stroke(isSelected ? .bgStatusFocused : .btnInteractiveTierary, lineWidth: 2)
             )
         }
         .buttonStyle(PlainButtonStyle())
@@ -211,12 +215,12 @@ struct NextButton: View {
         Button(action: action) {
             Text("다음")
                 .titleSemiBold18()
-                .foregroundColor(isEnabled ? .white : .gray500 )
+                .foregroundColor(isEnabled ? .txtInteractiveInverse : .txtStatusDisabled )
                 .frame(maxWidth: .infinity)
                 .frame(height: 55)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(isEnabled ? .primaryNormal : .primaryBg)
+                        .fill(isEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
                 )
         }
         .disabled(!isEnabled)

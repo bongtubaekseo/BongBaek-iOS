@@ -10,42 +10,38 @@ import SwiftUI
 struct WelcomeTextView: View {
     var body: some View {
         
-        VStack(alignment: .leading,spacing: 20) {
+        VStack(alignment: .leading,spacing: 16) {
+            
+            Image("bong2_logo")
+                .resizable()
+                .scaledToFill()
+                .frame(width: 48,height: 48)
+                .padding(.bottom, 8)
+            
+            
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 0) {
-                    Text("경조사비")
-                        .foregroundStyle(Color(hex: "#CDC9FF"))
+                    Text("경조사비 고민 끝,")
+                        .foregroundStyle(.txtDisplayPrimary)
                         .headBold26()
-                    
-                    Text(" 고민 끝,")
-                        .foregroundStyle(Color(hex: "#CDC9FF"))
-                        .headBold26()
-                    
+
                     Spacer()
                 }
                 
                 HStack(spacing: 0) {
-                    Text("봉투백서")
-                        .foregroundStyle(.white)
+                    Text("봉투백서에 오신 것을 환영합니다!")
+                        .foregroundStyle(.txtDisplayPrimary)
                         .headBold26()
-                    
-                    Text("에 오신 것을")
-                        .foregroundStyle(Color(hex: "#CDC9FF"))
-                        .headBold26()
-                    
+                
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text("환영합니다!")
-                    .foregroundStyle(Color(hex: "#CDC9FF"))
-                    .headBold26()
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             
             Text("3초 가입으로 바로 시작해보세요")
-                .foregroundStyle(.gray100)
-                .bodyMedium16()
+                .foregroundStyle(.txtDisplaySecondary)
+                .bodyRegular16()
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)

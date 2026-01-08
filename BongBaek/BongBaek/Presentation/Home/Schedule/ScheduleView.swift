@@ -12,42 +12,54 @@ struct ScheduleView: View {
     @EnvironmentObject var router: NavigationRouter
 
     private var sortedEvents: [Event] {
-           return events.sorted { $0.eventInfo.dDay > $1.eventInfo.dDay }
-       }
+        return events.sorted { $0.eventInfo.dDay < $1.eventInfo.dDay }
+    }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("\(UserDefaults.standard.memberName.isEmpty ? "봉백" : UserDefaults.standard.memberName)님의 일정")
-                    .font(.title_semibold_20)
-                    .foregroundStyle(.white)
-                
-                Spacer()
-
-                if !events.isEmpty {
-                    Button(action: {
-                        router.push(to: .fullScheduleView)
-                    }) {
-                        Text("더보기")
-                            .bodyRegular14()
-                            .foregroundColor(.gray)
-                            .padding(.vertical, 4)
-                            .padding(.horizontal, 8)
-                            .background(Color.clear)
-                    }
+                VStack(alignment: .leading, spacing: 2){
+                    Text("내 일정")
+                        .titleSemiBold20()
+                        .foregroundStyle(.txtDisplayPrimary)
+                    Text("나의 경조사 일정을 관리해보세요!")
+                        .captionRegular12()
+                        .foregroundStyle(.txtDisplayTierary)
                 }
+                Spacer()
+                
+                    Button(action: {
+                        NotificationCenter.default.post(
+                            name: .selectTab,
+                            object: Tab.record
+                        )
+                    }) {
+                        HStack(spacing: 0) {
+                            Text("더보기")
+                                .bodyRegular14()
+                                .foregroundColor(.txtDisplaySecondary)
+
+                            Image("icon_arrow")
+                                .renderingMode(.template)
+                                .foregroundColor(.txtDisplayTierary)
+                                .frame(width: 14, height: 14)
+                        }
+
+                    }
             }
             .padding(.bottom, 20)
-            
-            if events.isEmpty {
-                EmptyCardView()
-            } else {
-                ForEach(sortedEvents, id: \.eventId) { event in
-                    ScheduleCellView(event: event)
+                
+                if events.isEmpty {
+                    EmptyCardView()
+                } else {
+                    LazyVStack(spacing: 12) {
+                         ForEach(sortedEvents, id: \.eventId) { event in
+                             NewScheduleCellView(event: event)
+                         }
+                     }
                 }
             }
+            .padding(.horizontal, 20)
+            .background(.bgDisplayPrimary)
         }
-        .padding(.horizontal)
-        .background(Color.gray900)
     }
-}

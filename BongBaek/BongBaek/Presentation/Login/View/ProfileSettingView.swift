@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileSettingView: View {
+    @EnvironmentObject var router: NavigationRouter
     @StateObject private var viewModel = ProfileSettingViewModel()
     @State private var showDatePicker = false
     @FocusState private var focusedField: FocusField?
@@ -20,9 +21,14 @@ struct ProfileSettingView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomNavigationBar(title: "프로필 설정") {
-                dismiss()
+            HStack {
+                Spacer()
+                Text("프로필 설정")
+                    .titleSemiBold18()
+                    .foregroundStyle(.txtDisplayPrimary)
+                Spacer()
             }
+            .padding(.vertical, 12)
             
             ScrollView {
                 VStack {
@@ -32,12 +38,12 @@ struct ProfileSettingView: View {
                     incomeSelectionSection
                         .opacity(viewModel.hasIncome ? 1.0 : 0.0)
                         .animation(.easeInOut(duration: 0.4), value: viewModel.hasIncome)
-                        .padding(.bottom, 60)
+                        .padding(.bottom, 80)
+                    
+                    Spacer()
                     
                     startButton
                         .padding(.bottom, 36)
-                    
-                    Spacer()
                 }
             }
             .scrollIndicators(.hidden)
@@ -47,13 +53,12 @@ struct ProfileSettingView: View {
             .onTapGesture {
                 hideKeyboard()
             }
-        }
-        .navigationDestination(isPresented: $viewModel.navigateToMain) {
-            MainTabView()
+            
+            
         }
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .ignoresSafeArea(.container, edges: .bottom)
         .sheet(isPresented: $showDatePicker, onDismiss: {
             focusedField = nil
@@ -78,9 +83,9 @@ struct ProfileSettingView: View {
     private var textFieldSection: some View {
         VStack(spacing: 16) {
             CustomTextField(
-                title: "이름",
-                icon: "icon_person_16",
-                placeholder: "이름을 입력해주세요",
+                title: "닉네임",
+                icon: "icon_person",
+                placeholder: "닉네임을 입력해주세요",
                 text: $viewModel.nickname,
                 isValid: $viewModel.isNicknameValid,
                 validationRule: ValidationRule(
@@ -95,7 +100,7 @@ struct ProfileSettingView: View {
             
             CustomTextField(
                 title: "생년월일",
-                icon: "icon_calendar_16",
+                icon: "icon_calendar",
                 placeholder: "생년월일을 입력해주세요",
                 text: $viewModel.selectedDate,
                 isReadOnly: true,
@@ -115,13 +120,13 @@ struct ProfileSettingView: View {
         HStack {
             Text("현재 수입 있음")
                 .bodyMedium16()
-                .foregroundColor(.white)
+                .foregroundColor(.txtDisplayPrimary)
             
             Spacer()
             
             Toggle("", isOn: $viewModel.hasIncome)
                 .labelsHidden()
-                .tint(.primaryNormal)
+                .tint(.bgStatusFocused)
                 .onChange(of: viewModel.hasIncome) { _, newValue in
                     if !newValue {
                         viewModel.selectIncome(.none)
@@ -133,7 +138,7 @@ struct ProfileSettingView: View {
         .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
+                .fill(.bgDisplayCard)
         )
         .padding(.top, 20)
     }
@@ -142,7 +147,7 @@ struct ProfileSettingView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text("현재 수입은 어느 정도인가요?")
                 .titleSemiBold16()
-                .foregroundStyle(.gray100)
+                .foregroundStyle(.txtDisplaySecondary)
                 .padding(.bottom, 20)
             
             VStack(spacing: 12) {
@@ -156,7 +161,7 @@ struct ProfileSettingView: View {
         .padding(.bottom, 20)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
+                .fill(.bgDisplayCard)
         )
         .transition(.asymmetric(
             insertion: .move(edge: .top).combined(with: .opacity),
@@ -174,13 +179,13 @@ struct ProfileSettingView: View {
             HStack {
                 Text(selection.displayText)
                     .bodyRegular14()
-                    .foregroundStyle(.gray100)
+                    .foregroundStyle(.txtInteractivePrimary)
                 
                 Spacer()
                 
                 if viewModel.isSelected(selection) {
                     Image(systemName: "checkmark")
-                        .foregroundStyle(.primaryNormal)
+                        .foregroundStyle(.txtStatusFocused)
                         .font(.system(size: 12, weight: .semibold))
                         .transition(.scale.combined(with: .opacity))
                 }
@@ -195,7 +200,7 @@ struct ProfileSettingView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(
-                        viewModel.isSelected(selection) ? .primaryNormal : .commonLineNormal,
+                        viewModel.isSelected(selection) ? .borderStatusFocused : .borderFieldDefault,
                         lineWidth: viewModel.isSelected(selection) ? 2 : 1
                     )
             )
@@ -218,14 +223,14 @@ struct ProfileSettingView: View {
                 
                 Text("봉투백서 시작하기")
                     .titleSemiBold18()
-                    .foregroundColor(viewModel.isStartButtonEnabled ? .white : .gray500)
+                    .foregroundColor(viewModel.isStartButtonEnabled ? .txtInteractiveInverse : .txtStatusDisabled)
             }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(viewModel.isStartButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
+            .cornerRadius(12)
+            .contentShape(Rectangle())          
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(viewModel.isStartButtonEnabled ? .primaryNormal : .primaryBg)
-        .cornerRadius(12)
-        .padding(.top, 20)
         .disabled(!viewModel.isStartButtonEnabled || viewModel.isSigningUp)
         .animation(.easeInOut(duration: 0.2), value: viewModel.isStartButtonEnabled)
     }

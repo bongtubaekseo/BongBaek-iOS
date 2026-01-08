@@ -25,8 +25,11 @@ class LoginViewModel: ObservableObject {
     private var authCode: String = ""
     private var idToken: String = ""
     
-    init(authService: AuthServiceProtocol = DIContainer.shared.authService) {
+    private let urlOpener: URLOpenProtocol
+    
+    init(authService: AuthServiceProtocol = DIContainer.shared.authService,urlOpener:URLOpenProtocol = URLOpener() ) {
         self.authService = authService
+        self.urlOpener = urlOpener
     }
     
     func signUp(memberInfo: MemberInfo) {
@@ -75,7 +78,7 @@ class LoginViewModel: ObservableObject {
                             }
                         } else {
                             // ToDo: - 신규 회원/회원가입 필요
-                            self?.navigateToSignUp(kakaoId: data.kakaoId, kakaoAccessToken: data.kakaoAccessToken)
+                            self?.navigateToSignUp(kakaoId: data.oauthId ?? "", kakaoAccessToken: data.kakaoAccessToken)
                         }
                     } else {
                         self?.errorMessage = response.message
@@ -138,45 +141,33 @@ class LoginViewModel: ObservableObject {
 
 extension LoginViewModel {
     // MARK: - apple oauth
-    func requestAppleOauth() -> SignInWithAppleButton {
-        return SignInWithAppleButton(
-            onRequest: { request in
-                request.requestedScopes = [.fullName, .email]
-            },
-            onCompletion: { [weak self] result in
-                
-                guard let self = self else {
-                    print("self가 nil입니다.")
-                    return
-                }
-                
-                switch result {
-                case .success(let authResults):
-                    switch authResults.credential {
-                    case let appleIDCredential as ASAuthorizationAppleIDCredential:
-                        let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8) ?? ""
-                        let authorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) ?? ""
-                        
+    func handleAppleLoginSuccess(identityToken: String, authorizationCode: String) {
 
-                        print("애플 인증 성공 - idToken: \(identityToken), authCode: \(authorizationCode)")
-                        
-                        Task {
-                            await self.authManager.loginWithApple(idToken: identityToken)
-                        }
+        print("애플 인증 성공 - idToken: \(identityToken), authCode: \(authorizationCode)")
+        
+        self.authCode = authorizationCode
+        self.idToken = identityToken
+        
+        Task {
+            await authManager.loginWithApple(idToken: identityToken)
+        }
+    }
+    
+    func handleAppleLoginFailure(error: Error) {
+        isLoading = false
+        errorMessage = error.localizedDescription
+    }
+}
 
-                
-                         
-                        self.authCode = authorizationCode
-                        self.idToken = identityToken
-                        
-                    default:
-                        break
-                    }
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    print("애플 인증 에러 - \(error)")
-                }
-            }
-        )
+extension LoginViewModel {
+    
+    func openPrivacyPolicy() {
+        guard let url = URL(string: PrivacyUrls.personalInformationURL.rawValue) else {return}
+        urlOpener.openLink(url: url)
+    }
+    
+    func openTermsOfUse() {
+        guard let url = URL(string: PrivacyUrls.termsOfUseURL.rawValue) else {return}
+        urlOpener.openLink(url: url)
     }
 }

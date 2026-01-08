@@ -51,28 +51,33 @@ struct RecommendView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CustomNavigationBar(title: "관계정보") {
+            CustomNavigationBar(title: "관계 정보") {
                 dismiss()
             }
             
             StepProgressBar(currentStep: stepManager.currentStep, totalSteps: stepManager.totalSteps)
                 .padding(.horizontal, 20)
-                .padding(.bottom, 10)
+                .padding(.bottom, 20)
             
-            RecommendGuideTextView(
-                title1: "먼저, 마음을 전하고 싶은 분의",
-                title2: "정보를 적어주세요",
-                subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
-                subtitle2: "더 정확한 추천을 해드릴게요",
-                titleColor: .gray100
-            )
-            .padding(.leading, 20)
-            .padding(.top, 32)
-            .padding(.bottom,32)
+
 
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack {
+                        
+                        RecommendGuideTextView(
+                            title1: "먼저, 마음을 전하고 싶은 분의",
+                            title2: "정보를 적어주세요",
+                            subtitle1: "상대에 대한 정보와 관계를 말씀해주시면,",
+                            subtitle2: "더 정확한 추천을 해드릴게요",
+                            titleColor: .txtDisplaySecondary,
+                            subtitleColor: .txtDisplayTierary,
+                            titleSubtitleSpacing: 12
+                        )
+                        .padding(.leading, 20)
+                        .padding(.top, 22)
+                        .padding(.bottom,32)
+                        
                         userInfoSection
                         
                         relationshipHeaderSection
@@ -126,7 +131,7 @@ struct RecommendView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.background)
+        .background(Color.bgDisplayPrimary)
         .onTapGesture {
             hideKeyboard() // 전체 화면 터치 시 키보드 해제
         }
@@ -147,14 +152,15 @@ struct RecommendView: View {
     private var userInfoSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Image("icon_person_16")
+                Image("icon_person")
                     .renderingMode(.template)
-                    .foregroundColor(.primaryNormal)
-                    .frame(width: 22,height: 22)
+                    .resizable()
+                    .foregroundColor(.iconFocusedPrimary)
+                    .frame(width: 24,height: 24)
                 
                 Text("상대방의 이름과 별명을 알려주세요")
                     .titleSemiBold18()
-                    .foregroundStyle(.gray100)
+                    .foregroundStyle(.txtDisplaySecondary)
             }
             .padding(.bottom, 20)
             
@@ -188,7 +194,7 @@ struct RecommendView: View {
         .frame(maxWidth: .infinity, minHeight: 183)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(.gray750)
+                .fill(.bgDisplayCard)
                 .padding(.horizontal, 20)
         )
 //        .padding(.top, 32)
@@ -197,16 +203,16 @@ struct RecommendView: View {
     private var relationshipHeaderSection: some View {
         HStack {
             Image("icon_relation")
-                .frame(width: 20,height: 20)
+                .frame(width: 24,height: 24)
             
             Text("관계를 선택해주세요")
                 .titleSemiBold18()
-                .foregroundStyle(.gray100)
+                .foregroundStyle(.txtDisplaySecondary)
             
             Spacer()
         }
         .padding(.leading, 20)
-        .padding(.top, 20)
+        .padding(.top, 30)
     }
     
     private var relationshipGridSection: some View {
@@ -242,13 +248,13 @@ struct RecommendView: View {
         } label: {
             Text("다음")
                 .titleSemiBold18()
-                .foregroundStyle(isNextButtonEnabled ? .white : .gray500)
+                .foregroundStyle(isNextButtonEnabled ? .txtInteractiveInverse : .txtStatusDisabled)
                 .frame(maxWidth: .infinity)
                 .frame(height: 55)
         }
         .disabled(!isNextButtonEnabled)
         .frame(maxWidth: .infinity)
-        .background(isNextButtonEnabled ? .primaryNormal : .primaryBg)
+        .background(isNextButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
         .cornerRadius(12)
         .contentShape(Rectangle())
         .padding(.horizontal, 20)

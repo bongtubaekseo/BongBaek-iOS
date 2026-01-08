@@ -12,42 +12,43 @@ struct EmptyCardView: View {
     
     var body: some View {
         Button(action: {
-            router.push(to: .createEventViewAfterEvent)
+//            router.push(to: .createEventViewAfterEvent)
+            router.push(to: .createEventView)
         }) {
             VStack(spacing: 20) {
                 VStack {
                     Image("icon_plus")
-                        .foregroundColor(.black)
-                        .frame(width: 34, height: 34)
-                        .background(Circle().fill(Color(hex:"#6E7FFF")))
+                        .frame(width: 24, height: 24)
+                        
                 }
-                .padding(.top, 14)
+                .padding(.top, 12)
 
                 Text("예정된 일정이 없습니다")
-                    .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .bodyMedium14()
+                    .foregroundColor(.txtDisplaySecondary)
                     .padding(.bottom, -12)
                    
 
-                HStack(spacing: 4) {
-                    Text("일정추가하기")
+                HStack(spacing: 2) {
+                    Text("일정 추가하기")
                         .captionRegular12()
-                        .foregroundColor(.gray300)
+                        .foregroundColor(.txtDisplayTierary)
                     
-                    Image("icon_left")
-                        .foregroundColor(.gray400)
-                        .frame(width: 5, height: 10)
+                    Image("icon_arrow 1")
+                        .foregroundColor(.iconDisabledSecondary)
+                        .frame(width: 14, height: 14)
                 }
-                .padding(.vertical, 6)
-                .padding(.horizontal, 10)
-                .background(.gray900)
+                .padding(.vertical, 8)
+                .padding(.leading, 10)
+                .padding(.trailing, 4)
+                .background(.bgDisplayPrimary)
                 .cornerRadius(6)
                 .padding(.bottom, 14)
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
-            .background(.gray800)
+            .background(.bgFieldPrimary)
             .cornerRadius(10)
         }
         .buttonStyle(PlainButtonStyle())  // 기본 버튼 스타일 제거

@@ -28,7 +28,7 @@ struct RecommendStartView: View {
             .padding(.leading, 20)
             .padding(.top, 40.adjustedH)
 
-            Image("image_bong 1")
+            Image("recommend")
                 .frame(width: 335.adjusted,height: 335.adjustedH)
                 .padding(.top,20.adjustedH)
             
@@ -36,9 +36,9 @@ struct RecommendStartView: View {
                 Image("icon_protect")
                 Text("개인정보 보호모드 작동 중 ")
                     .bodyRegular14()
-                    .foregroundStyle(.gray300)
+                    .foregroundStyle(.txtDisplayTierary)
             }
-            .padding(.top,20.adjustedH)
+            .padding(.top,36.adjustedH)
             
             Button {
                 router.push(to: .recommendView)
@@ -47,11 +47,11 @@ struct RecommendStartView: View {
                     Spacer()
                     Text("금액 추천 시작하기")
                         .titleSemiBold18()
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.txtInteractiveInverse)
                     Spacer()
                 }
                 .frame(height: 55)
-                .background(.primaryNormal)
+                .background(.bgStatusFocused)
                 .cornerRadius(12)
             }
             .padding(.horizontal, 20)
@@ -61,9 +61,10 @@ struct RecommendStartView: View {
         }
         .onAppear {
             print("RecommendStartView 나타남 - path.count: \(router.path.count)")
+            stepManager.reset()
             eventManager.resetAllData()
          }
-        .background(Color.background)
+        .background(.bgDisplayPrimary)
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
     }

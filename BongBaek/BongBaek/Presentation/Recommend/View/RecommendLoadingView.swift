@@ -14,14 +14,14 @@ struct RecommendLoadingView: View {
     
     var body: some View {
         ZStack {
-            Color.gray900
+            Color.bgDisplayPrimary
                 .ignoresSafeArea(.all)
             
             VStack(spacing: 0) {
                 HStack {
                     Text("금액 추천 중")
                         .titleSemiBold18()
-                        .foregroundColor(.white)
+                        .foregroundColor(.txtDisplayPrimary)
                         .padding(.top, 20)
                 }
                 
@@ -33,11 +33,11 @@ struct RecommendLoadingView: View {
                     Text("\(UserDefaults.standard.memberName)님을 위한\n금액을 찾고 있어요")
                         .titleSemiBold18()
                         .multilineTextAlignment(.center)
-                        .foregroundColor(.gray100)
+                        .foregroundColor(.txtDisplaySecondary)
                                     
                     Text("잠시만 기다려주세요")
                         .bodyRegular14()
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtDisplayTierary)
                     
                     Spacer()
                 }

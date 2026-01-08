@@ -55,13 +55,13 @@ struct RecommendLottie: View {
                         Spacer()
                         Text("추천 금액")
                             .titleSemiBold18()
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.txtDisplayPrimary)
                         
                         Spacer()
                     }
                     .padding(.top, 10)
                     .padding(.bottom, 16)
-                    .background(Color.gray900)
+                    .background(.bgDisplayPrimary)
                     
                     ScrollView {
                         VStack(spacing: 24) {
@@ -119,7 +119,7 @@ struct RecommendLottie: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
     }
 
     var headerSection: some View {
@@ -127,24 +127,26 @@ struct RecommendLottie: View {
             VStack(spacing: 20) {
                 Text(eventCategory)
                     .bodyMedium14()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtStatusFocused)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
-                    .background(
+                    .background(Color.bgDisplayCard)
+                    .cornerRadius(6)
+                    .overlay(
                         RoundedRectangle(cornerRadius: 6)
-                            .stroke(.primaryNormal, lineWidth: 1)
-                            .background(.gray750)
+                            .stroke(Color.bgDisplayCard, lineWidth: 1)
                     )
+                    .padding(.top, -6)
 
                 VStack(spacing: 0) {
                     Text("추천 금액")
                         .captionRegular12()
-                        .foregroundColor(.white)
+                        .foregroundColor(.txtInteractiveInverse)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
                         .background(
                             RoundedRectangle(cornerRadius: 4)
-                                .fill(.primaryNormal)
+                                .fill(.bgStatusFocused)
                         )
 
                     HStack(alignment: .bottom, spacing: 4) {
@@ -163,26 +165,27 @@ struct RecommendLottie: View {
 
                         Text("원")
                             .titleSemiBold22()
-                            .foregroundColor(.gray600)
+                            .foregroundColor(.txtDisplayTierary)
                             .padding(.bottom, 8)
+                            .offset(y: -8)
                     }
                     .padding(.top, 6)
 
                     VStack(spacing: 6) {
                         Text("적절한 금액이에요!")
                             .bodyMedium16()
-                            .foregroundColor(.white)
+                            .foregroundColor(.txtInteractiveInverse)
 
                         Text("알려주신 정보를 고려한 추천입니다")
                             .bodyRegular14()
-                            .foregroundColor(.gray200)
+                            .foregroundColor(.txtInteractiveInverse)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, 30)
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(.gray750.opacity(0.6))
+                            .fill(.bgCard.opacity(0.4))
                     )
                     .padding(.top, 20)
                 }
@@ -213,21 +216,29 @@ struct RecommendLottie: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("적정 범위")
                 .titleSemiBold18()
-                .foregroundColor(.white)
+                .foregroundColor(.txtDisplaySecondary)
 
             VStack(spacing: 8) {
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(Color(hex: "#292929"))
+                            .fill(.bgDisplayRange)
                             .frame(height: 12)
+                            .overlay(
+                                Capsule()
+                                    .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                                    .blur(radius: 2)
+                                    .offset(x: 0, y: 2)
+                                    .mask(Capsule())
+                            )
+                            .clipShape(Capsule())
 
                         Capsule()
                             .fill(
                                 LinearGradient(
                                     colors: [
-                                        Color(hex: "#502EFF"),
-                                        Color(hex: "#807FFF"),
+                                        Color(hex: "#6E7FFF"),
+                                        Color(hex: "#6F53FF"),
                                     ],
                                     startPoint: .leading,
                                     endPoint: .trailing
@@ -242,13 +253,13 @@ struct RecommendLottie: View {
                 HStack {
                     Text("\(minAmount)원")
                         .captionRegular12()
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtDisplayTierary)
 
                     Spacer()
 
                     Text("\(maxAmount)원")
                         .captionRegular12()
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtDisplayTierary)
                 }
             }
         }
@@ -256,7 +267,7 @@ struct RecommendLottie: View {
         .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color.black)
+                .fill(.bgDisplayCard)
         )
     }
     
@@ -264,21 +275,29 @@ struct RecommendLottie: View {
         VStack(alignment: .leading, spacing: 16) {
             Text("적정 범위")
                 .titleSemiBold18()
-                .foregroundColor(.white)
+                .foregroundColor(.txtDisplaySecondary)
 
             VStack(spacing: 8) {
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(Color(hex: "#292929"))
+                            .fill(.bgDisplayRange)
                             .frame(height: 12)
+                            .overlay(
+                                Capsule()
+                                    .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                                    .blur(radius: 2)
+                                    .offset(x: 0, y: 2)
+                                    .mask(Capsule())
+                            )
+                            .clipShape(Capsule())
 
                         Capsule()
                             .fill(
                                 LinearGradient(
                                     colors: [
-                                        Color(hex: "#502EFF"),
-                                        Color(hex: "#807FFF"),
+                                        Color(hex: "#6E7FFF"),
+                                        Color(hex: "#6F53FF"),
                                     ],
                                     startPoint: .leading,
                                     endPoint: .trailing
@@ -293,13 +312,13 @@ struct RecommendLottie: View {
                 HStack {
                     Text("\(minAmount)원")
                         .captionRegular12()
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtDisplayTierary)
 
                     Spacer()
 
                     Text("\(maxAmount)원")
                         .captionRegular12()
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtDisplayTierary)
                 }
             }
         }
@@ -307,7 +326,7 @@ struct RecommendLottie: View {
         .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color.black)
+                .fill(.bgDisplayCard)
         )
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now()) {
@@ -323,52 +342,52 @@ struct RecommendLottie: View {
                 Image("icon_info")
                 Text("이렇게 계산했어요")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplaySecondary)
                 Spacer()
             }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("• 월 수입 고려")
                     .bodyRegular16()
-                    .foregroundColor(.gray400)
+                    .foregroundColor(.txtDisplayTierary)
                 Text("• 식사 참석 여부")
                     .bodyRegular16()
-                    .foregroundColor(.gray400)
+                    .foregroundColor(.txtDisplayTierary)
             }
         }
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color("gray750"))
+                .fill(.bgDisplayCard)
         )
     }
 
     var participationSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Image("icon_colorcheck")
+                Image("icon_check 5")
                 Text("참고해주세요!")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplaySecondary)
                 Spacer()
             }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("• 홀수 금액으로 준비해주세요")
                     .bodyRegular16()
-                    .foregroundColor(.gray400)
+                    .foregroundColor(.txtDisplayTierary)
                 Text("• 새 지폐로 준비하는게 좋아요")
                     .bodyRegular16()
-                    .foregroundColor(.gray400)
+                    .foregroundColor(.txtDisplayTierary)
                 Text("• 봉투에 정성스럽게 마음을 표현해보세요")
                     .bodyRegular16()
-                    .foregroundColor(.gray400)
+                    .foregroundColor(.txtDisplayTierary)
             }
         }
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color("gray750"))
+                .fill(.bgDisplayCard)
         )
     }
 
@@ -396,11 +415,11 @@ struct RecommendLottie: View {
             } label: {
                 Text("이 금액으로 결정하기")
                     .font(.title_semibold_18)
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtInteractiveInverse)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 18)
             }
-            .background(Color("primary_normal"))
+            .background(.bgStatusFocused)
             .cornerRadius(10)
             .disabled(isSubmitting)
 
@@ -411,11 +430,11 @@ struct RecommendLottie: View {
             } label: {
                 Text("추천받은 금액 수정하기")
                     .font(.title_semibold_18)
-                    .foregroundColor(.gray200)
+                    .foregroundColor(.txtInteractiveSecondary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 18)
             }
-            .background(Color("gray700"))
+            .background(.btnInteractiveSecondary)
             .cornerRadius(10)
         }
         .padding(.horizontal, 20)
@@ -426,42 +445,45 @@ struct RecommendLottie: View {
             HStack(spacing: 8) {
                 ZStack {
                     Circle()
-                        .fill(.gray900)
+                        .fill(.bgDisplayPrimary)
                         .frame(width: 40, height: 40)
-                    Image("icon_star")
+                    Image("icon_event")
+                        .frame(width: 24, height: 24)
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text("경조사 종류")
                         .captionRegular12()
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtDisplayTierary)
                     Text(eventCategory)
                         .bodyMedium16()
-                        .foregroundColor(.white)
+                        .foregroundColor(.txtDisplaySecondary)
                 }
                 Spacer()
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
-            .frame(maxWidth: .infinity, minHeight: 70)
+            .frame(maxWidth: .infinity)
+            .frame(height: 70)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color("gray750"))
+                    .fill(.bgDisplayCard)
             )
 
             HStack(spacing: 8) {
                 ZStack {
                     Circle()
-                        .fill(.gray900)
+                        .fill(.bgDisplayPrimary)
                         .frame(width: 40, height: 40)
-                    Image("icon_location 2")
+                    Image("icon_location 7")
+                        .frame(width: 24, height: 24)
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text("장소")
                         .captionRegular12()
-                        .foregroundColor(.gray400)
+                        .foregroundColor(.txtDisplayTierary)
                     Text(eventLocation)
                         .bodyMedium16()
-                        .foregroundColor(.white)
+                        .foregroundColor(.txtDisplaySecondary)
                 }
                 Spacer()
             }
@@ -472,7 +494,7 @@ struct RecommendLottie: View {
 
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color("gray750"))
+                    .fill(.bgDisplayCard)
             )
         }
         .frame(maxWidth: .infinity)

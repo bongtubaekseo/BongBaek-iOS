@@ -43,19 +43,20 @@ struct AccountDeletionView: View {
                 print("123")
                 router.pop()
             }
-            
-            VStack(alignment: .leading,spacing: 12.adjustedH) {
-                Text("탈퇴를 도와드릴게요")
-                    .font(.head_bold_24)
-                    .foregroundStyle(.gray100)
-                
-                Text("더 나은 서비스를 위해 탈퇴 이유를 알려주세요")
-                    .font(.body2_regular_14)
-                    .foregroundStyle(.gray400)
+            if !(selectedReason == "기타" && isOtherReasonExpanded){
+                VStack(alignment: .leading,spacing: 12.adjustedH) {
+                    Text("탈퇴를 도와드릴게요")
+                        .headBold24()
+                        .foregroundStyle(.txtDisplaySecondary)
+                    
+                    Text("더 나은 서비스를 위해 탈퇴 이유를 알려주세요")
+                        .bodyRegular14()
+                        .foregroundStyle(.txtDisplayTierary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 20)
+                .padding(.leading, 20)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.top, 10.adjustedH)
-            .padding(.leading, 20)
             
             ScrollViewReader { proxy in
                 VStack(spacing: 12.adjustedH) {
@@ -73,8 +74,8 @@ struct AccountDeletionView: View {
                     }
                 }
                 .padding(20)
-                .background(.gray800)
-                .cornerRadius(12)
+                .background(.bgDisplaySecondary)
+                .cornerRadius(10)
                 .padding(.horizontal, 20)
                 .padding(.top, 20.adjustedH)
                 .animation(.easeInOut(duration: 0.3), value: displayedReasons)
@@ -105,12 +106,12 @@ struct AccountDeletionView: View {
             }) {
                 Text("탈퇴하기")
                     .font(.title_semibold_18)
-                    .foregroundColor(isDeleteButtonEnabled ? .white : .gray500) // 수정
+                    .foregroundColor(isDeleteButtonEnabled ? .txtInteractiveInverse : .txtStatusDisabled)
                     .frame(maxWidth: .infinity)
                     .frame(height: 55)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(isDeleteButtonEnabled ? .primaryNormal : .primaryBg) // 수정
+                            .fill(isDeleteButtonEnabled ? .bgStatusFocused : .btnInteractiveDisabled)
                     )
             }
             .disabled(!isDeleteButtonEnabled)
@@ -121,7 +122,7 @@ struct AccountDeletionView: View {
              
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .alert("봉투백서를 탈퇴하시겠습니까?", isPresented: $showDeleteAlert) {
             Button("취소", role: .cancel) {
                 
@@ -261,46 +262,52 @@ struct DeletionReasonButton: View {
     @FocusState.Binding var isTextFieldFocused: Bool
     @Binding var isOtherReasonExpanded: Bool // 추가
     
+    private var textColor : Color{
+        if isSelected {
+            return .txtInteractivePrimary
+        } else if hasAnySelection {
+            return .txtStatusDisabled
+        } else {
+            return .txtInteractivePrimary
+        }
+    }
+    
+    private var iconColor : Color {
+        if isSelected {
+            return .iconFocusedPrimary
+        } else if hasAnySelection {
+            return .iconDisabledPrimary
+        } else {
+            return .iconInteractiveDefault
+        }
+    }
+    
     var body: some View {
         if title == "기타" {
             if isSelected && isOtherReasonExpanded {
                 VStack(spacing: 0) {
-                    HStack(spacing: 12) {
-          
+                    HStack(alignment: .top, spacing: 12) {
                         Image(getImageName())
                             .resizable()
+                            .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20)
                             .clipped()
+                            .foregroundColor(iconColor)
+                            .padding(.top, 16)
                         
-                        Text("기타")
+                        VStack(alignment: .leading, spacing: 0) {
+                            TextField("기타 사유를 입력해주세요",
+                                      text: $otherReasonText,
+                                      prompt: Text("기타 사유를 입력해주세요")
+                                .foregroundColor(.txtDisplayTierary),
+                                      axis: .vertical)
+                            
                             .font(.body1_medium_16)
-                            .foregroundColor(.gray100)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Spacer()
-                    }
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 16)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            isOtherReasonExpanded = false
-                        }
-                        isTextFieldFocused = false
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        TextField("기타 사유를 입력해주세요",
-                                  text: $otherReasonText,
-                                  prompt: Text("기타 사유를 입력해주세요")
-                            .foregroundColor(.gray500),
-                                  axis: .vertical)
-                              
-                            .font(.body1_medium_16)
-                            .foregroundColor(.white)
+                            .foregroundColor(.txtInteractivePrimary)
                             .focused($isTextFieldFocused)
                             .lineLimit(3...6)
+                            .padding(.vertical, 16)
                             .onSubmit {
                                 isTextFieldFocused = false
                             }
@@ -315,23 +322,26 @@ struct DeletionReasonButton: View {
                                     otherReasonText = String(newValue.prefix(50))
                                 }
                             }
-                        
-                        HStack {
-                            Spacer()
-                            Text("\(otherReasonText.count)/50")
-                                .font(.caption)
-                                .foregroundColor(.gray500)
+                            
+                            HStack {
+                                Spacer()
+                                Text("\(otherReasonText.count)/50")
+                                    .font(.caption_regular_12)
+                                    .foregroundColor(.txtDisplaySecondary)
+                                    .padding(.trailing, 12)
+                                    .padding(.bottom, 12)
+                            }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 16)
+                    .padding(.leading, 16)
                 }
-                .background(.gray750)
+                .background(.btnInteractiveDisabled)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.primaryNormal, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.borderStatusFocused, lineWidth: 2)
                 )
-                .cornerRadius(8)
+                .cornerRadius(10)
             } else {
                 Button(action: {
                     if isSelected {
@@ -348,29 +358,32 @@ struct DeletionReasonButton: View {
                     HStack(spacing: 12) {
                         Image(getImageName())
                             .resizable()
+                            .renderingMode(.template)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20)
                             .clipped()
+                            .foregroundColor(iconColor)
                         
                         Text(otherReasonText.isEmpty ? "기타" : otherReasonText)
                             .font(.body1_medium_16)
-                            .foregroundColor(.gray100)
+                            .foregroundColor(textColor)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .lineLimit(1)
                         
                         Spacer()
                     }
-                    .padding(.vertical, 16)
+                    .padding(.vertical, 14)
                     .padding(.horizontal, 16)
-                    .background(.gray750)
+                    .background(isSelected ? Color.btnInteractiveDisabled : Color.btnInteractiveTierary)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(
-                                isSelected ? Color.primaryNormal : Color.gray750,
-                                lineWidth: 1
-                            )
+                        Group {
+                            if isSelected {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.borderStatusFocused, lineWidth: 2)
+                            }
+                        }
                     )
-                    .cornerRadius(8)
+                    .cornerRadius(10)
                 }
                 .buttonStyle(PlainButtonStyle())
             }
@@ -379,39 +392,37 @@ struct DeletionReasonButton: View {
                 HStack(spacing: 12) {
                     Image(getImageName())
                         .resizable()
+                        .renderingMode(.template)
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 20, height: 20)
                         .clipped()
+                        .foregroundColor(iconColor)
                     
                     Text(title)
                         .font(.body1_medium_16)
-                        .foregroundColor(.gray100)
+                        .foregroundColor(textColor)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Spacer()
                 }
-                .padding(.vertical, 16)
+                .padding(.vertical, 14)
                 .padding(.horizontal, 16)
-                .background(.gray750)
+                .background(isSelected ? Color.btnInteractiveDisabled : Color.btnInteractiveTierary)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(
-                            isSelected ? Color.primaryNormal : Color.gray750,
-                            lineWidth: 1
-                        )
+                    Group {
+                        if isSelected {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.borderStatusFocused, lineWidth: 2)
+                        }
+                    }
                 )
-                .cornerRadius(8)
+                .cornerRadius(10)
             }
             .buttonStyle(PlainButtonStyle())
-//            .animation(.easeInOut(duration: 0.2), value: isSelected)
         }
     }
     
     private func getImageName() -> String {
-        if !hasAnySelection {
-            return "Exclude 2"
-        } else {
-            return isSelected ? "Exclude 1" : "Exclude 2"
-        }
+        return "Exclude 2"
     }
 }

@@ -17,16 +17,16 @@ class KakaoLoginManager {
                 UserApi.shared.loginWithKakaoTalk { oauthToken, error in
                     if let error = error {
                         continuation.resume(throwing: error)
-                    } else if let accessToken = oauthToken?.accessToken {
-                        continuation.resume(returning: accessToken)
+                    } else if let idToken = oauthToken?.idToken {
+                        continuation.resume(returning: idToken)
                     }
                 }
             } else {
                 UserApi.shared.loginWithKakaoAccount { oauthToken, error in
                     if let error = error {
                         continuation.resume(throwing: error)
-                    } else if let accessToken = oauthToken?.accessToken {
-                        continuation.resume(returning: accessToken)
+                    } else if let idToken = oauthToken?.idToken {
+                        continuation.resume(returning: idToken)
                     }
                 }
             }

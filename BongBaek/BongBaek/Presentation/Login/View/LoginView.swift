@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import _AuthenticationServices_SwiftUI
 
 struct LoginView: View {
     @State var isPresented = false
@@ -13,9 +14,7 @@ struct LoginView: View {
     @EnvironmentObject var appStateManager: AppStateManager
     @StateObject private var loginViewModel = LoginViewModel()
     @State private var test = false
-    @Environment(\.openURL) private var openURL
-    
-    
+
    var body: some View {
        
        NavigationStack {
@@ -23,22 +22,21 @@ struct LoginView: View {
                
                VStack {
                    WelcomeTextView()
-                       .padding(.top, 144.adjustedH)
+                       .padding(.top, 133.adjustedH)
                        .padding(.leading, 20)
                }
                
                Spacer()
                
                VStack(spacing: 0) {
-                   
-                   VStack(spacing: 20) {
+                   VStack(spacing: 12) {
                        Button(action: {
 
                        }) {
                            Image("btn_login_apple")
                                .resizable()
                                .scaledToFill()
-                               .frame(height: 55.adjustedH)
+                               .frame(height: 54.adjustedH)
                                .clipped()
                                .cornerRadius(8)
 
@@ -51,12 +49,8 @@ struct LoginView: View {
                            ProgressView().tint(.white) : nil
                        )
                        .overlay {
-                           loginViewModel.requestAppleOauth()
-                               .frame(maxWidth: 375)
-                               .frame(height: 44)
-                               .blendMode(.hue)
+                           appleLoginButton
                        }
-                       
                        
                        Button(action: {
                            appStateManager.loginWithKakao()
@@ -84,35 +78,31 @@ struct LoginView: View {
                    VStack(alignment: .leading,spacing: 0) {
                        Text("로그인하시면 아래 내용에 동의하는 것으로 간주됩니다.")
                            .captionRegular12()
-                           .foregroundStyle(.white)
+                           .foregroundStyle(.txtDisplayTierary)
 
                        HStack {
                            Text("개인정보 처리방침")
                                .captionRegular12()
-                               .foregroundStyle(.white)
+                               .foregroundStyle(.txtDisplayTierary)
                                .underline()
                                .onTapGesture {
-                                   if let url = URL(string: "https://www.notion.so/264f06bb0d3480d0b1eafa217b306105") {
-                                       openURL(url)
-                                   }
+                                   loginViewModel.openPrivacyPolicy()
                                }
 
                            Text("이용약관")
                                .captionRegular12()
-                               .foregroundStyle(.white)
+                               .foregroundStyle(.txtDisplayTierary)
                                .underline()
                                .padding(.leading, 12)
                                .onTapGesture {
-                                   if let url = URL(string: "https://www.notion.so/bongtubaekseo/264f06bb0d348036b260f175a236ec7c") {
-                                       openURL(url)
-                                   }
+                                   loginViewModel.openTermsOfUse()
                                }
                        }
                        .padding(.leading, 50)
-                       .padding(.top,12)
+                       .padding(.top,4)
                    }
                    .padding(.horizontal, 20)
-                   .padding(.top,12.adjustedH)
+                   .padding(.top,20.adjustedH)
                }
                
                Rectangle()
@@ -120,12 +110,7 @@ struct LoginView: View {
                    .foregroundStyle(.clear)
 
            }
-           .background(
-               Image("onboarding_ios")
-                   .resizable()
-                   .scaledToFill()
-                   .ignoresSafeArea()
-           )
+           .background(.bgDisplaySecondary)
            .navigationDestination(isPresented: $showProfileSetting) {
                ProfileSettingView()
            }
@@ -141,9 +126,37 @@ struct LoginView: View {
                    showProfileSetting = true
                }
            )
-           .presentationDetents([.height(439.adjustedH)])
+           .presentationDetents([.height(433.adjustedH)])
            .presentationDragIndicator(.visible)
        }
    }
+    
+    private var appleLoginButton: some View {
+        SignInWithAppleButton(
+            onRequest: { request in
+                request.requestedScopes = [.fullName, .email]
+                
+            },
+            onCompletion: { result in
+                switch result {
+                    
+                case .success(let authResults):
+                    if let appleIDCredential = authResults.credential as? ASAuthorizationAppleIDCredential {
+                        let identityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8) ?? ""
+                        let authorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) ?? ""
+                        print("애플 인증 성공 - idToken: \(identityToken), authCode: \(authorizationCode)")
+                        loginViewModel.handleAppleLoginSuccess(identityToken: identityToken, authorizationCode: authorizationCode)
+                        
+                    }
+                case .failure(let error):
+                    print("error")
+                    loginViewModel.handleAppleLoginFailure(error: error)
+                }
+            }
+        )
+        .frame(maxWidth: 375)
+        .frame(height: 44)
+        .blendMode(.hue)
+    }
 }
 

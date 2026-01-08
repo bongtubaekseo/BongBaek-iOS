@@ -8,7 +8,7 @@
 import SwiftUI
 
 class GlobalStepManager: ObservableObject {
-    @Published var currentStep: Int = 1
+    @Published var currentStep: Int = 0
     let totalSteps: Int = 4
     
     func nextStep() {
@@ -18,13 +18,13 @@ class GlobalStepManager: ObservableObject {
     }
     
     func previousStep() {
-        if currentStep > 1 {
+        if currentStep > 0 {
             currentStep -= 1
         }
     }
     
-    func resetToFirstStep() {
-        currentStep = 1
+    func reset() {
+        currentStep = 0
     }
     
     var isLastStep: Bool {

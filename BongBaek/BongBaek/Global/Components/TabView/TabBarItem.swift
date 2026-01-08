@@ -10,7 +10,8 @@ import SwiftUI
 struct TabBarItem: View {
     let tab: Tab
     @Binding var selectedTab: Tab
-    let imageName: String
+    let selectedImageName: String
+    let unselectedImageName: String
     let title: String
     
     private var isSelected: Bool {
@@ -22,16 +23,16 @@ struct TabBarItem: View {
             selectedTab = tab
         } label: {
             VStack(spacing: 8) {
-                Image(imageName)
+                Image(isSelected ? selectedImageName : unselectedImageName) 
                     .renderingMode(.template)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 30, height: 30)
-                    .foregroundStyle(isSelected ? .white : .gray400)
+                    .foregroundStyle(isSelected ? .iconSelectedMenu : .iconDisabledPrimary)
                 
                 Text(title)
                     .bodyRegular14()
-                    .foregroundStyle(isSelected ? .white : .gray400)
+                    .foregroundStyle(isSelected ? .txtDisplayPrimary : .txtStatusDisabled)
             }
         }
         .frame(maxWidth: .infinity)

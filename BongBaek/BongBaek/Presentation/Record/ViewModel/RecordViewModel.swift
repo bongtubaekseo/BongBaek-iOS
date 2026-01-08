@@ -20,6 +20,9 @@ enum Category: String, CaseIterable {
 @MainActor
 class RecordViewModel: ObservableObject {
     
+    @Published var selectedYear: Int = Calendar.current.component(.year, from: Date())
+    @Published var selectedMonth: Int = Calendar.current.component(.month, from: Date())
+    
     @Published var isDeleteMode = false
     @Published var selectedSection: RecordSection = .attended
     @Published var selectedCategory: EventsCategory = .all
@@ -62,6 +65,39 @@ class RecordViewModel: ObservableObject {
         case .notAttended:
             return notAttendedEvents
         }
+    }
+    
+    // 이전 달로 이동
+    func moveToPreviousMonth() {
+        if selectedMonth == 1 {
+            selectedYear -= 1
+            selectedMonth = 12
+        } else {
+            selectedMonth -= 1
+        }
+        
+        Task {
+            await loadAllRecords()
+        }
+    }
+    
+    // 다음 달로 이동
+    func moveToNextMonth() {
+        if selectedMonth == 12 {
+            selectedYear += 1
+            selectedMonth = 1
+        } else {
+            selectedMonth += 1
+        }
+        
+        Task {
+            await loadAllRecords()
+        }
+    }
+    
+    // 연월 문자열 반환 (예: "2025년 12월")
+    var currentYearMonthText: String {
+        return "\(selectedYear)년 \(selectedMonth)월"
     }
     
     var currentEventsGrouped: [String: [String: [AttendedEvent]]] {
@@ -115,32 +151,32 @@ class RecordViewModel: ObservableObject {
         case .attended:
             switch selectedCategory {
             case .babyParty:
-                return "참석한 돌잔치가 없습니다"
+                return "기록한 돌잔치가 없어요!"
             case .wedding:
-                return "참석한 결혼식이 없습니다"
+                return "기록한 결혼식이 없어요!"
             case .birthday:
-                return "참석한 생일이 없습니다"
+                return "기록한 생일이 없어요!"
             case .funeral:
-                return "참석한 장례식이 없습니다"
+                return "기록한 장례식이 없어요!"
             case .all:
-                return "참석한 경조사가 없습니다"
+                return "기록한 경조사가 없어요!"
             default:
-                return "참석한 경조사가 없습니다"
+                return "기록한 경조사가 없어요!"
             }
         case .notAttended:
             switch selectedCategory {
             case .babyParty:
-                return "불참한 돌잔치가 없습니다"
+                return "불참한 돌잔치가 없어요!"
             case .wedding:
-                return "불참한 결혼식이 없습니다"
+                return "불참한 결혼식이 없어요!"
             case .birthday:
-                return "불참한 생일이 없습니다"
+                return "불참한 생일이 없어요!"
             case .funeral:
-                return "불참한 장례식이 없습니다"
+                return "불참한 장례식이 없어요!"
             case .all:
-                return "불참한 경조사가 없습니다"
+                return "불참한 경조사가 없어요!"
             default:
-                return "불참한 경조사가 없습니다"
+                return "불참한 경조사가 없어요!"
             }
         }
     }
@@ -170,7 +206,7 @@ class RecordViewModel: ObservableObject {
         
         // 해당 섹션 데이터가 없으면 로드
         Task {
-            await loadSectionDataIfNeeded()
+            await loadAllRecords()
         }
     }
     
@@ -312,11 +348,14 @@ class RecordViewModel: ObservableObject {
             let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
             
             print(" 참석 이벤트 로드 - 페이지: \(attendedCurrentPage), 카테고리: \(categoryParam ?? "전체")")
+            print("월별 이벤트 로드 - \(selectedYear)년 \(selectedMonth)월")
             
             let response = try await eventService.getAttendedEvents(
                 page: attendedCurrentPage,
                 attended: true,  // 참석한 이벤트
-                category: categoryParam
+                category: categoryParam,
+                year: selectedYear,
+                month: selectedMonth
             ).async()
             
             if response.isSuccess, let data = response.data {
@@ -354,11 +393,14 @@ class RecordViewModel: ObservableObject {
             let categoryParam = selectedCategory == .all ? nil : selectedCategory.apiValue
             
             print("불참 이벤트 로드 - 페이지: \(notAttendedCurrentPage), 카테고리: \(categoryParam ?? "전체")")
+            print("월별 이벤트 로드 - \(selectedYear)년 \(selectedMonth)월")
             
             let response = try await eventService.getAttendedEvents(
                 page: notAttendedCurrentPage,
                 attended: false,  // 불참한 이벤트
-                category: categoryParam
+                category: categoryParam,
+                year: selectedYear,
+                month: selectedMonth
             ).async()
             
             if response.isSuccess, let data = response.data {

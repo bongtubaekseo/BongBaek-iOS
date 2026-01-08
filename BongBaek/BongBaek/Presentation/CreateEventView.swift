@@ -24,6 +24,10 @@ struct CreateEventView: View {
     @State private var selectedDate: String = ""
     @State private var showLargeMapView = false // Sheet 제어용
     
+    @State private var isNicknameValid = false
+    @State private var isAliasValid = false
+    @State private var isMoneyValid = false
+    
     // API 상태
     @State private var isSubmitting = false
     @State private var submitError: String?
@@ -59,7 +63,7 @@ struct CreateEventView: View {
                 }) {
                     Text("취소")
                         .bodyRegular16()
-                        .foregroundStyle(.gray200)
+                        .foregroundStyle(.txtInteractiveSecondary)
                 }
                 .frame(width: 44, height: 44)
                 .padding(.leading, -8)
@@ -68,7 +72,7 @@ struct CreateEventView: View {
                 
                 Text("경조사 기록하기")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplayPrimary)
                 
                 Spacer()
                 
@@ -78,7 +82,7 @@ struct CreateEventView: View {
             .padding(.horizontal, 20)
             .padding(.top, 4)
             .padding(.bottom, 16)
-            .background(.gray900)
+            .background(.bgDisplayPrimary)
             
             // 스크롤 가능한 콘텐츠
             ScrollView {
@@ -87,14 +91,17 @@ struct CreateEventView: View {
                         VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
-                                icon: "icon_person_16",
+
+                                icon: "icon_person",
+
                                 placeholder: "이름을 입력하세요",
                                 text: $nickname,
+                                isValid: $isNicknameValid,
                                 validationRule: ValidationRule(
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
@@ -105,11 +112,12 @@ struct CreateEventView: View {
                                 icon: "icon_nickname",
                                 placeholder: "별명을 입력하세요",
                                 text: $alias,
+                                isValid: $isAliasValid,
                                 validationRule: ValidationRule(
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
@@ -126,9 +134,12 @@ struct CreateEventView: View {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
-                                    icon: "icon_coin_16",
+
+                                    icon: "icon_coin",
+
                                     placeholder: "금액을 입력하세요",
                                     text: $money,
+                                    isValid: $isMoneyValid,
                                     validationRule: ValidationRule(
                                         customRule: { input in
                                             guard let amount = Int(input), amount > 0 else {
@@ -145,13 +156,15 @@ struct CreateEventView: View {
                                 
                                 Text("원")
                                     .bodyRegular16()
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.txtDisplayPrimary)
                                     .padding(.top, 24)
                             }
                             
                             CustomDropdown(
                                 title: "참석여부",
-                                icon: "icon_check 1",
+
+                                icon: "icon_check 4",
+
                                 placeholder: "참석여부를 선택하세요",
                                 items: attendItems,
                                 selectedItem: $selectedAttend
@@ -166,7 +179,7 @@ struct CreateEventView: View {
                             
                             CustomTextField(
                                 title: "날짜",
-                                icon: "icon_calendar_16",
+                                icon: "icon_calendar",
                                 placeholder: "날짜를 선택하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
@@ -188,7 +201,7 @@ struct CreateEventView: View {
                         .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
-                    .background(.gray800)
+                    .background(.bgDisplaySecondary)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -209,16 +222,19 @@ struct CreateEventView: View {
                                     .titleSemiBold18()
                                     .foregroundColor(.white)
                             }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 55)
                         } else {
                             Text("기록하기")
                                 .titleSemiBold18()
                                 .foregroundColor(isFormValid ? .white : .gray500)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 55)
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 55)
                     .background(isFormValid ? .primaryNormal : .primaryBg)
                     .cornerRadius(12)
+                    .contentShape(Rectangle())
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
                     .disabled(!isFormValid || isSubmitting)
@@ -237,7 +253,7 @@ struct CreateEventView: View {
                 hideKeyboard()
             }
         }
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
@@ -259,14 +275,15 @@ struct CreateEventView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 6")
-                        .renderingMode(.template)
+                    Image("icon_eventLocation")
+                        .resizable()
+                      //  .renderingMode(.template)
                         .frame(width: 20,height: 20)
-                        .foregroundStyle(.gray400)
+                      //  .foregroundStyle(.iconFocusedPrimary)
 
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray100)
+                        .foregroundStyle(.txtDisplaySecondary)
                 }
                 
                 Spacer()
@@ -276,7 +293,7 @@ struct CreateEventView: View {
                 } label: {
                     Text(selectedLocation != nil ? "수정하기" : "추가하기")
                         .bodyRegular14()
-                        .foregroundStyle(isAttending ? .gray300 : .gray600) // 참석시에만 활성화
+                        .foregroundStyle(isAttending ? .txtInteractiveSecondary : .txtStatusDisabled) // 참석시에만 활성화
                 }
                 .disabled(!isAttending) // 참석시에만 클릭 가능
             }
@@ -368,7 +385,7 @@ struct CreateEventView: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation 2",
+                icon: "icon_relation",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation
@@ -376,7 +393,7 @@ struct CreateEventView: View {
             
             CustomDropdown(
                 title: "경조사",
-                icon: "icon_event_16",
+                icon: "icon_star",
                 placeholder: "경조사를 선택하세요",
                 items: eventItems,
                 selectedItem: $selectedEvent
@@ -398,14 +415,17 @@ struct CreateEventView: View {
     
     // 폼 유효성 검사
     private var isFormValid: Bool {
-        let isMoneyValid: Bool = {
-            guard !money.isEmpty,
-                  let amount = Int(money) else { return false }
-            return amount >= 1 && amount <= 99_999_999
-        }()
+        print("=== isFormValid 체크 ===")
+        print("isNicknameValid: \(isNicknameValid)")
+        print("isAliasValid: \(isAliasValid)")
+        print("isMoneyValid: \(isMoneyValid)")
+        print("selectedAttend: \(selectedAttend?.title ?? "nil")")
+        print("selectedEvent: \(selectedEvent?.title ?? "nil")")
+        print("selectedRelation: \(selectedRelation?.title ?? "nil")")
+        print("selectedDate: \(selectedDate)")
         
-        return !nickname.isEmpty &&
-               !alias.isEmpty &&
+        return isNicknameValid &&
+               isAliasValid &&
                isMoneyValid &&
                selectedAttend != nil &&
                selectedEvent != nil &&
@@ -626,7 +646,7 @@ struct CreateEventViewAfterEvent: View {
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
@@ -641,7 +661,7 @@ struct CreateEventViewAfterEvent: View {
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isRequired: true,
                                 isSmallText: true
@@ -677,13 +697,13 @@ struct CreateEventViewAfterEvent: View {
                                 
                                 Text("원")
                                     .bodyRegular16()
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.txtDisplayPrimary)
                                     .padding(.top, 24)
                             }
                             
                             CustomDropdown(
                                 title: "참석여부",
-                                icon: "icon_check 1",
+                                icon: "icon_write_20_20",
                                 placeholder: "참석여부를 선택하세요",
                                 items: attendItems,
                                 selectedItem: $selectedAttend
@@ -791,14 +811,14 @@ struct CreateEventViewAfterEvent: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 6")
+                    Image("icon_eventLocation")
                         .renderingMode(.template)
                         .frame(width: 20,height: 20)
-                        .foregroundStyle(.gray400)
+                        .foregroundStyle(.iconFocusedPrimary)
                     
                     Text("행사장")
                         .bodyMedium14()
-                        .foregroundStyle(.gray100)
+                        .foregroundStyle(.txtDisplaySecondary)
                 }
                 
                 Spacer()
@@ -808,7 +828,7 @@ struct CreateEventViewAfterEvent: View {
                 } label: {
                     Text(selectedLocation != nil ? "수정하기" : "추가하기")
                         .bodyRegular14()
-                        .foregroundStyle(isAttending ? .gray300 : .gray600) // 참석시에만 활성화
+                        .foregroundStyle(isAttending ? .txtInteractiveSecondary : .txtStatusDisabled) // 참석시에만 활성화
                 }
                 .disabled(!isAttending) // 참석시에만 클릭 가능
             }
@@ -899,7 +919,7 @@ struct CreateEventViewAfterEvent: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation 2",
+                icon: "icon_relation",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation

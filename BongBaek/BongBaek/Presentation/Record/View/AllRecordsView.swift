@@ -14,40 +14,41 @@ struct AllRecordsView: View {
     @State private var showDeleteAlert = false
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var router: NavigationRouter
+    @State private var mapView: KakaoMapView?
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.white)
-                }
-                .contentShape(Rectangle())
-                
-                Text("경조사 전체기록")
+            ZStack {
+                Text("경조사 상세 기록")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
-                    .padding(.leading, 8)
-                
-                Spacer()
-                
-                Button(action: {
-                    // 편집 액션
-                    router.push(to: .modifyEventView(mode: .edit, eventDetailData: viewModel.eventDetail))
-                }) {
-                    Image("icon_edit")
-                        .foregroundColor(.white)
+                    .foregroundColor(.txtDisplayPrimary)
+
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.iconInteractiveDefault)
+                            .frame(width: 24, height: 24, alignment: .leading)
+                    }
+                    .frame(width: 44, height: 44, alignment: .leading)
+                    .contentShape(Rectangle())
+
+                    Spacer()
+
+                    Button(action: {
+                        router.push(to: .modifyEventView(mode: .edit, eventDetailData: viewModel.eventDetail))
+                    }) {
+                        Image("icon_edit 1")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                    }
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
                 }
-                .contentShape(Rectangle())
-                .padding(.trailing, 20)
             }
-            .padding(.top, 20)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 4)
+            .padding(.top, 0)
+            .padding(.horizontal, 20)
             .padding(.bottom, 10)
-            .background(Color.background) // 헤더 배경색 명시
+            .background(.bgDisplayPrimary)
             
             // 스크롤 가능한 콘텐츠
             ScrollView {
@@ -63,7 +64,7 @@ struct AllRecordsView: View {
                 .padding(.top, 16) // 헤더와의 간격
             }
         }
-        .background(Color.background)
+        .background(.bgDisplayPrimary)
         .navigationBarHidden(true)
         .onTapGesture {
             hideKeyboard()
@@ -119,15 +120,15 @@ struct AllRecordsView: View {
             VStack(alignment:.leading,spacing: 10) {
                 Text("\(eventDetail.hostInfo.hostName)의 \(eventDetail.eventInfo.eventCategory)")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
                     
                 Text(eventDetail.eventInfo.eventDate.DateFormat())
                     .bodyRegular14()
-                    .foregroundStyle(.gray400)
+                    .foregroundStyle(.txtDisplayTierary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(20)
-            .background(.gray750)
+            .background(.bgDisplayCard)
             .cornerRadius(10)
             .padding(.horizontal, 20)
             .padding(.top, -12)
@@ -135,13 +136,13 @@ struct AllRecordsView: View {
             HStack {
                 Text("경조사비")
                     .titleSemiBold16()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtInteractiveInverse)
                 
                 Spacer()
                 
                 Text("\(eventDetail.eventInfo.cost.formatted())원")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtInteractiveInverse)
             }
             .padding(20)
             .background(
@@ -186,30 +187,38 @@ struct AllRecordsView: View {
             HStack {
                 Text("상세정보")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
                 
                 Spacer()
                 
                 Image(systemName: isDetailExpanded ? "chevron.up" : "chevron.down")
-                    .foregroundColor(.white)
+                    .foregroundColor(.iconInteractiveDefault)
                     .animation(.easeInOut(duration: 0.3), value: isDetailExpanded)
             }
-            .background(Color.background)
+            .background(Color.bgDisplayPrimary)
         }
         .padding(.horizontal, 20)
         .buttonStyle(PlainButtonStyle())
     }
     
+    private func hasLocationData(_ eventDetail: EventDetailData) -> Bool {
+        let location = eventDetail.locationInfo.location
+        return location != "미정" &&
+               !location.isEmpty &&
+               eventDetail.locationInfo.longitude != 0.0 &&
+               eventDetail.locationInfo.latitude != 0.0
+    }
+    
     private func detailInfoView(eventDetail: EventDetailData) -> some View {
         VStack(alignment: .leading, spacing: 36) {
-            DetailRow(image: "icon_person_16", title: "이름", value: eventDetail.hostInfo.hostName, useMediumFont: true)
-            DetailRow(image: "icon_nickname_16", title: "별명", value: eventDetail.hostInfo.hostNickname, useMediumFont: true)
-            DetailRow(image: "icon_relation 2", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
-            DetailRow(image: "icon_event_16", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
-            DetailRow(image: "icon_coin_16", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원", useMediumFont: true)
-            DetailRow(image: "icon_check 1", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
-            DetailRow(image: "icon_calendar_16", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .primaryNormal, valueBackgroundColor: .primaryBg)
-            DetailRow(image: "icon_location_16",
+            DetailRow(image: "icon_person_off", title: "이름", value: eventDetail.hostInfo.hostName, useMediumFont: true)
+            DetailRow(image: "icon_nickname_off", title: "별명", value: eventDetail.hostInfo.hostNickname, useMediumFont: true)
+            DetailRow(image: "icon_relation_off", title: "관계", value: eventDetail.eventInfo.relationship, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_star_off", title: "경조사", value: eventDetail.eventInfo.eventCategory, valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_coin_off", title: "경조사비", value: "\(eventDetail.eventInfo.cost.formatted())원", useMediumFont: true)
+            DetailRow(image: "icon_check 4_off", title: "참석여부", value: eventDetail.eventInfo.isAttend ? "참석" : "불참", valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_calendar_off", title: "날짜", value: eventDetail.eventInfo.eventDate.DateFormat(), valueTextColor: .txtStatusFocused, valueBackgroundColor: .bgDisplayChips)
+            DetailRow(image: "icon_eventLocation_off",
                       title: "장소",
                       value: {
                     let location = eventDetail.locationInfo.location
@@ -218,10 +227,14 @@ struct AllRecordsView: View {
                         }
                     return location
                 }(),useMediumFont: true)
+            
+            if hasLocationData(eventDetail) {
+                mapSection(eventDetail: eventDetail)
+            }
             //DetailRow(image: "icon_calendar", title: "D-Day", value: "D-9", valueTextColor: .red, valueBackgroundColor: .red.opacity(0.2))
         }
         .padding(20)
-        .background(.gray800)
+        .background(.bgDisplaySecondary)
         .cornerRadius(12)
         .padding(.horizontal, 20)
         .transition(.asymmetric(
@@ -230,12 +243,79 @@ struct AllRecordsView: View {
         ))
     }
     
+    private func mapSection(eventDetail: EventDetailData) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // 지도
+            if let mapView = mapView {
+                mapView
+                    .frame(height: 180)
+                    .clipShape(
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
+                    .onAppear {
+                        updateMapLocation(eventDetail: eventDetail)
+                    }
+            } else {
+                Rectangle()
+                    .foregroundStyle(.gray750)
+                    .frame(height: 180)
+                    .clipShape(
+                        .rect(
+                            topLeadingRadius: 10,
+                            topTrailingRadius: 10
+                        )
+                    )
+                    .onAppear {
+                        mapView = KakaoMapView(draw: .constant(true))
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            updateMapLocation(eventDetail: eventDetail)
+                        }
+                    }
+            }
+            
+            // 주소 정보
+            VStack(alignment: .leading, spacing: 4) {
+                Text(eventDetail.locationInfo.location)
+                    .bodyMedium16()
+                    .foregroundStyle(.txtDisplayPrimary)
+                
+                Text(eventDetail.locationInfo.address)
+                    .bodyRegular14()
+                    .foregroundStyle(.txtDisplayTierary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .background(.btnInteractiveSecondary)
+            .clipShape(
+                .rect(
+                    bottomLeadingRadius: 10,
+                    bottomTrailingRadius: 10
+                )
+            )
+        }
+    }
+    
+    private func updateMapLocation(eventDetail: EventDetailData) {
+        guard hasLocationData(eventDetail) else { return }
+        
+        mapView?.updateLocation(
+            longitude: eventDetail.locationInfo.longitude,
+            latitude: eventDetail.locationInfo.latitude
+        )
+        print("지도 위치 업데이트: \(eventDetail.locationInfo.location)")
+        print("좌표: \(eventDetail.locationInfo.longitude), \(eventDetail.locationInfo.latitude)")
+    }
+    
     private var memoSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text("메모")
                     .titleSemiBold18()
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.txtDisplayPrimary)
                 
                 Spacer()
 
@@ -263,10 +343,10 @@ struct AllRecordsView: View {
                 }
             }
             .padding(16)
-            .background(.gray800)
+            .background(.bgFieldPrimary)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray800.opacity(0.5), lineWidth: 1)
+                    .stroke(.bgFieldPrimary, lineWidth: 1)
             )
             .cornerRadius(8)
             .padding(.horizontal, 20)
@@ -277,32 +357,34 @@ struct AllRecordsView: View {
         Button {
             showDeleteAlert = true
         } label: {
-            if viewModel.isDeleting {
-                HStack {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .red))
-                        .scaleEffect(0.8)
-                    Text("삭제 중...")
+            Group {
+                if viewModel.isDeleting {
+                    HStack {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .secondaryRed))
+                            .scaleEffect(0.8)
+                        Text("삭제 중...")
+                            .titleSemiBold18()
+                            .foregroundColor(.txtStatusError)
+                    }
+                } else {
+                    Text("기록 삭제하기")
                         .titleSemiBold18()
-                        .foregroundColor(.red)
+                        .foregroundColor(.txtStatusError)
                 }
-            } else {
-                Text("기록 삭제하기")
-                    .titleSemiBold18()
-                    .foregroundColor(.secondaryRed)
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: 55)
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 55)
         .background(.clear)
+        .contentShape(Rectangle())
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(.secondaryRed, lineWidth: 1)
+                .stroke(.borderStatusError, lineWidth: 1)
         )
         .cornerRadius(12)
         .padding(.horizontal, 20)
-        .padding(.top,60)
-//        .padding(.bottom,60)
+        .padding(.top, 60)
         .disabled(viewModel.isDeleting)
         .alert("경조사 기록을 삭제하시겠습니까?", isPresented: $showDeleteAlert) {
             Button("취소", role: .cancel) { }
@@ -315,7 +397,6 @@ struct AllRecordsView: View {
         .alert("삭제 완료", isPresented: $viewModel.deleteSuccess) {
             Button("확인") {
                 dismiss()
-//                router.pop()
             }
         } message: {
             Text("경조사 기록이 성공적으로 삭제되었습니다.")
@@ -367,12 +448,10 @@ struct DetailRow: View {
             HStack {
                 Image(image)
                     .resizable()
-                    .renderingMode(.template)
-                    .foregroundColor(.gray400)
-                    .frame(width: 16,height: 16)
+                    .frame(width: 20,height: 20)
                 Text(title)
                     .bodyMedium14()
-                    .foregroundColor(.gray100)
+                    .foregroundColor(.txtDisplaySecondary)
             }
             
             Spacer()
@@ -386,7 +465,7 @@ struct DetailRow: View {
                         .bodyRegular14()
                 }
             }
-                .foregroundColor(valueTextColor ?? .white)
+                .foregroundColor(valueTextColor ?? .txtDisplayPrimary)
                 .padding(.horizontal, valueBackgroundColor != nil ? 8 : 0)
                 .padding(.vertical, valueBackgroundColor != nil ? 4 : 0)
                 .background(valueBackgroundColor ?? .clear)

@@ -22,4 +22,8 @@ extension String {
         
         return self
     }
+    
+    func dotDateFormat() -> String {
+        return self.replacingOccurrences(of: "-", with: ".")
+    }
 }

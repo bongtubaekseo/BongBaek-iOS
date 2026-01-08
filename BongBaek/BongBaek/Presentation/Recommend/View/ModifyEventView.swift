@@ -47,6 +47,10 @@ struct ModifyEventView: View {
     @State private var isSubmitting = false
     @State private var submitError: String?
     
+    @State private var isNicknameValid = false
+    @State private var isAliasValid = false
+    @State private var isMoneyValid = false
+    
     private var isRecommendationEdit: Bool {
         guard eventDetailData == nil else { return false }
         return mode == .edit && eventManager.recommendationResponse != nil
@@ -57,15 +61,19 @@ struct ModifyEventView: View {
     }
     
     private var isFormValid: Bool {
-        let isMoneyValid: Bool = {
-            guard !money.isEmpty,
-                  let amount = Int(money) else { return false }
-            return amount >= 1 && amount <= 99_999_999
-        }()
         
-        return !nickname.isEmpty &&
-               !alias.isEmpty &&
-               isMoneyValid && 
+        print("=== isFormValid 체크 ===")
+        print("isNicknameValid: \(isNicknameValid)")
+        print("isAliasValid: \(isAliasValid)")
+        print("isMoneyValid: \(isMoneyValid)")
+        print("selectedAttend: \(selectedAttend?.title ?? "nil")")
+        print("selectedEvent: \(selectedEvent?.title ?? "nil")")
+        print("selectedRelation: \(selectedRelation?.title ?? "nil")")
+        print("selectedDate: \(selectedDate)")
+        
+        return isNicknameValid &&
+               isAliasValid &&
+               isMoneyValid &&
                selectedAttend != nil &&
                selectedEvent != nil &&
                selectedRelation != nil &&
@@ -112,7 +120,7 @@ struct ModifyEventView: View {
                 }) {
                     Text("취소")
                         .bodyRegular16()
-                        .foregroundStyle(.gray200)
+                        .foregroundStyle(.txtInteractiveSecondary)
                 }
                 .frame(width: 44, height: 44)
                 .padding(.leading, -8)
@@ -121,7 +129,7 @@ struct ModifyEventView: View {
                 
                 Text(mode == .create ? "경조사 기록하기" : "경조사 수정하기")
                     .titleSemiBold18()
-                    .foregroundColor(.white)
+                    .foregroundColor(.txtDisplayPrimary)
                 
                 Spacer()
                 
@@ -131,7 +139,7 @@ struct ModifyEventView: View {
             .padding(.horizontal, 20)
             .padding(.top, 4)
             .padding(.bottom, 16)
-            .background(.gray900)
+            .background(.bgDisplayPrimary)
             
             // 스크롤 가능한 콘텐츠
             ScrollView {
@@ -140,14 +148,15 @@ struct ModifyEventView: View {
                         VStack(spacing: 0) {
                             CustomTextField(
                                 title: "이름",
-                                icon: "icon_person_16",
+                                icon: "icon_person",
                                 placeholder: "이름을 입력하세요",
                                 text: $nickname,
+                                isValid: $isNicknameValid,
                                 validationRule: ValidationRule(
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                     
                                 ),
                                 isReadOnly: isRecommendationEdit,
@@ -161,11 +170,12 @@ struct ModifyEventView: View {
                                 icon: "icon_nickname",
                                 placeholder: "별명을 입력하세요",
                                 text: $alias,
+                                isValid: $isAliasValid,
                                 validationRule: ValidationRule(
                                     minLength: 2,
                                     maxLength: 10,
                                     regex: "^[가-힣a-zA-Z0-9\\s]+$",
-                                    customMessage: "한글, 영문, 숫자, 공백만 입력 가능합니다"
+                                    customMessage: "특수문자는 기입할 수 없어요"
                                 ),
                                 isReadOnly: isRecommendationEdit,
                                 isRequired: true,
@@ -184,9 +194,10 @@ struct ModifyEventView: View {
                             HStack(spacing: 8) {
                                 CustomTextField(
                                     title: "경조사비",
-                                    icon: "icon_coin_16",
+                                    icon: "icon_coin",
                                     placeholder: "금액을 입력하세요",
                                     text: $money,
+                                    isValid: $isMoneyValid,
                                     validationRule: ValidationRule(
                                         customRule: { input in
                                             guard let amount = Int(input), amount > 0 else {
@@ -203,13 +214,13 @@ struct ModifyEventView: View {
                                 
                                 Text("원")
                                     .bodyRegular16()
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.txtDisplayPrimary)
                                     .padding(.top, 24)
                             }
                             
                             CustomDropdown(
                                 title: "참석여부",
-                                icon: "icon_check 1",
+                                icon: "icon_check 4",
                                 placeholder: "경조사를 선택하세요",
                                 items: attendItems,
                                 selectedItem: $selectedAttend,
@@ -233,7 +244,7 @@ struct ModifyEventView: View {
                             
                             CustomTextField(
                                 title: "날짜",
-                                icon: "icon_calendar_16",
+                                icon: "icon_calendar",
                                 placeholder: "생년월일을 입력하세요",
                                 text: $selectedDate,
                                 isReadOnly: true,
@@ -257,7 +268,7 @@ struct ModifyEventView: View {
                         .padding(.top, 32)
                         .padding(.bottom, 24)
                     }
-                    .background(.gray800)
+                    .background(.bgDisplaySecondary)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -284,16 +295,19 @@ struct ModifyEventView: View {
                                     .titleSemiBold18()
                                     .foregroundColor(.white)
                             }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 55)
                         } else {
-                            Text(mode == .create ? "기록하기" : "수정하기")
+                            Text(mode == .create ? "기록 저장하기" : "수정하기")
                                 .titleSemiBold18()
-                                .foregroundColor(isFormValid ? .white : .gray500)
+                                .foregroundColor(isFormValid ? .txtInteractiveInverse : .gray500)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 55)
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 55)
                     .background(isFormValid ? .primaryNormal : .primaryBg)
                     .cornerRadius(12)
+                    .contentShape(Rectangle())  // 이 부분 추가
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
                     .disabled(!isFormValid || isSubmitting)
@@ -312,7 +326,7 @@ struct ModifyEventView: View {
                 hideKeyboard()
             }
         }
-        .background(.gray900)
+        .background(.bgDisplayPrimary)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
@@ -353,15 +367,13 @@ struct ModifyEventView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 HStack {
-                    Image("icon_location 6")
-                        .renderingMode(.template)
+                    Image(isRecommendationEdit ? "icon_eventLocation_off" : "icon_eventLocation")
                         .frame(width: 20,height: 20)
-                        .foregroundStyle(.gray400)
                     
                     Text("행사장")
                         .bodyMedium14()
                         .foregroundStyle(
-                            (isAttending && !isRecommendationEdit) ? .gray100 : .gray400
+                            (isAttending && !isRecommendationEdit) ? .txtDisplaySecondary : .gray400
                         )
 
                 }
@@ -374,7 +386,7 @@ struct ModifyEventView: View {
                     Text("수정하기")
                         .bodyRegular14()
                         .foregroundStyle(
-                            (isAttending && !isRecommendationEdit) ? .gray300 : .gray600
+                            (isAttending && !isRecommendationEdit) ? .txtInteractiveSecondary : .txtStatusDisabled
                         )
                 }
                 .disabled(!isAttending || isRecommendationEdit)
@@ -393,16 +405,16 @@ struct ModifyEventView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(locationName)
                                 .bodyMedium16()
-                                .foregroundStyle(.white)
+                                .foregroundStyle(.txtDisplayPrimary)
                             
                             Text(locationAddress)
                                 .bodyRegular14()
-                                .foregroundStyle(.gray400)
+                                .foregroundStyle(.txtDisplayTierary)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 16)
-                        .background(.gray700)
+                        .background(.btnInteractiveSecondary)
                         .clipShape(
                             .rect(
                                 bottomLeadingRadius: 10,
@@ -452,27 +464,6 @@ struct ModifyEventView: View {
                             }
                         }
                 }
-            } else {
-                // 위치 정보가 없는 경우 빈 Rectangle 표시
-                VStack {
-                    Image(systemName: "location.slash")
-                        .font(.system(size: 30))
-                        .foregroundColor(.gray500)
-                    
-                    Text("위치 정보가 없습니다")
-                        .bodyRegular14()
-                        .foregroundColor(.gray500)
-                        .padding(.top, 8)
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 180)
-                .background(.gray750)
-                .clipShape(
-                    .rect(
-                        topLeadingRadius: 10,
-                        topTrailingRadius: 10
-                    )
-                )
             }
         }
     }
@@ -489,7 +480,7 @@ struct ModifyEventView: View {
         VStack(spacing: 24) {
             CustomDropdown(
                 title: "관계",
-                icon: "icon_relation 2",
+                icon: "icon_relation",
                 placeholder: "관계를 선택하세요",
                 items: relationItems,
                 selectedItem: $selectedRelation,
@@ -498,7 +489,7 @@ struct ModifyEventView: View {
             
             CustomDropdown(
                 title: "경조사",
-                icon: "icon_event_16",
+                icon: "icon_star",
                 placeholder: "경조사를 선택하세요",
                 items: eventItems,
                 selectedItem: $selectedEvent,
@@ -539,6 +530,11 @@ struct ModifyEventView: View {
         // 금액
         money = "\(eventDetail.eventInfo.cost)"
         print("기존 기록 금액 설정: \(eventDetail.eventInfo.cost)원")
+        
+        // 초기값이 있으면 유효성도 true로 설정
+        isNicknameValid = !nickname.isEmpty && nickname.count >= 2 && nickname.count <= 10
+        isAliasValid = !alias.isEmpty && alias.count >= 2 && alias.count <= 10
+        isMoneyValid = !money.isEmpty
         
         // 참석 여부
         let attendanceText = eventDetail.eventInfo.isAttend ? "참석" : "불참석"

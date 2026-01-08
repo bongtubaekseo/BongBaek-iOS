@@ -55,7 +55,7 @@ struct EventMemoView: View {
             HStack {
                 Text("메모")
                     .titleSemiBold18()
-                    .foregroundStyle(isDisabled ? .gray500 : .white)
+                    .foregroundStyle(isDisabled ? .gray500 : .txtDisplayPrimary)
                 
                 Spacer()
             }
@@ -65,7 +65,7 @@ struct EventMemoView: View {
                     if memo.isEmpty {
                         Text("메모를 입력해주세요")
                             .font(.system(size: 16))
-                            .foregroundColor(.gray.opacity(0.6))
+                            .foregroundColor(.txtFieldPlaceholder)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 8)
                     }
@@ -100,7 +100,7 @@ struct EventMemoView: View {
                             Spacer()
                             Text("\(memo.count)/\(maxLength)")
                                 .font(.system(size: 12))
-                                .foregroundColor(memo.count > maxLength ? .red : .gray400)
+                                .foregroundColor(memo.count > maxLength ? .red : .txtDisplayTierary)
                                 .padding(.trailing, 8)
                                 .padding(.bottom, 8)
                         }
@@ -108,7 +108,7 @@ struct EventMemoView: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(backgroundColor)
+                .background(.bgFieldPrimary)
                 .cornerRadius(8)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)

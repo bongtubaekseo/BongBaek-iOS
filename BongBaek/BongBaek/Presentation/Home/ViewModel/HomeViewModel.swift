@@ -15,13 +15,18 @@ import Combine
 class HomeViewModel: ObservableObject {
     
     @Published var homeData: EventHomeData? = nil
+    @Published var homeContents: ContentsHomeResponseData? = nil
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
+    @Published var isLoadingContents = false
     
     private let eventManager = EventManager.shared
+    private let contentsService: ContentsServiceProtocol
+    
     private var cancellables = Set<AnyCancellable>()
     
-    init() {
+    init(contentsService: ContentsServiceProtocol = DIContainer.shared.contentsService) {
+        self.contentsService = contentsService
         setupBindings()
         print("HomeViewModel 초기화됨")
     }
@@ -31,6 +36,21 @@ class HomeViewModel: ObservableObject {
     func loadData(forceRefresh: Bool = false) {
         print("HomeViewModel: 데이터 로드 시작 (Combine)")
         eventManager.loadHomeData(forceRefresh: forceRefresh)
+    }
+    
+    /// 홈 콘텐츠 로드
+    func loadHomeContents() async {
+        isLoadingContents = true
+        
+        do {
+            let response = try await contentsService.getHomeContents()
+            if response.isSuccess {
+                homeContents = response.data
+            }
+        } catch {
+            print("Error: \(error)")
+        }
+        isLoadingContents = false
     }
 
     
